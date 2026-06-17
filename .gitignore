@@ -1,0 +1,75 @@
+
+backend/app/public/wp-admin/
+backend/app/public/wp-content/index.php
+backend/app/public/wp-content/languages
+backend/app/public/wp-content/plugins/index.php
+backend/app/public/wp-content/themes/index.php
+backend/app/public/wp-includes/
+backend/app/public/index.php
+backend/app/public/license.txt
+backend/app/public/readme.html
+backend/app/public/wp-*.php
+backend/app/public/xmlrpc.php
+backend/conf
+backend/logs
+
+# Configuration
+backend/app/public/wp-config.php
+backend/app/public/wp-*.php
+
+# Example themes
+backend/app/public/wp-content/themes/twenty*/
+
+# Example plugin
+backend/app/public/wp-content/plugins/hello.php
+
+# Uploads
+backend/app/public/wp-content/uploads/
+
+backend/app
+
+# Log files
+*.log
+
+# htaccess
+backend/app/public/.htaccess
+
+=====
+# Dependencies
+frontend/node_modules
+frontend/.pnp
+.pnp.js
+
+# Testing
+frontend/coverage
+
+# Next.js Build Output
+frontend/.next/
+frontend/out/
+frontend/build
+
+# Local Environment Variables
+frontend/.env*.local
+frontend/.env
+frontend/!.env.example
+
+# Vercel Deployment Platform
+frontend/.env.production.local
+frontend/.env.development.local
+frontend/.env.local
+frontend/.vercel
+
+# Testing & Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# TypeScript
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+
+# Operating Systems
+frontend/.DS_Store
+frontend/Thumbs.db
+
