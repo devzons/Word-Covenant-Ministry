@@ -10,7 +10,7 @@
 /readme.html
 /wp-*.php
 /xmlrpc.php
-
+/local-xdebuginfo.php
 
 # Configuration
 /wp-config.php

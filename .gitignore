@@ -1,5 +1,5 @@
-backend/conf
-backend/logs
+/backend/conf
+/backend/logs
 # Log files
 *.log
 
