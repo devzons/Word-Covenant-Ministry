@@ -8,7 +8,7 @@ export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<T> {
-  const url = new URL(path.replace(/^\//, ""), `${siteConfig.apiUrl}/`);
+  const url = createApiUrl(path);
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -22,4 +22,8 @@ export async function apiRequest<T>(
   }
 
   return response.json() as Promise<T>;
+}
+
+export function createApiUrl(path: string): URL {
+  return new URL(path.replace(/^\//, ""), `${siteConfig.apiUrl}/`);
 }
