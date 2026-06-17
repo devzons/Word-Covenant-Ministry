@@ -1,5 +1,6 @@
 /backend/conf
 /backend/logs
+/backend/app/sql
 # Log files
 *.log
 
