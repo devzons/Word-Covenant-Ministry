@@ -330,6 +330,83 @@ Never assume paths, APIs, environment variables, plugin structure, database sche
 
 Always inspect first.
 
+## Best Practice and Scalability Rule
+
+All code must follow best practices and be designed for long-term scalability.
+
+Requirements:
+
+- clear, maintainable code
+- typed interfaces where applicable
+- explicit data shapes
+- separated responsibilities
+- reusable utilities
+- no duplicate logic
+- no unnecessary abstractions
+- small focused files
+- safe failure behavior
+- input validation
+- no hardcoded secrets
+- no hardcoded environment assumptions
+- APIs and data models should be extendable
+- avoid quick hacks and temporary shortcuts
+
+Temporary workarounds are allowed only when necessary and must be documented with:
+
+- TODO
+- reason
+- risk
+- future removal plan
+
+This rule applies to:
+
+- frontend
+- backend plugin
+- APIs
+- Scripture Engine
+- media integration
+- Cloudflare integration
+- documentation
+
+## Security First Rule
+
+Security is a feature, not an afterthought.
+
+Requirements:
+
+- validate all inputs
+- sanitize all outputs
+- escape rendered content
+- follow WordPress security best practices
+- follow Next.js security best practices
+- principle of least privilege
+- never expose secrets
+- never commit secrets
+- environment variables must be used for sensitive values
+- fail safely
+- log safely
+
+Security takes precedence over convenience.
+
+## Migration Safety Rule
+
+Never make breaking changes without a migration plan.
+
+This applies to:
+
+- database schema changes
+- API changes
+- CPT changes
+- taxonomy changes
+- scripture model changes
+
+Before implementation, agents must:
+
+1. identify affected systems
+2. document migration path
+3. document rollback plan
+4. document risks
+
 ## Validation Before Completion Rule
 
 Before reporting completion, run relevant validation.
