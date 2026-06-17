@@ -1,7 +1,72 @@
-/backend/conf
-/backend/logs
-/backend/app/sql
-# Log files
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
 
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+wp-config.php
+wp-config-local.php
+*.pem
+*.key
+*.crt
 
+# Archives and backups
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.bak
+*.backup
+
+# Database exports
+*.sql
+*.sql.gz
+*.sqlite
+*.sqlite3
+*.dump
+
+# Frontend dependencies and build output
+node_modules/
+.next/
+out/
+coverage/
+
+# Local WP runtime files
+/backend/conf/
+/backend/logs/
+/backend/run/
+/backend/sql/
+/backend/app/sql/
+
+# WordPress generated content inside Local WP
+/backend/app/public/wp-content/uploads/
+/backend/app/public/wp-content/cache/
+/backend/app/public/wp-content/upgrade/
+/backend/app/public/wp-content/debug.log
+
+# Ignore Local WP WordPress core while keeping the official plugin source tracked.
+/backend/app/public/*
+!/backend/app/public/wp-content/
+/backend/app/public/wp-content/*
+!/backend/app/public/wp-content/plugins/
+/backend/app/public/wp-content/plugins/*
+!/backend/app/public/wp-content/plugins/wcm-core/
+!/backend/app/public/wp-content/plugins/wcm-core/**
+/backend/app/public/wp-content/plugins/wcm-core/vendor/
+/backend/app/public/wp-content/plugins/wcm-core/node_modules/

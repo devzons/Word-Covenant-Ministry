@@ -1,0 +1,12 @@
+{
+  "name": "word-covenant-ministry/wcm-core",
+  "description": "Core plugin for Word Covenant Ministry",
+  "type": "wordpress-plugin",
+  "autoload": {
+    "psr-4": {
+      "WCM\\": "src/"
+    }
+  },
+  "require": {},
+  "require-dev": {}
+}
