@@ -60,6 +60,34 @@ Create a decision record for architecture changes, repository structure changes,
 - Frontend hosting: Vercel
 - Backend local development: Local WP
 
+## Environment Endpoints
+
+Local frontend:
+
+```txt
+http://wordcovenantministry.local:3030
+```
+
+Local WP backend:
+
+```txt
+http://wordcovenantministry.local
+```
+
+If Local WP generates a different backend URL, inspect Local WP and use that generated URL.
+
+Production frontend:
+
+```txt
+https://wordcovenantministry.org
+```
+
+Production API:
+
+```txt
+https://api.wordcovenantministry.org
+```
+
 ## Official Repository Structure
 
 ```txt

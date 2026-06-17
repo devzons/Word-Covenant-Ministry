@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: WCM Core
  * Description: Core plugin for Word Covenant Ministry.
@@ -13,8 +14,9 @@ $autoload = __DIR__ . '/vendor/autoload.php';
 
 if (! file_exists($autoload)) {
     add_action('admin_notices', function () {
-        echo '<div class="notice notice-error"><p>WCM Core: Composer autoload file is missing. Run composer install.</p></div>';
+        echo '<div class="notice notice-error"><p>' . esc_html__('WCM Core: Composer autoload file is missing. Run composer install.', 'wcm-core') . '</p></div>';
     });
+
     return;
 }
 

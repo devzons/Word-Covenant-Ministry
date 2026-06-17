@@ -90,6 +90,29 @@ Alternatives Considered
 - Frontend hosting: Vercel
 - Backend local development: Local WP
 
+## Environment Endpoints
+
+Local frontend:
+
+```txt
+http://wordcovenantministry.local:3030
+```
+
+Local WP backend:
+
+```txt
+http://wordcovenantministry.local
+```
+
+If Local WP generates a different backend URL, inspect Local WP and use that generated URL.
+
+Production:
+
+```txt
+https://wordcovenantministry.org
+https://api.wordcovenantministry.org
+```
+
 ## Folder Structure
 
 ```txt

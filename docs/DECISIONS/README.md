@@ -38,3 +38,4 @@ Alternatives Considered
 - [ADR-0003 Headless Architecture](0003-headless-architecture.md)
 - [ADR-0004 Cloudflare Strategy](0004-cloudflare-strategy.md)
 - [ADR-0005 Scripture Engine First](0005-scripture-engine-first.md)
+- [ADR-0006 Development Port Standard](0006-development-port-standard.md)

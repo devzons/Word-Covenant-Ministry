@@ -131,6 +131,37 @@ Before any frontend modification, verify this path exists:
 frontend/
 ```
 
+## Development Port Standard Rule
+
+Port 3000 is reserved and may already be in use.
+
+Word Covenant Ministry frontend development uses:
+
+```txt
+http://wordcovenantministry.local:3030
+```
+
+Frontend standard:
+
+```txt
+Port 3030
+```
+
+Backend:
+
+```txt
+Use Local WP assigned URL.
+```
+
+Agents must follow ADR-0006 Development Port Standard.
+
+- Do not use port 3000.
+- Do not assume port 3000.
+- New frontend scripts must use port 3030.
+- Documentation examples must use port 3030.
+- Environment examples must use port 3030.
+- Future agent-generated commands must use port 3030 unless explicitly overridden.
+
 ## Architecture Protection Rule
 
 Agents must never:
