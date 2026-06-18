@@ -204,7 +204,7 @@ export function BibleReader({ bookMetadata, chapter, locale }: BibleReaderProps)
       </header>
 
       {chapter.verses.length > 0 ? (
-        <ol className="flex flex-col gap-4">
+        <ol className="flex flex-col gap-0">
           {chapter.verses.map((verse) => {
             const verseId = `v${verse.verse}`;
             const isActive = activeVerseId === verseId;
@@ -212,7 +212,7 @@ export function BibleReader({ bookMetadata, chapter, locale }: BibleReaderProps)
             return (
               <li
                 className={cn(
-                  "grid scroll-mt-24 grid-cols-[2rem_1fr] gap-3 rounded-lg border border-transparent px-2 py-1 text-lg leading-8 transition-colors",
+                  "grid scroll-mt-24 grid-cols-[2rem_1fr] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
                   isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
                 )}
                 id={verseId}
