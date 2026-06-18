@@ -401,6 +401,40 @@ This rule applies to:
 - Cloudflare integration
 - documentation
 
+## File Size and Performance Rule
+
+All generated files, imports, exports, API responses, and frontend bundles must be designed with file size and performance in mind.
+
+Requirements:
+
+- Do not commit large generated data files by default.
+- Do not bundle full Bible datasets into the frontend.
+- Do not return full Bible datasets from API endpoints.
+- Use custom tables as production storage for Bible text.
+- Use reference-based lookup for Bible passages.
+- Use pagination or chunking for large result sets.
+- Use batch processing for large imports.
+- Use streaming or memory-conscious readers where practical.
+- Keep generated JSON files ignored unless explicitly approved.
+- Review file size before committing any new file larger than 1MB.
+- Document the reason before committing any file larger than 5MB.
+- Never commit raw Bible source files unless explicitly approved.
+- Prefer DB storage over static frontend payloads for Scripture data.
+- Avoid duplicate generated exports.
+
+This rule applies to:
+
+- KRV
+- WEB
+- OSHB
+- SBLGNT
+- import/export tools
+- frontend API clients
+- REST API endpoints
+- media metadata
+- generated JSON
+- future search indexes
+
 ## Security First Rule
 
 Security is a feature, not an afterthought.
