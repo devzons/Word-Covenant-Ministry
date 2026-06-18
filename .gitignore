@@ -53,6 +53,8 @@ coverage/
 /docs/data-sources/**/*.db
 /docs/data-sources/**/*.zip
 /docs/data-sources/**/*.xml
+/docs/data-sources/**/*.json
+/docs/data-sources/**/*.generated.json
 
 # Local WP runtime files
 /backend/conf/
@@ -77,4 +79,3 @@ coverage/
 !/backend/app/public/wp-content/plugins/wcm-core/**
 /backend/app/public/wp-content/plugins/wcm-core/vendor/
 /backend/app/public/wp-content/plugins/wcm-core/node_modules/
-
