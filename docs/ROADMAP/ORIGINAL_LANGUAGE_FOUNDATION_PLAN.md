@@ -650,14 +650,287 @@ Goals:
 Pipeline shape:
 
 ```txt
-Raw source
--> Inspection
--> Normalized token export
--> Validation
--> Term upsert
--> Occurrence upsert
--> Verification report
+Source file
+-> Source Inspection
+-> Source Metadata / License Gate
+-> Header / Shape Validation
+-> Row Normalization
+-> Batch Validation
+-> Dry-run Report
+-> Explicit Approval
+-> Term Persistence
+-> Occurrence Persistence
+-> Verification Report
 ```
+
+#### Existing KRV Import Structure
+
+Current KRV import flow:
+
+```txt
+MDB export
+-> generated JSON
+-> ImportRow
+-> KrvImportValidator
+-> VerseImportService
+-> BibleRepository::upsertVerse()
+-> verification
+```
+
+KRV import structure:
+
+- `tools/export-krv-mdb.php` reads the source MDB and writes generated JSON.
+- `tools/import-krv-json.php` bootstraps WordPress from CLI and imports normalized JSON rows.
+- `ImportRow` represents normalized KRV import rows.
+- `KrvImportValidator` validates row shape, book/chapter/verse ranges, and text.
+- `VerseImportService` validates rows, resolves version/book records, constructs `BibleVerse`, and writes through `BibleRepository::upsertVerse()`.
+- `ImportReport` records total, imported, skipped, failed rows, and issues.
+- `tools/verify-krv-import.php` verifies row counts, empty text counts, and sample verses after import.
+
+KRV import does not currently provide a true dry-run mode. Original Language import must not copy that limitation; it needs a stronger dry-run gate before persistence.
+
+#### Proposed Phase 5C Classes
+
+Design candidates:
+
+- `OriginalLanguageSourceInspector`
+- `OriginalLanguageSourceMetadata`
+- `SourceFileValidator`
+- `SourceLicenseValidator`
+- `OriginalLanguageNormalizedRow`
+- `OriginalLanguageNormalizer`
+- `StepTahotNormalizer`
+- `StepTagntNormalizer`
+- `OriginalLanguageImportValidator`
+- `OriginalLanguageImportIssue`
+- `OriginalLanguageImportReport`
+- `OriginalLanguageImportService`
+
+These are design targets only. They must not be implemented until explicitly approved.
+
+#### Source Inspection Design
+
+Source inspection must:
+
+- Confirm the local file path exists.
+- Confirm the declared `source_dataset`.
+- Confirm file format and encoding.
+- Inspect headers and small samples only.
+- Confirm required columns.
+- Record source filename, checksum, license/attribution text, and row count estimate.
+- Fail closed when license or provenance is missing.
+- Perform no DB writes.
+
+#### Normalization Design
+
+Normalization must happen before ValueObject construction.
+
+Normalize:
+
+- `language_type`.
+- `source_dataset`.
+- Base Strong's values such as `H7225` and `G3056`.
+- `strongs_extended`.
+- Empty optional scalar fields to empty strings.
+- Nullable descriptive fields to `null`.
+- Canonical reference to `book_id`, `chapter`, and `verse`.
+- Source row id or word id to `sourceRef`.
+- Source token order to `wordOrder` and `subwordOrder`.
+- Source token role to `tokenType`.
+
+#### Validation Design
+
+Use existing validators:
+
+- `OriginalTermValidator`.
+- `OriginalWordOccurrenceValidator`.
+
+Add later:
+
+- `OriginalLanguageImportValidator`.
+- `SourceFileValidator`.
+- `SourceLicenseValidator`.
+
+Import validation must cover:
+
+- Headers.
+- Source provenance and license gate.
+- Duplicate term identity within a batch.
+- Duplicate occurrence identity within a batch.
+- Book mapping existence.
+- Greek edition filtering decision.
+- Hebrew versification decision.
+- `sourceRef` policy.
+- Morphology preservation.
+
+#### Import Service Design
+
+`OriginalLanguageImportService` must:
+
+- Default to `dryRun = true`.
+- Support chunked batch processing.
+- Perform no writes in dry-run mode.
+- Look up terms by identity.
+- Look up occurrences by identity.
+- Insert or update only after validation passes.
+- Fail closed on blocking errors.
+- Return a report for every run.
+- Avoid silent skips; every skip needs a report code.
+
+Dry-run must stay outside repositories because repository `save()` methods write immediately.
+
+#### Dry-run Design
+
+Dry-run must:
+
+- Inspect source.
+- Normalize rows.
+- Validate terms and occurrences.
+- Build identity keys.
+- Optionally simulate repository matching with read-only checks.
+- Produce counts and issue lists.
+- Perform zero writes.
+- Be mandatory before production import.
+
+#### Import Report Shape
+
+`OriginalLanguageImportReport` should include:
+
+- `source_dataset`.
+- `source_file`.
+- `license_status`.
+- `rows_read`.
+- `rows_valid`.
+- `rows_invalid`.
+- `terms_created`.
+- `terms_matched`.
+- `occurrences_created`.
+- `occurrences_skipped`.
+- `duplicate_terms`.
+- `duplicate_occurrences`.
+- `missing_lemma`.
+- `missing_strongs`.
+- `missing_morphology`.
+- `invalid_reference`.
+- `warnings`.
+- `errors`.
+- `ok`.
+
+#### STEP_TAHOT Rules
+
+STEP TAHOT import design must:
+
+- Preserve morphology exactly when provided.
+- Model Hebrew prefixes and suffixes with `subwordOrder` and `tokenType`.
+- Preserve Extended Strong's in `strongsExtended`.
+- Block import until Hebrew versification handling is fixed.
+- Require deterministic `sourceRef`.
+- Validate word and subword ordering.
+
+#### STEP_TAGNT Rules
+
+STEP TAGNT import design must:
+
+- Block import until Greek edition filtering is decided.
+- Preserve variant tokens as `tokenType = variant` when needed.
+- Preserve morphology exactly when provided.
+- Preserve STEP disambiguated Strong's in `strongsExtended`.
+- Use `subwordOrder = 0` unless source data requires expansion.
+- Validate canonical mapping before writes.
+
+#### Phase 5C-6 STEP Header Mapping Analysis
+
+Local source availability:
+
+- STEP_TAHOT source file was not found locally.
+- STEP_TAGNT source file was not found locally.
+- `docs/data-sources/` currently contains KRV-related files only.
+- Plugin tooling currently contains KRV tooling only:
+  - `tools/export-krv-mdb.php`
+  - `tools/import-krv-json.php`
+  - `tools/verify-krv-import.php`
+- No STEP source download was performed.
+- No STEP import was performed.
+
+Header mapping status:
+
+- STEP_TAHOT exact headers are not confirmed.
+- STEP_TAGNT exact headers are not confirmed.
+- `StepTahotNormalizer` implementation is blocked until approved local source files or header/sample excerpts are available.
+- `StepTagntNormalizer` implementation is blocked until approved local source files or header/sample excerpts are available.
+- `OriginalLanguageImportService` implementation remains blocked until source headers, sample rows, license/provenance, and gate decisions are confirmed.
+
+Pending STEP_TAHOT candidate mapping:
+
+```txt
+sourceDataset = STEP_TAHOT
+languageType = hebrew
+source reference -> bookCode, chapter, verse
+source ordering -> wordOrder, subwordOrder
+prefix/suffix/word/variant role -> tokenType
+base Strong's -> strongsNumber normalized as H####
+STEP disambiguation -> strongsExtended
+source morphology -> morphology, preserved exactly
+stable source word id preferred -> sourceRef
+```
+
+Pending STEP_TAGNT candidate mapping:
+
+```txt
+sourceDataset = STEP_TAGNT
+languageType = greek
+source reference -> bookCode, chapter, verse
+source ordering -> wordOrder
+subwordOrder = 0 unless source expansion requires otherwise
+tokenType = word by default, variant when retained
+base Strong's -> strongsNumber normalized as G####
+STEP disambiguation -> strongsExtended
+source morphology -> morphology, preserved exactly
+stable source word id preferred -> sourceRef
+```
+
+Open questions before source-specific normalizers:
+
+- Exact STEP TAHOT and STEP TAGNT files and versions.
+- License and attribution text.
+- TAGNT primary edition stream.
+- TAGNT variant filtering.
+- TAHOT versification mapping to WCM canonical references.
+- Hebrew prefix/suffix occurrence model.
+- Stable `sourceRef` strategy.
+- Base Strong's versus extended Strong's split.
+
+Implementation gate:
+
+- Do not implement `StepTahotNormalizer`.
+- Do not implement `StepTagntNormalizer`.
+- Do not implement `OriginalLanguageImportService`.
+- Do not run actual STEP import.
+- Do not write to the database.
+- Do not continue past header mapping until approved local source files or header/sample excerpts are provided and inspected.
+
+#### Phase 5C Risks
+
+- KRV importer lacks a dry-run pattern.
+- STEP source headers are not confirmed.
+- License and attribution text must be documented before import.
+- Hebrew prefix/suffix modeling can corrupt ordering if it happens too late.
+- Greek edition filtering can duplicate or mix readings if not decided first.
+- Repository `save()` methods write immediately, so dry-run must stay outside repositories.
+- Large occurrence imports need chunking and resumable reports.
+
+#### Recommended Phase 5C Implementation Order
+
+1. Design `OriginalLanguageImportReport` and issue codes.
+2. Design source metadata and source inspection contracts.
+3. Design `SourceFileValidator` and `SourceLicenseValidator`.
+4. Inspect exact STEP TAHOT/TAGNT headers.
+5. Design normalizer interfaces and source-specific normalizers.
+6. Design `OriginalLanguageImportValidator`.
+7. Design dry-run-only `OriginalLanguageImportService`.
+8. Implement only after approval.
+9. Run dry-run on approved local source files.
+10. Run actual import only after separate explicit approval.
 
 Import rules:
 

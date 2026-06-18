@@ -111,7 +111,7 @@ Phase 5C - Original Language Importer Design.
 Blocked items:
 
 ```txt
-None documented.
+STEP_TAHOT and STEP_TAGNT exact local source files or header/sample excerpts are not yet available. Source-specific normalizer implementation and OriginalLanguageImportService implementation are blocked until approved source headers, sample rows, license/attribution text, Greek edition filtering, Hebrew versification mapping, prefix/suffix token modeling, and sourceRef strategy are confirmed.
 ```
 
 Current phase boundary:
@@ -212,6 +212,20 @@ Phase 5C - Original Language Importer Design
 ```
 
 Phase 5C is design-first. It must define source file inspection, source header verification, import mapping, batch validation, dry-run behavior, verification report shape, validator/service responsibilities, and repository usage before any importer implementation or dataset import.
+
+Phase 5C importer design analysis summary:
+
+- Existing KRV import flow is `MDB export -> generated JSON -> ImportRow -> KrvImportValidator -> VerseImportService -> BibleRepository::upsertVerse() -> verification`.
+- Existing KRV import does not include a true dry-run mode.
+- Original Language import must add a stronger dry-run gate before persistence.
+- Proposed Original Language flow is `Source file -> Source Inspection -> Source Metadata / License Gate -> Header / Shape Validation -> Row Normalization -> Batch Validation -> Dry-run Report -> Explicit Approval -> Term Persistence -> Occurrence Persistence -> Verification Report`.
+- Dry-run must inspect, normalize, validate, build identity keys, optionally simulate read-only repository matching, produce counts and issues, and perform zero writes.
+- `OriginalLanguageImportService` must default to dry-run behavior until implementation receives explicit approval.
+- Phase 5C-6 header mapping analysis found no local STEP_TAHOT or STEP_TAGNT source files.
+- `docs/data-sources/` currently contains KRV-related files only.
+- Plugin tools currently contain KRV tooling only.
+- STEP_TAHOT and STEP_TAGNT exact headers are not confirmed.
+- `StepTahotNormalizer`, `StepTagntNormalizer`, and `OriginalLanguageImportService` must not be implemented until approved local source files or header/sample excerpts are provided and inspected.
 
 Still prohibited:
 

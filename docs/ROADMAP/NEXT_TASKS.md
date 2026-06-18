@@ -16,20 +16,21 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Phase 5C Importer Design
-2. Inspect exact STEP TAHOT/TAGNT source files
-3. Confirm license/attribution text
-4. Define dry-run import report
-5. Design `OriginalLanguageImportValidator`
-6. Design `OriginalLanguageImportService`
-7. Design import repository usage
-8. Only then implement importer
-9. No dataset import until explicit approval
-10. Phase 5D Read API Foundation
-11. Later: Interlinear UI
-12. Later: Word Study UI
-13. Later: Cross References
-14. Later: Commentary Layer
+1. Provide approved STEP_TAHOT / STEP_TAGNT files or header/sample excerpts
+2. Run header-only `OriginalLanguageSourceInspector`
+3. Finalize STEP_TAHOT / STEP_TAGNT header mapping
+4. Decide Greek edition filtering
+5. Decide Hebrew versification mapping
+6. Decide Hebrew prefix/suffix token model
+7. Then design `StepTahotNormalizer` / `StepTagntNormalizer`
+8. Then design dry-run-only `OriginalLanguageImportService`
+9. Run dry-run on approved local source files only after approval
+10. Actual import only after separate explicit approval
+11. Phase 5D Read API Foundation
+12. Later: Interlinear UI
+13. Later: Word Study UI
+14. Later: Cross References
+15. Later: Commentary Layer
 
 ## Required Pre-Work Before Code Changes
 
@@ -263,11 +264,39 @@ Phase 5C importer design constraints:
 - Phase 5C is not dataset import.
 - Inspect exact STEP TAHOT/TAGNT source files before importer implementation.
 - Verify source headers before importer implementation.
+- STEP_TAHOT source file is not currently available locally.
+- STEP_TAGNT source file is not currently available locally.
+- `docs/data-sources/` currently contains KRV-related files only.
+- Plugin tools currently contain KRV tooling only.
+- `StepTahotNormalizer`, `StepTagntNormalizer`, and `OriginalLanguageImportService` are blocked until approved local source files or header/sample excerpts are provided and inspected.
 - Define source-to-ValueObject import mapping before writes.
 - Define batch validation and dry-run report behavior before writes.
 - Design validator, service, and repository usage before implementation.
 - Do not import STEP, OSHB, SBLGNT, MorphGNT, OpenGNT, or any original-language source without explicit approval.
 - Do not build public original-language APIs, Interlinear UI, Strong's pages, Word Study UI, or other frontend surfaces in Phase 5C design.
+
+Phase 5C proposed classes:
+
+- `OriginalLanguageSourceInspector`
+- `OriginalLanguageSourceMetadata`
+- `SourceFileValidator`
+- `SourceLicenseValidator`
+- `OriginalLanguageNormalizedRow`
+- `OriginalLanguageNormalizer`
+- `StepTahotNormalizer`
+- `StepTagntNormalizer`
+- `OriginalLanguageImportValidator`
+- `OriginalLanguageImportIssue`
+- `OriginalLanguageImportReport`
+- `OriginalLanguageImportService`
+
+Phase 5C implementation must preserve a mandatory dry-run gate:
+
+- `dryRun` defaults to `true`.
+- Dry-run performs source inspection, normalization, validation, identity key generation, optional read-only repository matching simulation, count reporting, and issue reporting.
+- Dry-run performs zero writes.
+- No production import may run without a prior successful dry-run and separate explicit approval.
+- Repository `save()` methods write immediately, so dry-run behavior must stay in the import service layer and must not call persistence methods.
 
 ## Validation For Next Code Change
 
