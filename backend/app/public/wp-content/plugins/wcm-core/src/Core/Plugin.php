@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WCM\Core;
 
 use WCM\Api\ApiRegistrar;
+use WCM\Database\SchemaInstaller;
 use WCM\PostTypes\PostTypeRegistrar;
 use WCM\Settings\SettingsRegistrar;
 
@@ -23,6 +24,13 @@ final class Plugin
         add_action('init', [self::class, 'registerPostTypes']);
         add_action('rest_api_init', [self::class, 'registerApi']);
         add_action('admin_init', [self::class, 'registerSettings']);
+    }
+
+    public static function activate(): void
+    {
+        if (class_exists(SchemaInstaller::class)) {
+            (new SchemaInstaller())->install();
+        }
     }
 
     public static function registerPostTypes(): void
