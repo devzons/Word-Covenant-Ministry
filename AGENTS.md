@@ -39,6 +39,69 @@ Previous chat history is not enough.
 Agent assumptions are not enough.
 Documentation plus filesystem inspection is required every session.
 
+# Mandatory Project State Verification Rule
+
+At the start of every new session, before starting any task, the agent must verify the current project state from:
+
+1. `docs/ROADMAP/PROJECT_STATUS.md`
+2. `docs/ROADMAP/SCRIPTURE_ENGINE_ROADMAP.md`
+3. `docs/ROADMAP/NEXT_TASKS.md`
+
+Before any code modification, documentation update, file creation, API change, frontend change, or backend change, the agent must report:
+
+- current phase
+- completed phase
+- active objective
+- next task
+- blocked items if any
+- whether the requested work belongs to the current phase
+
+If the requested work belongs to a future phase instead of the current phase, the agent must:
+
+1. Stop.
+2. Explain the dependency.
+3. Ask for approval before proceeding.
+
+# New Window Continuation Rule
+
+In every new ChatGPT, Codex, Cursor, Claude Code, or Copilot session, conversation memory and previous chat history are not trusted as source of truth.
+
+The agent must reread repository documentation and reconstruct current state from ROADMAP documents before work begins.
+
+Default new-session startup order:
+
+1. Read `AGENTS.md`.
+2. Read `docs/DEVELOPMENT_CONSTITUTION.md`.
+3. Read `docs/PROJECT_ARCHITECTURE.md`.
+4. Read `docs/DECISIONS/*`.
+5. Read `docs/ROADMAP/PROJECT_STATUS.md`.
+6. Read `docs/ROADMAP/SCRIPTURE_ENGINE_ROADMAP.md`.
+7. Read `docs/ROADMAP/NEXT_TASKS.md`.
+8. Inspect filesystem.
+9. Verify git root.
+10. Run `git status`.
+11. Report current phase before implementation.
+
+# Roadmap Documentation Rule
+
+When project progress changes, update `docs/ROADMAP/`.
+
+ROADMAP updates are required for:
+
+- phase completion
+- new phase start
+- current work objective changes
+- blockers
+- API implementation location decisions
+- frontend route decisions
+- Scripture Engine roadmap changes
+- Search, Reader, Original Language, Cross Reference, or Commentary phase changes
+
+Authority relationship:
+
+- `AGENTS.md` and `docs/DEVELOPMENT_CONSTITUTION.md` are the top-level rules.
+- `docs/ROADMAP/*` is the source of truth for current status and next work.
+
 # No Code Change Without Inspection Rule
 
 No code may be modified until the repository structure and relevant documentation have been inspected in the current session.
