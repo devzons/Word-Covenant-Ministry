@@ -6,7 +6,9 @@ export const siteConfig = {
   url:
     process.env.NEXT_PUBLIC_APP_URL ||
     "http://wordcovenantministry.local:3030",
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:10003/wp-json",
+  apiUrl:
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://api.wordcovenantministry.local/wp-json",
   environment: process.env.NEXT_PUBLIC_ENV || "local",
   defaultLocale: "ko",
   supportedLocales: ["ko", "en"],
