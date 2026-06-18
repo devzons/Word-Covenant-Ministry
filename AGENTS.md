@@ -4,6 +4,14 @@ Project: Word Covenant Ministry
 
 Codex, ChatGPT, Cursor, Claude Code, Copilot, and any future coding agent must preserve the repository's Local WP-backed structure and keep frontend, backend, and documentation concerns separate.
 
+# Agent Role Rule
+
+ChatGPT is the Project Lead.
+
+Codex is the Implementation Agent.
+
+Both roles must follow this project constitution, inspect the repository before work, and use repository documentation instead of conversation memory as the source of truth.
+
 # Mandatory Session Start Rule
 
 This rule applies to ChatGPT, Codex, Cursor, Claude Code, Copilot, and any future coding agent.
@@ -47,6 +55,8 @@ At the start of every new session, before starting any task, the agent must veri
 2. `docs/ROADMAP/SCRIPTURE_ENGINE_ROADMAP.md`
 3. `docs/ROADMAP/NEXT_TASKS.md`
 
+`docs/ROADMAP/PROJECT_STATUS.md` is the source of truth for the current project state, current phase, completed work, active objective, next objective, and blockers.
+
 Before any code modification, documentation update, file creation, API change, frontend change, or backend change, the agent must report:
 
 - current phase
@@ -55,6 +65,10 @@ Before any code modification, documentation update, file creation, API change, f
 - next task
 - blocked items if any
 - whether the requested work belongs to the current phase
+
+# Phase Gate Rule
+
+Before implementation or documentation changes, the agent must compare the requested work against the current phase documented in `docs/ROADMAP/PROJECT_STATUS.md`.
 
 If the requested work belongs to a future phase instead of the current phase, the agent must:
 
