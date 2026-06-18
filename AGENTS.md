@@ -4,6 +4,70 @@ Project: Word Covenant Ministry
 
 Codex, ChatGPT, Cursor, Claude Code, Copilot, and any future coding agent must preserve the repository's Local WP-backed structure and keep frontend, backend, and documentation concerns separate.
 
+# Mandatory Session Start Rule
+
+This rule applies to ChatGPT, Codex, Cursor, Claude Code, Copilot, and any future coding agent.
+
+At the start of every new coding session, before any code modification, documentation update, file creation, deletion, rename, refactor, import, export, database change, API change, or frontend change, the agent must:
+
+1. Read `AGENTS.md`.
+2. Read `docs/DEVELOPMENT_CONSTITUTION.md`.
+3. Read `docs/PROJECT_ARCHITECTURE.md`.
+4. Read the relevant domain document:
+   - frontend work: `docs/FRONTEND_STRUCTURE.md`
+   - backend work: `docs/BACKEND_STRUCTURE.md`
+   - data/import work: `docs/DECISIONS/0014-bible-import-pipeline-strategy.md` and `docs/DECISIONS/0015-source-data-management-strategy.md`
+   - Scripture work: `docs/DECISIONS/0008-scripture-data-model.md`, `docs/DECISIONS/0009-bible-storage-strategy.md`, `docs/DECISIONS/0010-original-language-data-model.md`, and `docs/DECISIONS/0012-scripture-relationship-model.md`
+   - content/CPT work: `docs/DECISIONS/0013-content-domain-model.md`
+5. Inspect the actual filesystem.
+6. Verify the Git repository root.
+7. Run `git status`.
+8. Verify the target path exists.
+9. Compare documentation against actual structure.
+10. Only then make changes.
+
+Required commands before any code change:
+
+```bash
+git rev-parse --show-toplevel
+git status
+find . -maxdepth 5 -type d | sort
+```
+
+Conversation memory is not enough.
+Previous chat history is not enough.
+Agent assumptions are not enough.
+Documentation plus filesystem inspection is required every session.
+
+# No Code Change Without Inspection Rule
+
+No code may be modified until the repository structure and relevant documentation have been inspected in the current session.
+
+If an agent cannot inspect the repository, it must not pretend that it did.
+It must provide instructions or a Codex prompt instead.
+
+# ChatGPT and Codex Shared Responsibility Rule
+
+Both ChatGPT and Codex must follow the same project constitution.
+
+ChatGPT must not give implementation prompts that violate:
+
+- the confirmed repository structure
+- official plugin path
+- local URL strategy
+- documentation-first rule
+- inspection-first rule
+- file size and performance rule
+- source data management strategy
+
+Codex must not modify code until it has inspected:
+
+- `AGENTS.md`
+- `docs/DEVELOPMENT_CONSTITUTION.md`
+- relevant docs
+- actual file structure
+- git status
+
 # Repository Inspection Rule (Highest Priority)
 
 Before making any change:
@@ -103,6 +167,20 @@ Documentation:
 docs/
 ```
 
+Source data archive:
+
+```txt
+docs/data-sources/
+```
+
+Do not use these paths for active project work:
+
+```txt
+backend/wcm-core/
+backend/plugin/wcm-core/
+app/public/wp-content/plugins/wcm-core/
+```
+
 ## Change Validation Rule
 
 Before any commit:
@@ -150,7 +228,7 @@ Port 3030
 Backend:
 
 ```txt
-Use Local WP assigned URL.
+http://api.wordcovenantministry.local
 ```
 
 Agents must follow ADR-0006 Development Port Standard.
@@ -161,6 +239,47 @@ Agents must follow ADR-0006 Development Port Standard.
 - Documentation examples must use port 3030.
 - Environment examples must use port 3030.
 - Future agent-generated commands must use port 3030 unless explicitly overridden.
+
+## Local URL Strategy Rule
+
+Confirmed local development URLs:
+
+```txt
+Frontend: http://wordcovenantministry.local:3030
+Local WP / Backend API: http://api.wordcovenantministry.local
+WordPress REST API base: http://api.wordcovenantministry.local/wp-json
+WCM REST API namespace: http://api.wordcovenantministry.local/wp-json/wcm/v1
+```
+
+Example WCM Bible endpoint:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1/bible/KRV/genesis/1/1
+```
+
+Frontend local `NEXT_PUBLIC_API_URL` must point to:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+Do not use this URL for local frontend API configuration unless the local API host is explicitly changed:
+
+```txt
+http://wordcovenantministry.local/wp-json
+```
+
+Production frontend:
+
+```txt
+https://wordcovenantministry.org
+```
+
+Future production API:
+
+```txt
+https://api.wordcovenantministry.org
+```
 
 ## Architecture Protection Rule
 

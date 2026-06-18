@@ -65,6 +65,40 @@ app/plugins/wcm-core
 
 unless they already exist and are documented.
 
+Do not use these paths for active backend or plugin work:
+
+```txt
+backend/wcm-core/
+backend/plugin/wcm-core/
+app/public/wp-content/plugins/wcm-core/
+```
+
+## Local API URLs
+
+Confirmed Local WP / backend API URL:
+
+```txt
+http://api.wordcovenantministry.local
+```
+
+WordPress REST API base:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+WCM REST API namespace:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1
+```
+
+Example WCM Bible endpoint:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1/bible/KRV/genesis/1/1
+```
+
 ## Namespace
 
 Composer autoloading should use the `WCM\\` namespace:

@@ -86,6 +86,8 @@ Alternatives Considered
 - Frontend: Next.js in `frontend/`
 - Backend CMS: WordPress through Local WP in `backend/`
 - Core plugin: `backend/app/public/wp-content/plugins/wcm-core/`
+- Documentation: `docs/`
+- Source data archive: `docs/data-sources/`
 - Media, CDN, WAF, and DNS: Cloudflare
 - Frontend hosting: Vercel
 - Backend local development: Local WP
@@ -98,18 +100,41 @@ Local frontend:
 http://wordcovenantministry.local:3030
 ```
 
-Local WP backend:
+Local WP / backend API:
 
 ```txt
-http://wordcovenantministry.local
+http://api.wordcovenantministry.local
+```
+
+WordPress REST API base:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+WCM REST API namespace:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1
+```
+
+Example WCM Bible endpoint:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1/bible/KRV/genesis/1/1
 ```
 
 If Local WP generates a different backend URL, inspect Local WP and use that generated URL.
 
-Production:
+Production frontend:
 
 ```txt
 https://wordcovenantministry.org
+```
+
+Future production API:
+
+```txt
 https://api.wordcovenantministry.org
 ```
 
@@ -125,6 +150,7 @@ wordcovenantministry/
 │               └── plugins/
 │                   └── wcm-core/
 ├── docs/
+│   └── data-sources/
 ├── .gitignore
 ├── README.md
 └── AGENTS.md
@@ -149,6 +175,18 @@ npm run dev
 ```
 
 Use `.env.example` as the template for local frontend environment variables. Do not commit `.env`, `.env.local`, or other secret-bearing env files.
+
+Local frontend API configuration should point `NEXT_PUBLIC_API_URL` to:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+Do not use this URL for local frontend API configuration unless the local API host is explicitly changed:
+
+```txt
+http://wordcovenantministry.local/wp-json
+```
 
 ## Backend Setup
 

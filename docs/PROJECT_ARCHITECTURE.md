@@ -56,6 +56,8 @@ Create a decision record for architecture changes, repository structure changes,
 - Frontend: Next.js application in `frontend/`
 - Backend CMS: WordPress through Local WP in `backend/`
 - Core plugin: `backend/app/public/wp-content/plugins/wcm-core/`
+- Documentation: `docs/`
+- Source data archive: `docs/data-sources/`
 - Media/CDN/WAF/DNS: Cloudflare
 - Frontend hosting: Vercel
 - Backend local development: Local WP
@@ -68,10 +70,28 @@ Local frontend:
 http://wordcovenantministry.local:3030
 ```
 
-Local WP backend:
+Local WP / backend API:
 
 ```txt
-http://wordcovenantministry.local
+http://api.wordcovenantministry.local
+```
+
+WordPress REST API base:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+WCM REST API namespace:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1
+```
+
+Example WCM Bible endpoint:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1/bible/KRV/genesis/1/1
 ```
 
 If Local WP generates a different backend URL, inspect Local WP and use that generated URL.
@@ -100,6 +120,7 @@ wordcovenantministry/
 │               └── plugins/
 │                   └── wcm-core/
 ├── docs/
+│   └── data-sources/
 ├── .gitignore
 ├── README.md
 └── AGENTS.md
@@ -124,6 +145,14 @@ app/plugins/wcm-core
 ```
 
 unless they already exist and are documented.
+
+Do not use these paths for active project work:
+
+```txt
+backend/wcm-core/
+backend/plugin/wcm-core/
+app/public/wp-content/plugins/wcm-core/
+```
 
 ## Data Flow
 

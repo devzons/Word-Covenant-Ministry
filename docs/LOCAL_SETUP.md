@@ -18,12 +18,54 @@ npm run dev
 
 The frontend reads from the WordPress backend through configured API URLs. Use `frontend/.env.example` as the template for local values, and never commit real `.env` files.
 
+Local frontend URL:
+
+```txt
+http://wordcovenantministry.local:3030
+```
+
+Local frontend API configuration should point `NEXT_PUBLIC_API_URL` to:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+Do not use this URL for local frontend API configuration unless the local API host is explicitly changed:
+
+```txt
+http://wordcovenantministry.local/wp-json
+```
+
 ## Backend CMS
 
 The backend is the Local WP site stored under:
 
 ```txt
 backend/
+```
+
+Confirmed Local WP / backend API URL:
+
+```txt
+http://api.wordcovenantministry.local
+```
+
+WordPress REST API base:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+WCM REST API namespace:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1
+```
+
+Example WCM Bible endpoint:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1/bible/KRV/genesis/1/1
 ```
 
 The active plugin source is:

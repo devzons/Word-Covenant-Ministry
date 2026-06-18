@@ -74,6 +74,32 @@ The active WordPress plugin source is outside `frontend/` at:
 backend/app/public/wp-content/plugins/wcm-core/
 ```
 
+## Local API Configuration
+
+The local frontend runs at:
+
+```txt
+http://wordcovenantministry.local:3030
+```
+
+`NEXT_PUBLIC_API_URL` should point locally to:
+
+```txt
+http://api.wordcovenantministry.local/wp-json
+```
+
+Do not use this URL for local frontend API configuration unless the local API host is explicitly changed:
+
+```txt
+http://wordcovenantministry.local/wp-json
+```
+
+Example WCM Bible endpoint:
+
+```txt
+http://api.wordcovenantministry.local/wp-json/wcm/v1/bible/KRV/genesis/1/1
+```
+
 ## Validation
 
 ```bash

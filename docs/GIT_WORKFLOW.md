@@ -43,6 +43,8 @@ Review existing changes before editing. Do not overwrite unrelated work.
 - Update docs before changing the repository structure.
 - Do not move files or create symlinks for the plugin.
 - Avoid unrelated formatting or refactors.
+- Preserve the confirmed local URL strategy: frontend at `http://wordcovenantministry.local:3030`, backend API at `http://api.wordcovenantministry.local`, and WordPress REST at `http://api.wordcovenantministry.local/wp-json`.
+- Frontend local `NEXT_PUBLIC_API_URL` should use `http://api.wordcovenantministry.local/wp-json`, not `http://wordcovenantministry.local/wp-json`, unless explicitly changed.
 
 ## Before Commit
 
