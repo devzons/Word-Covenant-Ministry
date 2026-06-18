@@ -13,16 +13,13 @@ if (PHP_SAPI !== 'cli') {
     exit(1);
 }
 
-if ($argc !== 2) {
-    fwrite(STDERR, "Usage: php import-krv-json.php <krv.generated.json>\n");
-    exit(1);
-}
-
 try {
-    loadComposerAutoload();
-    bootstrapWordPress();
+    $arguments = parseCliArguments($argv);
 
-    $jsonPath = resolvePath($argv[1]);
+    loadComposerAutoload();
+    bootstrapWordPress($arguments['dbSocket']);
+
+    $jsonPath = resolvePath($arguments['jsonPath']);
     $records = readJsonRecords($jsonPath);
     $prepared = prepareImportRows($records);
 
@@ -41,6 +38,52 @@ try {
     exit(1);
 }
 
+/**
+ * @param string[] $argv
+ * @return array{jsonPath: string, dbSocket: string|null}
+ */
+function parseCliArguments(array $argv): array
+{
+    $jsonPath = null;
+    $dbSocket = null;
+
+    foreach (array_slice($argv, 1) as $argument) {
+        if (str_starts_with($argument, '--db-socket=')) {
+            $dbSocket = substr($argument, strlen('--db-socket='));
+            continue;
+        }
+
+        if ($argument === '--db-socket') {
+            throw new RuntimeException('Use --db-socket=/path/to/mysqld.sock.');
+        }
+
+        if (str_starts_with($argument, '--')) {
+            throw new RuntimeException('Unknown option: ' . $argument);
+        }
+
+        if ($jsonPath !== null) {
+            throw new RuntimeException('Only one JSON path argument is supported.');
+        }
+
+        $jsonPath = $argument;
+    }
+
+    if ($jsonPath === null) {
+        throw new RuntimeException(
+            "Usage: php import-krv-json.php <krv.generated.json> [--db-socket=/path/to/mysqld.sock]"
+        );
+    }
+
+    if ($dbSocket !== null && trim($dbSocket) === '') {
+        throw new RuntimeException('The --db-socket value must not be empty.');
+    }
+
+    return [
+        'jsonPath' => $jsonPath,
+        'dbSocket' => $dbSocket,
+    ];
+}
+
 function loadComposerAutoload(): void
 {
     $autoloadPath = dirname(__DIR__) . '/vendor/autoload.php';
@@ -52,7 +95,7 @@ function loadComposerAutoload(): void
     require_once $autoloadPath;
 }
 
-function bootstrapWordPress(): void
+function bootstrapWordPress(?string $dbSocket): void
 {
     $wpLoadPath = dirname(__DIR__, 4) . '/wp-load.php';
 
@@ -60,7 +103,7 @@ function bootstrapWordPress(): void
         throw new RuntimeException('WordPress bootstrap file not found: ' . $wpLoadPath);
     }
 
-    preflightWordPressDatabase(dirname($wpLoadPath) . '/wp-config.php');
+    preflightWordPressDatabase(dirname($wpLoadPath) . '/wp-config.php', $dbSocket);
 
     if (! defined('WP_USE_THEMES')) {
         define('WP_USE_THEMES', false);
@@ -69,7 +112,7 @@ function bootstrapWordPress(): void
     require_once $wpLoadPath;
 }
 
-function preflightWordPressDatabase(string $configPath): void
+function preflightWordPressDatabase(string $configPath, ?string $dbSocket): void
 {
     if (! extension_loaded('mysqli') || ! is_file($configPath)) {
         return;
@@ -90,20 +133,81 @@ function preflightWordPressDatabase(string $configPath): void
         return;
     }
 
+    mysqli_report(MYSQLI_REPORT_OFF);
+
+    $errors = [];
+
+    if ($dbSocket !== null && $dbHost === 'localhost') {
+        if (isMysqlSocket($dbSocket)) {
+            $error = testDatabaseConnection('localhost', $dbUser, $dbPassword, $dbName, $dbSocket);
+
+            if ($error === null) {
+                configureRuntimeMysqlSocket($dbSocket);
+                fwrite(STDOUT, 'Using Local WP socket: ' . $dbSocket . "\n");
+
+                return;
+            }
+
+            $errors[] = $dbSocket . ': ' . $error;
+        } else {
+            $errors[] = $dbSocket . ': socket path does not exist or is not a socket';
+        }
+    }
+
+    $connectionHosts = $dbHost === 'localhost' ? ['localhost', '127.0.0.1'] : [$dbHost];
+
+    foreach ($connectionHosts as $connectionHost) {
+        $error = testDatabaseConnection($connectionHost, $dbUser, $dbPassword, $dbName);
+
+        if ($error === null) {
+            if ($dbHost === 'localhost' && $connectionHost === '127.0.0.1') {
+                fwrite(STDOUT, "WordPress DB preflight used TCP fallback host 127.0.0.1.\n");
+            }
+
+            return;
+        }
+
+        $errors[] = $connectionHost . ': ' . $error;
+    }
+
+    throw new RuntimeException('WordPress database is not reachable: ' . implode('; ', $errors));
+}
+
+function testDatabaseConnection(
+    string $host,
+    string $user,
+    string $password,
+    string $database,
+    ?string $socket = null
+): ?string
+{
     $mysqli = mysqli_init();
 
     if (! $mysqli instanceof mysqli) {
-        return;
+        return null;
     }
 
-    mysqli_report(MYSQLI_REPORT_OFF);
+    if (@$mysqli->real_connect($host, $user, $password, $database, null, $socket) === true) {
+        $mysqli->close();
 
-    if (@$mysqli->real_connect($dbHost, $dbUser, $dbPassword, $dbName) !== true) {
-        $error = $mysqli->connect_error ?: 'unknown database connection error';
-        throw new RuntimeException('WordPress database is not reachable: ' . $error);
+        return null;
     }
 
+    $error = $mysqli->connect_error ?: 'unknown database connection error';
     $mysqli->close();
+
+    return $error;
+}
+
+function configureRuntimeMysqlSocket(string $socket): void
+{
+    ini_set('mysqli.default_socket', $socket);
+    ini_set('pdo_mysql.default_socket', $socket);
+}
+
+function isMysqlSocket(string $socket): bool
+{
+    return file_exists($socket) && @filetype($socket) === 'socket';
 }
 
 function parseWpConfigConstant(string $config, string $constant): ?string
