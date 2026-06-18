@@ -120,6 +120,39 @@ final class BibleRepository
         return is_array($row) ? $row : null;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function getChapterVerses(
+        int $versionId,
+        int $bookId,
+        int $chapter
+    ): array {
+        global $wpdb;
+
+        if ($versionId < 1 || $bookId < 1 || $chapter < 1) {
+            return [];
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_bible_verses';
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT verse, text FROM {$tableName}
+                WHERE version_id = %d
+                AND book_id = %d
+                AND chapter = %d
+                ORDER BY verse ASC",
+                $versionId,
+                $bookId,
+                $chapter
+            ),
+            'ARRAY_A'
+        );
+
+        return is_array($rows) ? $rows : [];
+    }
+
     public function verseExists(
         int $versionId,
         int $bookId,

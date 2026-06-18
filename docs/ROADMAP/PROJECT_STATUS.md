@@ -67,31 +67,33 @@ backend/app/public/wp-content/plugins/wcm-core/
 - Psalm 72:20 correction completed.
 - KRV import verification completed.
 - Bible Lookup API implemented.
+- Bible Search API implemented.
+- Bible Chapter API implemented.
 
 ## Current Phase Summary
 
 Current phase:
 
 ```txt
-Scripture Engine - Bible Search API preparation
+Phase 3 - Frontend Bible Reader preparation
 ```
 
 Completed phase:
 
 ```txt
-Scripture Engine Foundation and KRV Bible Lookup API
+Scripture Engine Foundation, KRV Bible Lookup API, Bible Search API, and Bible Chapter API
 ```
 
 Active objective:
 
 ```txt
-Implement the first constrained Bible Search API after documentation and structure verification.
+Prepare the Frontend Bible Reader MVP using the backend Scripture APIs.
 ```
 
 Next task:
 
 ```txt
-Create the first Bible Search API using src/Api/BibleSearchController.php, ApiRegistrar.php, and BibleRepository::searchVerses(...).
+Implement the Frontend Bible Reader route at /ko/bible/KRV/genesis/1 after confirming frontend routing and API client structure.
 ```
 
 Blocked items:
@@ -103,7 +105,7 @@ None documented.
 Current phase boundary:
 
 ```txt
-Bible Search API belongs to the current phase. Reader UI, generic search engine, original language import, cross references, and commentary features are future phases.
+Frontend Bible Reader MVP belongs to the current phase. Generic search engine, original language import, cross references, and commentary features are future phases.
 ```
 
 ## Current Bible Lookup API
@@ -128,6 +130,27 @@ Implementation structure:
 - `BibleController` sanitizes and validates request parameters.
 - `BibleController` uses `BibleRepository` for data access.
 - `BibleRepository` uses `getVersionByCode`, `getBookBySlug`, and `getVerse` to query custom Bible tables.
+
+## Current Bible Chapter API
+
+Current endpoint:
+
+```txt
+/wp-json/wcm/v1/bible/{version}/{book}/{chapter}
+```
+
+Example:
+
+```txt
+/wp-json/wcm/v1/bible/KRV/genesis/1
+```
+
+Implementation structure:
+
+- `src/Api/BibleController.php` registers the chapter route.
+- `BibleController` sanitizes and validates version, book slug, and chapter params.
+- `BibleController` uses `BibleRepository::getChapterVerses()` for chapter verse retrieval.
+- The endpoint returns one chapter only and does not return a full Bible dataset.
 
 ## Current Scripture Source Structure
 
