@@ -909,6 +909,74 @@ Implementation gate:
 - Do not write to the database.
 - Do not continue past header mapping until approved local source files or header/sample excerpts are provided and inspected.
 
+#### Phase 5C-7 Source Acquisition Specification
+
+Official source acquisition policy:
+
+```txt
+docs/ROADMAP/SOURCE_ACQUISITION_SPECIFICATION.md
+```
+
+Source selection:
+
+- Hebrew primary source: STEP Bible TAHOT.
+- Hebrew secondary validation/reference source: OSHB.
+- Greek primary source: STEP Bible TAGNT.
+- Greek reference text: SBLGNT.
+
+Source version policy:
+
+- Do not use floating `latest` source references.
+- Exact source version or release identifier must be selected before download, inspection, dry-run, or import.
+- Exact file name, source URL, source version, download date, verification date, checksum, license status, and attribution text must be documented.
+- Source version records belong under `docs/data-sources/`, not in source code.
+
+Recommended storage location:
+
+```txt
+docs/data-sources/
+└── STEP/
+    ├── README.md
+    ├── LICENSE.md
+    ├── TAHOT/
+    │   ├── README.md
+    │   └── source files
+    └── TAGNT/
+        ├── README.md
+        └── source files
+```
+
+Required before download:
+
+- Exact file name.
+- Expected format.
+- Expected headers or source shape.
+- Expected source dataset value.
+- Attribution requirements.
+- License status.
+- Source URL.
+
+Required before import:
+
+- `OriginalLanguageSourceInspector` passes.
+- `SourceFileValidator` passes.
+- `SourceLicenseValidator` passes.
+- Header inspection is complete.
+- Header mapping is complete.
+- Greek edition filtering is decided.
+- Hebrew versification mapping is decided.
+- Hebrew prefix/suffix token model is decided.
+- Stable `sourceRef` strategy is decided.
+- Explicit approval is given for actual import.
+
+Blocked until approved source files or header/sample excerpts are provided:
+
+- `StepTahotNormalizer`.
+- `StepTagntNormalizer`.
+- `OriginalLanguageImportService`.
+- Actual STEP import.
+- Database writes.
+
 #### Phase 5C Risks
 
 - KRV importer lacks a dry-run pattern.
@@ -921,16 +989,17 @@ Implementation gate:
 
 #### Recommended Phase 5C Implementation Order
 
-1. Design `OriginalLanguageImportReport` and issue codes.
-2. Design source metadata and source inspection contracts.
-3. Design `SourceFileValidator` and `SourceLicenseValidator`.
-4. Inspect exact STEP TAHOT/TAGNT headers.
-5. Design normalizer interfaces and source-specific normalizers.
-6. Design `OriginalLanguageImportValidator`.
-7. Design dry-run-only `OriginalLanguageImportService`.
-8. Implement only after approval.
-9. Run dry-run on approved local source files.
-10. Run actual import only after separate explicit approval.
+1. Finalize Source Acquisition Specification.
+2. Acquire approved STEP_TAHOT / STEP_TAGNT source files or header/sample excerpts.
+3. Run header-only source inspection.
+4. Finalize header mapping.
+5. Decide Greek edition filtering.
+6. Decide Hebrew versification mapping.
+7. Decide Hebrew prefix/suffix token model.
+8. Design `StepTahotNormalizer` and `StepTagntNormalizer`.
+9. Design dry-run-only `OriginalLanguageImportService`.
+10. Run first dry-run import only after approval.
+11. Run actual import only after separate explicit approval.
 
 Import rules:
 

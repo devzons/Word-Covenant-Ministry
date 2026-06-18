@@ -226,6 +226,10 @@ Phase 5C importer design analysis summary:
 - Plugin tools currently contain KRV tooling only.
 - STEP_TAHOT and STEP_TAGNT exact headers are not confirmed.
 - `StepTahotNormalizer`, `StepTagntNormalizer`, and `OriginalLanguageImportService` must not be implemented until approved local source files or header/sample excerpts are provided and inspected.
+- Phase 5C-7 source acquisition policy is recorded in `docs/ROADMAP/SOURCE_ACQUISITION_SPECIFICATION.md`.
+- Source versions must be exact and documented; floating `latest` source references are not allowed.
+- Recommended STEP storage location is `docs/data-sources/STEP/TAHOT/` and `docs/data-sources/STEP/TAGNT/`.
+- Source acquisition must document exact file name, source URL, source version, download date, license, and attribution text before any download or import.
 
 Still prohibited:
 

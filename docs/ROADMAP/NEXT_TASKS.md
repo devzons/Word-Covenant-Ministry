@@ -16,21 +16,20 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Provide approved STEP_TAHOT / STEP_TAGNT files or header/sample excerpts
-2. Run header-only `OriginalLanguageSourceInspector`
-3. Finalize STEP_TAHOT / STEP_TAGNT header mapping
-4. Decide Greek edition filtering
-5. Decide Hebrew versification mapping
-6. Decide Hebrew prefix/suffix token model
-7. Then design `StepTahotNormalizer` / `StepTagntNormalizer`
-8. Then design dry-run-only `OriginalLanguageImportService`
-9. Run dry-run on approved local source files only after approval
-10. Actual import only after separate explicit approval
-11. Phase 5D Read API Foundation
-12. Later: Interlinear UI
-13. Later: Word Study UI
-14. Later: Cross References
-15. Later: Commentary Layer
+1. Source Acquisition Specification
+2. Approved source file acquisition
+3. Header-only inspection
+4. Header mapping finalization
+5. StepTahotNormalizer design
+6. StepTagntNormalizer design
+7. Dry-run ImportService design
+8. First dry-run import
+9. Actual import only after separate explicit approval
+10. Phase 5D Read API Foundation
+11. Later: Interlinear UI
+12. Later: Word Study UI
+13. Later: Cross References
+14. Later: Commentary Layer
 
 ## Required Pre-Work Before Code Changes
 
@@ -262,6 +261,14 @@ Phase 5B Original Language Data Layer implementation complete:
 Phase 5C importer design constraints:
 
 - Phase 5C is not dataset import.
+- Source Acquisition Specification is recorded in `docs/ROADMAP/SOURCE_ACQUISITION_SPECIFICATION.md`.
+- Hebrew primary source is STEP Bible TAHOT.
+- Hebrew secondary validation/reference source is OSHB.
+- Greek primary source is STEP Bible TAGNT.
+- Greek reference text is SBLGNT.
+- Floating `latest` source versions are not allowed.
+- Exact source version, file name, source URL, download date, license, and attribution text must be documented before source acquisition proceeds.
+- Recommended STEP storage location is `docs/data-sources/STEP/TAHOT/` and `docs/data-sources/STEP/TAGNT/`.
 - Inspect exact STEP TAHOT/TAGNT source files before importer implementation.
 - Verify source headers before importer implementation.
 - STEP_TAHOT source file is not currently available locally.
