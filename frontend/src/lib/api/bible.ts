@@ -1,5 +1,6 @@
 import { apiRequest } from "@/lib/api/client";
 import type {
+  BibleBookMetadata,
   BibleChapterResponse,
   BibleSearchParams,
   BibleSearchResponse,
@@ -12,6 +13,15 @@ export function getBibleChapter(
 ): Promise<BibleChapterResponse> {
   return apiRequest<BibleChapterResponse>(
     `/wcm/v1/bible/${encodeURIComponent(version)}/${encodeURIComponent(book)}/${chapter}`,
+  );
+}
+
+export function getBibleBookMetadata(
+  version: string,
+  book: string,
+): Promise<BibleBookMetadata> {
+  return apiRequest<BibleBookMetadata>(
+    `/wcm/v1/books/${encodeURIComponent(version)}/${encodeURIComponent(book)}`,
   );
 }
 

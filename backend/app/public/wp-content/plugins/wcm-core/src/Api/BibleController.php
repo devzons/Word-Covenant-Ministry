@@ -21,6 +21,16 @@ final class BibleController
     {
         register_rest_route(
             self::NAMESPACE,
+            '/books/(?P<version>[A-Za-z0-9_-]+)/(?P<book>[a-z0-9-]+)',
+            [
+                'methods' => 'GET',
+                'callback' => [$this, 'getBookMetadata'],
+                'permission_callback' => '__return_true',
+            ]
+        );
+
+        register_rest_route(
+            self::NAMESPACE,
             '/bible/(?P<version>[A-Za-z0-9_-]+)/(?P<book>[a-z0-9-]+)/(?P<chapter>\d+)',
             [
                 'methods' => 'GET',
@@ -36,6 +46,33 @@ final class BibleController
                 'methods' => 'GET',
                 'callback' => [$this, 'getVerse'],
                 'permission_callback' => '__return_true',
+            ]
+        );
+    }
+
+    public function getBookMetadata(WP_REST_Request $request): WP_REST_Response
+    {
+        $versionCode = strtoupper(sanitize_key((string) $request->get_param('version')));
+        $bookSlug = sanitize_title((string) $request->get_param('book'));
+
+        $version = $this->repository->getVersionByCode($versionCode);
+
+        if ($version === null) {
+            return $this->notFound('bible_version_not_found', 'Bible version not found.');
+        }
+
+        $book = $this->repository->getBookBySlug($bookSlug);
+
+        if ($book === null) {
+            return $this->notFound('bible_book_not_found', 'Bible book not found.');
+        }
+
+        return new WP_REST_Response(
+            [
+                'translation' => (string) $version['code'],
+                'book' => (string) $book['slug'],
+                'name' => (string) $book['name_ko'],
+                'chapter_count' => (int) $book['chapters'],
             ]
         );
     }

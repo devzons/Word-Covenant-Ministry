@@ -11,6 +11,13 @@ export type BibleChapterResponse = {
   verses: BibleVerse[];
 };
 
+export type BibleBookMetadata = {
+  translation: string;
+  book: string;
+  name: string;
+  chapter_count: number;
+};
+
 export type BibleReaderParams = {
   locale: string;
   version: string;

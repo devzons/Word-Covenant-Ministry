@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { BibleReader } from "@/components/scripture/BibleReader";
 import { Container } from "@/components/ui/Container";
-import { getBibleChapter } from "@/lib/api/bible";
+import { getBibleBookMetadata, getBibleChapter } from "@/lib/api/bible";
 import { createMetadata } from "@/lib/seo/metadata";
-import type { BibleChapterResponse, BibleReaderParams } from "@/types/bible";
+import type { BibleBookMetadata, BibleChapterResponse, BibleReaderParams } from "@/types/bible";
 
 type BibleReaderPageProps = {
   params: Promise<BibleReaderParams>;
@@ -30,22 +30,34 @@ export default async function BibleReaderPage({ params }: BibleReaderPageProps) 
   }
 
   let bibleChapter: BibleChapterResponse | null = null;
+  let bookMetadata: BibleBookMetadata | null = null;
   let errorMessage = "";
+  let isChapterOutOfRange = false;
 
   try {
-    bibleChapter = await getBibleChapter(version, book, chapterNumber);
+    bookMetadata = await getBibleBookMetadata(version, book);
+
+    if (chapterNumber > bookMetadata.chapter_count) {
+      isChapterOutOfRange = true;
+    } else {
+      bibleChapter = await getBibleChapter(version, book, chapterNumber);
+    }
   } catch {
     errorMessage = "Bible chapter could not be loaded.";
   }
 
-  if (!bibleChapter) {
+  if (isChapterOutOfRange) {
+    return <BibleReaderError message="Bible chapter could not be loaded." />;
+  }
+
+  if (!bibleChapter || !bookMetadata) {
     return <BibleReaderError message={errorMessage} />;
   }
 
   return (
     <SiteShell>
       <Container>
-        <BibleReader chapter={bibleChapter} locale={locale} />
+        <BibleReader bookMetadata={bookMetadata} chapter={bibleChapter} locale={locale} />
       </Container>
     </SiteShell>
   );
