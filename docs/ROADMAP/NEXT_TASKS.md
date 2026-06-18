@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Implement Phase 5B - Original Language Schema Foundation.
+Phase 5C - Original Language Importer Design.
 
-Phase 5B implementation must create only the approved original-language schema foundation. It must not import datasets, create importers, change existing Bible tables, or change existing Bible APIs.
+Phase 5B Original Language Data Layer implementation is complete. Phase 5C must design the importer before any dataset import. It must start with source file inspection, source header verification, import mapping, batch validation, dry-run behavior, and verification report design.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,21 +16,20 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Implement Phase 5B Schema Foundation
-2. Add `wcm_original_terms` table
-3. Add `wcm_original_word_occurrences` table
-4. Add indexes and unique keys
-5. Validate dbDelta output
-6. Add syntax checks
-7. Implement Phase 5B-1 Original Language ValueObjects after design approval
-8. Add ValueObject-level invariant validation only
-9. Add dedicated validation rules before importer work
-10. Then Phase 5C importer design
-11. Phase 5D Read API Foundation
-12. Later: Interlinear UI
-13. Later: Word Study UI
-14. Later: Cross References
-15. Later: Commentary Layer
+1. Phase 5C Importer Design
+2. Inspect exact STEP TAHOT/TAGNT source files
+3. Confirm license/attribution text
+4. Define dry-run import report
+5. Design `OriginalLanguageImportValidator`
+6. Design `OriginalLanguageImportService`
+7. Design import repository usage
+8. Only then implement importer
+9. No dataset import until explicit approval
+10. Phase 5D Read API Foundation
+11. Later: Interlinear UI
+12. Later: Word Study UI
+13. Later: Cross References
+14. Later: Commentary Layer
 
 ## Required Pre-Work Before Code Changes
 
@@ -248,6 +247,28 @@ Phase 5B-1 ValueObject design decisions:
 - Keep duplicate identity, source-specific validation, Greek edition filtering, Hebrew versification, and batch reports in validators/importer validation.
 - Normalize raw source rows before constructing ValueObjects.
 
+Phase 5B Original Language Data Layer implementation complete:
+
+- `wcm_original_terms` schema table.
+- `wcm_original_word_occurrences` schema table.
+- `OriginalTerm`.
+- `OriginalWordOccurrence`.
+- `OriginalTermValidator`.
+- `OriginalWordOccurrenceValidator`.
+- `OriginalTermRepository`.
+- `OriginalWordOccurrenceRepository`.
+
+Phase 5C importer design constraints:
+
+- Phase 5C is not dataset import.
+- Inspect exact STEP TAHOT/TAGNT source files before importer implementation.
+- Verify source headers before importer implementation.
+- Define source-to-ValueObject import mapping before writes.
+- Define batch validation and dry-run report behavior before writes.
+- Design validator, service, and repository usage before implementation.
+- Do not import STEP, OSHB, SBLGNT, MorphGNT, OpenGNT, or any original-language source without explicit approval.
+- Do not build public original-language APIs, Interlinear UI, Strong's pages, Word Study UI, or other frontend surfaces in Phase 5C design.
+
 ## Validation For Next Code Change
 
 After frontend Scripture changes, run:
@@ -275,12 +296,16 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 
 ## Not In Scope For The Next Task
 
-- Do not implement backend schema before Phase 5A is complete.
-- Do not import more Bible data.
+- Do not import original-language datasets.
+- Do not run actual STEP TAHOT or STEP TAGNT import.
+- Do not run OSHB import.
+- Do not run SBLGNT import.
 - Do not download, import, or transform STEP Bible, OSHB, SBLGNT, MorphGNT, OpenGNT, or other original-language datasets yet.
-- Do not implement an original-language importer yet.
+- Do not implement an original-language importer until Phase 5C design is complete and approved.
+- Do not create public original-language APIs yet.
 - Do not create a generic search engine.
 - Do not build Interlinear UI yet.
+- Do not build a Strong's page yet.
 - Do not build Word Study UI yet.
 - Do not implement cross references or commentary.
 - Do not bundle full Bible or original-language datasets into the frontend.

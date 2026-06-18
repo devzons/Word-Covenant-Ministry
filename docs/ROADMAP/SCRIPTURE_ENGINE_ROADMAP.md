@@ -78,18 +78,46 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: Planned
+Status: In Progress
 
-Phase 5 must start with source and schema analysis. It must not start with dataset import.
+Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. It must still not proceed to dataset import without explicit approval.
 
 Subphases:
 
 ```txt
 Phase 5A - Source and Schema Analysis
-Phase 5B - Original Language Schema Foundation
-Phase 5C - Import Foundation
+Phase 5B - Original Language Data Layer
+Phase 5C - Original Language Importer Design
 Phase 5D - Read API Foundation
 ```
+
+Phase 5B status:
+
+```txt
+Implementation Complete
+```
+
+Phase 5B completed:
+
+- SchemaInstaller original language tables.
+- `wcm_original_terms`.
+- `wcm_original_word_occurrences`.
+- `OriginalTerm` ValueObject.
+- `OriginalWordOccurrence` ValueObject.
+- `OriginalTermValidator`.
+- `OriginalWordOccurrenceValidator`.
+- `OriginalTermRepository`.
+- `OriginalWordOccurrenceRepository`.
+
+Current next phase:
+
+```txt
+Phase 5C - Original Language Importer Design
+```
+
+Phase 5C starts with source file inspection, source headers verification, import mapping, batch validation design, dry-run import report design, `OriginalLanguageImportValidator` design, `OriginalLanguageImportService` design, and repository usage design.
+
+Phase 5C is not approval to import datasets. Actual STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
 
 Phase 5A entry requirements:
 
@@ -165,6 +193,7 @@ Current Scripture-related directories:
 ```txt
 src/Scripture/Import/
 src/Scripture/Repositories/
+src/Scripture/Validators/
 src/Scripture/ValueObjects/
 ```
 
@@ -180,6 +209,8 @@ Current repository:
 
 ```txt
 src/Scripture/Repositories/BibleRepository.php
+src/Scripture/Repositories/OriginalTermRepository.php
+src/Scripture/Repositories/OriginalWordOccurrenceRepository.php
 ```
 
 Current search placeholder:

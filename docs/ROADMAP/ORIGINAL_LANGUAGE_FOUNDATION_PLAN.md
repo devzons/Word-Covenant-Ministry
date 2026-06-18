@@ -15,16 +15,16 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 4 - Reader UX Polish
+Phase 5C - Original Language Importer Design
 ```
 
 Next major phase:
 
 ```txt
-Phase 5 - Original Language Foundation
+Phase 5C - Original Language Importer Design
 ```
 
-Phase 5 must begin with analysis and source validation. It must not begin with importing OSHB, SBLGNT, STEP Bible, MorphGNT, OpenGNT, or other original-language datasets.
+Phase 5B Original Language Data Layer implementation is complete. Phase 5C must begin with importer design, source file inspection, source header verification, import mapping, batch validation, dry-run design, and verification report design. It must not begin with importing OSHB, SBLGNT, STEP Bible, MorphGNT, OpenGNT, or other original-language datasets.
 
 ## Phase 5 Breakdown
 
@@ -65,13 +65,20 @@ Phase 5B entry requirements:
 - Decide Strong's normalization rules, including original Strong's and Extended Strong's handling.
 - Draft validation rules for missing lemma, missing morphology, missing Strong's number, invalid canonical reference, duplicate occurrence identity, edition membership, and source row provenance.
 
-### Phase 5B - Original Language Schema Foundation
+### Phase 5B - Original Language Data Layer
+
+Status:
+
+```txt
+Implementation Complete
+```
 
 Goals:
 
 - Add custom table foundation after Phase 5A approval.
 - Keep original-language data separate from translated Bible text.
 - Preserve canonical Scripture reference as the shared connection point.
+- Add ValueObjects, validators, and repositories for the original-language data layer before importer work.
 
 Recommended core tables:
 
@@ -602,13 +609,43 @@ source row id, word id, or deterministic import ref -> source_ref
 - Hebrew import must not begin before Hebrew versification handling is decided.
 - `source_dataset` must remain part of occurrence uniqueness because multiple source datasets may be supported later.
 
-### Phase 5C - Import Foundation
+#### Phase 5B Implementation Completion
+
+Completed implementation:
+
+- `SchemaInstaller` original-language tables.
+- `wcm_original_terms`.
+- `wcm_original_word_occurrences`.
+- `OriginalTerm` ValueObject.
+- `OriginalWordOccurrence` ValueObject.
+- `OriginalTermValidator`.
+- `OriginalWordOccurrenceValidator`.
+- `OriginalTermRepository`.
+- `OriginalWordOccurrenceRepository`.
+
+Phase 5B implementation did not approve or perform any original-language dataset import.
+
+### Phase 5C - Original Language Importer Design
+
+Status:
+
+```txt
+Next
+```
 
 Goals:
 
-- Create an original-language import pipeline separate from the KRV verse importer.
-- Reuse KRV importer patterns only where helpful.
-- Validate before writing to custom tables.
+- Inspect exact STEP TAHOT and STEP TAGNT source files.
+- Verify source headers and source row shapes.
+- Confirm license and attribution text.
+- Design original-language import mapping.
+- Design batch validation before writes.
+- Design dry-run import behavior.
+- Design verification report output.
+- Design `OriginalLanguageImportValidator`.
+- Design `OriginalLanguageImportService`.
+- Design repository usage for term and occurrence persistence.
+- Only then proceed to importer implementation after explicit approval.
 
 Pipeline shape:
 
@@ -628,7 +665,11 @@ Import rules:
 - Do not silently skip invalid canonical references.
 - Do not bundle generated original-language data into the frontend.
 - Generated exports remain ignored unless explicitly approved.
-- Do not implement an importer before the Phase 5B entry requirements are satisfied and approved.
+- Do not implement an importer before Phase 5C design is complete and approved.
+- Do not run actual STEP TAHOT or STEP TAGNT import during Phase 5C design.
+- Do not run OSHB or SBLGNT import during Phase 5C design.
+- Do not create public original-language APIs during Phase 5C design.
+- Do not build Interlinear UI, Strong's pages, or Word Study UI during Phase 5C design.
 
 ### Phase 5D - Read API Foundation
 

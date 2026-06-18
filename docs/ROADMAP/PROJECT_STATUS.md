@@ -81,31 +81,31 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 4 - Reader UX Polish
+Phase 5C - Original Language Importer Design
 ```
 
 Status:
 
 ```txt
-Near Complete
+Ready To Begin
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Chapter Navigation, Search Results, and Active Verse Highlight
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, and Phase 5B Original Language Data Layer
 ```
 
 Active objective:
 
 ```txt
-Polish the Bible Reader experience after the first Search and Reader layers.
+Design the original-language importer workflow before any source dataset import.
 ```
 
 Next task:
 
 ```txt
-Implement Phase 5B - Original Language Schema Foundation.
+Phase 5C - Original Language Importer Design.
 ```
 
 Blocked items:
@@ -117,7 +117,7 @@ None documented.
 Current phase boundary:
 
 ```txt
-Reader UX Polish remains the current official phase. The next major phase is Phase 5 - Original Language Foundation, beginning with Phase 5A Source and Schema Analysis. Original language implementation must not begin with data import; it must begin with source license/provenance verification and schema gap analysis.
+Phase 5B Original Language Data Layer implementation is complete. Phase 5C must begin with importer design, source file inspection, header verification, import mapping, batch validation, dry-run design, and verification report design. It must not begin with actual STEP, OSHB, SBLGNT, or other dataset import.
 ```
 
 Phase 5A source recommendation:
@@ -192,6 +192,34 @@ Phase 5B implementation gate summary:
 - Phase 5B implementation is table creation only for `wcm_original_terms` and `wcm_original_word_occurrences`.
 - Existing Bible tables, existing Bible APIs, and existing import pipeline behavior must not be changed during Phase 5B.
 - Phase 5C importer work must not begin until validation rules are applied.
+
+Phase 5B implementation complete:
+
+```txt
+SchemaInstaller original language tables: complete
+OriginalTerm ValueObject: complete
+OriginalWordOccurrence ValueObject: complete
+OriginalTermValidator: complete
+OriginalWordOccurrenceValidator: complete
+OriginalTermRepository: complete
+OriginalWordOccurrenceRepository: complete
+```
+
+Phase 5C next phase:
+
+```txt
+Phase 5C - Original Language Importer Design
+```
+
+Phase 5C is design-first. It must define source file inspection, source header verification, import mapping, batch validation, dry-run behavior, verification report shape, validator/service responsibilities, and repository usage before any importer implementation or dataset import.
+
+Still prohibited:
+
+- Actual STEP TAHOT or STEP TAGNT import.
+- OSHB import.
+- SBLGNT import.
+- Public original-language API.
+- Original-language UI, Interlinear UI, Strong's page, or Word Study UI.
 
 Detailed Phase 5 plan:
 
