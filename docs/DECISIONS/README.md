@@ -47,3 +47,4 @@ Alternatives Considered
 - [ADR-0012 Scripture Relationship Model](0012-scripture-relationship-model.md)
 - [ADR-0013 Content Domain Model](0013-content-domain-model.md)
 - [ADR-0014 Bible Import Pipeline Strategy](0014-bible-import-pipeline-strategy.md)
+- [ADR-0015 Source Data Management Strategy](0015-source-data-management-strategy.md)

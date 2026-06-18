@@ -46,7 +46,13 @@ node_modules/
 .next/
 out/
 coverage/
-/docs/data-sources/*.mdb
+
+# Raw Bible source data archives
+/docs/data-sources/**/*.mdb
+/docs/data-sources/**/*.sqlite
+/docs/data-sources/**/*.db
+/docs/data-sources/**/*.zip
+/docs/data-sources/**/*.xml
 
 # Local WP runtime files
 /backend/conf/
@@ -71,5 +77,4 @@ coverage/
 !/backend/app/public/wp-content/plugins/wcm-core/**
 /backend/app/public/wp-content/plugins/wcm-core/vendor/
 /backend/app/public/wp-content/plugins/wcm-core/node_modules/
-
 
