@@ -105,7 +105,7 @@ Polish the Bible Reader experience after the first Search and Reader layers.
 Next task:
 
 ```txt
-Phase 5A - Source and Schema Analysis for Original Language Foundation.
+Implement Phase 5B - Original Language Schema Foundation.
 ```
 
 Blocked items:
@@ -118,6 +118,17 @@ Current phase boundary:
 
 ```txt
 Reader UX Polish remains the current official phase. The next major phase is Phase 5 - Original Language Foundation, beginning with Phase 5A Source and Schema Analysis. Original language implementation must not begin with data import; it must begin with source license/provenance verification and schema gap analysis.
+```
+
+Phase 5A source recommendation:
+
+```txt
+Hebrew primary source candidate: STEP Bible TAHOT
+Hebrew secondary validation/reference: OSHB
+Greek primary source candidate: STEP Bible TAGNT
+Greek reference text: SBLGNT
+MorphGNT: not a primary source before ShareAlike review
+OpenGNT: not the first production source because of provenance/license complexity
 ```
 
 ## Phase 5 Entry Criteria
@@ -149,7 +160,38 @@ Phase 5 rules:
 - `wcm_scripture_relationships` is a discovery/ranking graph, not authoritative occurrence storage.
 - Original Language import must use a dedicated importer, not direct reuse of the KRV verse importer.
 - Source license and provenance must be verified before OSHB, SBLGNT, or other source imports.
+- Source license and provenance must also be verified before STEP Bible, MorphGNT, OpenGNT, or other source imports.
 - Original Language data must not be bundled into the frontend.
+- Schema implementation, importer implementation, dataset import, and UI implementation remain out of scope until Phase 5A gates are complete.
+
+Phase 5B entry requirements:
+
+- Confirm exact STEP TAHOT and STEP TAGNT files and field headers.
+- Document license and attribution text.
+- Decide Greek edition filtering.
+- Decide Hebrew versification handling.
+- Decide prefix and suffix token modeling.
+- Decide Strong's normalization.
+- Draft validation rules.
+
+Phase 5B schema design review summary:
+
+- Core schema remains limited to `wcm_original_terms` and `wcm_original_word_occurrences`.
+- `wcm_bible_verses` must not be extended for original-language data.
+- `wcm_scripture_relationships` remains a future discovery/ranking graph, not authoritative occurrence storage.
+- `wcm_original_terms` stores lexical identity, including normalized lemma, base Strong's, STEP extended Strong's, root, gloss, and optional definition.
+- `wcm_original_word_occurrences` stores source-specific canonical occurrences, including `source_dataset`, `source_ref`, `word_order`, `subword_order`, `token_type`, surface/normalized form, morphology, and grammar fields.
+- Phase 5B does not add `version_id` to original-language occurrences.
+- Next implementation preparation must finalize enum values, migration/rollback notes, validation rules, and then prepare schema work.
+
+Phase 5B implementation gate summary:
+
+- Enum and naming decisions are fixed in `docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md`.
+- Initial `source_dataset` values are `STEP_TAHOT` and `STEP_TAGNT`.
+- Future `source_dataset` values are `OSHB`, `SBLGNT`, `MORPHGNT`, and `OPENGNT`.
+- Phase 5B implementation is table creation only for `wcm_original_terms` and `wcm_original_word_occurrences`.
+- Existing Bible tables, existing Bible APIs, and existing import pipeline behavior must not be changed during Phase 5B.
+- Phase 5C importer work must not begin until validation rules are applied.
 
 Detailed Phase 5 plan:
 

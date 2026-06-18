@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Begin Phase 5A - Source and Schema Analysis for Original Language Foundation.
+Implement Phase 5B - Original Language Schema Foundation.
 
-This is analysis and documentation-first work. Source code changes must wait until source license/provenance and schema gaps are documented.
+Phase 5B implementation must create only the approved original-language schema foundation. It must not import datasets, create importers, change existing Bible tables, or change existing Bible APIs.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,17 +16,18 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Phase 5A - Source and Schema Analysis
-2. Verify OSHB/SBLGNT or other source license/provenance
-3. Define original language schema gap against ADR-0010
-4. Draft schema implementation plan
-5. Phase 5B - Original Language Schema Foundation
-6. Phase 5C - Import Foundation
-7. Phase 5D - Read API Foundation
-8. Later: Interlinear UI
-9. Later: Word Study UI
-10. Later: Cross References
-11. Later: Commentary Layer
+1. Implement Phase 5B Schema Foundation
+2. Add `wcm_original_terms` table
+3. Add `wcm_original_word_occurrences` table
+4. Add indexes and unique keys
+5. Validate dbDelta output
+6. Add syntax checks
+7. Then Phase 5C importer design
+8. Phase 5D Read API Foundation
+9. Later: Interlinear UI
+10. Later: Word Study UI
+11. Later: Cross References
+12. Later: Commentary Layer
 
 ## Required Pre-Work Before Code Changes
 
@@ -149,6 +150,12 @@ GET /wp-json/wcm/v1/books/{version}/{book}
 
 Phase 5 must follow these constraints:
 
+- Hebrew primary source candidate is STEP Bible TAHOT.
+- Hebrew secondary validation/reference source is OSHB.
+- Greek primary source candidate is STEP Bible TAGNT.
+- Greek reference text is SBLGNT.
+- MorphGNT must not be used as a primary source before ShareAlike implications are reviewed.
+- OpenGNT must not be used as the first production source because of provenance and license complexity.
 - Do not extend `wcm_bible_verses` for original-language data.
 - Store original-language data in separate custom tables.
 - Start with `wcm_original_terms` and `wcm_original_word_occurrences`.
@@ -159,8 +166,44 @@ Phase 5 must follow these constraints:
 - Do not directly reuse the KRV verse importer for original-language import.
 - Reuse importer patterns only where appropriate.
 - Do not import OSHB, SBLGNT, or any source before license/provenance verification.
+- Do not import STEP Bible, MorphGNT, OpenGNT, or any source before license/provenance verification.
 - Do not bundle original-language datasets into the frontend.
 - Keep UI work for later phases after data/API foundation exists.
+
+Phase 5B may not begin until:
+
+- Exact STEP TAHOT and STEP TAGNT files are confirmed.
+- License and attribution text is documented.
+- Greek edition filtering is decided.
+- Hebrew versification handling is decided.
+- Prefix and suffix token modeling is decided.
+- Strong's normalization is decided.
+- Validation rules are drafted.
+
+Phase 5B schema design review decisions:
+
+- Core tables are `wcm_original_terms` and `wcm_original_word_occurrences`.
+- Do not extend `wcm_bible_verses`.
+- Keep `wcm_scripture_relationships` as future discovery/ranking graph storage, not authoritative occurrence storage.
+- Store Strong's at term level.
+- Store morphology at occurrence level.
+- Use `source_dataset + book_id + chapter + verse` for source-specific canonical occurrence lookup.
+- Do not add `version_id` to original-language occurrences in Phase 5B.
+- Include `subword_order` and `token_type` for Hebrew prefix/suffix and compound token modeling.
+- Include `source_ref` for import audit and rollback.
+
+Phase 5B implementation gate decisions:
+
+- Allowed `language_type` values are `hebrew` and `greek`.
+- Allowed `token_type` values are `word`, `prefix`, `suffix`, `punctuation`, and `variant`.
+- Initial allowed `source_dataset` values are `STEP_TAHOT` and `STEP_TAGNT`.
+- Future allowed `source_dataset` values are `OSHB`, `SBLGNT`, `MORPHGNT`, and `OPENGNT`.
+- Base Strong's values belong in `strongs_number` using values such as `H7225` and `G3056`.
+- STEP extended or disambiguated values belong in `strongs_extended`.
+- Prefer normalizing absent `strongs_extended` values to an empty string during implementation.
+- Phase 5B is table creation only and must not change existing Bible tables, APIs, or import pipelines.
+- Rollback is manual table drop only before production original-language import.
+- Phase 5C importer work must apply term, occurrence, and performance validation before any data write.
 
 ## Validation For Next Code Change
 
@@ -191,7 +234,8 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 
 - Do not implement backend schema before Phase 5A is complete.
 - Do not import more Bible data.
-- Do not download, import, or transform OSHB/SBLGNT yet.
+- Do not download, import, or transform STEP Bible, OSHB, SBLGNT, MorphGNT, OpenGNT, or other original-language datasets yet.
+- Do not implement an original-language importer yet.
 - Do not create a generic search engine.
 - Do not build Interlinear UI yet.
 - Do not build Word Study UI yet.
