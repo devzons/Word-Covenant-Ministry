@@ -309,6 +309,160 @@ Phase 5B implementation rules:
 - Destructive rollback is allowed only before production original-language data is imported.
 - After production original-language import, rollback requires a backup/export strategy.
 
+#### Phase 5B-1 ValueObject Design Review
+
+Phase 5B-1 defines the domain ValueObject shape that should sit between importer validation, repositories, read APIs, and future UI/API output. This phase is design-only until implementation is explicitly approved.
+
+##### OriginalTerm ValueObject
+
+Recommended fields:
+
+```txt
+?int id
+string languageType
+string lemma
+string lemmaNormalized
+string strongsNumber
+string strongsExtended
+string transliteration
+string root
+?string gloss
+?string definition
+```
+
+ValueObject policy:
+
+- `id` is nullable before persistence.
+- `gloss` and `definition` are nullable.
+- `strongsNumber`, `strongsExtended`, `transliteration`, and `root` use empty string normalization.
+- `lemma`, `lemmaNormalized`, and `languageType` are required non-empty values.
+- Database timestamps are not part of the ValueObject.
+- The implementation should use a `final readonly class`.
+- Constructor-promoted properties should match the current project ValueObject style.
+- The constructor should perform lightweight invariant validation only.
+
+##### OriginalWordOccurrence ValueObject
+
+Recommended fields:
+
+```txt
+?int id
+int termId
+int bookId
+int chapter
+int verse
+int wordOrder
+int subwordOrder
+string tokenType
+string surfaceForm
+string normalizedForm
+string morphology
+?string grammarSummary
+?string grammarNote
+?string contextualFunction
+string sourceDataset
+string sourceRef
+```
+
+ValueObject policy:
+
+- `id` is nullable before persistence.
+- `grammarSummary`, `grammarNote`, and `contextualFunction` are nullable.
+- `normalizedForm`, `morphology`, and `sourceRef` may be empty strings.
+- Numeric reference and ordering values must be validated.
+- Database timestamps are not part of the ValueObject.
+- `versionId` is not included in Phase 5B.
+- The implementation should use a `final readonly class`.
+- The ValueObject is immutable after construction.
+
+##### Phase 5B-1 Enum Strategy
+
+Do not use PHP enums initially.
+
+Use project-style constants first so importer normalization, source validation, and database string values remain simple during early source integration.
+
+Recommended constants:
+
+```txt
+OriginalTerm::LANGUAGE_HEBREW = 'hebrew'
+OriginalTerm::LANGUAGE_GREEK = 'greek'
+
+OriginalWordOccurrence::TOKEN_WORD = 'word'
+OriginalWordOccurrence::TOKEN_PREFIX = 'prefix'
+OriginalWordOccurrence::TOKEN_SUFFIX = 'suffix'
+OriginalWordOccurrence::TOKEN_PUNCTUATION = 'punctuation'
+OriginalWordOccurrence::TOKEN_VARIANT = 'variant'
+```
+
+`source_dataset` allowed values should be managed by a validator or constants. Initial values remain `STEP_TAHOT` and `STEP_TAGNT`; future values remain `OSHB`, `SBLGNT`, `MORPHGNT`, and `OPENGNT`.
+
+##### Phase 5B-1 Validation Strategy
+
+ValueObject constructor validation:
+
+- Enforce basic invariants only.
+- Validate required non-empty fields.
+- Validate numeric references and ordering ranges.
+- Validate known `languageType`, `tokenType`, and source dataset values when constants are available.
+- Avoid source-specific or batch-level decisions in constructors.
+
+Dedicated validator responsibilities:
+
+- Duplicate term identity detection.
+- Duplicate occurrence identity detection.
+- Confirm `book_id` exists in `wcm_bible_books`.
+- Greek edition filtering.
+- Hebrew versification handling.
+- Source-specific morphology preservation.
+- `sourceRef` policy.
+
+Importer validation responsibilities:
+
+- Source file headers.
+- Source row counts.
+- Source provenance.
+- Batch deduplication.
+- Validation report generation.
+- Fail-closed behavior.
+
+##### Phase 5B-1 Import Flow
+
+Recommended flow:
+
+```txt
+Raw Source
+-> Source Inspection
+-> Normalization
+-> Validator
+-> OriginalTerm
+-> OriginalWordOccurrence
+-> Repository
+```
+
+Normalization must happen before ValueObject construction. Raw STEP, OSHB, SBLGNT, MorphGNT, or OpenGNT source rows should not construct ValueObjects directly until references, Strong's values, token types, source dataset values, and empty-string defaults are normalized.
+
+##### Phase 5B-1 Future Compatibility
+
+The ValueObject shape supports:
+
+- Strong's Lookup through `OriginalTerm.strongsNumber`.
+- Word Study through `OriginalTerm` and occurrence lookup by `termId`.
+- Interlinear display through ordered occurrences by `wordOrder` and `subwordOrder`.
+- Cross References through canonical `bookId`, `chapter`, and `verse`.
+- Commentary links through future relationship records.
+- Hebrew Root Study through `OriginalTerm.root`.
+- Pictographic Observations through future term-linked tables.
+
+`wcm_scripture_relationships` remains a future discovery and ranking graph. It must not become authoritative original-language occurrence storage.
+
+##### Phase 5B-1 Risks
+
+- Over-validating constructors can make importer diagnostics weaker.
+- PHP enums may be too rigid before source data quirks are fully known.
+- Nullable `id` handling must be consistent between import candidates and hydrated persisted rows.
+- Empty-string normalization for Strong's and source fields must be consistent across normalization, validation, repository writes, and repository hydration.
+- Adding timestamps to ValueObjects too early would mix persistence metadata into domain objects.
+
 ##### Phase 5C Import Validation Rules Draft
 
 Term validation:

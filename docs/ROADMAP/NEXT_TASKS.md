@@ -22,12 +22,15 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 4. Add indexes and unique keys
 5. Validate dbDelta output
 6. Add syntax checks
-7. Then Phase 5C importer design
-8. Phase 5D Read API Foundation
-9. Later: Interlinear UI
-10. Later: Word Study UI
-11. Later: Cross References
-12. Later: Commentary Layer
+7. Implement Phase 5B-1 Original Language ValueObjects after design approval
+8. Add ValueObject-level invariant validation only
+9. Add dedicated validation rules before importer work
+10. Then Phase 5C importer design
+11. Phase 5D Read API Foundation
+12. Later: Interlinear UI
+13. Later: Word Study UI
+14. Later: Cross References
+15. Later: Commentary Layer
 
 ## Required Pre-Work Before Code Changes
 
@@ -102,7 +105,34 @@ Implemented Reader UX polish:
 Verse Anchor Navigation
 Active Verse Highlight
 Chapter Boundary Navigation
+Bible Reader scripture spacing/style standard
 ```
+
+Official Bible Reader design standard:
+
+```txt
+docs/ROADMAP/BIBLE_READER_DESIGN_STANDARD.md
+```
+
+Default Reader spacing/style:
+
+```txt
+Verse list: ol gap-0
+Verse row: py-0.5
+Verse anchor offset: scroll-mt-24
+Verse id format: id="v16"
+Verse text: leading-7
+Active highlight: bg-blue-50, border-blue-200, rounded-lg, hover:bg-blue-100
+Active verse number: text-blue-700
+```
+
+Reader design intent:
+
+- Use continuous scripture reading density instead of generic blog article spacing.
+- Minimize verse-to-verse vertical spacing.
+- Preserve mobile readability.
+- Use subtle blue active verse highlighting for search-result navigation.
+- Do not use strong yellow or red active verse highlights by default.
 
 Confirmed chapter boundary navigation examples:
 
@@ -204,6 +234,19 @@ Phase 5B implementation gate decisions:
 - Phase 5B is table creation only and must not change existing Bible tables, APIs, or import pipelines.
 - Rollback is manual table drop only before production original-language import.
 - Phase 5C importer work must apply term, occurrence, and performance validation before any data write.
+
+Phase 5B-1 ValueObject design decisions:
+
+- `OriginalTerm` should be a `final readonly class` with constructor-promoted properties.
+- `OriginalTerm` fields are nullable `id`, required `languageType`, `lemma`, `lemmaNormalized`, string-normalized Strong's/transliteration/root fields, and nullable `gloss`/`definition`.
+- `OriginalWordOccurrence` should be a `final readonly class` with constructor-promoted properties.
+- `OriginalWordOccurrence` fields are nullable `id`, term/reference/order fields, token/source fields, surface/normalized/morphology fields, and nullable grammar/context fields.
+- Database timestamps do not belong in the Phase 5B-1 ValueObjects.
+- `versionId` does not belong in `OriginalWordOccurrence` for Phase 5B.
+- Use project-style constants before PHP enums.
+- Keep constructors limited to lightweight invariant validation.
+- Keep duplicate identity, source-specific validation, Greek edition filtering, Hebrew versification, and batch reports in validators/importer validation.
+- Normalize raw source rows before constructing ValueObjects.
 
 ## Validation For Next Code Change
 

@@ -275,6 +275,7 @@ The Reader now supports:
 - Verse Anchor Navigation.
 - Active Verse Highlight.
 - Chapter Boundary Navigation.
+- Bible Reader default scripture spacing/style standard.
 
 Confirmed chapter boundary navigation examples:
 
@@ -283,6 +284,47 @@ Confirmed chapter boundary navigation examples:
 - Malachi 4 next goes to Matthew 1.
 - Matthew 1 previous goes to Malachi 4.
 - Revelation 22 next is disabled.
+
+Bible Reader default design standard:
+
+```txt
+docs/ROADMAP/BIBLE_READER_DESIGN_STANDARD.md
+```
+
+Current applied Reader spacing/style:
+
+```txt
+Verse list: ol gap-0
+Verse row: py-0.5, scroll-mt-24, per-verse ids such as id="v16"
+Verse text: leading-7
+Active highlight: bg-blue-50, border-blue-200, rounded-lg, hover:bg-blue-100
+Active verse number: text-blue-700
+```
+
+Design intent:
+
+- Preserve a continuous Bible-like reading flow.
+- Minimize artificial vertical spacing between verses.
+- Maintain mobile readability.
+- Highlight search-result destination verses with a subtle blue tone.
+- Do not use strong yellow or red active verse highlights by default.
+- Treat the Reader as scripture text density, not general blog article spacing.
+
+Current applied spacing change:
+
+```txt
+Before: ol gap-4, verse row py-1, leading-8
+After:  ol gap-0, verse row py-0.5, leading-7
+```
+
+Verified Reader spacing/style state:
+
+```txt
+typecheck passed
+lint passed
+build passed
+git diff --check passed
+```
 
 ## Current Scripture Source Structure
 
