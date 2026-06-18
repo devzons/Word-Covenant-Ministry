@@ -10,29 +10,34 @@ Codex is the Implementation Agent.
 
 Both roles must follow this project constitution, inspect the repository before work, and use repository documentation instead of conversation memory as the source of truth.
 
-# Mandatory Session Start Rule
+# Mandatory New Session Start Rule
 
 This rule applies to ChatGPT, Codex, Cursor, Claude Code, Copilot, and any future coding agent.
 
-At the start of every new coding session, before any code modification, documentation update, file creation, deletion, rename, refactor, import, export, database change, API change, or frontend change, the agent must:
+At the start of every new ChatGPT, Codex, Cursor, Claude Code, Copilot, or future agent session, before the first analysis, code modification, documentation update, file creation, deletion, rename, refactor, import, export, database change, API change, or frontend change, the agent must:
 
 1. Read `AGENTS.md`.
 2. Read `docs/DEVELOPMENT_CONSTITUTION.md`.
 3. Read `docs/PROJECT_ARCHITECTURE.md`.
-4. Read the relevant domain document:
+4. Read `docs/DECISIONS/*`.
+5. Read `docs/ROADMAP/PROJECT_STATUS.md`.
+6. Read `docs/ROADMAP/SCRIPTURE_ENGINE_ROADMAP.md`.
+7. Read `docs/ROADMAP/NEXT_TASKS.md`.
+8. Read the relevant domain document:
    - frontend work: `docs/FRONTEND_STRUCTURE.md`
    - backend work: `docs/BACKEND_STRUCTURE.md`
    - data/import work: `docs/DECISIONS/0014-bible-import-pipeline-strategy.md` and `docs/DECISIONS/0015-source-data-management-strategy.md`
    - Scripture work: `docs/DECISIONS/0008-scripture-data-model.md`, `docs/DECISIONS/0009-bible-storage-strategy.md`, `docs/DECISIONS/0010-original-language-data-model.md`, and `docs/DECISIONS/0012-scripture-relationship-model.md`
    - content/CPT work: `docs/DECISIONS/0013-content-domain-model.md`
-5. Inspect the actual filesystem.
-6. Verify the Git repository root.
-7. Run `git status`.
-8. Verify the target path exists.
-9. Compare documentation against actual structure.
-10. Only then make changes.
+9. Inspect the actual filesystem.
+10. Verify the Git repository root.
+11. Run `git status`.
+12. Verify the target path exists.
+13. Compare documentation against actual structure.
+14. Report Current Phase, Completed Work, Current Objective, Next Objective, and Known Constraints.
+15. Only then make changes.
 
-Required commands before any code change:
+Required commands before first implementation in a new session:
 
 ```bash
 git rev-parse --show-toplevel
@@ -43,11 +48,45 @@ find . -maxdepth 5 -type d | sort
 Conversation memory is not enough.
 Previous chat history is not enough.
 Agent assumptions are not enough.
-Documentation plus filesystem inspection is required every session.
+Documentation plus filesystem inspection is required at the start of every new session.
+
+# Same Session Continuation Rule
+
+Within the same ChatGPT, Codex, Cursor, Claude Code, Copilot, or future agent session, follow-up tasks do not require rereading every ADR and ROADMAP document by default.
+
+For same-session continuation, the agent must still inspect the relevant scope before changing anything:
+
+1. Run `git status`.
+2. Verify the target file or directory exists.
+3. Read the relevant target files before editing.
+4. Read only the relevant documentation when the task changes project state, architecture, API behavior, database schema, frontend routes, source data handling, import pipeline behavior, or roadmap status.
+5. Preserve the official repository structure and target path rules.
+
+Examples:
+
+- Styling tweak: inspect `git status`, the target component, and any directly relevant design document.
+- Backend endpoint change: inspect `git status`, relevant backend docs, route/controller files, and target repository/service files.
+- Schema or import change: inspect `git status`, relevant ROADMAP or ADR documents, `SchemaInstaller` or import files, and target files.
+- New phase transition: inspect `git status` and the ROADMAP documents before updating status or implementing work.
+
+# Re-read Trigger Rule
+
+Even within the same session, the agent must reread the full new-session set or the relevant subset when any of these triggers occur:
+
+- A new phase begins.
+- Architecture changes.
+- Database schema changes.
+- API contract changes.
+- Repository structure changes.
+- Source data or import pipeline changes.
+- Documentation conflicts with the filesystem or implementation.
+- `git status` shows unexpected changes.
+- The agent is not confident about current state.
+- The user says "새 창", "새 세션", "다시 시작", "new session", or equivalent.
 
 # Mandatory Project State Verification Rule
 
-At the start of every new session, before starting any task, the agent must verify the current project state from:
+At the start of every new session, before starting the first task, the agent must verify the current project state from:
 
 1. `docs/ROADMAP/PROJECT_STATUS.md`
 2. `docs/ROADMAP/SCRIPTURE_ENGINE_ROADMAP.md`
@@ -55,7 +94,7 @@ At the start of every new session, before starting any task, the agent must veri
 
 `docs/ROADMAP/PROJECT_STATUS.md` is the source of truth for the current project state, current phase, completed work, active objective, next objective, and blockers.
 
-Before any code modification, documentation update, file creation, API change, frontend change, or backend change, the agent must report:
+Before the first code modification, documentation update, file creation, API change, frontend change, or backend change in a new session, the agent must report:
 
 - current phase
 - completed phase
@@ -64,9 +103,13 @@ Before any code modification, documentation update, file creation, API change, f
 - blocked items if any
 - whether the requested work belongs to the current phase
 
+For same-session continuation, repeat this report only when the task changes phase, project state, architecture, API contracts, database schema, import pipeline, roadmap status, or when a re-read trigger applies.
+
 # Phase Gate Rule
 
-Before implementation or documentation changes, the agent must compare the requested work against the current phase documented in `docs/ROADMAP/PROJECT_STATUS.md`.
+Before first implementation or documentation changes in a new session, the agent must compare the requested work against the current phase documented in `docs/ROADMAP/PROJECT_STATUS.md`.
+
+For same-session continuation, compare against the already verified phase context unless the work changes phase, changes roadmap status, or a re-read trigger applies.
 
 If the requested work belongs to a future phase instead of the current phase, the agent must:
 
@@ -74,7 +117,7 @@ If the requested work belongs to a future phase instead of the current phase, th
 2. Explain the dependency.
 3. Ask for approval before proceeding.
 
-# New Window Continuation Rule
+# New Window / New Session Rule
 
 In every new ChatGPT, Codex, Cursor, Claude Code, or Copilot session, conversation memory and previous chat history are not trusted as source of truth.
 
@@ -93,6 +136,8 @@ Default new-session startup order:
 9. Verify git root.
 10. Run `git status`.
 11. Report current phase before implementation.
+
+This full startup order is for a new window, new Codex session, new ChatGPT session, or explicit restart. It is not required for every small follow-up task in the same active session unless a re-read trigger applies.
 
 # Roadmap Documentation Rule
 
@@ -125,6 +170,8 @@ It must provide instructions or a Codex prompt instead.
 
 Both ChatGPT and Codex must follow the same project constitution.
 
+ChatGPT may use current verified session context for same-session continuation, but must reread the full new-session set when a new session begins or a re-read trigger applies.
+
 ChatGPT must not give implementation prompts that violate:
 
 - the confirmed repository structure
@@ -143,9 +190,11 @@ Codex must not modify code until it has inspected:
 - actual file structure
 - git status
 
+For same-session continuation, Codex may rely on already verified session context and inspect only the relevant files and docs required for the requested change, plus `git status`, unless a re-read trigger applies.
+
 # Repository Inspection Rule (Highest Priority)
 
-Before making any change:
+At the start of every new session before first implementation, and during same-session continuation for the relevant target scope:
 
 1. Inspect the current repository structure.
 2. Verify actual paths from the filesystem.
