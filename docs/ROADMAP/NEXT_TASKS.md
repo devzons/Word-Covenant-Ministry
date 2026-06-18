@@ -6,7 +6,7 @@
 
 ## Immediate Next Task
 
-Implement the Frontend Bible Reader MVP.
+Verify the Frontend Bible Reader and Frontend Bible Search Results MVPs in the browser.
 
 This is frontend source code work and must only happen inside:
 
@@ -16,7 +16,7 @@ frontend/
 
 ## Required Pre-Work Before Code Changes
 
-Before implementing Frontend Bible Reader, read:
+Before continuing frontend Scripture work, read:
 
 1. `AGENTS.md`
 2. `docs/DEVELOPMENT_CONSTITUTION.md`
@@ -43,26 +43,34 @@ Verify the frontend path exists before editing:
 frontend/
 ```
 
-## Frontend Bible Reader Implementation Guidance
+## Frontend Scripture Implementation Status
 
-Recommended files:
+Implemented Reader files:
 
 ```txt
-Create: frontend/src/app/[locale]/bible/[version]/[book]/[chapter]/page.tsx
-Create: frontend/src/components/scripture/BibleReader.tsx
-Create: frontend/src/lib/api/bible.ts
-Create or update: frontend/src/types/bible.ts or frontend/src/types/scripture.ts
+frontend/src/app/[locale]/bible/[version]/[book]/[chapter]/page.tsx
+frontend/src/components/scripture/BibleReader.tsx
 ```
 
-Recommended route shape:
+Implemented Search Results files:
+
+```txt
+frontend/src/app/[locale]/bible/search/page.tsx
+frontend/src/components/scripture/BibleSearchResults.tsx
+frontend/src/lib/api/bible.ts
+frontend/src/types/bible.ts
+```
+
+Implemented route shapes:
 
 ```txt
 /ko/bible/KRV/genesis/1
+/ko/bible/search?q=태초&translation=KRV
 ```
 
-## Required Reader Constraints
+## Required Frontend Scripture Constraints
 
-The Frontend Bible Reader MVP must:
+Frontend Scripture pages must:
 
 - fetch only the requested chapter from the backend Chapter API
 - never import or bundle a full Bible dataset
@@ -70,7 +78,8 @@ The Frontend Bible Reader MVP must:
 - include previous and next chapter links
 - include book and chapter selectors
 - include a simple search box using paginated backend search
-- include API error, loading, and empty states
+- include API error and empty states
+- show paginated search results from the backend Search API
 - stay mobile readable
 
 Backend Chapter API:
@@ -87,7 +96,7 @@ GET /wp-json/wcm/v1/search
 
 ## Validation For Next Code Change
 
-After implementing Frontend Bible Reader, run:
+After frontend Scripture changes, run:
 
 ```bash
 cd frontend
@@ -103,10 +112,11 @@ git status
 git diff --check
 ```
 
-Test the local API host:
+Test the local API host and frontend routes:
 
 ```bash
 curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/bible/KRV/genesis/1"
+curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&translation=KRV&page=1&per_page=20"
 ```
 
 ## Not In Scope For The Next Task

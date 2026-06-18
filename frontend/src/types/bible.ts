@@ -17,3 +17,27 @@ export type BibleReaderParams = {
   book: string;
   chapter: string;
 };
+
+export type BibleSearchResult = {
+  translation: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  reference: string;
+  text: string;
+};
+
+export type BibleSearchResponse = {
+  query: string;
+  total: number;
+  page: number;
+  per_page: number;
+  results: BibleSearchResult[];
+};
+
+export type BibleSearchParams = {
+  q: string;
+  translation?: string;
+  page?: number;
+  perPage?: number;
+};

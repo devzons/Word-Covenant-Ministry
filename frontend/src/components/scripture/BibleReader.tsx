@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 
-import { siteConfig } from "@/config/site";
 import type { BibleChapterResponse } from "@/types/bible";
 
 type BibleReaderProps = {
@@ -89,7 +88,7 @@ export function BibleReader({ chapter, locale }: BibleReaderProps) {
       ? `/${locale}/bible/${chapter.translation}/${chapter.book}/${chapterNumber - 1}`
       : null;
   const nextHref = `/${locale}/bible/${chapter.translation}/${chapter.book}/${chapterNumber + 1}`;
-  const searchUrl = `${siteConfig.apiUrl.replace(/\/$/, "")}/wcm/v1/search`;
+  const searchUrl = `/${locale}/bible/search`;
 
   function handleReferenceChange(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

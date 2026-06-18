@@ -69,31 +69,33 @@ backend/app/public/wp-content/plugins/wcm-core/
 - Bible Lookup API implemented.
 - Bible Search API implemented.
 - Bible Chapter API implemented.
+- Frontend Bible Reader MVP implemented.
+- Frontend Bible Search Results MVP implemented.
 
 ## Current Phase Summary
 
 Current phase:
 
 ```txt
-Phase 3 - Frontend Bible Reader preparation
+Phase 4 - Frontend Bible Search Results MVP
 ```
 
 Completed phase:
 
 ```txt
-Scripture Engine Foundation, KRV Bible Lookup API, Bible Search API, and Bible Chapter API
+Scripture Engine Foundation, KRV Bible Lookup API, Bible Search API, Bible Chapter API, and Frontend Bible Reader MVP
 ```
 
 Active objective:
 
 ```txt
-Prepare the Frontend Bible Reader MVP using the backend Scripture APIs.
+Render paginated frontend Bible search results using the backend Bible Search API.
 ```
 
 Next task:
 
 ```txt
-Implement the Frontend Bible Reader route at /ko/bible/KRV/genesis/1 after confirming frontend routing and API client structure.
+Verify the Frontend Bible Reader and Bible Search Results MVPs in the browser against the Local WP API.
 ```
 
 Blocked items:
@@ -105,7 +107,7 @@ None documented.
 Current phase boundary:
 
 ```txt
-Frontend Bible Reader MVP belongs to the current phase. Generic search engine, original language import, cross references, and commentary features are future phases.
+Frontend Bible Search Results MVP belongs to the current phase. Generic search engine, original language import, cross references, and commentary features are future phases.
 ```
 
 ## Current Bible Lookup API

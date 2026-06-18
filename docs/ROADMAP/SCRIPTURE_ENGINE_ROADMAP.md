@@ -18,6 +18,8 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - Read-only Bible Lookup API implemented.
 - Bible Search API implemented.
 - Bible Chapter API implemented for Frontend Bible Reader preparation.
+- Frontend Bible Reader MVP implemented.
+- Frontend Bible Search Results MVP implemented.
 
 ## Current Domain Model
 
@@ -114,9 +116,9 @@ Current route:
 
 This route exists to support Frontend Bible Reader chapter rendering without repeated single-verse API calls or frontend Bible dataset imports.
 
-## Next Scripture Engine Milestone
+## Current Frontend Scripture Milestone
 
-The next milestone is the Frontend Bible Reader MVP.
+The current frontend Scripture milestone includes the Bible Reader MVP and Bible Search Results MVP.
 
 Recommended implementation location:
 
@@ -128,6 +130,17 @@ Types: frontend/src/types/bible.ts or frontend/src/types/scripture.ts
 ```
 
 The Reader should consume only the needed chapter from the backend Chapter API.
+
+Search results implementation location:
+
+```txt
+Route: frontend/src/app/[locale]/bible/search/page.tsx
+Component: frontend/src/components/scripture/BibleSearchResults.tsx
+API client: frontend/src/lib/api/bible.ts
+Types: frontend/src/types/bible.ts
+```
+
+The Search Results page should consume only paginated backend Search API responses.
 
 ## Bible Search API
 
@@ -191,13 +204,12 @@ ADR-0009 mentions `FULLTEXT KEY text_search (text)`, but the current `SchemaInst
 
 ## Future Scripture Engine Work
 
-Future milestones after Bible Search API:
+Future milestones after the frontend Bible Reader and Search Results MVPs:
 
 - Passage range lookup.
-- Chapter lookup with pagination or constrained response size.
 - Scripture relationship table design and migration.
 - Scripture relationship API contract.
 - Original language table design and migration.
 - WEB source inspection and import plan.
 - OSHB and SBLGNT source inspection and licensing review.
-- Scripture-centered frontend integration.
+- Scripture-centered frontend refinement.
