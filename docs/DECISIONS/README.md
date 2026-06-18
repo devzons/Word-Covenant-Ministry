@@ -44,3 +44,4 @@ Alternatives Considered
 - [ADR-0009 Bible Storage Strategy](0009-bible-storage-strategy.md)
 - [ADR-0010 Original Language Data Model](0010-original-language-data-model.md)
 - [ADR-0011 Localization Strategy](0011-localization-strategy.md)
+- [ADR-0012 Scripture Relationship Model](0012-scripture-relationship-model.md)
