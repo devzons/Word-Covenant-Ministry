@@ -77,10 +77,29 @@ word_order
 surface_form
 morphology
 parsing
+grammar_summary
+grammar_note
+contextual_function
 context_snippet
 created_at
 updated_at
 ```
+
+Grammar fields are part of the Original Language Engine data model:
+
+- `grammar_summary`: concise grammatical identification for display, such as verbal stem, tense/aspect, mood, voice, person, number, gender, case, or syntactic role.
+- `grammar_note`: short explanatory note that helps readers understand how the grammar affects the verse context.
+- `contextual_function`: the word's function in the immediate clause, phrase, or sentence.
+
+Grammar is a supporting layer. It helps explain how a term functions in context, but it does not replace lexical meaning, biblical usage, or contextual interpretation.
+
+No separate Grammar Engine will be created. Grammar belongs inside the Original Language Engine.
+
+Examples:
+
+- Hebrew verbs: identify stem, aspect/conjugation, person, number, gender, and contextual function, such as a qal perfect verb functioning as the main action of the clause.
+- Greek nouns: identify case, number, gender, article relationship, and contextual function, such as a nominative noun functioning as the subject or a genitive noun functioning possessively.
+- Greek verbs: identify tense-form, voice, mood, person, number, and contextual function, such as an aorist active indicative functioning as the main finite verb or a present participle functioning adjectivally.
 
 ### wcm_hebrew_letters
 
@@ -128,11 +147,14 @@ The UI and API must preserve this order:
 1. Original Meaning
 2. Biblical Usage
 3. Context
-4. Pictographic Observation
-5. Revelatory Significance
-6. Christological Fulfillment
+4. Grammar
+5. Pictographic Observation
+6. Revelatory Significance
+7. Christological Fulfillment
 
-Pictographic observation must never be shown before original meaning, biblical usage, and context.
+Grammar must be presented after original meaning, biblical usage, and context. It must be presented before pictographic observation, revelatory significance, and Christological fulfillment.
+
+Pictographic observation must never be shown before original meaning, biblical usage, context, and grammar.
 
 ## Gematria Rule
 
