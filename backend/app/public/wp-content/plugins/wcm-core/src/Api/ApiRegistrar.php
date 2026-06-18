@@ -9,5 +9,6 @@ final class ApiRegistrar
     public function register(): void
     {
         (new BibleController())->registerRoutes();
+        (new BibleSearchController())->registerRoutes();
     }
 }

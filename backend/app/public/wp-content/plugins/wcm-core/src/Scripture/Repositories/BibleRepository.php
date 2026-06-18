@@ -152,6 +152,81 @@ final class BibleRepository
         return $existingId !== null;
     }
 
+    /**
+     * @return array{results: array<int, array<string, mixed>>, total: int, page: int, per_page: int}
+     */
+    public function searchVerses(
+        string $query,
+        ?string $translation,
+        int $page,
+        int $perPage
+    ): array {
+        global $wpdb;
+
+        $query = trim($query);
+        $translation = $translation === null ? null : trim($translation);
+        $page = max(1, $page);
+        $perPage = max(1, $perPage);
+
+        if ($query === '') {
+            return [
+                'results' => [],
+                'total' => 0,
+                'page' => $page,
+                'per_page' => $perPage,
+            ];
+        }
+
+        $versesTable = $wpdb->prefix . 'wcm_bible_verses';
+        $versionsTable = $wpdb->prefix . 'wcm_bible_versions';
+        $booksTable = $wpdb->prefix . 'wcm_bible_books';
+        $like = '%' . $wpdb->esc_like($query) . '%';
+        $offset = ($page - 1) * $perPage;
+        $where = 'WHERE verses.text LIKE %s AND versions.is_active = 1';
+        $params = [$like];
+
+        if ($translation !== null && $translation !== '') {
+            $where .= ' AND versions.code = %s';
+            $params[] = $translation;
+        }
+
+        $join = "FROM {$versesTable} verses
+            INNER JOIN {$versionsTable} versions ON versions.id = verses.version_id
+            INNER JOIN {$booksTable} books ON books.id = verses.book_id
+            {$where}";
+
+        $total = (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) {$join}",
+                ...$params
+            )
+        );
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT
+                    versions.code AS translation,
+                    books.slug AS book_slug,
+                    books.name_ko AS book_name_ko,
+                    verses.chapter,
+                    verses.verse,
+                    verses.text
+                {$join}
+                ORDER BY versions.code ASC, books.book_order ASC, verses.chapter ASC, verses.verse ASC
+                LIMIT %d OFFSET %d",
+                ...array_merge($params, [$perPage, $offset])
+            ),
+            'ARRAY_A'
+        );
+
+        return [
+            'results' => is_array($rows) ? $rows : [],
+            'total' => $total,
+            'page' => $page,
+            'per_page' => $perPage,
+        ];
+    }
+
     public function upsertVerse(BibleVerse $verse): bool
     {
         global $wpdb;
