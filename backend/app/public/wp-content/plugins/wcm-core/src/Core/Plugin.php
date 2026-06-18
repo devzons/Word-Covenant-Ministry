@@ -6,6 +6,7 @@ namespace WCM\Core;
 
 use WCM\Api\ApiRegistrar;
 use WCM\Database\BibleBooksSeeder;
+use WCM\Database\BibleVersionSeeder;
 use WCM\Database\DatabaseHealthCheck;
 use WCM\Database\SchemaInstaller;
 use WCM\PostTypes\PostTypeRegistrar;
@@ -33,6 +34,10 @@ final class Plugin
     {
         if (class_exists(SchemaInstaller::class)) {
             (new SchemaInstaller())->install();
+        }
+
+        if (class_exists(BibleVersionSeeder::class)) {
+            (new BibleVersionSeeder())->seed();
         }
 
         if (class_exists(BibleBooksSeeder::class)) {
