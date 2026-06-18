@@ -58,6 +58,68 @@ final class BibleRepository
         return is_array($row) ? $row : null;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function getBookBySlug(string $slug): ?array
+    {
+        global $wpdb;
+
+        $slug = trim($slug);
+
+        if ($slug === '') {
+            return null;
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_bible_books';
+
+        $row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM {$tableName} WHERE slug = %s LIMIT 1",
+                $slug
+            ),
+            'ARRAY_A'
+        );
+
+        return is_array($row) ? $row : null;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function getVerse(
+        int $versionId,
+        int $bookId,
+        int $chapter,
+        int $verse
+    ): ?array {
+        global $wpdb;
+
+        if ($versionId < 1 || $bookId < 1 || $chapter < 1 || $verse < 1) {
+            return null;
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_bible_verses';
+
+        $row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM {$tableName}
+                WHERE version_id = %d
+                AND book_id = %d
+                AND chapter = %d
+                AND verse = %d
+                LIMIT 1",
+                $versionId,
+                $bookId,
+                $chapter,
+                $verse
+            ),
+            'ARRAY_A'
+        );
+
+        return is_array($row) ? $row : null;
+    }
+
     public function verseExists(
         int $versionId,
         int $bookId,

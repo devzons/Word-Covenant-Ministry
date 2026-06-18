@@ -8,6 +8,6 @@ final class ApiRegistrar
 {
     public function register(): void
     {
-        // REST routes will be registered in later feature phases.
+        (new BibleController())->registerRoutes();
     }
 }
