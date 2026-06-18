@@ -6,28 +6,45 @@
 
 ## Immediate Next Task
 
-Verify the Frontend Bible Reader and Frontend Bible Search Results MVPs in the browser.
+Begin Phase 5A - Source and Schema Analysis for Original Language Foundation.
 
-This is frontend source code work and must only happen inside:
+This is analysis and documentation-first work. Source code changes must wait until source license/provenance and schema gaps are documented.
 
 ```txt
-frontend/
+docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 ```
+
+## Current Priority Order
+
+1. Phase 5A - Source and Schema Analysis
+2. Verify OSHB/SBLGNT or other source license/provenance
+3. Define original language schema gap against ADR-0010
+4. Draft schema implementation plan
+5. Phase 5B - Original Language Schema Foundation
+6. Phase 5C - Import Foundation
+7. Phase 5D - Read API Foundation
+8. Later: Interlinear UI
+9. Later: Word Study UI
+10. Later: Cross References
+11. Later: Commentary Layer
 
 ## Required Pre-Work Before Code Changes
 
-Before continuing frontend Scripture work, read:
+Before continuing Original Language Foundation work, read:
 
 1. `AGENTS.md`
 2. `docs/DEVELOPMENT_CONSTITUTION.md`
 3. `docs/PROJECT_ARCHITECTURE.md`
-4. `docs/FRONTEND_STRUCTURE.md`
+4. `docs/BACKEND_STRUCTURE.md`
 5. `docs/DECISIONS/0008-scripture-data-model.md`
 6. `docs/DECISIONS/0009-bible-storage-strategy.md`
-7. `docs/DECISIONS/0011-localization-strategy.md`
+7. `docs/DECISIONS/0010-original-language-data-model.md`
 8. `docs/DECISIONS/0012-scripture-relationship-model.md`
-9. `docs/ROADMAP/PROJECT_STATUS.md`
-10. `docs/ROADMAP/SCRIPTURE_ENGINE_ROADMAP.md`
+9. `docs/DECISIONS/0014-bible-import-pipeline-strategy.md`
+10. `docs/DECISIONS/0015-source-data-management-strategy.md`
+11. `docs/ROADMAP/PROJECT_STATUS.md`
+12. `docs/ROADMAP/SCRIPTURE_ENGINE_ROADMAP.md`
+13. `docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md`
 
 Then run:
 
@@ -37,13 +54,23 @@ git status
 find . -maxdepth 5 -type d | sort
 ```
 
-Verify the frontend path exists before editing:
+Verify the official backend plugin path exists before any future backend implementation:
 
 ```txt
-frontend/
+backend/app/public/wp-content/plugins/wcm-core/
 ```
 
 ## Frontend Scripture Implementation Status
+
+Completed backend Scripture APIs:
+
+```txt
+KRV Import
+Bible Lookup API
+Bible Search API
+Bible Chapter API
+Book Metadata API
+```
 
 Implemented Reader files:
 
@@ -66,6 +93,24 @@ Implemented route shapes:
 ```txt
 /ko/bible/KRV/genesis/1
 /ko/bible/search?q=태초&translation=KRV
+```
+
+Implemented Reader UX polish:
+
+```txt
+Verse Anchor Navigation
+Active Verse Highlight
+Chapter Boundary Navigation
+```
+
+Confirmed chapter boundary navigation examples:
+
+```txt
+Genesis 50 -> Exodus 1
+Malachi 4 -> Matthew 1
+Matthew 1 -> Malachi 4 via previous
+Revelation 22 next disabled
+Genesis 1 previous disabled
 ```
 
 ## Required Frontend Scripture Constraints
@@ -94,6 +139,29 @@ Backend Search API:
 GET /wp-json/wcm/v1/search
 ```
 
+Backend Book Metadata API:
+
+```txt
+GET /wp-json/wcm/v1/books/{version}/{book}
+```
+
+## Original Language Foundation Constraints
+
+Phase 5 must follow these constraints:
+
+- Do not extend `wcm_bible_verses` for original-language data.
+- Store original-language data in separate custom tables.
+- Start with `wcm_original_terms` and `wcm_original_word_occurrences`.
+- Use `book_id + chapter + verse` as the canonical connection point.
+- Store Strong's numbers at term level, for example `H7225` and `G3056`.
+- Store morphology at occurrence level.
+- Treat `wcm_scripture_relationships` as discovery/ranking graph storage, not authoritative occurrence storage.
+- Do not directly reuse the KRV verse importer for original-language import.
+- Reuse importer patterns only where appropriate.
+- Do not import OSHB, SBLGNT, or any source before license/provenance verification.
+- Do not bundle original-language datasets into the frontend.
+- Keep UI work for later phases after data/API foundation exists.
+
 ## Validation For Next Code Change
 
 After frontend Scripture changes, run:
@@ -121,9 +189,11 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 
 ## Not In Scope For The Next Task
 
-- Do not modify backend APIs unless the Reader exposes a verified blocker.
+- Do not implement backend schema before Phase 5A is complete.
 - Do not import more Bible data.
-- Do not read or transform the MDB.
+- Do not download, import, or transform OSHB/SBLGNT yet.
 - Do not create a generic search engine.
-- Do not implement original language, cross references, or commentary.
-- Do not bundle full Bible datasets into the frontend.
+- Do not build Interlinear UI yet.
+- Do not build Word Study UI yet.
+- Do not implement cross references or commentary.
+- Do not bundle full Bible or original-language datasets into the frontend.

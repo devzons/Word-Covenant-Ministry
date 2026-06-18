@@ -69,33 +69,43 @@ backend/app/public/wp-content/plugins/wcm-core/
 - Bible Lookup API implemented.
 - Bible Search API implemented.
 - Bible Chapter API implemented.
+- Book Metadata API implemented.
 - Frontend Bible Reader MVP implemented.
 - Frontend Bible Search Results MVP implemented.
+- Verse Anchor Navigation implemented.
+- Active Verse Highlight implemented.
+- Chapter Boundary Navigation implemented.
 
 ## Current Phase Summary
 
 Current phase:
 
 ```txt
-Phase 4 - Frontend Bible Search Results MVP
+Phase 4 - Reader UX Polish
+```
+
+Status:
+
+```txt
+Near Complete
 ```
 
 Completed phase:
 
 ```txt
-Scripture Engine Foundation, KRV Bible Lookup API, Bible Search API, Bible Chapter API, and Frontend Bible Reader MVP
+Scripture Foundation, Search Layer, Reader Layer, Chapter Navigation, Search Results, and Active Verse Highlight
 ```
 
 Active objective:
 
 ```txt
-Render paginated frontend Bible search results using the backend Bible Search API.
+Polish the Bible Reader experience after the first Search and Reader layers.
 ```
 
 Next task:
 
 ```txt
-Verify the Frontend Bible Reader and Bible Search Results MVPs in the browser against the Local WP API.
+Phase 5A - Source and Schema Analysis for Original Language Foundation.
 ```
 
 Blocked items:
@@ -107,7 +117,44 @@ None documented.
 Current phase boundary:
 
 ```txt
-Frontend Bible Search Results MVP belongs to the current phase. Generic search engine, original language import, cross references, and commentary features are future phases.
+Reader UX Polish remains the current official phase. The next major phase is Phase 5 - Original Language Foundation, beginning with Phase 5A Source and Schema Analysis. Original language implementation must not begin with data import; it must begin with source license/provenance verification and schema gap analysis.
+```
+
+## Phase 5 Entry Criteria
+
+Next major phase:
+
+```txt
+Phase 5 - Original Language Foundation
+```
+
+Phase 5 entry sequence:
+
+```txt
+Phase 5A - Source and Schema Analysis
+Phase 5B - Original Language Schema Foundation
+Phase 5C - Import Foundation
+Phase 5D - Read API Foundation
+```
+
+Phase 5 rules:
+
+- Original Language data must not extend `wcm_bible_verses`.
+- Original Language data belongs in separate custom tables.
+- Core tables are `wcm_original_terms` and `wcm_original_word_occurrences`.
+- Future related tables include `wcm_hebrew_letters`, `wcm_word_letter_breakdowns`, `wcm_pictographic_observations`, and `wcm_scripture_relationships`.
+- The canonical connection point is `book_id + chapter + verse`.
+- Strong's numbers are term-level fields such as `H7225` and `G3056`.
+- Morphology is occurrence-level data.
+- `wcm_scripture_relationships` is a discovery/ranking graph, not authoritative occurrence storage.
+- Original Language import must use a dedicated importer, not direct reuse of the KRV verse importer.
+- Source license and provenance must be verified before OSHB, SBLGNT, or other source imports.
+- Original Language data must not be bundled into the frontend.
+
+Detailed Phase 5 plan:
+
+```txt
+docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 ```
 
 ## Current Bible Lookup API
@@ -153,6 +200,47 @@ Implementation structure:
 - `BibleController` sanitizes and validates version, book slug, and chapter params.
 - `BibleController` uses `BibleRepository::getChapterVerses()` for chapter verse retrieval.
 - The endpoint returns one chapter only and does not return a full Bible dataset.
+
+## Current Book Metadata API
+
+Current endpoint:
+
+```txt
+/wp-json/wcm/v1/books/{version}/{book}
+```
+
+Example:
+
+```txt
+/wp-json/wcm/v1/books/KRV/genesis
+```
+
+The endpoint returns book metadata used by the Reader for chapter boundary navigation:
+
+```json
+{
+  "translation": "KRV",
+  "book": "genesis",
+  "name": "창세기",
+  "chapter_count": 50
+}
+```
+
+## Current Reader UX Status
+
+The Reader now supports:
+
+- Verse Anchor Navigation.
+- Active Verse Highlight.
+- Chapter Boundary Navigation.
+
+Confirmed chapter boundary navigation examples:
+
+- Genesis 1 previous is disabled.
+- Genesis 50 next goes to Exodus 1.
+- Malachi 4 next goes to Matthew 1.
+- Matthew 1 previous goes to Malachi 4.
+- Revelation 22 next is disabled.
 
 ## Current Scripture Source Structure
 

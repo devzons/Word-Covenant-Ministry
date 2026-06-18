@@ -18,8 +18,119 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - Read-only Bible Lookup API implemented.
 - Bible Search API implemented.
 - Bible Chapter API implemented for Frontend Bible Reader preparation.
+- Book Metadata API implemented for Reader chapter boundary navigation.
 - Frontend Bible Reader MVP implemented.
 - Frontend Bible Search Results MVP implemented.
+- Verse Anchor Navigation implemented.
+- Active Verse Highlight implemented.
+- Chapter Boundary Navigation implemented.
+
+## Phase Status
+
+### Phase 1 Foundation
+
+Status: Complete
+
+Completed:
+
+- Scripture custom table foundation.
+- KRV source inspection and import pipeline.
+- KRV `31,102` canonical verse import.
+- KRV import verification.
+
+### Phase 2 Search Layer
+
+Status: Complete
+
+Completed:
+
+- Bible Search API.
+- Paginated search response.
+- Frontend Bible Search Results MVP.
+
+### Phase 3 Reader Layer
+
+Status: Complete
+
+Completed:
+
+- Bible Chapter API.
+- Frontend Bible Reader MVP.
+- Chapter verse list rendering.
+- Reader route under `/[locale]/bible/[version]/[book]/[chapter]`.
+
+### Phase 4 Reader UX Polish
+
+Status: Mostly Complete
+
+Completed:
+
+- Book Metadata API.
+- Verse Anchor Navigation.
+- Active Verse Highlight.
+- Chapter Boundary Navigation.
+
+Remaining polish candidates:
+
+- Search Result Highlighting.
+- Reading History.
+- Reader Preferences.
+
+### Phase 5 Original Language Foundation
+
+Status: Planned
+
+Phase 5 must start with source and schema analysis. It must not start with dataset import.
+
+Subphases:
+
+```txt
+Phase 5A - Source and Schema Analysis
+Phase 5B - Original Language Schema Foundation
+Phase 5C - Import Foundation
+Phase 5D - Read API Foundation
+```
+
+Phase 5A entry requirements:
+
+- Verify OSHB, SBLGNT, or other source license and provenance.
+- Inspect source format before import or transformation.
+- Define schema gaps against ADR-0010.
+- Draft an implementation plan before schema changes.
+
+Core storage decision:
+
+- Do not extend `wcm_bible_verses` for original-language data.
+- Store original-language data in separate custom tables.
+- Use `book_id + chapter + verse` as the common canonical reference.
+- Treat `wcm_scripture_relationships` as discovery/ranking graph storage, not authoritative word occurrence storage.
+
+Recommended core tables:
+
+```txt
+wcm_original_terms
+wcm_original_word_occurrences
+```
+
+Future related tables:
+
+```txt
+wcm_hebrew_letters
+wcm_word_letter_breakdowns
+wcm_pictographic_observations
+wcm_scripture_relationships
+```
+
+Strong's strategy:
+
+- Store Strong's numbers at term level.
+- Examples: `H7225`, `G3056`.
+- Use a non-unique index initially unless source validation proves uniqueness.
+
+Morphology strategy:
+
+- Store morphology at occurrence level.
+- Same lemma may have different morphology, parsing, grammar, and contextual function in different verse contexts.
 
 ## Current Domain Model
 
@@ -77,7 +188,7 @@ Current search placeholder:
 src/Search/.gitkeep
 ```
 
-Bible Lookup, Bible Search, and Bible Chapter APIs exist.
+Bible Lookup, Bible Search, Bible Chapter, and Book Metadata APIs exist.
 
 ## Bible Lookup API
 
@@ -116,9 +227,19 @@ Current route:
 
 This route exists to support Frontend Bible Reader chapter rendering without repeated single-verse API calls or frontend Bible dataset imports.
 
+## Book Metadata API
+
+Current route:
+
+```txt
+/wp-json/wcm/v1/books/{version}/{book}
+```
+
+This route exists to support Reader chapter boundary navigation without bundling Bible book metadata as a full frontend Bible dataset.
+
 ## Current Frontend Scripture Milestone
 
-The current frontend Scripture milestone includes the Bible Reader MVP and Bible Search Results MVP.
+The current frontend Scripture milestone includes the Bible Reader MVP, Bible Search Results MVP, and Reader UX Polish.
 
 Recommended implementation location:
 
@@ -129,7 +250,7 @@ API client: frontend/src/lib/api/bible.ts
 Types: frontend/src/types/bible.ts or frontend/src/types/scripture.ts
 ```
 
-The Reader should consume only the needed chapter from the backend Chapter API.
+The Reader should consume only the needed chapter from the backend Chapter API and book chapter count from the Book Metadata API.
 
 Search results implementation location:
 
@@ -204,12 +325,22 @@ ADR-0009 mentions `FULLTEXT KEY text_search (text)`, but the current `SchemaInst
 
 ## Future Scripture Engine Work
 
-Future milestones after the frontend Bible Reader and Search Results MVPs:
+Future milestones after Reader UX Polish:
 
-- Passage range lookup.
-- Scripture relationship table design and migration.
-- Scripture relationship API contract.
-- Original language table design and migration.
-- WEB source inspection and import plan.
-- OSHB and SBLGNT source inspection and licensing review.
-- Scripture-centered frontend refinement.
+- Phase 5A - Source and Schema Analysis.
+- Verify OSHB/SBLGNT or other source license/provenance.
+- Define original language schema gap against ADR-0010.
+- Draft original language schema implementation plan.
+- Phase 5B - Original Language Schema Foundation.
+- Phase 5C - Import Foundation.
+- Phase 5D - Read API Foundation.
+- Later: Interlinear UI.
+- Later: Word Study UI.
+- Later: Cross References.
+- Later: Commentary Layer.
+
+Detailed Phase 5 plan:
+
+```txt
+docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
+```
