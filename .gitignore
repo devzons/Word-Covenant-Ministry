@@ -46,6 +46,7 @@ node_modules/
 .next/
 out/
 coverage/
+/docs/data-sources/*.mdb
 
 # Local WP runtime files
 /backend/conf/
@@ -70,3 +71,5 @@ coverage/
 !/backend/app/public/wp-content/plugins/wcm-core/**
 /backend/app/public/wp-content/plugins/wcm-core/vendor/
 /backend/app/public/wp-content/plugins/wcm-core/node_modules/
+
+

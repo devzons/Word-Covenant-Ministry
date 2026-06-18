@@ -39,3 +39,6 @@ Alternatives Considered
 - [ADR-0004 Cloudflare Strategy](0004-cloudflare-strategy.md)
 - [ADR-0005 Scripture Engine First](0005-scripture-engine-first.md)
 - [ADR-0006 Development Port Standard](0006-development-port-standard.md)
+- [ADR-0007 Bible Data Source](0007-bible-data-source.md)
+- [ADR-0008 Scripture Data Model](0008-scripture-data-model.md)
+- [ADR-0009 Bible Storage Strategy](0009-bible-storage-strategy.md)
