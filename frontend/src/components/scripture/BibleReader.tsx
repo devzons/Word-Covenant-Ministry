@@ -176,7 +176,11 @@ export function BibleReader({ chapter, locale }: BibleReaderProps) {
       {chapter.verses.length > 0 ? (
         <ol className="flex flex-col gap-4">
           {chapter.verses.map((verse) => (
-            <li className="grid grid-cols-[2rem_1fr] gap-3 text-lg leading-8" key={verse.verse}>
+            <li
+              className="grid scroll-mt-24 grid-cols-[2rem_1fr] gap-3 text-lg leading-8"
+              id={`v${verse.verse}`}
+              key={verse.verse}
+            >
               <span className="pt-0.5 text-sm font-semibold text-zinc-500">
                 {verse.verse}
               </span>

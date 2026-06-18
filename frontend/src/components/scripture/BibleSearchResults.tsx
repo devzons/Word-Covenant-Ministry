@@ -152,7 +152,7 @@ function renderSearchState({
         >
           <Link
             className="flex flex-col gap-2"
-            href={`/${locale}/bible/${result.translation}/${result.book}/${result.chapter}`}
+            href={`/${locale}/bible/${result.translation}/${result.book}/${result.chapter}#v${result.verse}`}
           >
             <span className="text-sm font-semibold text-zinc-950">
               {result.reference}
