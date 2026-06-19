@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-18
+2026-06-19
 
 ## Purpose
 
@@ -81,43 +81,43 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 5D - Original Language Dry-run Pipeline
+Phase 5E - Original Language Persistence Smoke Verification
 ```
 
 Status:
 
 ```txt
-Dry-run Complete
+Small local write smokes complete
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, and Phase 5D Dry-run Pipeline
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, and Phase 5E small local write smoke verification
 ```
 
 Active objective:
 
 ```txt
-Hold the original-language pipeline at the no-write dry-run gate until persistence import receives separate explicit approval.
+Hold the original-language pipeline after approved tiny local write smokes until any controlled larger import receives separate explicit approval.
 ```
 
 Next task:
 
 ```txt
-Phase 5E or separately approved persistence-import phase planning. No actual import is approved yet.
+Explicit approval is required before any controlled larger STEP import. Full import is not approved.
 ```
 
 Blocked items:
 
 ```txt
-Actual original-language persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, but DB writes, repository persistence, public APIs, frontend work, and real import execution require a separate explicit approval phase.
+Full original-language persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, and tiny local write smokes have passed, but larger imports, public APIs, frontend work, and real import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5D dry-run pipeline is complete. The completed dry-run pipeline does not authorize actual STEP, OSHB, SBLGNT, or other dataset import. It also does not authorize DB writes, public APIs, or frontend surfaces.
+Phase 5E small local write smoke verification is complete. The smoke data does not authorize full STEP, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
 ```
 
 Phase 5A source recommendation:
@@ -146,7 +146,8 @@ Phase 5A - Source and Schema Analysis
 Phase 5B - Original Language Schema Foundation
 Phase 5C - Import Foundation
 Phase 5D - Dry-run Pipeline
-Phase 5E - Read API Foundation
+Phase 5E - Persistence Smoke Verification
+Future - Read API Foundation
 ```
 
 Phase 5 rules:
@@ -258,6 +259,16 @@ Phase 5C importer design analysis summary:
   - TAHOT Q(K) rows are skipped and reported without variant occurrence storage.
   - Dry-run exception map handling includes `1Ch.22.17 -> 1Ch.22.16`, `1Ch.22.18 -> 1Ch.22.17`, `1Ch.22.19 -> 1Ch.22.18`, and `Rev.12.18 -> Rev.13.1`.
   - Full read-only dry-run completed with zero hard errors.
+- Phase 5E local write smoke verification is complete:
+  - Persistence skeleton committed in `24a0d24`.
+  - Local DB connectivity was restored through Local Site Shell.
+  - Original-language tables were confirmed: `wp_wcm_original_terms` and `wp_wcm_original_word_occurrences`.
+  - Small `STEP_TAGNT` write smoke passed with `maxRows=3` and `batchSize=1`: first run created `3` terms and `3` occurrences; rerun matched `3` terms and `3` occurrences; duplicates=`0`.
+  - Small `STEP_TAHOT` write smoke passed with `maxRows=3` and `batchSize=1`: first run created `4` terms and `4` occurrences; rerun matched `4` terms and `4` occurrences; Hebrew expansion confirmed; duplicates=`0`.
+  - Current local DB smoke state contains `7` original-language terms and `7` original-language occurrences.
+  - Full import has not been run.
+  - Public original-language API and frontend surfaces have not been added.
+  - Next larger import step requires separate explicit approval.
 
 Phase 5D full dry-run aggregate results:
 
@@ -284,13 +295,12 @@ Remaining non-hard dry-run issues:
 
 Still prohibited:
 
-- Actual STEP TAHOT or STEP TAGNT import.
+- Full STEP TAHOT or STEP TAGNT import.
 - OSHB import.
 - SBLGNT import.
 - Public original-language API.
 - Original-language UI, Interlinear UI, Strong's page, or Word Study UI.
-- DB writes.
-- Repository persistence calls.
+- Any additional DB writes beyond separately approved local smoke or controlled import steps.
 - Frontend changes.
 
 Detailed Phase 5 plan:

@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-18
+2026-06-19
 
 ## Current Foundation
 
@@ -78,11 +78,11 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: Dry-run Pipeline Complete
+Status: Small Local Write Smokes Complete
 
 Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
 
-The project must still not proceed to actual dataset import, DB writes, public original-language APIs, or frontend original-language features without separate explicit approval.
+Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. The project must still not proceed to full dataset import, public original-language APIs, or frontend original-language features without separate explicit approval.
 
 Subphases:
 
@@ -91,7 +91,8 @@ Phase 5A - Source and Schema Analysis
 Phase 5B - Original Language Data Layer
 Phase 5C - Source Gate and Normalizer Foundation
 Phase 5D - Dry-run Import Pipeline
-Phase 5E - Read API Foundation
+Phase 5E - Persistence Smoke Verification
+Future - Read API Foundation
 ```
 
 Phase 5B status:
@@ -173,10 +174,39 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 5E or separately approved persistence-import planning
+Separately approved controlled larger import planning
 ```
 
-Actual STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved. No DB writes or actual original-language import have occurred.
+Full STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
+
+Phase 5E local write smoke summary:
+
+```txt
+Persistence skeleton commit: 24a0d24
+Local DB connectivity: restored through Local Site Shell
+Confirmed tables: wp_wcm_original_terms, wp_wcm_original_word_occurrences
+
+STEP_TAGNT smoke:
+maxRows=3
+batchSize=1
+first run created terms=3 occurrences=3
+rerun matched terms=3 occurrences=3
+duplicates=0
+
+STEP_TAHOT smoke:
+maxRows=3
+batchSize=1
+first run created terms=4 occurrences=4
+rerun matched terms=4 occurrences=4
+Hebrew expansion confirmed
+duplicates=0
+
+Current local DB smoke state:
+terms=7
+occurrences=7
+```
+
+Full import has not been run. Public original-language API and frontend surfaces have not been added. The next larger import step requires separate explicit approval.
 
 Phase 5A entry requirements:
 
@@ -423,7 +453,9 @@ Future milestones after Reader UX Polish:
 - Draft original language schema implementation plan.
 - Phase 5B - Original Language Schema Foundation.
 - Phase 5C - Import Foundation.
-- Phase 5D - Read API Foundation.
+- Phase 5D - Dry-run Pipeline.
+- Phase 5E - Persistence Smoke Verification.
+- Future - Read API Foundation.
 - Later: Interlinear UI.
 - Later: Word Study UI.
 - Later: Cross References.

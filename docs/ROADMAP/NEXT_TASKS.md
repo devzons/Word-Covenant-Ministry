@@ -2,13 +2,13 @@
 
 ## Date
 
-2026-06-18
+2026-06-19
 
 ## Immediate Next Task
 
-Phase 5E or separately approved Original Language persistence-import planning.
+Explicit approval for controlled larger Original Language import, if the project is ready to proceed.
 
-Phase 5D Original Language dry-run pipeline is complete. The next task is not an actual import by default. Real persistence import requires separate explicit approval after reviewing the zero-error dry-run results and remaining warning categories.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The next task is not a full import by default. Any larger persistence import requires separate explicit approval after reviewing the zero-error dry-run results, remaining warning categories, and the small smoke outcomes.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,17 +16,45 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Review Phase 5D full dry-run aggregate results.
-2. Decide whether to approve a separate persistence-import planning phase.
-3. If approved, design the write-enabled import execution plan and rollback/export strategy.
-4. If approved, define repository persistence usage and resumable batch behavior.
-5. If approved, define post-import verification reports.
-6. Actual import only after separate explicit approval.
-7. Public original-language APIs only after data import and verification are approved.
-8. Later: Interlinear UI.
-9. Later: Word Study UI.
-10. Later: Cross References.
-11. Later: Commentary Layer.
+1. Review Phase 5D full dry-run aggregate results and Phase 5E small write smoke reports.
+2. Decide whether to approve a controlled larger STEP import phase.
+3. If approved, define the exact source scope, row limits, batch size, rollback/export strategy, and verification report shape.
+4. If approved, run controlled larger import only under the approved limits.
+5. Actual full import only after separate explicit approval.
+6. Public original-language APIs only after data import and verification are approved.
+7. Later: Interlinear UI.
+8. Later: Word Study UI.
+9. Later: Cross References.
+10. Later: Commentary Layer.
+
+## Phase 5E Smoke Status
+
+Completed local write-smoke status:
+
+- Persistence skeleton committed in `24a0d24`.
+- Local DB connectivity restored through Local Site Shell.
+- Original-language tables confirmed:
+  - `wp_wcm_original_terms`
+  - `wp_wcm_original_word_occurrences`
+- Small `STEP_TAGNT` write smoke passed:
+  - `maxRows=3`
+  - `batchSize=1`
+  - first run created `3` terms and `3` occurrences
+  - rerun matched `3` terms and `3` occurrences
+  - duplicates=`0`
+- Small `STEP_TAHOT` write smoke passed:
+  - `maxRows=3`
+  - `batchSize=1`
+  - first run created `4` terms and `4` occurrences
+  - rerun matched `4` terms and `4` occurrences
+  - Hebrew expansion confirmed
+  - duplicates=`0`
+- Current local DB smoke state:
+  - `7` terms
+  - `7` occurrences
+- Full import has not been run.
+- Public original-language API and frontend surfaces have not been added.
+- Next phase requires explicit approval for any controlled larger import.
 
 ## Required Pre-Work Before Code Changes
 
@@ -298,7 +326,7 @@ Phase 5C importer design constraints:
   - TAHOT rowsRead=`305652`, rowsNormalized=`536199`, rowsSkipped=`2267`.
   - hard errors=`0`.
 - Remaining non-hard issues are `missing_morphology`, `tagnt_non_sbl_skipped`, `qere_kethiv_variant_skipped`, `tahot_non_base_text_type_skipped`, `psalm_title`, and `duplicate_occurrence` warning-level skips.
-- Do not import STEP, OSHB, SBLGNT, MorphGNT, OpenGNT, or any original-language source without explicit approval.
+- Do not run any additional STEP, OSHB, SBLGNT, MorphGNT, OpenGNT, or original-language import without explicit approval.
 - Do not build public original-language APIs, Interlinear UI, Strong's pages, Word Study UI, or other frontend surfaces before import and verification are separately approved.
 
 Phase 5C proposed classes:
@@ -351,12 +379,12 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 
 ## Not In Scope For The Next Task
 
-- Do not import original-language datasets.
-- Do not run actual STEP TAHOT or STEP TAGNT import.
+- Do not run full original-language dataset imports.
+- Do not run full STEP TAHOT or STEP TAGNT import.
 - Do not run OSHB import.
 - Do not run SBLGNT import.
 - Do not download, import, or transform STEP Bible, OSHB, SBLGNT, MorphGNT, OpenGNT, or other original-language datasets yet.
-- Do not implement write-enabled original-language import execution until persistence import is separately approved.
+- Do not run additional write-enabled original-language import execution until the next controlled import step is separately approved.
 - Do not create public original-language APIs yet.
 - Do not create a generic search engine.
 - Do not build Interlinear UI yet.

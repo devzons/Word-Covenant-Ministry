@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-18
+2026-06-19
 
 ## Purpose
 
@@ -15,16 +15,18 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 5D - Original Language Dry-run Pipeline
+Phase 5E - Original Language Persistence Smoke Verification
 ```
 
 Next major phase:
 
 ```txt
-Phase 5E or separately approved persistence-import planning
+Separately approved controlled larger import planning
 ```
 
-Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors. It does not approve DB writes, actual import execution, public APIs, frontend work, or repository persistence.
+Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
+
+Phase 5E tiny local persistence smokes are complete. They verify the persistence skeleton and idempotent repository matching behavior for `STEP_TAGNT` and `STEP_TAHOT` using `maxRows=3` and `batchSize=1`. They do not approve full import execution, public APIs, frontend work, or additional repository persistence.
 
 ## Phase 5 Breakdown
 
@@ -963,10 +965,10 @@ Decision-gate resolutions before source-specific normalizers:
 Implementation gate:
 
 - `StepTahotNormalizer`, `StepTagntNormalizer`, and dry-run-only `OriginalLanguageImportService` are now implemented.
-- Do not implement write-enabled import execution without separate approval.
-- Do not run actual STEP import.
-- Do not write to the database.
-- Do not proceed to persistence/import implementation until the Project Lead explicitly approves a separate import phase.
+- Write-enabled persistence skeleton was later committed in `24a0d24` and verified only through approved tiny local write smokes.
+- Do not run full STEP import.
+- Do not write to the database beyond separately approved smoke or controlled import steps.
+- Do not proceed to any larger persistence/import execution until the Project Lead explicitly approves a separate controlled import phase.
 
 #### Phase 5C-7 Source Acquisition Specification
 
@@ -1036,8 +1038,8 @@ Completed after explicit limited implementation approval:
 
 Still blocked until separate persistence-import approval:
 
-- Actual STEP import.
-- Database writes.
+- Full STEP import.
+- Additional database writes beyond separately approved smoke or controlled import steps.
 
 #### Phase 5C Decision Gate Finalization
 
@@ -1115,8 +1117,8 @@ Import rules:
 - Do not silently skip invalid canonical references.
 - Do not bundle generated original-language data into the frontend.
 - Generated exports remain ignored unless explicitly approved.
-- Do not implement write-enabled import execution before a separate persistence-import phase is approved.
-- Do not run actual STEP TAHOT or STEP TAGNT import without separate approval.
+- Do not run additional write-enabled import execution before a separate controlled import step is approved.
+- Do not run full STEP TAHOT or STEP TAGNT import without separate approval.
 - Do not run OSHB or SBLGNT import without separate approval.
 - Do not create public original-language APIs before import and verification are approved.
 - Do not build Interlinear UI, Strong's pages, or Word Study UI during the data/import foundation phases.
@@ -1196,9 +1198,61 @@ Phase 5D did not perform:
 - Frontend work.
 - Schema changes.
 
-Real persistence import requires a separate explicit approval phase.
+Any larger persistence import requires a separate explicit approval phase.
 
-### Phase 5E - Read API Foundation
+### Phase 5E - Original Language Persistence Smoke Verification
+
+Status:
+
+```txt
+Complete
+```
+
+Completed local verification:
+
+- Persistence skeleton committed in `24a0d24`.
+- Local DB connectivity restored through Local Site Shell.
+- Original-language tables confirmed:
+  - `wp_wcm_original_terms`
+  - `wp_wcm_original_word_occurrences`
+- `importApprovedSource()` confirmed to run preflight before write transaction.
+- Small `STEP_TAGNT` local DB write smoke passed:
+  - `maxRows=3`
+  - `batchSize=1`
+  - first run created `3` terms and `3` occurrences
+  - rerun matched `3` terms and `3` occurrences
+  - duplicate term identity groups=`0`
+  - duplicate occurrence identity groups=`0`
+- Small `STEP_TAHOT` local DB write smoke passed:
+  - `maxRows=3`
+  - `batchSize=1`
+  - first run created `4` terms and `4` occurrences
+  - rerun matched `4` terms and `4` occurrences
+  - Hebrew expansion confirmed
+  - duplicate term identity groups=`0`
+  - duplicate occurrence identity groups=`0`
+- Current local DB smoke state contains:
+  - `7` original-language terms
+  - `7` original-language occurrences
+
+Phase 5E did not perform:
+
+- Full STEP import.
+- TAHOT full import.
+- TAGNT full import.
+- OSHB import.
+- SBLGNT import.
+- Public original-language API work.
+- Frontend work.
+- Commit creation.
+
+Next gate:
+
+```txt
+Any controlled larger import requires separate explicit approval with exact source scope, row limits, batch size, rollback/export strategy, and verification report expectations.
+```
+
+### Future - Read API Foundation
 
 Goals:
 
