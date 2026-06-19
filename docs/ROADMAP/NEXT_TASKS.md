@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Explicit approval for controlled TAHOT Jos-Est import, if the project is ready to proceed.
+Explicit approval for controlled TAHOT Job-Sng import, if the project is ready to proceed.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, and controlled `STEP_TAHOT` Gen-Deu local import are complete. Full TAGNT NT and TAHOT Gen-Deu are imported. Any controlled TAHOT Jos-Est import requires separate explicit approval after reviewing the Gen-Deu import results and rollback strategy.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, and controlled `STEP_TAHOT` Jos-Est local import are complete. Full TAGNT NT, TAHOT Gen-Deu, and TAHOT Jos-Est are imported. Any controlled TAHOT Job-Sng import requires separate explicit approval after reviewing the Jos-Est import results and rollback strategy.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,11 +16,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, the full TAGNT NT import result, and the controlled TAHOT Gen-Deu import result.
-2. Decide whether to approve controlled TAHOT Jos-Est import.
-3. If approved, define the exact TAHOT Jos-Est source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
-4. If approved, run controlled TAHOT Jos-Est import only under the approved limits.
-5. Any larger TAHOT scope beyond Jos-Est only after separate explicit approval.
+1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, the full TAGNT NT import result, and the controlled TAHOT Gen-Deu/Jos-Est import results.
+2. Decide whether to approve controlled TAHOT Job-Sng import.
+3. If approved, define the exact TAHOT Job-Sng source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
+4. If approved, run controlled TAHOT Job-Sng import only under the approved limits.
+5. Any larger TAHOT scope beyond Job-Sng only after separate explicit approval.
 6. Public original-language APIs only after data import and verification are approved.
 7. Later: Interlinear UI.
 8. Later: Word Study UI.
@@ -116,10 +116,28 @@ Completed local write-smoke status:
   - post counts: `9584` terms, `279132` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=142018`
   - coverage: `Genesis=36666`, `Exodus=29477`, `Leviticus=21448`, `Numbers=28655`, `Deuteronomy=25772`
   - duplicate groups=`0`
-- TAHOT has not been run beyond the tiny smoke and controlled Gen-Deu import.
+- Controlled `STEP_TAHOT` Jos-Est local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_k_pre_tahot_jos_est_full.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=107259`, `rowsValid=106536`, `rowsNormalized=189960`, `rowsSkipped=723`
+  - skipped reasons: `qere_kethiv_variant_skipped=512`, `tahot_non_base_text_type_skipped=211`
+  - first successful run created `4465` terms and `189913` occurrences
+  - first successful run skipped `47` duplicate occurrence candidates
+  - duplicateOccurrences=`47` warning-level skips
+  - missingMorphology=`8658` warning-level
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`30.4797s`
+  - peakMemory=`58523648`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `189913` occurrences
+  - post counts: `14049` terms, `469045` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=331931`
+  - coverage: `Joshua=18058`, `Judges=17501`, `Ruth=2258`, `1 Samuel=23439`, `2 Samuel=19418`, `1 Kings=22983`, `2 Kings=21349`, `1 Chronicles=19158`, `2 Chronicles=24016`, `Ezra=6600`, `Nehemiah=9638`, `Esther=5495`
+  - duplicate groups=`0`
+- TAHOT has not been run beyond the tiny smoke and controlled Gen-Deu/Jos-Est imports.
 - Full OT has not been run.
 - Public original-language API and frontend surfaces have not been added.
-- TAHOT Jos-Est controlled import requires separate explicit approval.
+- TAHOT Job-Sng controlled import requires separate explicit approval.
 
 ## Required Pre-Work Before Code Changes
 

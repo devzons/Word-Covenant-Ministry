@@ -21,7 +21,7 @@ Phase 5E - Original Language Persistence Smoke Verification
 Next major phase:
 
 ```txt
-Separately approved controlled TAHOT Jos-Est import decision
+Separately approved controlled TAHOT Job-Sng import decision
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -34,7 +34,9 @@ The approved full `STEP_TAGNT` Mat-Jhn local import is complete. It used `batchS
 
 The approved full `STEP_TAGNT` Act-Rev local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_i_pre_tagnt_act_rev_full.sql`. Full TAGNT NT is imported.
 
-The approved controlled `STEP_TAHOT` Gen-Deu local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_j_pre_tahot_gen_deu_full.sql`. This does not approve other TAHOT files, full OT import, public APIs, frontend work, or additional repository persistence.
+The approved controlled `STEP_TAHOT` Gen-Deu local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_j_pre_tahot_gen_deu_full.sql`.
+
+The approved controlled `STEP_TAHOT` Jos-Est local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_k_pre_tahot_jos_est_full.sql`. This does not approve Job-Sng, Isa-Mal, full OT import, public APIs, frontend work, or additional repository persistence.
 
 ## Phase 5 Breakdown
 
@@ -1307,11 +1309,31 @@ Completed local verification:
   - post source counts: `STEP_TAGNT=137114`, `STEP_TAHOT=142018`
   - coverage: `Genesis=36666`, `Exodus=29477`, `Leviticus=21448`, `Numbers=28655`, `Deuteronomy=25772`
   - duplicate groups=`0`
+- Controlled `STEP_TAHOT` Jos-Est local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_k_pre_tahot_jos_est_full.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=107259`, `rowsValid=106536`, `rowsNormalized=189960`, `rowsSkipped=723`
+  - skipped reasons: `qere_kethiv_variant_skipped=512`, `tahot_non_base_text_type_skipped=211`
+  - first successful run created `4465` terms and `189913` occurrences
+  - first successful run skipped `47` duplicate occurrence candidates
+  - duplicateOccurrences=`47` warning-level skips
+  - missingMorphology=`8658` warning-level
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`30.4797s`
+  - peakMemory=`58523648`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `189913` occurrences
+  - post counts: `14049` terms and `469045` occurrences
+  - post source counts: `STEP_TAGNT=137114`, `STEP_TAHOT=331931`
+  - coverage: `Joshua=18058`, `Judges=17501`, `Ruth=2258`, `1 Samuel=23439`, `2 Samuel=19418`, `1 Kings=22983`, `2 Kings=21349`, `1 Chronicles=19158`, `2 Chronicles=24016`, `Ezra=6600`, `Nehemiah=9638`, `Esther=5495`
+  - duplicate groups=`0`
 
 Phase 5E did not perform:
 
 - Full STEP import.
-- Other TAHOT file import.
+- Job-Sng import.
+- Isa-Mal import.
 - Full OT import.
 - OSHB import.
 - SBLGNT import.
@@ -1322,7 +1344,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Controlled TAHOT Jos-Est requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
+Controlled TAHOT Job-Sng requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
 ```
 
 ### Future - Read API Foundation

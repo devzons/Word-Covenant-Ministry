@@ -78,11 +78,11 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: TAHOT Gen-Deu Local Import Complete
+Status: TAHOT Jos-Est Local Import Complete
 
 Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
 
-Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, and controlled `STEP_TAHOT` Gen-Deu local import. Full TAGNT NT and TAHOT Gen-Deu are imported. The project must still not proceed to other TAHOT files, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
+Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, and controlled `STEP_TAHOT` Jos-Est local import. Full TAGNT NT, TAHOT Gen-Deu, and TAHOT Jos-Est are imported. The project must still not proceed to other TAHOT files, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
 
 Subphases:
 
@@ -174,7 +174,7 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Separately approved controlled TAHOT Jos-Est import decision
+Separately approved controlled TAHOT Job-Sng import decision
 ```
 
 Full STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
@@ -378,7 +378,59 @@ Deuteronomy=25772
 duplicate groups=0
 ```
 
-Other TAHOT files, full OT, public original-language API, and frontend surfaces have not been run. Controlled TAHOT Jos-Est requires separate explicit approval.
+Phase 5E controlled TAHOT Jos-Est import summary:
+
+```txt
+Backup path: /private/tmp/wcm_phase_5e_k_pre_tahot_jos_est_full.sql
+sourceDataset=STEP_TAHOT
+batchSize=250
+
+First successful run:
+rowsRead=107259
+rowsValid=106536
+rowsNormalized=189960
+rowsSkipped=723
+qere_kethiv_variant_skipped=512
+tahot_non_base_text_type_skipped=211
+termsCreated=4465
+occurrencesCreated=189913
+occurrencesSkipped=47
+duplicateOccurrences=47 warning-level skips
+missingMorphology=8658
+errors=0
+failedBatches=0
+runtime=30.4797s
+peakMemory=58523648
+
+Rerun idempotency:
+termsCreated=0
+occurrencesCreated=0
+occurrencesMatched=189913
+
+Post counts:
+terms=14049
+occurrences=469045
+STEP_TAGNT=137114
+STEP_TAHOT=331931
+
+Coverage:
+Joshua=18058
+Judges=17501
+Ruth=2258
+1 Samuel=23439
+2 Samuel=19418
+1 Kings=22983
+2 Kings=21349
+1 Chronicles=19158
+2 Chronicles=24016
+Ezra=6600
+Nehemiah=9638
+Esther=5495
+
+duplicate groups=0
+```
+
+Job-Sng, Isa-Mal, full OT, public original-language API, and frontend surfaces have not been run. Controlled TAHOT Job-Sng requires separate explicit approval.
 
 Phase 5A entry requirements:
 
