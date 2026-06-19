@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Phase 5C - Original Language Importer Design.
+Phase 5E or separately approved Original Language persistence-import planning.
 
-Phase 5B Original Language Data Layer implementation is complete. Phase 5C must design the importer before any dataset import. It must start with source file inspection, source header verification, import mapping, batch validation, dry-run behavior, and verification report design.
+Phase 5D Original Language dry-run pipeline is complete. The next task is not an actual import by default. Real persistence import requires separate explicit approval after reviewing the zero-error dry-run results and remaining warning categories.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,20 +16,17 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Source Acquisition Specification
-2. Approved source file acquisition
-3. Header-only inspection
-4. Header mapping finalization
-5. StepTahotNormalizer design
-6. StepTagntNormalizer design
-7. Dry-run ImportService design
-8. First dry-run import
-9. Actual import only after separate explicit approval
-10. Phase 5D Read API Foundation
-11. Later: Interlinear UI
-12. Later: Word Study UI
-13. Later: Cross References
-14. Later: Commentary Layer
+1. Review Phase 5D full dry-run aggregate results.
+2. Decide whether to approve a separate persistence-import planning phase.
+3. If approved, design the write-enabled import execution plan and rollback/export strategy.
+4. If approved, define repository persistence usage and resumable batch behavior.
+5. If approved, define post-import verification reports.
+6. Actual import only after separate explicit approval.
+7. Public original-language APIs only after data import and verification are approved.
+8. Later: Interlinear UI.
+9. Later: Word Study UI.
+10. Later: Cross References.
+11. Later: Commentary Layer.
 
 ## Required Pre-Work Before Code Changes
 
@@ -269,18 +266,40 @@ Phase 5C importer design constraints:
 - Floating `latest` source versions are not allowed.
 - Exact source version, file name, source URL, download date, license, and attribution text must be documented before source acquisition proceeds.
 - Recommended STEP storage location is `docs/data-sources/STEP/TAHOT/` and `docs/data-sources/STEP/TAGNT/`.
-- Inspect exact STEP TAHOT/TAGNT source files before importer implementation.
-- Verify source headers before importer implementation.
-- STEP_TAHOT source file is not currently available locally.
-- STEP_TAGNT source file is not currently available locally.
-- `docs/data-sources/` currently contains KRV-related files only.
+- STEP_TAHOT candidate files are locally available under `docs/data-sources/STEP/TAHOT/`.
+- STEP_TAGNT candidate files are locally available under `docs/data-sources/STEP/TAGNT/`.
+- A local `STEPBible-Data` source clone is available under `docs/data-sources/STEPBible-Data/`.
+- Pinned STEP source commit for Phase 5C design is `b86d26cdb1f51729e73b5b4eb7f7ccadc5dfba39`.
+- License is CC BY 4.0.
+- Attribution must credit STEP Bible linked to `www.STEPBible.org` and note the Tyndale House Cambridge basis.
+- TAGNT first production import must use SBL-aligned filtering: include only rows whose `editions` field contains `SBL`.
+- TAHOT canonical mapping must keep WCM `book_id + chapter + verse` authoritative and use an explicit Hebrew versification exception map before import.
+- Hebrew prefixes, root words, suffixes, and punctuation must be modeled with `wordOrder`, `subwordOrder`, and `tokenType` when source segment data is available.
+- Base Strong's values belong in `strongsNumber`; STEP disambiguation belongs in `strongsExtended`.
+- Raw STEP source files remain untracked source data and must not be committed without separate approval.
 - Plugin tools currently contain KRV tooling only.
-- `StepTahotNormalizer`, `StepTagntNormalizer`, and `OriginalLanguageImportService` are blocked until approved local source files or header/sample excerpts are provided and inspected.
-- Define source-to-ValueObject import mapping before writes.
-- Define batch validation and dry-run report behavior before writes.
-- Design validator, service, and repository usage before implementation.
+- `StepTahotNormalizer`, `StepTagntNormalizer`, `OriginalLanguageVersificationResolver`, and dry-run-only `OriginalLanguageImportService` are implemented.
+- Phase 5C-B1 Source Gate Hardening is complete:
+  - STEP `.txt` files are recognized as `step_txt`.
+  - Real TAHOT/TAGNT data header detection is implemented.
+  - TAHOT/TAGNT required header validation is implemented.
+  - Source metadata/report include source version, source URL, and checksum support.
+  - Approved STEP path/name validation is implemented.
+  - STEP CC BY 4.0 attribution validation is implemented.
+  - Read-only smoke check passed for `STEP_TAHOT` and `STEP_TAGNT`.
+- Phase 5D dry-run blocker fixes are complete:
+  - TAGNT alternate references using `{}`, `[]`, and `()` before `#` are parsed and preserved in raw/context.
+  - TAHOT non-base text types such as `X` are skipped by first-import policy.
+  - TAHOT Q(K) rows are skipped and reported without variant occurrence storage.
+  - Dry-run exception map handling includes `1Ch.22.17 -> 1Ch.22.16`, `1Ch.22.18 -> 1Ch.22.17`, `1Ch.22.19 -> 1Ch.22.18`, and `Rev.12.18 -> Rev.13.1`.
+- Phase 5D full read-only dry-run completed with zero hard errors.
+- Full dry-run aggregate:
+  - TAGNT rowsRead=`142096`, rowsNormalized=`137121`, rowsSkipped=`4975`.
+  - TAHOT rowsRead=`305652`, rowsNormalized=`536199`, rowsSkipped=`2267`.
+  - hard errors=`0`.
+- Remaining non-hard issues are `missing_morphology`, `tagnt_non_sbl_skipped`, `qere_kethiv_variant_skipped`, `tahot_non_base_text_type_skipped`, `psalm_title`, and `duplicate_occurrence` warning-level skips.
 - Do not import STEP, OSHB, SBLGNT, MorphGNT, OpenGNT, or any original-language source without explicit approval.
-- Do not build public original-language APIs, Interlinear UI, Strong's pages, Word Study UI, or other frontend surfaces in Phase 5C design.
+- Do not build public original-language APIs, Interlinear UI, Strong's pages, Word Study UI, or other frontend surfaces before import and verification are separately approved.
 
 Phase 5C proposed classes:
 
@@ -337,7 +356,7 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 - Do not run OSHB import.
 - Do not run SBLGNT import.
 - Do not download, import, or transform STEP Bible, OSHB, SBLGNT, MorphGNT, OpenGNT, or other original-language datasets yet.
-- Do not implement an original-language importer until Phase 5C design is complete and approved.
+- Do not implement write-enabled original-language import execution until persistence import is separately approved.
 - Do not create public original-language APIs yet.
 - Do not create a generic search engine.
 - Do not build Interlinear UI yet.

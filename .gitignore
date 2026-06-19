@@ -48,6 +48,7 @@ out/
 coverage/
 
 # Raw Bible source data archives
+/docs/data-sources/
 /docs/data-sources/**/*.mdb
 /docs/data-sources/**/*.sqlite
 /docs/data-sources/**/*.db

@@ -15,16 +15,16 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 5C - Original Language Importer Design
+Phase 5D - Original Language Dry-run Pipeline
 ```
 
 Next major phase:
 
 ```txt
-Phase 5C - Original Language Importer Design
+Phase 5E or separately approved persistence-import planning
 ```
 
-Phase 5B Original Language Data Layer implementation is complete. Phase 5C must begin with importer design, source file inspection, source header verification, import mapping, batch validation, dry-run design, and verification report design. It must not begin with importing OSHB, SBLGNT, STEP Bible, MorphGNT, OpenGNT, or other original-language datasets.
+Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors. It does not approve DB writes, actual import execution, public APIs, frontend work, or repository persistence.
 
 ## Phase 5 Breakdown
 
@@ -630,7 +630,7 @@ Phase 5B implementation did not approve or perform any original-language dataset
 Status:
 
 ```txt
-Next
+Complete
 ```
 
 Goals:
@@ -706,7 +706,7 @@ Design candidates:
 - `OriginalLanguageImportReport`
 - `OriginalLanguageImportService`
 
-These are design targets only. They must not be implemented until explicitly approved.
+These classes were designed during Phase 5C. Source gates, normalized row contracts, source-specific normalizers, the versification resolver, and the dry-run import service were then implemented through the approved Phase 5C/5D limited implementation steps. Write-enabled persistence import remains out of scope.
 
 #### Source Inspection Design
 
@@ -799,6 +799,9 @@ Dry-run must:
 - `source_dataset`.
 - `source_file`.
 - `license_status`.
+- `source_version`.
+- `source_url`.
+- `checksum`.
 - `rows_read`.
 - `rows_valid`.
 - `rows_invalid`.
@@ -823,7 +826,10 @@ STEP TAHOT import design must:
 - Preserve morphology exactly when provided.
 - Model Hebrew prefixes and suffixes with `subwordOrder` and `tokenType`.
 - Preserve Extended Strong's in `strongsExtended`.
-- Block import until Hebrew versification handling is fixed.
+- Use WCM canonical `book_id + chapter + verse` as authoritative.
+- Parse the source English/NRSV reference as the default canonical reference input.
+- Preserve Hebrew alternate references in source metadata/raw row context.
+- Block import until the Hebrew versification exception map is validated.
 - Require deterministic `sourceRef`.
 - Validate word and subword ordering.
 
@@ -831,8 +837,10 @@ STEP TAHOT import design must:
 
 STEP TAGNT import design must:
 
-- Block import until Greek edition filtering is decided.
-- Preserve variant tokens as `tokenType = variant` when needed.
+- Use SBL-aligned filtering for the first production import.
+- Include only rows whose `editions` field contains `SBL`.
+- Exclude non-SBL rows from the first production import and count them in dry-run reports.
+- Defer importing non-SBL variants as `tokenType = variant` until a later approved variant phase.
 - Preserve morphology exactly when provided.
 - Preserve STEP disambiguated Strong's in `strongsExtended`.
 - Use `subwordOrder = 0` unless source data requires expansion.
@@ -842,23 +850,73 @@ STEP TAGNT import design must:
 
 Local source availability:
 
-- STEP_TAHOT source file was not found locally.
-- STEP_TAGNT source file was not found locally.
-- `docs/data-sources/` currently contains KRV-related files only.
+- STEP_TAHOT candidate files are locally available under `docs/data-sources/STEP/TAHOT/`.
+- STEP_TAGNT candidate files are locally available under `docs/data-sources/STEP/TAGNT/`.
+- A local STEP source clone is available under `docs/data-sources/STEPBible-Data/`.
+- The local STEP source clone is pinned for Phase 5C design review at commit `b86d26cdb1f51729e73b5b4eb7f7ccadc5dfba39`.
+- `docs/data-sources/` contains KRV files, STEP candidate files, and a local `STEPBible-Data` source clone.
 - Plugin tooling currently contains KRV tooling only:
   - `tools/export-krv-mdb.php`
   - `tools/import-krv-json.php`
   - `tools/verify-krv-import.php`
-- No STEP source download was performed.
+- No STEP source download was performed during this decision update.
 - No STEP import was performed.
 
 Header mapping status:
 
-- STEP_TAHOT exact headers are not confirmed.
-- STEP_TAGNT exact headers are not confirmed.
-- `StepTahotNormalizer` implementation is blocked until approved local source files or header/sample excerpts are available.
-- `StepTagntNormalizer` implementation is blocked until approved local source files or header/sample excerpts are available.
-- `OriginalLanguageImportService` implementation remains blocked until source headers, sample rows, license/provenance, and gate decisions are confirmed.
+- STEP_TAHOT header/sample shape has been inspected from the pinned local STEP source.
+- STEP_TAGNT header/sample shape has been inspected from the pinned local STEP source.
+- `StepTahotNormalizer` has been implemented for dry-run normalization.
+- `StepTagntNormalizer` has been implemented for dry-run normalization.
+- `OriginalLanguageImportService` has been implemented in dry-run-only mode.
+
+Pinned source and license status:
+
+```txt
+Repository: https://github.com/STEPBible/STEPBible-Data.git
+Pinned commit: b86d26cdb1f51729e73b5b4eb7f7ccadc5dfba39
+License: CC BY 4.0
+Attribution: Credit STEP Bible linked to www.STEPBible.org; data is based on work at Tyndale House Cambridge.
+```
+
+Raw STEP source files remain untracked and must not be committed unless separately approved.
+
+#### Phase 5C-B1 Source Gate Hardening
+
+Status:
+
+```txt
+Complete
+```
+
+Implemented source gate behavior:
+
+- STEP `.txt` source files are recognized as `step_txt`.
+- `step_txt` is treated as tab-separated STEP text format.
+- `OriginalLanguageSourceInspector` locates real TAHOT/TAGNT data header rows instead of intro/license lines.
+- `OriginalLanguageSourceInspector` extracts sample data rows after the real STEP header.
+- `SourceFileValidator` validates source-specific required headers for `STEP_TAHOT` and `STEP_TAGNT`.
+- `OriginalLanguageSourceMetadata` includes source version, source URL, and checksum support.
+- `OriginalLanguageImportReport` includes source version, source URL, and checksum support.
+- `SourceFileValidator` validates approved STEP source path and expected file-name prefixes.
+- `SourceLicenseValidator` validates STEP CC BY 4.0 attribution, STEP Bible/STEPBible.org attribution, Tyndale House Cambridge attribution, approved license status, and STEPBible-Data source URL.
+
+Read-only smoke check:
+
+```txt
+STEP_TAHOT format=step_txt headers=12 samples=5 issues=0
+STEP_TAGNT format=step_txt headers=13 samples=5 issues=0
+```
+
+Phase 5C-B1 did not implement:
+
+- `StepTahotNormalizer`.
+- `StepTagntNormalizer`.
+- `OriginalLanguageImportService`.
+- Dataset import.
+- Database writes.
+- Public original-language APIs.
+- Original-language UI.
 
 Pending STEP_TAHOT candidate mapping:
 
@@ -889,25 +947,26 @@ source morphology -> morphology, preserved exactly
 stable source word id preferred -> sourceRef
 ```
 
-Open questions before source-specific normalizers:
+Decision-gate resolutions before source-specific normalizers:
 
-- Exact STEP TAHOT and STEP TAGNT files and versions.
-- License and attribution text.
-- TAGNT primary edition stream.
-- TAGNT variant filtering.
-- TAHOT versification mapping to WCM canonical references.
-- Hebrew prefix/suffix occurrence model.
-- Stable `sourceRef` strategy.
-- Base Strong's versus extended Strong's split.
+- Exact STEP source version is pinned to `STEPBible-Data` commit `b86d26cdb1f51729e73b5b4eb7f7ccadc5dfba39`.
+- License is CC BY 4.0.
+- Attribution must credit STEP Bible linked to `www.STEPBible.org` and note the Tyndale House Cambridge basis.
+- TAGNT primary edition stream is SBL-aligned using rows whose `editions` field contains `SBL`.
+- TAGNT non-SBL rows are excluded from the first production import and reported by dry-run.
+- TAHOT maps to WCM canonical `book_id + chapter + verse` using the source English/NRSV reference as default input.
+- TAHOT Hebrew alternate references are preserved in raw/source metadata and require an exception map before import.
+- Hebrew prefix/suffix modeling uses separate occurrences with `wordOrder`, `subwordOrder`, and `tokenType`.
+- Strong's normalization stores base lookup values in `strongsNumber` and STEP disambiguation in `strongsExtended`.
+- Stable `sourceRef` should prefer the deterministic source reference plus source word number and text type. If a stronger source word id is confirmed, use it instead.
 
 Implementation gate:
 
-- Do not implement `StepTahotNormalizer`.
-- Do not implement `StepTagntNormalizer`.
-- Do not implement `OriginalLanguageImportService`.
+- `StepTahotNormalizer`, `StepTagntNormalizer`, and dry-run-only `OriginalLanguageImportService` are now implemented.
+- Do not implement write-enabled import execution without separate approval.
 - Do not run actual STEP import.
 - Do not write to the database.
-- Do not continue past header mapping until approved local source files or header/sample excerpts are provided and inspected.
+- Do not proceed to persistence/import implementation until the Project Lead explicitly approves a separate import phase.
 
 #### Phase 5C-7 Source Acquisition Specification
 
@@ -969,19 +1028,70 @@ Required before import:
 - Stable `sourceRef` strategy is decided.
 - Explicit approval is given for actual import.
 
-Blocked until approved source files or header/sample excerpts are provided:
+Completed after explicit limited implementation approval:
 
 - `StepTahotNormalizer`.
 - `StepTagntNormalizer`.
 - `OriginalLanguageImportService`.
+
+Still blocked until separate persistence-import approval:
+
 - Actual STEP import.
 - Database writes.
+
+#### Phase 5C Decision Gate Finalization
+
+Source acquisition status:
+
+- Local STEP candidate files are present under `docs/data-sources/STEP/`.
+- A local `STEPBible-Data` source clone is present under `docs/data-sources/STEPBible-Data/`.
+- The pinned STEP source commit for Phase 5C design is `b86d26cdb1f51729e73b5b4eb7f7ccadc5dfba39`.
+- Raw STEP files are source data, not implementation code, and must not be committed without separate approval.
+
+License and attribution:
+
+- License: CC BY 4.0.
+- Attribution: credit STEP Bible linked to `www.STEPBible.org`.
+- Provenance note: data is created by STEP Bible and based on work at Tyndale House Cambridge.
+- Any future source README, import report, public attribution surface, or distribution note must preserve this attribution.
+
+Greek edition filtering decision:
+
+- Use TAGNT as the primary Greek source.
+- Use SBLGNT as the reference text.
+- Initial import stream is SBL-aligned: import only TAGNT rows where `editions` contains `SBL`.
+- Do not import non-SBL rows as `variant` in the first production import.
+- Dry-run reports must count excluded non-SBL rows and any rows with variant-related warnings.
+
+Hebrew versification decision:
+
+- WCM canonical reference remains `book_id + chapter + verse`.
+- TAHOT English/NRSV reference is the default parse input for canonical mapping.
+- Hebrew alternate references in brackets are preserved in raw/source metadata.
+- Psalm title verse `0` cases and English/Hebrew verse-start differences require an explicit exception map before import.
+
+Hebrew prefix/suffix token decision:
+
+- Use expanded occurrence modeling when TAHOT separates prefixes, root words, suffixes, or punctuation.
+- Preserve the source word number as `wordOrder`.
+- Assign `subwordOrder` from `0` upward in source display order within the same STEP word.
+- Use `tokenType = prefix`, `word`, `suffix`, or `punctuation` according to the source segment role.
+- Use `subwordOrder = 0` for unsegmented words.
+
+Strong's normalization decision:
+
+- Store base lookup Strong's in `strongsNumber`.
+- Store STEP disambiguation in `strongsExtended`.
+- Remove braces, wrappers, suffix letters, and instance markers from base Strong's.
+- Remove leading zeroes in base Strong's canonical form, for example `H0430` becomes `H430` and `G0011` becomes `G11`.
+- Preserve meaningful STEP disambiguation suffixes in `strongsExtended`, for example `H7225G` or `G2424G`.
+- Do not include occurrence instance markers such as `_A` or `_B` in term identity.
 
 #### Phase 5C Risks
 
 - KRV importer lacks a dry-run pattern.
-- STEP source headers are not confirmed.
-- License and attribution text must be documented before import.
+- STEP source files are currently untracked source data and must not be committed without approval.
+- License and attribution text must be carried into source documentation and import reports before import.
 - Hebrew prefix/suffix modeling can corrupt ordering if it happens too late.
 - Greek edition filtering can duplicate or mix readings if not decided first.
 - Repository `save()` methods write immediately, so dry-run must stay outside repositories.
@@ -990,16 +1100,14 @@ Blocked until approved source files or header/sample excerpts are provided:
 #### Recommended Phase 5C Implementation Order
 
 1. Finalize Source Acquisition Specification.
-2. Acquire approved STEP_TAHOT / STEP_TAGNT source files or header/sample excerpts.
-3. Run header-only source inspection.
-4. Finalize header mapping.
-5. Decide Greek edition filtering.
-6. Decide Hebrew versification mapping.
-7. Decide Hebrew prefix/suffix token model.
-8. Design `StepTahotNormalizer` and `StepTagntNormalizer`.
-9. Design dry-run-only `OriginalLanguageImportService`.
-10. Run first dry-run import only after approval.
-11. Run actual import only after separate explicit approval.
+2. Confirm raw STEP source file commit/ignore policy.
+3. Run header-only source inspection with `OriginalLanguageSourceInspector`.
+4. Validate source metadata with `SourceFileValidator` and `SourceLicenseValidator`.
+5. Design `StepTahotNormalizer` from the finalized header map and decision-gate policies.
+6. Design `StepTagntNormalizer` from the finalized header map and SBL filtering policy.
+7. Design dry-run-only `OriginalLanguageImportService`.
+8. Run first dry-run import only after approval.
+9. Run actual import only after separate explicit approval.
 
 Import rules:
 
@@ -1007,13 +1115,90 @@ Import rules:
 - Do not silently skip invalid canonical references.
 - Do not bundle generated original-language data into the frontend.
 - Generated exports remain ignored unless explicitly approved.
-- Do not implement an importer before Phase 5C design is complete and approved.
-- Do not run actual STEP TAHOT or STEP TAGNT import during Phase 5C design.
-- Do not run OSHB or SBLGNT import during Phase 5C design.
-- Do not create public original-language APIs during Phase 5C design.
-- Do not build Interlinear UI, Strong's pages, or Word Study UI during Phase 5C design.
+- Do not implement write-enabled import execution before a separate persistence-import phase is approved.
+- Do not run actual STEP TAHOT or STEP TAGNT import without separate approval.
+- Do not run OSHB or SBLGNT import without separate approval.
+- Do not create public original-language APIs before import and verification are approved.
+- Do not build Interlinear UI, Strong's pages, or Word Study UI during the data/import foundation phases.
 
-### Phase 5D - Read API Foundation
+### Phase 5D - Original Language Dry-run Pipeline
+
+Status:
+
+```txt
+Complete
+```
+
+Completed implementation:
+
+- `StepTagntNormalizer`.
+- `StepTahotNormalizer`.
+- `OriginalLanguageVersificationResolver`.
+- `OriginalLanguageImportService` in dry-run-only mode.
+
+Dry-run behavior completed:
+
+- Source inspection and source/license validation are used before row processing.
+- STEP rows stream after the detected STEP data header.
+- TAGNT non-SBL rows are skipped and counted.
+- TAHOT Psalm title rows are skipped and counted.
+- Unresolved references are treated as hard errors during dry-run.
+- Missing morphology remains warning-only.
+- Duplicate occurrence candidates are warning-level skips during dry-run.
+- No repositories are called.
+- No DB writes occur.
+- No public API or frontend surface is created.
+
+Blocker fixes completed in Phase 5D-E:
+
+- TAGNT alternate references using `{}`, `[]`, and `()` before `#` are accepted.
+- TAGNT alternate reference marker, type, and value are preserved in raw/context.
+- TAGNT canonical resolution uses the primary reference unless an explicit exception map overrides it.
+- TAHOT first-import policy includes base `L` rows and skips non-base text types such as `X`.
+- TAHOT Q(K) rows are skipped and reported with `qere_kethiv_variant_skipped`.
+- TAHOT non-base rows are reported with `tahot_non_base_text_type_skipped`.
+- No variant table or variant occurrence storage was added.
+- Dry-run exception map handling includes:
+  - `1Ch.22.17 -> 1Ch.22.16`
+  - `1Ch.22.18 -> 1Ch.22.17`
+  - `1Ch.22.19 -> 1Ch.22.18`
+  - `Rev.12.18 -> Rev.13.1`
+
+Full dry-run aggregate results:
+
+```txt
+TAGNT rowsRead=142096
+TAGNT rowsNormalized=137121
+TAGNT rowsSkipped=4975
+
+TAHOT rowsRead=305652
+TAHOT rowsNormalized=536199
+TAHOT rowsSkipped=2267
+
+hard errors=0
+```
+
+Remaining non-hard issues:
+
+- `missing_morphology`
+- `tagnt_non_sbl_skipped`
+- `qere_kethiv_variant_skipped`
+- `tahot_non_base_text_type_skipped`
+- `psalm_title`
+- `duplicate_occurrence` warning-level skips
+
+Phase 5D did not perform:
+
+- Actual STEP import.
+- DB writes.
+- Repository persistence calls.
+- Public original-language API work.
+- Frontend work.
+- Schema changes.
+
+Real persistence import requires a separate explicit approval phase.
+
+### Phase 5E - Read API Foundation
 
 Goals:
 

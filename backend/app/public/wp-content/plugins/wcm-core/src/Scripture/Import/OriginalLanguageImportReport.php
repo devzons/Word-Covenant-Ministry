@@ -11,9 +11,16 @@ final class OriginalLanguageImportReport
     public string $sourceDataset;
     public string $sourceFile;
     public string $licenseStatus;
+    public string $sourceVersion;
+    public string $sourceUrl;
+    public string $checksum;
     public int $rowsRead;
     public int $rowsValid;
     public int $rowsInvalid;
+    public int $rowsNormalized;
+    public int $rowsSkipped;
+    public int $termsCandidateCount;
+    public int $occurrencesCandidateCount;
     public int $termsCreated;
     public int $termsMatched;
     public int $occurrencesCreated;
@@ -39,9 +46,16 @@ final class OriginalLanguageImportReport
         string $sourceDataset = '',
         string $sourceFile = '',
         string $licenseStatus = '',
+        string $sourceVersion = '',
+        string $sourceUrl = '',
+        string $checksum = '',
         int $rowsRead = 0,
         int $rowsValid = 0,
         int $rowsInvalid = 0,
+        int $rowsNormalized = 0,
+        int $rowsSkipped = 0,
+        int $termsCandidateCount = 0,
+        int $occurrencesCandidateCount = 0,
         int $termsCreated = 0,
         int $termsMatched = 0,
         int $occurrencesCreated = 0,
@@ -57,9 +71,16 @@ final class OriginalLanguageImportReport
         $this->sourceDataset = trim($sourceDataset);
         $this->sourceFile = trim($sourceFile);
         $this->licenseStatus = trim($licenseStatus);
+        $this->sourceVersion = trim($sourceVersion);
+        $this->sourceUrl = trim($sourceUrl);
+        $this->checksum = trim($checksum);
         $this->rowsRead = $this->nonNegative($rowsRead, 'rowsRead');
         $this->rowsValid = $this->nonNegative($rowsValid, 'rowsValid');
         $this->rowsInvalid = $this->nonNegative($rowsInvalid, 'rowsInvalid');
+        $this->rowsNormalized = $this->nonNegative($rowsNormalized, 'rowsNormalized');
+        $this->rowsSkipped = $this->nonNegative($rowsSkipped, 'rowsSkipped');
+        $this->termsCandidateCount = $this->nonNegative($termsCandidateCount, 'termsCandidateCount');
+        $this->occurrencesCandidateCount = $this->nonNegative($occurrencesCandidateCount, 'occurrencesCandidateCount');
         $this->termsCreated = $this->nonNegative($termsCreated, 'termsCreated');
         $this->termsMatched = $this->nonNegative($termsMatched, 'termsMatched');
         $this->occurrencesCreated = $this->nonNegative($occurrencesCreated, 'occurrencesCreated');
@@ -106,6 +127,26 @@ final class OriginalLanguageImportReport
     public function recordRowsInvalid(int $count = 1): void
     {
         $this->incrementCounter('rowsInvalid', $count);
+    }
+
+    public function recordRowsNormalized(int $count = 1): void
+    {
+        $this->incrementCounter('rowsNormalized', $count);
+    }
+
+    public function recordRowsSkipped(int $count = 1): void
+    {
+        $this->incrementCounter('rowsSkipped', $count);
+    }
+
+    public function recordTermsCandidateCount(int $count = 1): void
+    {
+        $this->incrementCounter('termsCandidateCount', $count);
+    }
+
+    public function recordOccurrencesCandidateCount(int $count = 1): void
+    {
+        $this->incrementCounter('occurrencesCandidateCount', $count);
     }
 
     public function recordTermsCreated(int $count = 1): void
@@ -168,9 +209,16 @@ final class OriginalLanguageImportReport
      *     source_dataset: string,
      *     source_file: string,
      *     license_status: string,
+     *     source_version: string,
+     *     source_url: string,
+     *     checksum: string,
      *     rows_read: int,
      *     rows_valid: int,
      *     rows_invalid: int,
+     *     rows_normalized: int,
+     *     rows_skipped: int,
+     *     terms_candidate_count: int,
+     *     occurrences_candidate_count: int,
      *     terms_created: int,
      *     terms_matched: int,
      *     occurrences_created: int,
@@ -183,6 +231,8 @@ final class OriginalLanguageImportReport
      *     invalid_reference: int,
      *     warnings: int,
      *     errors: int,
+     *     issue_counts_by_severity: array<string, int>,
+     *     issue_counts_by_code: array<string, int>,
      *     issues: array<int, array{severity: string, code: string, message: string, context: array<string, mixed>}>,
      *     ok: bool
      * }
@@ -193,9 +243,16 @@ final class OriginalLanguageImportReport
             'source_dataset' => $this->sourceDataset,
             'source_file' => $this->sourceFile,
             'license_status' => $this->licenseStatus,
+            'source_version' => $this->sourceVersion,
+            'source_url' => $this->sourceUrl,
+            'checksum' => $this->checksum,
             'rows_read' => $this->rowsRead,
             'rows_valid' => $this->rowsValid,
             'rows_invalid' => $this->rowsInvalid,
+            'rows_normalized' => $this->rowsNormalized,
+            'rows_skipped' => $this->rowsSkipped,
+            'terms_candidate_count' => $this->termsCandidateCount,
+            'occurrences_candidate_count' => $this->occurrencesCandidateCount,
             'terms_created' => $this->termsCreated,
             'terms_matched' => $this->termsMatched,
             'occurrences_created' => $this->occurrencesCreated,
@@ -208,12 +265,48 @@ final class OriginalLanguageImportReport
             'invalid_reference' => $this->invalidReference,
             'warnings' => $this->warnings,
             'errors' => $this->errors,
+            'issue_counts_by_severity' => $this->issueCountsBySeverity(),
+            'issue_counts_by_code' => $this->issueCountsByCode(),
             'issues' => array_map(
                 static fn (OriginalLanguageImportIssue $issue): array => $issue->toArray(),
                 $this->issues
             ),
             'ok' => $this->ok(),
         ];
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function issueCountsBySeverity(): array
+    {
+        $counts = [
+            OriginalLanguageImportIssue::SEVERITY_INFO => 0,
+            OriginalLanguageImportIssue::SEVERITY_WARNING => 0,
+            OriginalLanguageImportIssue::SEVERITY_ERROR => 0,
+        ];
+
+        foreach ($this->issues as $issue) {
+            $counts[$issue->severity] = ($counts[$issue->severity] ?? 0) + 1;
+        }
+
+        return $counts;
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function issueCountsByCode(): array
+    {
+        $counts = [];
+
+        foreach ($this->issues as $issue) {
+            $counts[$issue->code] = ($counts[$issue->code] ?? 0) + 1;
+        }
+
+        ksort($counts);
+
+        return $counts;
     }
 
     private function incrementCounter(string $property, int $count): void

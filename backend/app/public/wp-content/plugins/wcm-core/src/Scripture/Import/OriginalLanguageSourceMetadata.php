@@ -22,6 +22,8 @@ final readonly class OriginalLanguageSourceMetadata
         public string $licenseStatus,
         public string $attribution,
         public ?int $rowCountEstimate,
+        public string $sourceVersion = '',
+        public string $sourceUrl = '',
         public array $headers = [],
         public array $sampleRows = []
     ) {
@@ -49,6 +51,14 @@ final readonly class OriginalLanguageSourceMetadata
             throw new InvalidArgumentException('Original language source format is required.');
         }
 
+        if (trim($this->sourceVersion) === '') {
+            throw new InvalidArgumentException('Original language source version is required.');
+        }
+
+        if (trim($this->sourceUrl) === '') {
+            throw new InvalidArgumentException('Original language source URL is required.');
+        }
+
         if ($this->rowCountEstimate !== null && $this->rowCountEstimate < 0) {
             throw new InvalidArgumentException('Original language source row count estimate cannot be negative.');
         }
@@ -64,6 +74,8 @@ final readonly class OriginalLanguageSourceMetadata
      *     format: string,
      *     license_status: string,
      *     attribution: string,
+     *     source_version: string,
+     *     source_url: string,
      *     row_count_estimate: ?int,
      *     headers: string[],
      *     sample_rows: array<int, mixed>
@@ -80,6 +92,8 @@ final readonly class OriginalLanguageSourceMetadata
             'format' => $this->format,
             'license_status' => $this->licenseStatus,
             'attribution' => $this->attribution,
+            'source_version' => $this->sourceVersion,
+            'source_url' => $this->sourceUrl,
             'row_count_estimate' => $this->rowCountEstimate,
             'headers' => $this->headers,
             'sample_rows' => $this->sampleRows,

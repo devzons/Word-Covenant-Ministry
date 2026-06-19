@@ -78,17 +78,20 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: In Progress
+Status: Dry-run Pipeline Complete
 
-Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. It must still not proceed to dataset import without explicit approval.
+Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
+
+The project must still not proceed to actual dataset import, DB writes, public original-language APIs, or frontend original-language features without separate explicit approval.
 
 Subphases:
 
 ```txt
 Phase 5A - Source and Schema Analysis
 Phase 5B - Original Language Data Layer
-Phase 5C - Original Language Importer Design
-Phase 5D - Read API Foundation
+Phase 5C - Source Gate and Normalizer Foundation
+Phase 5D - Dry-run Import Pipeline
+Phase 5E - Read API Foundation
 ```
 
 Phase 5B status:
@@ -109,15 +112,71 @@ Phase 5B completed:
 - `OriginalTermRepository`.
 - `OriginalWordOccurrenceRepository`.
 
+Phase 5C status:
+
+```txt
+Complete
+```
+
+Phase 5C completed:
+
+- STEP source gate hardening.
+- STEP `.txt` recognition as `step_txt`.
+- Real TAHOT/TAGNT header detection.
+- TAHOT/TAGNT required header validation.
+- Source metadata and report support for source version, source URL, and checksum.
+- STEP CC BY 4.0 attribution validation.
+- `OriginalLanguageNormalizedRow`.
+- `OriginalLanguageNormalizerInterface`.
+- `StepTagntNormalizer`.
+- `StepTahotNormalizer`.
+
+Phase 5D status:
+
+```txt
+Complete
+```
+
+Phase 5D completed:
+
+- `OriginalLanguageVersificationResolver`.
+- `OriginalLanguageImportService` in dry-run-only mode.
+- TAGNT alternate reference parsing for `{}`, `[]`, and `()` markers before `#`.
+- TAHOT non-base text type skip policy.
+- TAHOT Q(K) skip policy.
+- Dry-run exception handling for `1Ch.22.17-19` and `Rev.12.18`.
+- Full read-only dry-run audit with zero hard errors.
+
+Phase 5D full dry-run aggregate:
+
+```txt
+TAGNT rowsRead=142096
+TAGNT rowsNormalized=137121
+TAGNT rowsSkipped=4975
+
+TAHOT rowsRead=305652
+TAHOT rowsNormalized=536199
+TAHOT rowsSkipped=2267
+
+hard errors=0
+```
+
+Remaining non-hard dry-run issues:
+
+- `missing_morphology`
+- `tagnt_non_sbl_skipped`
+- `qere_kethiv_variant_skipped`
+- `tahot_non_base_text_type_skipped`
+- `psalm_title`
+- `duplicate_occurrence` warning-level skips
+
 Current next phase:
 
 ```txt
-Phase 5C - Original Language Importer Design
+Phase 5E or separately approved persistence-import planning
 ```
 
-Phase 5C starts with source file inspection, source headers verification, import mapping, batch validation design, dry-run import report design, `OriginalLanguageImportValidator` design, `OriginalLanguageImportService` design, and repository usage design.
-
-Phase 5C is not approval to import datasets. Actual STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
+Actual STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved. No DB writes or actual original-language import have occurred.
 
 Phase 5A entry requirements:
 

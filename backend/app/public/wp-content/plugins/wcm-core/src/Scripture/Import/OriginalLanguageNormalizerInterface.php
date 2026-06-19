@@ -10,6 +10,7 @@ interface OriginalLanguageNormalizerInterface
 
     /**
      * @param array<string, mixed> $row
+     * @return iterable<OriginalLanguageNormalizedRow>
      */
-    public function normalizeRow(array $row, int $rowNumber): OriginalLanguageNormalizedRow;
+    public function normalizeRow(array $row, int $rowNumber): iterable;
 }
