@@ -5,13 +5,16 @@ import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
+import { ReaderModeControl } from "@/components/scripture/ReaderModeControl";
 import { cn } from "@/lib/utils/cn";
 import type { BibleBookMetadata, BibleChapterResponse } from "@/types/bible";
+import type { OriginalLanguageReaderMode } from "@/types/original-language";
 
 type BibleReaderProps = {
   bookMetadata: BibleBookMetadata;
   chapter: BibleChapterResponse;
   locale: string;
+  mode: OriginalLanguageReaderMode;
 };
 
 const bookOptions = [
@@ -83,7 +86,7 @@ const bookOptions = [
   { slug: "revelation", label: "요한계시록", chapterCount: 22 },
 ];
 
-export function BibleReader({ bookMetadata, chapter, locale }: BibleReaderProps) {
+export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReaderProps) {
   const router = useRouter();
   const [activeVerseId, setActiveVerseId] = useState("");
   const chapterNumber = chapter.chapter;
@@ -95,15 +98,21 @@ export function BibleReader({ bookMetadata, chapter, locale }: BibleReaderProps)
       : null;
   const previousHref =
     chapterNumber > 1
-      ? `/${locale}/bible/${chapter.translation}/${chapter.book}/${chapterNumber - 1}`
+      ? createReaderHref(locale, chapter.translation, chapter.book, chapterNumber - 1, mode)
       : previousBook
-        ? `/${locale}/bible/${chapter.translation}/${previousBook.slug}/${previousBook.chapterCount}`
+        ? createReaderHref(
+            locale,
+            chapter.translation,
+            previousBook.slug,
+            previousBook.chapterCount,
+            mode,
+          )
         : null;
   const nextHref =
     chapterNumber < bookMetadata.chapter_count
-      ? `/${locale}/bible/${chapter.translation}/${chapter.book}/${chapterNumber + 1}`
+      ? createReaderHref(locale, chapter.translation, chapter.book, chapterNumber + 1, mode)
       : nextBook
-        ? `/${locale}/bible/${chapter.translation}/${nextBook.slug}/1`
+        ? createReaderHref(locale, chapter.translation, nextBook.slug, 1, mode)
         : null;
   const searchUrl = `/${locale}/bible/search`;
 
@@ -118,7 +127,7 @@ export function BibleReader({ bookMetadata, chapter, locale }: BibleReaderProps)
       return;
     }
 
-    router.push(`/${locale}/bible/${chapter.translation}/${book}/${nextChapter}`);
+    router.push(createReaderHref(locale, chapter.translation, book, nextChapter, mode));
   }
 
   useEffect(() => {
@@ -181,6 +190,14 @@ export function BibleReader({ bookMetadata, chapter, locale }: BibleReaderProps)
             Go
           </button>
         </form>
+
+        <ReaderModeControl
+          book={chapter.book}
+          chapter={chapter.chapter}
+          locale={locale}
+          mode={mode}
+          version={chapter.translation}
+        />
 
         <form action={searchUrl} className="flex flex-col gap-2 sm:flex-row" method="get">
           <input name="translation" type="hidden" value={chapter.translation} />
@@ -258,4 +275,18 @@ export function BibleReader({ bookMetadata, chapter, locale }: BibleReaderProps)
       </nav>
     </article>
   );
+}
+
+function createReaderHref(
+  locale: string,
+  version: string,
+  book: string,
+  chapter: number,
+  mode: OriginalLanguageReaderMode,
+): string {
+  const params = new URLSearchParams({
+    mode,
+  });
+
+  return `/${locale}/bible/${version}/${book}/${chapter}?${params.toString()}`;
 }

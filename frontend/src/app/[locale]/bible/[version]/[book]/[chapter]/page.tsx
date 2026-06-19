@@ -6,9 +6,13 @@ import { Container } from "@/components/ui/Container";
 import { getBibleBookMetadata, getBibleChapter } from "@/lib/api/bible";
 import { createMetadata } from "@/lib/seo/metadata";
 import type { BibleBookMetadata, BibleChapterResponse, BibleReaderParams } from "@/types/bible";
+import type { OriginalLanguageReaderMode } from "@/types/original-language";
 
 type BibleReaderPageProps = {
   params: Promise<BibleReaderParams>;
+  searchParams: Promise<{
+    mode?: string;
+  }>;
 };
 
 export async function generateMetadata({
@@ -21,8 +25,13 @@ export async function generateMetadata({
   });
 }
 
-export default async function BibleReaderPage({ params }: BibleReaderPageProps) {
+export default async function BibleReaderPage({
+  params,
+  searchParams,
+}: BibleReaderPageProps) {
   const { locale, version, book, chapter } = await params;
+  const query = await searchParams;
+  const mode = parseReaderMode(query.mode);
   const chapterNumber = Number(chapter);
 
   if (!Number.isInteger(chapterNumber) || chapterNumber < 1) {
@@ -57,10 +66,23 @@ export default async function BibleReaderPage({ params }: BibleReaderPageProps) 
   return (
     <SiteShell>
       <Container>
-        <BibleReader bookMetadata={bookMetadata} chapter={bibleChapter} locale={locale} />
+        <BibleReader
+          bookMetadata={bookMetadata}
+          chapter={bibleChapter}
+          locale={locale}
+          mode={mode}
+        />
       </Container>
     </SiteShell>
   );
+}
+
+function parseReaderMode(value: string | undefined): OriginalLanguageReaderMode {
+  if (value === "original" || value === "interlinear") {
+    return value;
+  }
+
+  return "reader";
 }
 
 function BibleReaderError({ message }: { message: string }) {
