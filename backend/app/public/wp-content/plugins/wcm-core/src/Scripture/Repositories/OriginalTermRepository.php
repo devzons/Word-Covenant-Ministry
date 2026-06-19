@@ -9,7 +9,7 @@ use WCM\Scripture\ValueObjects\OriginalTerm;
 
 final class OriginalTermRepository
 {
-    private const MAX_PER_PAGE = 50;
+    private const MAX_PER_PAGE = 100;
     private const DEFAULT_BATCH_SIZE = 500;
 
     public function save(OriginalTerm $term): int
@@ -163,6 +163,30 @@ final class OriginalTermRepository
         }
 
         return array_map([$this, 'hydrateTerm'], $rows);
+    }
+
+    public function countByStrongsNumber(string $languageType, string $strongsNumber): int
+    {
+        global $wpdb;
+
+        $languageType = trim($languageType);
+        $strongsNumber = trim($strongsNumber);
+
+        if ($languageType === '' || $strongsNumber === '') {
+            return 0;
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_original_terms';
+
+        return (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$tableName}
+                WHERE language_type = %s
+                AND strongs_number = %s",
+                $languageType,
+                $strongsNumber
+            )
+        );
     }
 
     public function buildIdentityKey(

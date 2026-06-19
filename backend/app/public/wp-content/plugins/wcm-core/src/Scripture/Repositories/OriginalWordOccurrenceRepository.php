@@ -9,7 +9,7 @@ use WCM\Scripture\ValueObjects\OriginalWordOccurrence;
 
 final class OriginalWordOccurrenceRepository
 {
-    private const MAX_PER_PAGE = 50;
+    private const MAX_PER_PAGE = 100;
     private const DEFAULT_BATCH_SIZE = 500;
     private const IDENTITY_DELIMITER = "\x1F";
 
@@ -195,6 +195,68 @@ final class OriginalWordOccurrenceRepository
     }
 
     /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findForVerseWithTerms(
+        string $sourceDataset,
+        int $bookId,
+        int $chapter,
+        int $verse
+    ): array {
+        global $wpdb;
+
+        $sourceDataset = trim($sourceDataset);
+
+        if ($sourceDataset === '' || $bookId < 1 || $chapter < 1 || $verse < 1) {
+            return [];
+        }
+
+        $occurrencesTable = $wpdb->prefix . 'wcm_original_word_occurrences';
+        $termsTable = $wpdb->prefix . 'wcm_original_terms';
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT
+                    occurrences.id,
+                    occurrences.term_id,
+                    occurrences.book_id,
+                    occurrences.chapter,
+                    occurrences.verse,
+                    occurrences.word_order,
+                    occurrences.subword_order,
+                    occurrences.token_type,
+                    occurrences.surface_form,
+                    occurrences.normalized_form,
+                    occurrences.morphology,
+                    occurrences.contextual_function,
+                    occurrences.source_dataset,
+                    occurrences.source_ref,
+                    terms.language_type,
+                    terms.lemma,
+                    terms.lemma_normalized,
+                    terms.strongs_number,
+                    terms.strongs_extended,
+                    terms.transliteration,
+                    terms.gloss
+                FROM {$occurrencesTable} occurrences
+                INNER JOIN {$termsTable} terms ON terms.id = occurrences.term_id
+                WHERE occurrences.source_dataset = %s
+                AND occurrences.book_id = %d
+                AND occurrences.chapter = %d
+                AND occurrences.verse = %d
+                ORDER BY occurrences.word_order ASC, occurrences.subword_order ASC",
+                $sourceDataset,
+                $bookId,
+                $chapter,
+                $verse
+            ),
+            'ARRAY_A'
+        );
+
+        return is_array($rows) ? $rows : [];
+    }
+
+    /**
      * @return OriginalWordOccurrence[]
      */
     public function findByTermId(
@@ -232,6 +294,25 @@ final class OriginalWordOccurrenceRepository
         }
 
         return array_map([$this, 'hydrateOccurrence'], $rows);
+    }
+
+    public function countByTermId(int $termId): int
+    {
+        global $wpdb;
+
+        if ($termId < 1) {
+            return 0;
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_original_word_occurrences';
+
+        return (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$tableName}
+                WHERE term_id = %d",
+                $termId
+            )
+        );
     }
 
     public function buildIdentityKey(
