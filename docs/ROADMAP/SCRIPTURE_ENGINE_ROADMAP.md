@@ -174,8 +174,7 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Frontend integration planning
-Original language reader UI planning
+Phase 7A - Original Language Reader UI Planning
 ```
 
 OSHB, SBLGNT, frontend UI implementation, and Strong's page work remain out of scope until explicitly approved.
@@ -284,14 +283,13 @@ Security validation:
 Next phase:
 
 ```txt
-Frontend integration planning
-Original language reader UI planning
+Phase 7A - Original Language Reader UI Planning
 ```
 
 Next gate after separate approval:
 
-1. Frontend integration planning.
-2. Original language reader UI planning.
+1. Frontend original-language reader implementation.
+2. Strong's or Word Study frontend pages.
 
 ### Phase 6B - Word Study API
 
@@ -461,9 +459,85 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Frontend integration planning
-Original language reader UI planning
+Phase 7A - Original Language Reader UI Planning
 ```
+
+### Phase 7A - Original Language Reader UI Planning
+
+Status:
+
+```txt
+Documentation only; frontend implementation not started
+```
+
+UI direction:
+
+- Add a progressive original-language layer on top of the existing KRV reader.
+- Keep the normal reader as the default.
+- Reveal original-language depth only when the user opts in.
+
+Reader modes:
+
+- `Reader`
+- `Original`
+- `Interlinear`
+
+UX rules:
+
+- Chapter load fetches only normal Bible chapter data.
+- Original-language and interlinear data are fetched per verse on demand.
+- Whole-chapter interlinear prefetch is excluded.
+- OT source defaults to `STEP_TAHOT`.
+- NT source defaults to `STEP_TAGNT`.
+
+UI behavior:
+
+- Original mode uses verse-level expandable token preview.
+- Interlinear mode uses a focused selected-verse interlinear layout.
+- Token click opens a desktop side panel.
+- Token click opens a mobile bottom sheet.
+
+API usage:
+
+```txt
+GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
+GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}
+```
+
+Proposed components:
+
+- `BibleReaderToolbar`
+- `ReaderModeControl`
+- `BibleVerseRow`
+- `VerseOriginalLanguagePreview`
+- `InterlinearVerse`
+- `InterlinearToken`
+- `OriginalWordPanel`
+- `StrongOverviewPanel`
+- `WordStudyPanel`
+
+Routing strategy:
+
+- Keep existing reader route: `/{locale}/bible/{version}/{book}/{chapter}`.
+- Use query modes: `?mode=reader`, `?mode=original`, and `?mode=interlinear`.
+- Optional later routes: `/{locale}/bible/strongs/{strongsNumber}` and `/{locale}/bible/word-study/{termId}`.
+
+Implementation order after explicit approval:
+
+1. Frontend original-language types/API client.
+2. Reader mode URL state.
+3. Per-verse interlinear fetch.
+4. Token click panel.
+5. Strong overview panel.
+6. Term detail panel.
+
+Explicit exclusions:
+
+- No authored interpretation.
+- No pictographic/gematria UI.
+- No full chapter interlinear prefetch.
+- No frontend pages for Strong or Word Study unless separately approved.
 
 Phase 5E local write smoke summary:
 
@@ -764,7 +838,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-The read-only Original Language API, Word Study API, and high-level Interlinear API are complete. Frontend surfaces have not been run. Frontend integration planning and original language reader UI planning require separate explicit approval.
+The read-only Original Language API, Word Study API, and high-level Interlinear API are complete. Phase 7A Original Language Reader UI planning is documented. Frontend implementation requires separate explicit approval.
 
 Phase 5A entry requirements:
 

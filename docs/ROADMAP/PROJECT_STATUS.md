@@ -81,13 +81,13 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 6C - High-Level Interlinear API
+Phase 7A - Original Language Reader UI Planning
 ```
 
 Status:
 
 ```txt
-Phase 6C completed; high-level Interlinear API implemented
+Phase 7A planning documented; frontend implementation not started
 ```
 
 Completed phase:
@@ -99,19 +99,19 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Plan frontend integration and original-language reader UI surfaces after completed read APIs.
+Document original-language reader UI direction before frontend implementation.
 ```
 
 Next task:
 
 ```txt
-Frontend integration planning and original language reader UI planning.
+After explicit approval, implement original-language reader UI integration.
 ```
 
 Blocked items:
 
 ```txt
-Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Phase 6C high-level Interlinear API implementation is complete. Frontend work, write/import endpoints, and any further source import execution require a separate explicit approval phase.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Phase 6C high-level Interlinear API implementation is complete. Phase 7A documents frontend UI planning only. Frontend implementation, write/import endpoints, and any further source import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
@@ -215,8 +215,8 @@ unapproved variant internals
 
 Next gate after separate approval:
 
-1. Frontend integration planning.
-2. Original language reader UI planning.
+1. Frontend original-language reader implementation.
+2. Strong's or Word Study frontend pages.
 
 Phase 6A-3 validation:
 
@@ -401,9 +401,87 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Frontend integration planning
-Original language reader UI planning
+Phase 7A - Original Language Reader UI Planning
 ```
+
+## Phase 7A Original Language Reader UI Planning
+
+Status:
+
+```txt
+Documentation only; frontend implementation not started
+```
+
+UI direction:
+
+- Add a progressive original-language layer on top of the existing KRV reader.
+- Keep the normal reader as the default experience.
+- Reveal original-language depth only when the user opts in.
+
+Reader modes:
+
+```txt
+Reader
+Original
+Interlinear
+```
+
+UX rules:
+
+- Chapter load fetches only normal Bible chapter data.
+- Original and interlinear data are fetched per verse on demand.
+- Do not prefetch whole-chapter interlinear data.
+- Old Testament source defaults to `STEP_TAHOT`.
+- New Testament source defaults to `STEP_TAGNT`.
+
+UI behavior:
+
+- Original mode provides verse-level expandable token previews.
+- Interlinear mode provides a focused selected-verse interlinear layout.
+- Token click opens a side panel on desktop.
+- Token click opens a bottom sheet on mobile.
+
+API usage:
+
+```txt
+GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
+GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}
+```
+
+Proposed components:
+
+- `BibleReaderToolbar`
+- `ReaderModeControl`
+- `BibleVerseRow`
+- `VerseOriginalLanguagePreview`
+- `InterlinearVerse`
+- `InterlinearToken`
+- `OriginalWordPanel`
+- `StrongOverviewPanel`
+- `WordStudyPanel`
+
+Routing strategy:
+
+- Keep existing reader route: `/{locale}/bible/{version}/{book}/{chapter}`.
+- Use query modes: `?mode=reader`, `?mode=original`, `?mode=interlinear`.
+- Optional later routes: `/{locale}/bible/strongs/{strongsNumber}` and `/{locale}/bible/word-study/{termId}`.
+
+Implementation order after separate approval:
+
+1. Frontend original-language types and API client.
+2. Reader mode URL state.
+3. Per-verse interlinear fetch.
+4. Token click panel.
+5. Strong overview panel.
+6. Term detail panel.
+
+Explicit exclusions:
+
+- No authored interpretation.
+- No pictographic or gematria UI.
+- No full chapter interlinear prefetch.
+- No frontend pages for Strong's or Word Study unless separately approved.
 
 ## Phase 5 Entry Criteria
 

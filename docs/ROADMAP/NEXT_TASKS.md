@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Explicit approval is still required before frontend work, write/import endpoints, or any further source import execution.
+Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documents the Original Language Reader UI planning direction. Explicit approval is still required before frontend implementation, write/import endpoints, or any further source import execution.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, and Phase 6C high-level Interlinear API are complete.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, and Phase 6C high-level Interlinear API are complete. Phase 7A planning keeps the normal reader as the default and adds original-language depth only when the user opts in.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,11 +16,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Plan frontend integration for the completed original-language APIs.
-2. Plan original language reader UI surfaces.
-3. Keep existing lower-level `/original-language/interlinear/...` token-only endpoint available.
-4. Later: Interlinear UI implementation after explicit approval.
-5. Later: Word Study UI implementation after explicit approval.
+1. Complete Phase 7A Original Language Reader UI planning documentation.
+2. After explicit approval, implement frontend original-language types and API client work.
+3. After explicit approval, add reader mode URL state for `reader`, `original`, and `interlinear`.
+4. After explicit approval, add per-verse interlinear fetch behavior without whole-chapter interlinear prefetch.
+5. After explicit approval, add token click panels for desktop and mobile.
 6. Later: Strong's pages.
 7. Later: Cross References.
 8. Later: Commentary Layer.
@@ -287,8 +287,8 @@ term occurrences => success
 
 Next gate:
 
-1. Frontend integration planning requires explicit approval.
-2. Original language reader UI planning requires explicit approval.
+1. Frontend original-language reader implementation requires explicit approval.
+2. Strong's or Word Study frontend pages require separate explicit approval.
 
 ## Phase 6B Word Study API
 
@@ -456,9 +456,85 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Frontend integration planning
-Original language reader UI planning
+Phase 7A - Original Language Reader UI Planning
 ```
+
+## Phase 7A Original Language Reader UI Planning
+
+Status:
+
+```txt
+Documentation only; frontend implementation not started
+```
+
+UI direction:
+
+- Build a progressive original-language layer on top of the existing KRV reader.
+- Keep the normal reader as the default experience.
+- Show original-language depth only when the user explicitly opts in.
+
+Reader modes:
+
+- `Reader`
+- `Original`
+- `Interlinear`
+
+UX rules:
+
+- Chapter load fetches only normal Bible chapter data.
+- Original-language and interlinear data are fetched per verse on demand.
+- Do not prefetch whole-chapter interlinear data.
+- OT source defaults to `STEP_TAHOT`.
+- NT source defaults to `STEP_TAGNT`.
+
+UI behavior:
+
+- Original mode shows verse-level expandable token previews.
+- Interlinear mode shows a focused selected-verse interlinear layout.
+- Token click opens a side panel on desktop.
+- Token click opens a bottom sheet on mobile.
+
+API usage:
+
+```txt
+GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
+GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}
+```
+
+Proposed components:
+
+- `BibleReaderToolbar`
+- `ReaderModeControl`
+- `BibleVerseRow`
+- `VerseOriginalLanguagePreview`
+- `InterlinearVerse`
+- `InterlinearToken`
+- `OriginalWordPanel`
+- `StrongOverviewPanel`
+- `WordStudyPanel`
+
+Routing strategy:
+
+- Keep the existing route: `/{locale}/bible/{version}/{book}/{chapter}`.
+- Use query modes: `?mode=reader`, `?mode=original`, and `?mode=interlinear`.
+- Optional later routes: `/{locale}/bible/strongs/{strongsNumber}` and `/{locale}/bible/word-study/{termId}`.
+
+Implementation order after explicit approval:
+
+1. Frontend original-language types/API client.
+2. Reader mode URL state.
+3. Per-verse interlinear fetch.
+4. Token click panel.
+5. Strong overview panel.
+6. Term detail panel.
+
+Explicit exclusions:
+
+- No authored interpretation.
+- No pictographic/gematria UI.
+- No full chapter interlinear prefetch.
+- No frontend pages for Strong or Word Study unless separately approved.
 
 ## Required Pre-Work Before Code Changes
 
