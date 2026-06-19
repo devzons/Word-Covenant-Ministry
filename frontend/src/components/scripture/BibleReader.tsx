@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
+import { InterlinearVerse } from "@/components/scripture/InterlinearVerse";
 import { ReaderModeControl } from "@/components/scripture/ReaderModeControl";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
 import { cn } from "@/lib/utils/cn";
@@ -93,9 +94,11 @@ const bookOptions = [
 export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReaderProps) {
   const router = useRouter();
   const [activeVerseId, setActiveVerseId] = useState("");
+  const [selectedInterlinearVerse, setSelectedInterlinearVerse] = useState<number | null>(null);
   const chapterNumber = chapter.chapter;
   const currentBookIndex = bookOptions.findIndex((book) => book.slug === chapter.book);
   const originalLanguageSource = getOriginalLanguageSource(chapter.book);
+  const isInterlinearMode = mode === "interlinear";
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -229,7 +232,9 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
         <ol className="flex flex-col gap-0">
           {chapter.verses.map((verse) => {
             const verseId = `v${verse.verse}`;
-            const isActive = activeVerseId === verseId;
+            const isActive =
+              activeVerseId === verseId ||
+              (isInterlinearMode && selectedInterlinearVerse === verse.verse);
 
             return (
               <li
@@ -249,7 +254,17 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
                   {verse.verse}
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-zinc-950">{verse.text}</span>
+                  {isInterlinearMode ? (
+                    <button
+                      className="text-left text-zinc-950 transition-colors hover:text-zinc-700"
+                      onClick={() => setSelectedInterlinearVerse(verse.verse)}
+                      type="button"
+                    >
+                      {verse.text}
+                    </button>
+                  ) : (
+                    <span className="text-zinc-950">{verse.text}</span>
+                  )}
                   {mode === "original" ? (
                     <VerseOriginalLanguagePreview
                       book={chapter.book}
@@ -268,6 +283,15 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
           No verses were returned for this chapter.
         </div>
       )}
+
+      {isInterlinearMode ? (
+        <InterlinearVerse
+          book={chapter.book}
+          chapter={chapter.chapter}
+          source={originalLanguageSource}
+          verse={selectedInterlinearVerse}
+        />
+      ) : null}
 
       <nav
         aria-label="Bible chapter navigation"
