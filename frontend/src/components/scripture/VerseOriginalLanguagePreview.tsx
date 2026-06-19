@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 
+import {
+  OriginalWordPanel,
+  type OriginalWordPanelWord,
+} from "@/components/scripture/OriginalWordPanel";
 import { getOriginalLanguageVerse } from "@/lib/api/original-language";
 import type {
+  OriginalLanguageJoinedOccurrence,
   OriginalLanguageSourceDataset,
   OriginalLanguageVerseResponse,
 } from "@/types/original-language";
@@ -25,6 +30,7 @@ export function VerseOriginalLanguagePreview({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState<OriginalLanguageVerseResponse | null>(null);
+  const [selectedWord, setSelectedWord] = useState<OriginalWordPanelWord | null>(null);
 
   async function handleToggle() {
     const nextExpanded = !isExpanded;
@@ -60,9 +66,16 @@ export function VerseOriginalLanguagePreview({
 
       {isExpanded ? (
         <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
-          {renderPreviewState({ data, errorMessage, isLoading })}
+          {renderPreviewState({
+            data,
+            errorMessage,
+            isLoading,
+            onSelectWord: setSelectedWord,
+          })}
         </div>
       ) : null}
+
+      <OriginalWordPanel word={selectedWord} onClose={() => setSelectedWord(null)} />
     </div>
   );
 }
@@ -71,10 +84,12 @@ function renderPreviewState({
   data,
   errorMessage,
   isLoading,
+  onSelectWord,
 }: {
   data: OriginalLanguageVerseResponse | null;
   errorMessage: string;
   isLoading: boolean;
+  onSelectWord: (word: OriginalWordPanelWord) => void;
 }) {
   if (isLoading) {
     return <p className="text-sm text-zinc-600">Loading original language...</p>;
@@ -91,19 +106,34 @@ function renderPreviewState({
   return (
     <ul className="flex flex-wrap gap-2">
       {data.occurrences.map((occurrence) => (
-        <li
-          className="rounded border border-zinc-200 bg-white px-2.5 py-2"
-          key={occurrence.id}
-        >
-          <span className="block text-base font-semibold text-zinc-950">
-            {occurrence.surface_form}
-          </span>
-          <span className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-xs text-zinc-600">
-            <span>{occurrence.term.strongs_number}</span>
-            {occurrence.term.gloss ? <span>{occurrence.term.gloss}</span> : null}
-          </span>
+        <li key={occurrence.id}>
+          <button
+            className="rounded border border-zinc-200 bg-white px-2.5 py-2 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50"
+            onClick={() => onSelectWord(toPanelWord(occurrence))}
+            type="button"
+          >
+            <span className="block text-base font-semibold text-zinc-950">
+              {occurrence.surface_form}
+            </span>
+            <span className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-xs text-zinc-600">
+              <span>{occurrence.term.strongs_number}</span>
+              {occurrence.term.gloss ? <span>{occurrence.term.gloss}</span> : null}
+            </span>
+          </button>
         </li>
       ))}
     </ul>
   );
+}
+
+function toPanelWord(occurrence: OriginalLanguageJoinedOccurrence): OriginalWordPanelWord {
+  return {
+    surface_form: occurrence.surface_form,
+    lemma: occurrence.term.lemma,
+    strongs_number: occurrence.term.strongs_number,
+    strongs_extended: occurrence.term.strongs_extended,
+    transliteration: occurrence.term.transliteration,
+    gloss: occurrence.term.gloss,
+    morphology: occurrence.morphology,
+  };
 }

@@ -2,9 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+import {
+  OriginalWordPanel,
+  type OriginalWordPanelWord,
+} from "@/components/scripture/OriginalWordPanel";
 import { getInterlinearVerse } from "@/lib/api/original-language";
 import type {
   HighLevelInterlinearResponse,
+  HighLevelInterlinearToken,
   OriginalLanguageSourceDataset,
 } from "@/types/original-language";
 
@@ -26,6 +31,7 @@ export function InterlinearVerse({
   const [cache, setCache] = useState<InterlinearCache>({});
   const [loadingVerse, setLoadingVerse] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedWord, setSelectedWord] = useState<OriginalWordPanelWord | null>(null);
   const selectedData = verse ? cache[verse] : null;
 
   useEffect(() => {
@@ -111,37 +117,59 @@ export function InterlinearVerse({
 
       <ul className="grid gap-3 sm:grid-cols-2">
         {selectedData.tokens.map((token) => (
-          <li className="rounded-md border border-zinc-200 bg-white p-3" key={token.id}>
-            <span className="block text-lg font-semibold text-zinc-950">
-              {token.surface_form}
-            </span>
-            <dl className="mt-2 grid gap-1 text-sm">
-              <div className="flex gap-2">
-                <dt className="w-24 shrink-0 font-medium text-zinc-500">Lemma</dt>
-                <dd className="text-zinc-900">{token.term.lemma}</dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="w-24 shrink-0 font-medium text-zinc-500">
-                  Strong&apos;s
-                </dt>
-                <dd className="text-zinc-900">{token.term.strongs_number}</dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="w-24 shrink-0 font-medium text-zinc-500">
-                  Transliteration
-                </dt>
-                <dd className="text-zinc-900">{token.term.transliteration}</dd>
-              </div>
-              {token.term.gloss ? (
-                <div className="flex gap-2">
-                  <dt className="w-24 shrink-0 font-medium text-zinc-500">Gloss</dt>
-                  <dd className="text-zinc-900">{token.term.gloss}</dd>
-                </div>
-              ) : null}
-            </dl>
+          <li key={token.id}>
+            <button
+              className="w-full rounded-md border border-zinc-200 bg-white p-3 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50"
+              onClick={() => setSelectedWord(toPanelWord(token))}
+              type="button"
+            >
+              <span className="block text-lg font-semibold text-zinc-950">
+                {token.surface_form}
+              </span>
+              <span className="mt-2 grid gap-1 text-sm">
+                <span className="flex gap-2">
+                  <span className="w-24 shrink-0 font-medium text-zinc-500">Lemma</span>
+                  <span className="text-zinc-900">{token.term.lemma}</span>
+                </span>
+                <span className="flex gap-2">
+                  <span className="w-24 shrink-0 font-medium text-zinc-500">
+                    Strong&apos;s
+                  </span>
+                  <span className="text-zinc-900">{token.term.strongs_number}</span>
+                </span>
+                <span className="flex gap-2">
+                  <span className="w-24 shrink-0 font-medium text-zinc-500">
+                    Transliteration
+                  </span>
+                  <span className="text-zinc-900">{token.term.transliteration}</span>
+                </span>
+                {token.term.gloss ? (
+                  <span className="flex gap-2">
+                    <span className="w-24 shrink-0 font-medium text-zinc-500">
+                      Gloss
+                    </span>
+                    <span className="text-zinc-900">{token.term.gloss}</span>
+                  </span>
+                ) : null}
+              </span>
+            </button>
           </li>
         ))}
       </ul>
+
+      <OriginalWordPanel word={selectedWord} onClose={() => setSelectedWord(null)} />
     </section>
   );
+}
+
+function toPanelWord(token: HighLevelInterlinearToken): OriginalWordPanelWord {
+  return {
+    surface_form: token.surface_form,
+    lemma: token.term.lemma,
+    strongs_number: token.term.strongs_number,
+    strongs_extended: token.term.strongs_extended,
+    transliteration: token.term.transliteration,
+    gloss: token.term.gloss,
+    morphology: token.morphology,
+  };
 }
