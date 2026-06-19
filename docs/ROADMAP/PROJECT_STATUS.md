@@ -81,43 +81,43 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 6C-1 - Interlinear API Contract Documentation
+Phase 6C - High-Level Interlinear API
 ```
 
 Status:
 
 ```txt
-Word Study API completed; Interlinear API contract documentation in progress
+Phase 6C completed; high-level Interlinear API implemented
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, controlled TAHOT Isa-Mal import, Phase 6A Original Language Read API, and Phase 6B Word Study API
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, controlled TAHOT Isa-Mal import, Phase 6A Original Language Read API, Phase 6B Word Study API, and Phase 6C high-level Interlinear API
 ```
 
 Active objective:
 
 ```txt
-Document the Phase 6C high-level Interlinear API contract before implementation.
+Plan frontend integration and original-language reader UI surfaces after completed read APIs.
 ```
 
 Next task:
 
 ```txt
-After explicit implementation approval, add the Phase 6C read-only high-level Interlinear API.
+Frontend integration planning and original language reader UI planning.
 ```
 
 Blocked items:
 
 ```txt
-Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Frontend work, write/import endpoints, Phase 6C Interlinear API implementation, and any further source import execution require a separate explicit approval phase.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Phase 6C high-level Interlinear API implementation is complete. Frontend work, write/import endpoints, and any further source import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API and Phase 6B Word Study API are complete. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize frontend surfaces, write/import endpoints, raw source export, variant UI, or interpretation/pictographic/gematria APIs.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, and Phase 6C high-level Interlinear API are complete. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize frontend surfaces, write/import endpoints, raw source export, variant UI, or interpretation/pictographic/gematria APIs.
 ```
 
 Phase 5A source recommendation:
@@ -213,10 +213,10 @@ import diagnostics
 unapproved variant internals
 ```
 
-Implementation order after separate approval:
+Next gate after separate approval:
 
-1. High-level Interlinear API implementation requires explicit approval.
-2. No frontend until API contracts are stable and explicitly approved.
+1. Frontend integration planning.
+2. Original language reader UI planning.
 
 Phase 6A-3 validation:
 
@@ -332,15 +332,21 @@ Security validation:
 - No theological interpretation fields.
 - No pictographic or gematria fields.
 
-## Phase 6C Interlinear API Contract
+## Phase 6C Interlinear API
 
 Status:
 
 ```txt
-Documentation only; implementation not started
+Phase 6C completed in commits 1930d36 and d89e3aa
 ```
 
-Canonical high-level endpoint:
+Implemented:
+
+- `InterlinearService`.
+- `InterlinearController`.
+- `ApiRegistrar` route registration.
+
+High-level endpoint:
 
 ```txt
 GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
@@ -368,25 +374,35 @@ Safety constraints:
 
 - Read-only.
 - No raw source JSON.
+- No `term_identity_hash`.
 - No import diagnostics.
 - No interpretation.
 - No pictographic or gematria API fields.
 - No frontend in this phase.
 
-Implementation order after separate approval:
-
-1. `InterlinearService`.
-2. `InterlinearController`.
-3. `ApiRegistrar` route registration.
-4. REST smoke checks.
-
-Planned smoke checks:
+Validation:
 
 ```txt
-STEP_TAGNT/matthew/1/1
-STEP_TAHOT/genesis/1/1
-STEP_TAHOT/psalms/119/1
-STEP_TAHOT/esther/8/9
+Matthew 1:1 => 8 tokens
+Genesis 1:1 => 12 tokens
+Psalm 119:1 => 10 tokens
+Esther 8:9 => 90 tokens
+```
+
+Current corpus:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+```
+
+Next phase:
+
+```txt
+Frontend integration planning
+Original language reader UI planning
 ```
 
 ## Phase 5 Entry Criteria

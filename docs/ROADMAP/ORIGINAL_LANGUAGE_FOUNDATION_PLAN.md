@@ -15,13 +15,14 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 6C-1 - Interlinear API Contract Documentation
+Phase 6C - High-Level Interlinear API
 ```
 
 Next major phase:
 
 ```txt
-Phase 6C - High-Level Interlinear API
+Frontend integration planning
+Original language reader UI planning
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -42,7 +43,7 @@ The approved binary-stable original term identity implementation and migration a
 
 The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
 
-The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). This does not approve frontend work, write/import endpoints, or additional source imports.
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`. This does not approve frontend work, write/import endpoints, or additional source imports.
 
 ## Phase 6A Original Language Read API
 
@@ -148,7 +149,8 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 6C-1 - Interlinear API Contract Documentation
+Frontend integration planning
+Original language reader UI planning
 ```
 
 ## Phase 6B Word Study API
@@ -246,15 +248,21 @@ Security validation:
 - No theological interpretation fields.
 - No pictographic or gematria fields.
 
-## Phase 6C Interlinear API Contract
+## Phase 6C Interlinear API
 
 Status:
 
 ```txt
-Documentation only; implementation not started
+Phase 6C completed in commits 1930d36 and d89e3aa
 ```
 
-Canonical high-level endpoint:
+Implemented:
+
+- `InterlinearService`.
+- `InterlinearController`.
+- `ApiRegistrar` route registration.
+
+High-level endpoint:
 
 ```txt
 GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
@@ -282,25 +290,35 @@ Safety constraints:
 
 - Read-only.
 - No raw source JSON.
+- No `term_identity_hash`.
 - No import diagnostics.
 - No interpretation.
 - No pictographic or gematria API fields.
 - No frontend in this phase.
 
-Implementation order after separate approval:
-
-1. `InterlinearService`.
-2. `InterlinearController`.
-3. `ApiRegistrar` route registration.
-4. REST smoke checks.
-
-Planned smoke checks:
+Validation:
 
 ```txt
-STEP_TAGNT/matthew/1/1
-STEP_TAHOT/genesis/1/1
-STEP_TAHOT/psalms/119/1
-STEP_TAHOT/esther/8/9
+Matthew 1:1 => 8 tokens
+Genesis 1:1 => 12 tokens
+Psalm 119:1 => 10 tokens
+Esther 8:9 => 90 tokens
+```
+
+Current corpus:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+```
+
+Next phase:
+
+```txt
+Frontend integration planning
+Original language reader UI planning
 ```
 
 ## Phase 5 Breakdown
@@ -1659,7 +1677,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Original Language Read API and Word Study API are complete. Phase 6C documents the high-level Interlinear API contract only. Interlinear API implementation requires separate explicit approval before implementation.
+Original Language Read API, Word Study API, and high-level Interlinear API are complete. Frontend integration planning and original language reader UI planning require separate explicit approval before implementation.
 ```
 
 ### Future - Read API Foundation

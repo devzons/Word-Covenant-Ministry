@@ -174,10 +174,11 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 6C-1 - Interlinear API Contract Documentation
+Frontend integration planning
+Original language reader UI planning
 ```
 
-OSHB, SBLGNT, frontend UI, additional Interlinear API implementation/UI, and Strong's page work remain out of scope until explicitly approved.
+OSHB, SBLGNT, frontend UI implementation, and Strong's page work remain out of scope until explicitly approved.
 
 ### Phase 6A - Original Language Read API
 
@@ -283,13 +284,14 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 6C-1 - Interlinear API Contract Documentation
+Frontend integration planning
+Original language reader UI planning
 ```
 
-Implementation order after separate approval:
+Next gate after separate approval:
 
-1. High-level Interlinear API implementation requires explicit approval.
-2. Keep frontend blocked until API contracts are stable and explicitly approved.
+1. Frontend integration planning.
+2. Original language reader UI planning.
 
 ### Phase 6B - Word Study API
 
@@ -390,15 +392,21 @@ Security validation:
 - No theological interpretation fields.
 - No pictographic or gematria fields.
 
-### Phase 6C - Interlinear API Contract
+### Phase 6C - Interlinear API
 
 Status:
 
 ```txt
-Documentation only; implementation not started
+Phase 6C completed in commits 1930d36 and d89e3aa
 ```
 
-Canonical high-level endpoint:
+Implemented:
+
+- `InterlinearService`.
+- `InterlinearController`.
+- `ApiRegistrar` route registration.
+
+High-level endpoint:
 
 ```txt
 GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
@@ -426,25 +434,35 @@ Safety constraints:
 
 - Read-only.
 - No raw source JSON.
+- No `term_identity_hash`.
 - No import diagnostics.
 - No interpretation.
 - No pictographic or gematria API fields.
 - No frontend in this phase.
 
-Implementation order after explicit approval:
-
-1. `InterlinearService`.
-2. `InterlinearController`.
-3. `ApiRegistrar` route registration.
-4. REST smoke checks.
-
-Planned smoke checks:
+Validation:
 
 ```txt
-STEP_TAGNT/matthew/1/1
-STEP_TAHOT/genesis/1/1
-STEP_TAHOT/psalms/119/1
-STEP_TAHOT/esther/8/9
+Matthew 1:1 => 8 tokens
+Genesis 1:1 => 12 tokens
+Psalm 119:1 => 10 tokens
+Esther 8:9 => 90 tokens
+```
+
+Current corpus:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+```
+
+Next phase:
+
+```txt
+Frontend integration planning
+Original language reader UI planning
 ```
 
 Phase 5E local write smoke summary:
@@ -746,7 +764,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-The read-only Original Language API and Word Study API are complete. Frontend surfaces have not been run. Phase 6C Interlinear API implementation requires separate explicit approval.
+The read-only Original Language API, Word Study API, and high-level Interlinear API are complete. Frontend surfaces have not been run. Frontend integration planning and original language reader UI planning require separate explicit approval.
 
 Phase 5A entry requirements:
 
