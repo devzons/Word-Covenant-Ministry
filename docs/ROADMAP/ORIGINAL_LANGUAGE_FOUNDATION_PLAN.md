@@ -21,7 +21,7 @@ Phase 6A-3 - Original Language Read API
 Next major phase:
 
 ```txt
-Word Study API
+Phase 6B-1 - Word Study API Contract Documentation
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -148,8 +148,96 @@ Security validation:
 Next phase:
 
 ```txt
-Word Study API
+Phase 6B-1 - Word Study API Contract Documentation
 ```
+
+## Phase 6B-1 Word Study API Contract
+
+Status:
+
+```txt
+Documentation only; implementation not started
+```
+
+Current corpus state:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+```
+
+Approved contract scope:
+
+- Read-only.
+- Data-driven only.
+- No interpretation API.
+- No pictographic or gematria API.
+- No authored theological explanation.
+- No raw source JSON.
+- No frontend.
+
+Endpoint contract:
+
+```txt
+GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}/distribution
+```
+
+Deferred endpoints:
+
+- Lemma lookup.
+- Hebrew root lookup.
+- Related terms by base Strong.
+- Occurrence-level Strong's dump.
+
+Response policy:
+
+- Strong's overview includes `language_type`, `strongs_number`, `total_terms`, `total_occurrences`, terms grouped by `strongs_extended`, and book distribution.
+- Term detail includes term data, `total_occurrences`, `book_count`, `chapter_count`, and limited `sample_occurrences`.
+- Term distribution includes book/chapter distribution.
+
+Safe public fields:
+
+- Term ID.
+- `language_type`.
+- `lemma`.
+- `lemma_normalized`.
+- `strongs_number`.
+- `strongs_extended`.
+- `transliteration`.
+- `gloss`.
+- Occurrence counts.
+- Book/chapter distribution.
+- Limited safe occurrence samples.
+
+Hold back from public responses:
+
+- Raw source JSON.
+- Import diagnostics.
+- `definition`.
+- `grammar_note`.
+- `grammar_summary`.
+- `term_identity_hash`.
+- Theological interpretation.
+- Pictographic/gematria.
+- Variant internals.
+
+Pagination rules:
+
+- Default `per_page=20`.
+- Maximum `per_page=100`.
+- Negative `page` or `per_page` values return `400 invalid_pagination`.
+
+Implementation order after separate approval:
+
+1. Repository aggregate methods.
+2. `WordStudyService`.
+3. `WordStudyController`.
+4. `ApiRegistrar` route registration.
+5. REST smoke tests.
 
 ## Phase 5 Breakdown
 
@@ -1507,7 +1595,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Original Language Read API is complete. Word Study API and additional Interlinear API work require separate explicit approval before implementation.
+Original Language Read API is complete. Phase 6B-1 documents the Word Study API contract only. Word Study API implementation and additional Interlinear API work require separate explicit approval before implementation.
 ```
 
 ### Future - Read API Foundation

@@ -6,7 +6,7 @@
 
 ## Immediate Next Task
 
-Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Explicit approval is still required before Word Study API implementation, additional Interlinear API work, frontend work, write/import endpoints, or any further source import execution.
+Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B-1 documents the Word Study API contract only. Explicit approval is still required before Word Study API implementation, additional Interlinear API work, frontend work, write/import endpoints, or any further source import execution.
 
 Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 API contract documentation, Phase 6A-2 repository read methods, and Phase 6A-3 read-only REST API implementation are complete.
 
@@ -16,13 +16,14 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Decide whether to approve Word Study API planning or implementation.
-2. Decide whether to approve Interlinear API implementation beyond the basic read-only verse endpoint.
-3. Public original-language frontend surfaces only after API contracts are implemented and stable.
-4. Later: Interlinear UI.
-5. Later: Word Study UI.
-6. Later: Cross References.
-7. Later: Commentary Layer.
+1. Complete Phase 6B-1 Word Study API contract documentation.
+2. Decide whether to approve Phase 6B read-only Word Study API implementation.
+3. Decide whether to approve Interlinear API implementation beyond the basic read-only verse endpoint.
+4. Public original-language frontend surfaces only after API contracts are implemented and stable.
+5. Later: Interlinear UI.
+6. Later: Word Study UI.
+7. Later: Cross References.
+8. Later: Commentary Layer.
 
 ## Phase 5E Smoke Status
 
@@ -186,7 +187,7 @@ Completed local write-smoke status:
 - Phase 6A-2 added original-language repository read methods.
 - Phase 6A-3 added the read-only Original Language REST API in commit `d8947cc`.
 - Public original-language frontend surfaces have not been added.
-- Next implementation candidate: Word Study API.
+- Next implementation candidate after contract approval: Word Study API.
 - Later phase candidates: richer Interlinear API/UI, Strong's pages, and original-language frontend surfaces.
 
 ## Phase 6A Original Language Read API
@@ -284,8 +285,94 @@ term occurrences => success
 
 Next gate:
 
-1. Word Study API planning or implementation requires explicit approval.
+1. Word Study API implementation requires explicit approval.
 2. Keep frontend work blocked until API contracts are stable and explicitly approved.
+
+## Phase 6B-1 Word Study API Contract
+
+Current corpus state:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+```
+
+Approved Phase 6B-1 scope:
+
+- Documentation only.
+- Read-only API contract only.
+- Data-driven only.
+- No code changes.
+- No DB writes.
+- No imports.
+- No frontend.
+- No interpretation API.
+- No pictographic or gematria API.
+- No authored theological explanation.
+- No raw source JSON.
+
+Contracted endpoints:
+
+```txt
+GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}/distribution
+```
+
+Deferred endpoints:
+
+- Lemma lookup.
+- Hebrew root lookup.
+- Related terms by base Strong.
+- Occurrence-level Strong's dump.
+
+Response policy:
+
+- Strong's overview includes `language_type`, `strongs_number`, `total_terms`, `total_occurrences`, terms grouped by `strongs_extended`, and book distribution.
+- Term detail includes term data, `total_occurrences`, `book_count`, `chapter_count`, and limited `sample_occurrences`.
+- Term distribution includes book/chapter distribution.
+
+Safe public fields:
+
+- Term ID.
+- `language_type`.
+- `lemma`.
+- `lemma_normalized`.
+- `strongs_number`.
+- `strongs_extended`.
+- `transliteration`.
+- `gloss`.
+- Occurrence counts.
+- Book/chapter distribution.
+- Limited safe occurrence samples.
+
+Hold back from public responses:
+
+- Raw source JSON.
+- Import diagnostics.
+- `definition`.
+- `grammar_note`.
+- `grammar_summary`.
+- `term_identity_hash`.
+- Theological interpretation.
+- Pictographic/gematria.
+- Variant internals.
+
+Pagination rules:
+
+- Default `per_page=20`.
+- Maximum `per_page=100`.
+- Negative `page` or `per_page` values return `400 invalid_pagination`.
+
+Implementation order after separate approval:
+
+1. Repository aggregate methods.
+2. `WordStudyService`.
+3. `WordStudyController`.
+4. `ApiRegistrar` route registration.
+5. REST smoke tests.
 
 ## Required Pre-Work Before Code Changes
 

@@ -174,7 +174,7 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 6A-3 - Original Language Read API
+Phase 6B-1 - Word Study API Contract Documentation
 ```
 
 OSHB, SBLGNT, frontend UI, additional Interlinear API/UI, Strong's page, and Word Study work remain out of scope until explicitly approved.
@@ -283,16 +283,105 @@ Security validation:
 Next phase:
 
 ```txt
-Word Study API
+Phase 6B-1 - Word Study API Contract Documentation
 ```
 
 Implementation order after separate approval:
 
-1. Add repository joined read methods.
-2. Add `OriginalLanguageController`.
-3. Register routes in `ApiRegistrar`.
-4. Run REST smoke tests.
-5. Keep frontend blocked until the API is stable.
+1. Word Study API implementation requires explicit approval.
+2. Keep frontend blocked until API contracts are stable and explicitly approved.
+
+### Phase 6B-1 - Word Study API Contract
+
+Status:
+
+```txt
+Documentation only; implementation not started
+```
+
+Current corpus state:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+```
+
+Approved contract scope:
+
+- Read-only.
+- Data-driven only.
+- No interpretation API.
+- No pictographic or gematria API.
+- No authored theological explanation.
+- No raw source JSON.
+- No frontend.
+
+Endpoint contract:
+
+```txt
+GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}
+GET /wp-json/wcm/v1/word-study/terms/{term_id}/distribution
+```
+
+Deferred endpoints:
+
+- Lemma lookup.
+- Hebrew root lookup.
+- Related terms by base Strong.
+- Occurrence-level Strong's dump.
+
+Response policy:
+
+- Strong's overview includes `language_type`, `strongs_number`, `total_terms`, `total_occurrences`, terms grouped by `strongs_extended`, and book distribution.
+- Term detail includes term data, `total_occurrences`, `book_count`, `chapter_count`, and limited `sample_occurrences`.
+- Term distribution includes book/chapter distribution.
+
+Safe public fields:
+
+```txt
+term id
+language_type
+lemma
+lemma_normalized
+strongs_number
+strongs_extended
+transliteration
+gloss
+occurrence counts
+book/chapter distribution
+limited safe occurrence samples
+```
+
+Hold back from public responses:
+
+```txt
+raw source JSON
+import diagnostics
+definition
+grammar_note
+grammar_summary
+term_identity_hash
+theological interpretation
+pictographic/gematria
+variant internals
+```
+
+Pagination rules:
+
+- Default `per_page=20`.
+- Maximum `per_page=100`.
+- Negative `page` or `per_page` values return `400 invalid_pagination`.
+
+Implementation order after explicit approval:
+
+1. Repository aggregate methods.
+2. `WordStudyService`.
+3. `WordStudyController`.
+4. `ApiRegistrar` route registration.
+5. REST smoke tests.
 
 Phase 5E local write smoke summary:
 
