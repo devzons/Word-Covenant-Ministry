@@ -21,12 +21,16 @@ Phase 5E - Original Language Persistence Smoke Verification
 Next major phase:
 
 ```txt
-Separately approved controlled larger import planning
+Separately approved controlled TAGNT Act-Rev import decision
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
 
-Phase 5E tiny local persistence smokes are complete. They verify the persistence skeleton and idempotent repository matching behavior for `STEP_TAGNT` and `STEP_TAHOT` using `maxRows=3` and `batchSize=1`. They do not approve full import execution, public APIs, frontend work, or additional repository persistence.
+Phase 5E tiny local persistence smokes are complete. They verify the persistence skeleton and idempotent repository matching behavior for `STEP_TAGNT` and `STEP_TAHOT` using `maxRows=3` and `batchSize=1`.
+
+The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import is also complete. It used `maxRows=1000`, `batchSize=100`, and the backup path `/private/tmp/wcm_phase_5e_g_pre_tagnt_1000.sql`.
+
+The approved full `STEP_TAGNT` Mat-Jhn local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_h_pre_tagnt_mat_jhn_full.sql`. It does not approve TAGNT Act-Rev import, full NT import, TAHOT import, full OT import, public APIs, frontend work, or additional repository persistence.
 
 ## Phase 5 Breakdown
 
@@ -1231,15 +1235,44 @@ Completed local verification:
   - Hebrew expansion confirmed
   - duplicate term identity groups=`0`
   - duplicate occurrence identity groups=`0`
-- Current local DB smoke state contains:
-  - `7` original-language terms
-  - `7` original-language occurrences
+- Controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_g_pre_tagnt_1000.sql`
+  - `maxRows=1000`
+  - `batchSize=100`
+  - pre counts: `7` original-language terms and `7` original-language occurrences
+  - pre source counts: `STEP_TAGNT=3`, `STEP_TAHOT=4`
+  - first successful run: `rowsRead=1000`, `rowsValid=988`, `rowsNormalized=988`, `rowsSkipped=12`
+  - first successful run created `273` terms and `985` occurrences
+  - first successful run matched `242` terms and `3` occurrences
+  - rerun created `0` terms and `0` occurrences
+  - rerun matched `515` terms and `988` occurrences
+  - duplicate term identity groups=`0`
+  - duplicate occurrence identity groups=`0`
+  - post counts: `280` original-language terms and `992` original-language occurrences
+  - post source counts: `STEP_TAGNT=988`, `STEP_TAHOT=4`
+- Full `STEP_TAGNT` Mat-Jhn local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_h_pre_tagnt_mat_jhn_full.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=66984`, `rowsNormalized=64205`, `rowsSkipped=2779`
+  - first successful run created `2731` terms and `63217` occurrences
+  - first successful run matched `988` occurrences
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`10.6752s`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `64205` occurrences
+  - post counts: `3011` terms and `64209` occurrences
+  - post source counts: `STEP_TAGNT=64205`, `STEP_TAHOT=4`
+  - coverage: `Matthew=18297`, `Mark=11091`, `Luke=19408`, `John=15409`
+  - duplicate groups=`0`
+  - blank TAGNT morphology rows=`0`
 
 Phase 5E did not perform:
 
 - Full STEP import.
 - TAHOT full import.
-- TAGNT full import.
+- TAGNT Act-Rev import.
+- Full NT import.
 - OSHB import.
 - SBLGNT import.
 - Public original-language API work.
@@ -1249,7 +1282,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Any controlled larger import requires separate explicit approval with exact source scope, row limits, batch size, rollback/export strategy, and verification report expectations.
+TAGNT Act-Rev controlled import requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
 ```
 
 ### Future - Read API Foundation

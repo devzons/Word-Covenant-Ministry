@@ -78,11 +78,11 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: Small Local Write Smokes Complete
+Status: Full TAGNT Mat-Jhn Local Import Complete
 
 Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
 
-Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. The project must still not proceed to full dataset import, public original-language APIs, or frontend original-language features without separate explicit approval.
+Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import and full `STEP_TAGNT` Mat-Jhn local import. The project must still not proceed to TAGNT Act-Rev import, full NT import, TAHOT import, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
 
 Subphases:
 
@@ -174,7 +174,7 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Separately approved controlled larger import planning
+Separately approved controlled TAGNT Act-Rev import decision
 ```
 
 Full STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
@@ -201,12 +201,97 @@ rerun matched terms=4 occurrences=4
 Hebrew expansion confirmed
 duplicates=0
 
-Current local DB smoke state:
+Pre-controlled-import local DB smoke state:
 terms=7
 occurrences=7
 ```
 
-Full import has not been run. Public original-language API and frontend surfaces have not been added. The next larger import step requires separate explicit approval.
+Phase 5E controlled TAGNT Mat-Jhn 1,000-row import summary:
+
+```txt
+Backup path: /private/tmp/wcm_phase_5e_g_pre_tagnt_1000.sql
+sourceDataset=STEP_TAGNT
+maxRows=1000
+batchSize=100
+
+Pre counts:
+terms=7
+occurrences=7
+STEP_TAGNT=3
+STEP_TAHOT=4
+duplicate term groups=0
+duplicate occurrence groups=0
+
+First successful run:
+rowsRead=1000
+rowsValid=988
+rowsNormalized=988
+rowsSkipped=12
+termsCreated=273
+termsMatched=242
+occurrencesCreated=985
+occurrencesMatched=3
+errors=0
+warnings=0
+failedBatches=0
+
+Rerun idempotency:
+termsCreated=0
+occurrencesCreated=0
+termsMatched=515
+occurrencesMatched=988
+
+Post counts:
+terms=280
+occurrences=992
+STEP_TAGNT=988
+STEP_TAHOT=4
+duplicate term groups=0
+duplicate occurrence groups=0
+```
+
+Full TAGNT Mat-Jhn import was later completed under separate explicit approval. Public original-language API and frontend surfaces have not been added.
+
+Phase 5E full TAGNT Mat-Jhn import summary:
+
+```txt
+Backup path: /private/tmp/wcm_phase_5e_h_pre_tagnt_mat_jhn_full.sql
+sourceDataset=STEP_TAGNT
+batchSize=250
+
+First successful run:
+rowsRead=66984
+rowsNormalized=64205
+rowsSkipped=2779
+termsCreated=2731
+occurrencesCreated=63217
+occurrencesMatched=988
+errors=0
+failedBatches=0
+runtime=10.6752s
+
+Rerun idempotency:
+termsCreated=0
+occurrencesCreated=0
+occurrencesMatched=64205
+
+Post counts:
+terms=3011
+occurrences=64209
+STEP_TAGNT=64205
+STEP_TAHOT=4
+
+Coverage:
+Matthew=18297
+Mark=11091
+Luke=19408
+John=15409
+
+duplicate groups=0
+blank TAGNT morphology rows=0
+```
+
+Full NT, TAHOT beyond tiny smoke, full OT, public original-language API, and frontend surfaces have not been run. TAGNT Act-Rev controlled import requires separate explicit approval.
 
 Phase 5A entry requirements:
 

@@ -87,37 +87,37 @@ Phase 5E - Original Language Persistence Smoke Verification
 Status:
 
 ```txt
-Small local write smokes complete
+Full TAGNT Mat-Jhn local import complete
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, and Phase 5E small local write smoke verification
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, and full TAGNT Mat-Jhn local import
 ```
 
 Active objective:
 
 ```txt
-Hold the original-language pipeline after approved tiny local write smokes until any controlled larger import receives separate explicit approval.
+Hold the original-language pipeline after the approved full TAGNT Mat-Jhn local import until any TAGNT Act-Rev controlled import receives separate explicit approval.
 ```
 
 Next task:
 
 ```txt
-Explicit approval is required before any controlled larger STEP import. Full import is not approved.
+Explicit approval is required before any controlled TAGNT Act-Rev import.
 ```
 
 Blocked items:
 
 ```txt
-Full original-language persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, and tiny local write smokes have passed, but larger imports, public APIs, frontend work, and real import execution require a separate explicit approval phase.
+Full original-language NT/OT persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, and the full TAGNT Mat-Jhn local import has passed. TAGNT Act-Rev controlled import, TAHOT larger import, public APIs, frontend work, and any further import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification is complete. The smoke data does not authorize full STEP, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, and the approved full TAGNT Mat-Jhn local import are complete. This does not authorize TAGNT Act-Rev import, full NT import, TAHOT import, full OT import, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
 ```
 
 Phase 5A source recommendation:
@@ -265,10 +265,22 @@ Phase 5C importer design analysis summary:
   - Original-language tables were confirmed: `wp_wcm_original_terms` and `wp_wcm_original_word_occurrences`.
   - Small `STEP_TAGNT` write smoke passed with `maxRows=3` and `batchSize=1`: first run created `3` terms and `3` occurrences; rerun matched `3` terms and `3` occurrences; duplicates=`0`.
   - Small `STEP_TAHOT` write smoke passed with `maxRows=3` and `batchSize=1`: first run created `4` terms and `4` occurrences; rerun matched `4` terms and `4` occurrences; Hebrew expansion confirmed; duplicates=`0`.
-  - Current local DB smoke state contains `7` original-language terms and `7` original-language occurrences.
-  - Full import has not been run.
+  - Controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import passed with `maxRows=1000` and `batchSize=100`.
+  - Backup path before controlled import: `/private/tmp/wcm_phase_5e_g_pre_tagnt_1000.sql`.
+  - Controlled import pre counts: `7` terms, `7` occurrences, `STEP_TAGNT=3`, `STEP_TAHOT=4`, duplicate term groups=`0`, duplicate occurrence groups=`0`.
+  - Controlled import first successful run: `rowsRead=1000`, `rowsValid=988`, `rowsNormalized=988`, `termsCreated=273`, `termsMatched=242`, `occurrencesCreated=985`, `occurrencesMatched=3`, `rowsSkipped=12`, `errors=0`, `warnings=0`, `failedBatches=0`.
+  - Controlled import rerun was idempotent: `termsCreated=0`, `occurrencesCreated=0`, `occurrencesMatched=988`.
+  - Controlled import post counts: `280` terms, `992` occurrences, `STEP_TAGNT=988`, `STEP_TAHOT=4`, duplicate term groups=`0`, duplicate occurrence groups=`0`.
+  - Full `STEP_TAGNT` Mat-Jhn local import passed with `batchSize=250`.
+  - Backup path before full Mat-Jhn import: `/private/tmp/wcm_phase_5e_h_pre_tagnt_mat_jhn_full.sql`.
+  - Full Mat-Jhn import first successful run: `rowsRead=66984`, `rowsNormalized=64205`, `rowsSkipped=2779`, `termsCreated=2731`, `occurrencesCreated=63217`, `occurrencesMatched=988`, `errors=0`, `failedBatches=0`, `runtime=10.6752s`.
+  - Full Mat-Jhn import rerun was idempotent: `termsCreated=0`, `occurrencesCreated=0`, `occurrencesMatched=64205`.
+  - Full Mat-Jhn post counts: `3011` terms, `64209` occurrences, `STEP_TAGNT=64205`, `STEP_TAHOT=4`.
+  - Full Mat-Jhn coverage: `Matthew=18297`, `Mark=11091`, `Luke=19408`, `John=15409`.
+  - Full Mat-Jhn duplicate groups=`0`; blank TAGNT morphology rows=`0`.
+  - Full NT, TAHOT, full OT, public API, and frontend work have not been run.
   - Public original-language API and frontend surfaces have not been added.
-  - Next larger import step requires separate explicit approval.
+  - TAGNT Act-Rev controlled import requires separate explicit approval.
 
 Phase 5D full dry-run aggregate results:
 
