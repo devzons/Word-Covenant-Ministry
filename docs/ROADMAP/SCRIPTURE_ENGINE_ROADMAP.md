@@ -78,11 +78,11 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: Full TAGNT NT Local Import Complete
+Status: TAHOT Gen-Deu Local Import Complete
 
 Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
 
-Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, and full `STEP_TAGNT` Act-Rev local import. Full TAGNT NT is imported. The project must still not proceed to TAHOT import beyond the tiny smoke, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
+Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, and controlled `STEP_TAHOT` Gen-Deu local import. Full TAGNT NT and TAHOT Gen-Deu are imported. The project must still not proceed to other TAHOT files, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
 
 Subphases:
 
@@ -174,7 +174,7 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Separately approved controlled TAHOT Gen-Deu import decision
+Separately approved controlled TAHOT Jos-Est import decision
 ```
 
 Full STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
@@ -291,7 +291,7 @@ duplicate groups=0
 blank TAGNT morphology rows=0
 ```
 
-TAGNT Act-Rev import was later completed under separate explicit approval. TAHOT beyond tiny smoke, full OT, public original-language API, and frontend surfaces have not been run.
+TAGNT Act-Rev import was later completed under separate explicit approval. TAHOT Gen-Deu was later completed under separate explicit approval. Other TAHOT files, full OT, public original-language API, and frontend surfaces have not been run.
 
 Phase 5E full TAGNT Act-Rev import summary:
 
@@ -332,7 +332,53 @@ duplicate groups=0
 blank TAGNT morphology rows=0
 ```
 
-TAHOT full import, full OT, public original-language API, and frontend surfaces have not been run. TAHOT Gen-Deu controlled import requires separate explicit approval.
+Phase 5E controlled TAHOT Gen-Deu import summary:
+
+```txt
+Backup path: /private/tmp/wcm_phase_5e_j_pre_tahot_gen_deu_full.sql
+sourceDataset=STEP_TAHOT
+batchSize=250
+
+First successful run:
+rowsRead=79990
+rowsValid=79737
+rowsNormalized=142021
+rowsSkipped=253
+qere_kethiv_variant_skipped=76
+tahot_non_base_text_type_skipped=177
+psalm_title=0
+termsCreated=4011
+occurrencesCreated=142014
+occurrencesMatched=4
+occurrencesSkipped=3
+missingMorphology=6412
+errors=0
+failedBatches=0
+runtime=22.3522s
+peakMemory=52232192
+
+Rerun idempotency:
+termsCreated=0
+occurrencesCreated=0
+occurrencesMatched=142018
+
+Post counts:
+terms=9584
+occurrences=279132
+STEP_TAGNT=137114
+STEP_TAHOT=142018
+
+Coverage:
+Genesis=36666
+Exodus=29477
+Leviticus=21448
+Numbers=28655
+Deuteronomy=25772
+
+duplicate groups=0
+```
+
+Other TAHOT files, full OT, public original-language API, and frontend surfaces have not been run. Controlled TAHOT Jos-Est requires separate explicit approval.
 
 Phase 5A entry requirements:
 

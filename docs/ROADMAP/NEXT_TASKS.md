@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Explicit approval for controlled TAHOT Gen-Deu import, if the project is ready to proceed.
+Explicit approval for controlled TAHOT Jos-Est import, if the project is ready to proceed.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, and full `STEP_TAGNT` Act-Rev local import are complete. Full TAGNT NT is imported. Any controlled TAHOT Gen-Deu import requires separate explicit approval after reviewing the TAGNT NT import results and rollback strategy.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, and controlled `STEP_TAHOT` Gen-Deu local import are complete. Full TAGNT NT and TAHOT Gen-Deu are imported. Any controlled TAHOT Jos-Est import requires separate explicit approval after reviewing the Gen-Deu import results and rollback strategy.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,11 +16,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, and the full TAGNT NT import result.
-2. Decide whether to approve controlled TAHOT Gen-Deu import.
-3. If approved, define the exact TAHOT Gen-Deu source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
-4. If approved, run controlled TAHOT Gen-Deu import only under the approved limits.
-5. Any larger TAHOT scope beyond Gen-Deu only after separate explicit approval.
+1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, the full TAGNT NT import result, and the controlled TAHOT Gen-Deu import result.
+2. Decide whether to approve controlled TAHOT Jos-Est import.
+3. If approved, define the exact TAHOT Jos-Est source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
+4. If approved, run controlled TAHOT Jos-Est import only under the approved limits.
+5. Any larger TAHOT scope beyond Jos-Est only after separate explicit approval.
 6. Public original-language APIs only after data import and verification are approved.
 7. Later: Interlinear UI.
 8. Later: Word Study UI.
@@ -98,10 +98,28 @@ Completed local write-smoke status:
   - Full TAGNT NT imported: Mat-Jhn already completed; Act-Rev completed
   - duplicate groups=`0`
   - blank TAGNT morphology rows=`0`
-- TAHOT has not been run beyond the tiny smoke.
+- Controlled `STEP_TAHOT` Gen-Deu local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_j_pre_tahot_gen_deu_full.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=79990`, `rowsValid=79737`, `rowsNormalized=142021`, `rowsSkipped=253`
+  - skipped reasons: `qere_kethiv_variant_skipped=76`, `tahot_non_base_text_type_skipped=177`, `psalm_title=0`
+  - first successful run created `4011` terms and `142014` occurrences
+  - first successful run matched `4` occurrences
+  - first successful run skipped `3` duplicate occurrence candidates
+  - missingMorphology=`6412` warning-level
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`22.3522s`
+  - peakMemory=`52232192`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `142018` occurrences
+  - post counts: `9584` terms, `279132` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=142018`
+  - coverage: `Genesis=36666`, `Exodus=29477`, `Leviticus=21448`, `Numbers=28655`, `Deuteronomy=25772`
+  - duplicate groups=`0`
+- TAHOT has not been run beyond the tiny smoke and controlled Gen-Deu import.
 - Full OT has not been run.
 - Public original-language API and frontend surfaces have not been added.
-- TAHOT Gen-Deu controlled import requires separate explicit approval.
+- TAHOT Jos-Est controlled import requires separate explicit approval.
 
 ## Required Pre-Work Before Code Changes
 

@@ -87,37 +87,37 @@ Phase 5E - Original Language Persistence Smoke Verification
 Status:
 
 ```txt
-Full TAGNT NT local import complete
+TAHOT Gen-Deu local import complete
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, and full TAGNT NT local import
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, and controlled TAHOT Gen-Deu local import
 ```
 
 Active objective:
 
 ```txt
-Hold the original-language pipeline after the approved full TAGNT NT local import until any TAHOT Gen-Deu controlled import receives separate explicit approval.
+Hold the original-language pipeline after the approved TAHOT Gen-Deu local import until any TAHOT Jos-Est controlled import receives separate explicit approval.
 ```
 
 Next task:
 
 ```txt
-Explicit approval is required before any controlled TAHOT Gen-Deu import.
+Explicit approval is required before any controlled TAHOT Jos-Est import.
 ```
 
 Blocked items:
 
 ```txt
-Full original-language OT persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, and TAGNT Act-Rev has passed. TAHOT Gen-Deu controlled import, public APIs, frontend work, and any further import execution require a separate explicit approval phase.
+Full original-language OT persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, and TAHOT Gen-Deu has passed. TAHOT Jos-Est controlled import, other TAHOT files, public APIs, frontend work, and any further import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, and TAGNT Act-Rev local import are complete. Full TAGNT NT is imported. This does not authorize TAHOT import beyond the tiny smoke, full OT import, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, and TAHOT Gen-Deu local import are complete. Full TAGNT NT and TAHOT Gen-Deu are imported. This does not authorize other TAHOT files, full OT import, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
 ```
 
 Phase 5A source recommendation:
@@ -285,9 +285,16 @@ Phase 5C importer design analysis summary:
   - Full TAGNT NT post counts: `5573` terms, `137118` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=4`.
   - Full TAGNT NT imported: Mat-Jhn already completed; Act-Rev completed.
   - Full TAGNT NT duplicate groups=`0`; blank TAGNT morphology rows=`0`.
-  - TAHOT full import, full OT, public API, and frontend work have not been run.
+  - Controlled `STEP_TAHOT` Gen-Deu local import passed with `batchSize=250`.
+  - Backup path before Gen-Deu import: `/private/tmp/wcm_phase_5e_j_pre_tahot_gen_deu_full.sql`.
+  - Gen-Deu import first successful run: `rowsRead=79990`, `rowsValid=79737`, `rowsNormalized=142021`, `rowsSkipped=253`, `qere_kethiv_variant_skipped=76`, `tahot_non_base_text_type_skipped=177`, `psalm_title=0`, `termsCreated=4011`, `occurrencesCreated=142014`, `occurrencesMatched=4`, `occurrencesSkipped=3`, `missingMorphology=6412`, `errors=0`, `failedBatches=0`, `runtime=22.3522s`, `peakMemory=52232192`.
+  - Gen-Deu import rerun was idempotent: `termsCreated=0`, `occurrencesCreated=0`, `occurrencesMatched=142018`.
+  - Gen-Deu post counts: `9584` terms, `279132` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=142018`.
+  - Gen-Deu coverage: `Genesis=36666`, `Exodus=29477`, `Leviticus=21448`, `Numbers=28655`, `Deuteronomy=25772`.
+  - Gen-Deu duplicate groups=`0`.
+  - Other TAHOT files, full OT, public API, and frontend work have not been run.
   - Public original-language API and frontend surfaces have not been added.
-  - TAHOT Gen-Deu controlled import requires separate explicit approval.
+  - Controlled TAHOT Jos-Est requires separate explicit approval.
 
 Phase 5D full dry-run aggregate results:
 
