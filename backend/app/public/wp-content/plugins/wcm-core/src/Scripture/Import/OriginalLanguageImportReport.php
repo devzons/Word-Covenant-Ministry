@@ -24,7 +24,9 @@ final class OriginalLanguageImportReport
     public int $termsCreated;
     public int $termsMatched;
     public int $occurrencesCreated;
+    public int $occurrencesMatched;
     public int $occurrencesSkipped;
+    public int $failedBatch;
     public int $duplicateTerms;
     public int $duplicateOccurrences;
     public int $missingLemma;
@@ -59,7 +61,9 @@ final class OriginalLanguageImportReport
         int $termsCreated = 0,
         int $termsMatched = 0,
         int $occurrencesCreated = 0,
+        int $occurrencesMatched = 0,
         int $occurrencesSkipped = 0,
+        int $failedBatch = 0,
         int $duplicateTerms = 0,
         int $duplicateOccurrences = 0,
         int $missingLemma = 0,
@@ -84,7 +88,9 @@ final class OriginalLanguageImportReport
         $this->termsCreated = $this->nonNegative($termsCreated, 'termsCreated');
         $this->termsMatched = $this->nonNegative($termsMatched, 'termsMatched');
         $this->occurrencesCreated = $this->nonNegative($occurrencesCreated, 'occurrencesCreated');
+        $this->occurrencesMatched = $this->nonNegative($occurrencesMatched, 'occurrencesMatched');
         $this->occurrencesSkipped = $this->nonNegative($occurrencesSkipped, 'occurrencesSkipped');
+        $this->failedBatch = $this->nonNegative($failedBatch, 'failedBatch');
         $this->duplicateTerms = $this->nonNegative($duplicateTerms, 'duplicateTerms');
         $this->duplicateOccurrences = $this->nonNegative($duplicateOccurrences, 'duplicateOccurrences');
         $this->missingLemma = $this->nonNegative($missingLemma, 'missingLemma');
@@ -164,9 +170,19 @@ final class OriginalLanguageImportReport
         $this->incrementCounter('occurrencesCreated', $count);
     }
 
+    public function recordOccurrencesMatched(int $count = 1): void
+    {
+        $this->incrementCounter('occurrencesMatched', $count);
+    }
+
     public function recordOccurrencesSkipped(int $count = 1): void
     {
         $this->incrementCounter('occurrencesSkipped', $count);
+    }
+
+    public function recordFailedBatch(int $count = 1): void
+    {
+        $this->incrementCounter('failedBatch', $count);
     }
 
     public function recordDuplicateTerm(int $count = 1): void
@@ -222,7 +238,9 @@ final class OriginalLanguageImportReport
      *     terms_created: int,
      *     terms_matched: int,
      *     occurrences_created: int,
+     *     occurrences_matched: int,
      *     occurrences_skipped: int,
+     *     failed_batch: int,
      *     duplicate_terms: int,
      *     duplicate_occurrences: int,
      *     missing_lemma: int,
@@ -256,7 +274,9 @@ final class OriginalLanguageImportReport
             'terms_created' => $this->termsCreated,
             'terms_matched' => $this->termsMatched,
             'occurrences_created' => $this->occurrencesCreated,
+            'occurrences_matched' => $this->occurrencesMatched,
             'occurrences_skipped' => $this->occurrencesSkipped,
+            'failed_batch' => $this->failedBatch,
             'duplicate_terms' => $this->duplicateTerms,
             'duplicate_occurrences' => $this->duplicateOccurrences,
             'missing_lemma' => $this->missingLemma,

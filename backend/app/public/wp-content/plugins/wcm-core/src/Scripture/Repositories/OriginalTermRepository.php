@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace WCM\Scripture\Repositories;
 
+use RuntimeException;
 use WCM\Scripture\ValueObjects\OriginalTerm;
 
 final class OriginalTermRepository
 {
     private const MAX_PER_PAGE = 50;
+    private const DEFAULT_BATCH_SIZE = 500;
+    private const IDENTITY_DELIMITER = "\x1F";
 
     public function save(OriginalTerm $term): int
     {
@@ -156,6 +159,123 @@ final class OriginalTermRepository
         return array_map([$this, 'hydrateTerm'], $rows);
     }
 
+    public function buildIdentityKey(
+        string $languageType,
+        string $lemmaNormalized,
+        string $strongsNumber,
+        string $strongsExtended
+    ): string {
+        return implode(self::IDENTITY_DELIMITER, [
+            trim($languageType),
+            trim($lemmaNormalized),
+            trim($strongsNumber),
+            trim($strongsExtended),
+        ]);
+    }
+
+    /**
+     * @param array<int, array{
+     *     language_type?: string,
+     *     languageType?: string,
+     *     lemma_normalized?: string,
+     *     lemmaNormalized?: string,
+     *     strongs_number?: string,
+     *     strongsNumber?: string,
+     *     strongs_extended?: string,
+     *     strongsExtended?: string
+     * }> $identities
+     *
+     * @return array<string, int>
+     */
+    public function findIdsByIdentities(array $identities, int $batchSize = self::DEFAULT_BATCH_SIZE): array
+    {
+        global $wpdb;
+
+        $normalizedIdentities = $this->normalizeIdentitySet($identities);
+        if ($normalizedIdentities === []) {
+            return [];
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_original_terms';
+        $batchSize = max(1, $batchSize);
+        $result = [];
+
+        foreach (array_chunk($normalizedIdentities, $batchSize) as $batch) {
+            $conditions = [];
+            $values = [];
+
+            foreach ($batch as $identity) {
+                $conditions[] = '(language_type = %s AND lemma_normalized = %s AND strongs_number = %s AND strongs_extended = %s)';
+                array_push(
+                    $values,
+                    $identity['language_type'],
+                    $identity['lemma_normalized'],
+                    $identity['strongs_number'],
+                    $identity['strongs_extended']
+                );
+            }
+
+            $sql = "SELECT id, language_type, lemma_normalized, strongs_number, strongs_extended
+                FROM {$tableName}
+                WHERE " . implode(' OR ', $conditions);
+
+            $rows = $wpdb->get_results($wpdb->prepare($sql, ...$values), 'ARRAY_A');
+            if (! is_array($rows)) {
+                throw new RuntimeException('Original term batch lookup failed.');
+            }
+
+            foreach ($rows as $row) {
+                $result[$this->buildIdentityKey(
+                    (string) $row['language_type'],
+                    (string) $row['lemma_normalized'],
+                    (string) $row['strongs_number'],
+                    (string) $row['strongs_extended']
+                )] = (int) $row['id'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param OriginalTerm[] $terms
+     *
+     * @return array<string, int>
+     */
+    public function insertBatch(array $terms, int $batchSize = self::DEFAULT_BATCH_SIZE): array
+    {
+        $batchSize = max(1, $batchSize);
+        $created = [];
+
+        foreach (array_chunk($terms, $batchSize) as $batch) {
+            foreach ($batch as $term) {
+                if (! $term instanceof OriginalTerm) {
+                    throw new RuntimeException('Original term batch insert expects OriginalTerm instances.');
+                }
+
+                if ($term->id !== null) {
+                    throw new RuntimeException('Original term batch insert expects unpersisted OriginalTerm instances.');
+                }
+
+                $identity = $this->buildIdentityKey(
+                    $term->languageType,
+                    $term->lemmaNormalized,
+                    $term->strongsNumber,
+                    $term->strongsExtended
+                );
+
+                $id = $this->save($term);
+                if ($id < 1) {
+                    throw new RuntimeException('Original term batch insert failed for identity: ' . $identity);
+                }
+
+                $created[$identity] = $id;
+            }
+        }
+
+        return $created;
+    }
+
     /**
      * @param array<string, mixed> $row
      */
@@ -178,5 +298,51 @@ final class OriginalTermRepository
     private function nullableString(mixed $value): ?string
     {
         return $value === null ? null : (string) $value;
+    }
+
+    /**
+     * @param array<int, array{
+     *     language_type?: string,
+     *     languageType?: string,
+     *     lemma_normalized?: string,
+     *     lemmaNormalized?: string,
+     *     strongs_number?: string,
+     *     strongsNumber?: string,
+     *     strongs_extended?: string,
+     *     strongsExtended?: string
+     * }> $identities
+     *
+     * @return array<string, array{
+     *     language_type: string,
+     *     lemma_normalized: string,
+     *     strongs_number: string,
+     *     strongs_extended: string
+     * }>
+     */
+    private function normalizeIdentitySet(array $identities): array
+    {
+        $normalized = [];
+
+        foreach ($identities as $identity) {
+            $languageType = trim((string) ($identity['language_type'] ?? $identity['languageType'] ?? ''));
+            $lemmaNormalized = trim((string) ($identity['lemma_normalized'] ?? $identity['lemmaNormalized'] ?? ''));
+
+            if ($languageType === '' || $lemmaNormalized === '') {
+                continue;
+            }
+
+            $strongsNumber = trim((string) ($identity['strongs_number'] ?? $identity['strongsNumber'] ?? ''));
+            $strongsExtended = trim((string) ($identity['strongs_extended'] ?? $identity['strongsExtended'] ?? ''));
+            $key = $this->buildIdentityKey($languageType, $lemmaNormalized, $strongsNumber, $strongsExtended);
+
+            $normalized[$key] = [
+                'language_type' => $languageType,
+                'lemma_normalized' => $lemmaNormalized,
+                'strongs_number' => $strongsNumber,
+                'strongs_extended' => $strongsExtended,
+            ];
+        }
+
+        return $normalized;
     }
 }

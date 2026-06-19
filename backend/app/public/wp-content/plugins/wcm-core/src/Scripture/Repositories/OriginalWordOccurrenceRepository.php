@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace WCM\Scripture\Repositories;
 
+use RuntimeException;
 use WCM\Scripture\ValueObjects\OriginalWordOccurrence;
 
 final class OriginalWordOccurrenceRepository
 {
     private const MAX_PER_PAGE = 50;
+    private const DEFAULT_BATCH_SIZE = 500;
+    private const IDENTITY_DELIMITER = "\x1F";
 
     public function save(OriginalWordOccurrence $occurrence): int
     {
@@ -231,6 +234,142 @@ final class OriginalWordOccurrenceRepository
         return array_map([$this, 'hydrateOccurrence'], $rows);
     }
 
+    public function buildIdentityKey(
+        string $sourceDataset,
+        int $bookId,
+        int $chapter,
+        int $verse,
+        int $wordOrder,
+        int $subwordOrder,
+        string $tokenType
+    ): string {
+        return implode(self::IDENTITY_DELIMITER, [
+            trim($sourceDataset),
+            (string) $bookId,
+            (string) $chapter,
+            (string) $verse,
+            (string) $wordOrder,
+            (string) $subwordOrder,
+            trim($tokenType),
+        ]);
+    }
+
+    /**
+     * @param array<int, array{
+     *     source_dataset?: string,
+     *     sourceDataset?: string,
+     *     book_id?: int,
+     *     bookId?: int,
+     *     chapter?: int,
+     *     verse?: int,
+     *     word_order?: int,
+     *     wordOrder?: int,
+     *     subword_order?: int,
+     *     subwordOrder?: int,
+     *     token_type?: string,
+     *     tokenType?: string
+     * }> $identities
+     *
+     * @return array<string, int>
+     */
+    public function findIdsByIdentities(array $identities, int $batchSize = self::DEFAULT_BATCH_SIZE): array
+    {
+        global $wpdb;
+
+        $normalizedIdentities = $this->normalizeIdentitySet($identities);
+        if ($normalizedIdentities === []) {
+            return [];
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_original_word_occurrences';
+        $batchSize = max(1, $batchSize);
+        $result = [];
+
+        foreach (array_chunk($normalizedIdentities, $batchSize) as $batch) {
+            $conditions = [];
+            $values = [];
+
+            foreach ($batch as $identity) {
+                $conditions[] = '(source_dataset = %s AND book_id = %d AND chapter = %d AND verse = %d AND word_order = %d AND subword_order = %d AND token_type = %s)';
+                array_push(
+                    $values,
+                    $identity['source_dataset'],
+                    $identity['book_id'],
+                    $identity['chapter'],
+                    $identity['verse'],
+                    $identity['word_order'],
+                    $identity['subword_order'],
+                    $identity['token_type']
+                );
+            }
+
+            $sql = "SELECT id, source_dataset, book_id, chapter, verse, word_order, subword_order, token_type
+                FROM {$tableName}
+                WHERE " . implode(' OR ', $conditions);
+
+            $rows = $wpdb->get_results($wpdb->prepare($sql, ...$values), 'ARRAY_A');
+            if (! is_array($rows)) {
+                throw new RuntimeException('Original word occurrence batch lookup failed.');
+            }
+
+            foreach ($rows as $row) {
+                $result[$this->buildIdentityKey(
+                    (string) $row['source_dataset'],
+                    (int) $row['book_id'],
+                    (int) $row['chapter'],
+                    (int) $row['verse'],
+                    (int) $row['word_order'],
+                    (int) $row['subword_order'],
+                    (string) $row['token_type']
+                )] = (int) $row['id'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param OriginalWordOccurrence[] $occurrences
+     *
+     * @return array<string, int>
+     */
+    public function insertBatch(array $occurrences, int $batchSize = self::DEFAULT_BATCH_SIZE): array
+    {
+        $batchSize = max(1, $batchSize);
+        $created = [];
+
+        foreach (array_chunk($occurrences, $batchSize) as $batch) {
+            foreach ($batch as $occurrence) {
+                if (! $occurrence instanceof OriginalWordOccurrence) {
+                    throw new RuntimeException('Original word occurrence batch insert expects OriginalWordOccurrence instances.');
+                }
+
+                if ($occurrence->id !== null) {
+                    throw new RuntimeException('Original word occurrence batch insert expects unpersisted OriginalWordOccurrence instances.');
+                }
+
+                $identity = $this->buildIdentityKey(
+                    $occurrence->sourceDataset,
+                    $occurrence->bookId,
+                    $occurrence->chapter,
+                    $occurrence->verse,
+                    $occurrence->wordOrder,
+                    $occurrence->subwordOrder,
+                    $occurrence->tokenType
+                );
+
+                $id = $this->save($occurrence);
+                if ($id < 1) {
+                    throw new RuntimeException('Original word occurrence batch insert failed for identity: ' . $identity);
+                }
+
+                $created[$identity] = $id;
+            }
+        }
+
+        return $created;
+    }
+
     /**
      * @param array<string, mixed> $row
      */
@@ -259,5 +398,80 @@ final class OriginalWordOccurrenceRepository
     private function nullableString(mixed $value): ?string
     {
         return $value === null ? null : (string) $value;
+    }
+
+    /**
+     * @param array<int, array{
+     *     source_dataset?: string,
+     *     sourceDataset?: string,
+     *     book_id?: int,
+     *     bookId?: int,
+     *     chapter?: int,
+     *     verse?: int,
+     *     word_order?: int,
+     *     wordOrder?: int,
+     *     subword_order?: int,
+     *     subwordOrder?: int,
+     *     token_type?: string,
+     *     tokenType?: string
+     * }> $identities
+     *
+     * @return array<string, array{
+     *     source_dataset: string,
+     *     book_id: int,
+     *     chapter: int,
+     *     verse: int,
+     *     word_order: int,
+     *     subword_order: int,
+     *     token_type: string
+     * }>
+     */
+    private function normalizeIdentitySet(array $identities): array
+    {
+        $normalized = [];
+
+        foreach ($identities as $identity) {
+            $sourceDataset = trim((string) ($identity['source_dataset'] ?? $identity['sourceDataset'] ?? ''));
+            $bookId = (int) ($identity['book_id'] ?? $identity['bookId'] ?? 0);
+            $chapter = (int) ($identity['chapter'] ?? 0);
+            $verse = (int) ($identity['verse'] ?? 0);
+            $wordOrder = (int) ($identity['word_order'] ?? $identity['wordOrder'] ?? 0);
+            $subwordOrder = (int) ($identity['subword_order'] ?? $identity['subwordOrder'] ?? -1);
+            $tokenType = trim((string) ($identity['token_type'] ?? $identity['tokenType'] ?? ''));
+
+            if (
+                $sourceDataset === ''
+                || $bookId < 1
+                || $chapter < 1
+                || $verse < 1
+                || $wordOrder < 1
+                || $subwordOrder < 0
+                || $tokenType === ''
+            ) {
+                continue;
+            }
+
+            $key = $this->buildIdentityKey(
+                $sourceDataset,
+                $bookId,
+                $chapter,
+                $verse,
+                $wordOrder,
+                $subwordOrder,
+                $tokenType
+            );
+
+            $normalized[$key] = [
+                'source_dataset' => $sourceDataset,
+                'book_id' => $bookId,
+                'chapter' => $chapter,
+                'verse' => $verse,
+                'word_order' => $wordOrder,
+                'subword_order' => $subwordOrder,
+                'token_type' => $tokenType,
+            ];
+        }
+
+        return $normalized;
     }
 }

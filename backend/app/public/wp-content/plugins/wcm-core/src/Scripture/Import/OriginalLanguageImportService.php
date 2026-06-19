@@ -6,12 +6,16 @@ namespace WCM\Scripture\Import;
 
 use InvalidArgumentException;
 use RuntimeException;
+use Throwable;
+use WCM\Scripture\Repositories\OriginalTermRepository;
+use WCM\Scripture\Repositories\OriginalWordOccurrenceRepository;
 use WCM\Scripture\ValueObjects\OriginalTerm;
 use WCM\Scripture\ValueObjects\OriginalWordOccurrence;
 
 final class OriginalLanguageImportService
 {
     private const READ_LENGTH = 131072;
+    private const MAX_WRITE_BATCH_SIZE = 500;
 
     /**
      * @var array<string, array{book_code: string, chapter: int, verse: int}>
@@ -38,6 +42,8 @@ final class OriginalLanguageImportService
         private ?SourceFileValidator $sourceFileValidator = null,
         private ?SourceLicenseValidator $sourceLicenseValidator = null,
         private ?OriginalLanguageImportValidator $importValidator = null,
+        private ?OriginalTermRepository $termRepository = null,
+        private ?OriginalWordOccurrenceRepository $occurrenceRepository = null,
         array $normalizers = []
     ) {
         $this->sourceInspector ??= new OriginalLanguageSourceInspector();
@@ -47,6 +53,8 @@ final class OriginalLanguageImportService
             hebrewVersificationResolved: true,
             greekEditionFilteringResolved: true
         );
+        $this->termRepository ??= new OriginalTermRepository();
+        $this->occurrenceRepository ??= new OriginalWordOccurrenceRepository();
 
         $this->normalizers = $normalizers === []
             ? [new StepTahotNormalizer(), new StepTagntNormalizer()]
@@ -256,6 +264,624 @@ final class OriginalLanguageImportService
         $report->recordOccurrencesCandidateCount(count($occurrenceCandidateKeys));
 
         return $report;
+    }
+
+    /**
+     * Write-enabled import entrypoint. This method is intentionally separate from dryRun()
+     * and must only be called by an explicitly approved persistence phase.
+     *
+     * @param array<string, int> $bookIdsByCode Canonical STEP book code to wcm_bible_books.id map.
+     * @param array<string, array{book_code: string, chapter: int, verse: int}> $exceptionMap
+     */
+    public function importApprovedSource(
+        bool $dryRunApproved,
+        string $sourceDataset,
+        string $sourcePath,
+        string $expectedChecksum,
+        string $sourceVersion,
+        string $sourceUrl,
+        string $licenseStatus,
+        string $attribution,
+        array $bookIdsByCode,
+        ?int $maxRows = null,
+        array $exceptionMap = [],
+        int $batchSize = self::MAX_WRITE_BATCH_SIZE
+    ): OriginalLanguageImportReport {
+        $this->validateApprovedImportRequest(
+            $dryRunApproved,
+            $expectedChecksum,
+            $sourceVersion,
+            $sourceUrl,
+            $licenseStatus,
+            $attribution,
+            $bookIdsByCode,
+            $maxRows,
+            $batchSize
+        );
+
+        $preflightReport = $this->dryRun(
+            $sourceDataset,
+            $sourcePath,
+            $licenseStatus,
+            $attribution,
+            null,
+            $exceptionMap,
+            true,
+            $sourceVersion,
+            $sourceUrl
+        );
+
+        if (
+            ! $preflightReport->ok()
+            || $preflightReport->sourceDataset !== trim($sourceDataset)
+            || ! hash_equals(strtolower(trim($expectedChecksum)), strtolower($preflightReport->checksum))
+            || $preflightReport->sourceVersion !== trim($sourceVersion)
+            || $preflightReport->sourceUrl !== trim($sourceUrl)
+            || $preflightReport->licenseStatus !== 'approved'
+        ) {
+            if ($preflightReport->ok()) {
+                $preflightReport->addIssue($this->error(
+                    'preflight_mismatch',
+                    'Write-enabled import preflight does not match approved source inputs.',
+                    [
+                        'expected_source_dataset' => trim($sourceDataset),
+                        'actual_source_dataset' => $preflightReport->sourceDataset,
+                        'expected_checksum' => trim($expectedChecksum),
+                        'actual_checksum' => $preflightReport->checksum,
+                        'expected_source_version' => trim($sourceVersion),
+                        'actual_source_version' => $preflightReport->sourceVersion,
+                        'expected_source_url' => trim($sourceUrl),
+                        'actual_source_url' => $preflightReport->sourceUrl,
+                        'actual_license_status' => $preflightReport->licenseStatus,
+                    ]
+                ));
+            }
+
+            return $preflightReport;
+        }
+
+        $metadata = $this->sourceInspector->inspect(
+            $sourceDataset,
+            $sourcePath,
+            $licenseStatus,
+            $attribution,
+            $sourceVersion,
+            $sourceUrl
+        );
+
+        $report = new OriginalLanguageImportReport(
+            sourceDataset: $metadata->sourceDataset,
+            sourceFile: $metadata->sourceFile,
+            licenseStatus: $metadata->licenseStatus,
+            sourceVersion: $metadata->sourceVersion,
+            sourceUrl: $metadata->sourceUrl,
+            checksum: $metadata->checksum
+        );
+
+        foreach ($this->sourceFileValidator->validate($metadata) as $issue) {
+            $report->addIssue($issue);
+        }
+
+        foreach ($this->sourceLicenseValidator->validate($metadata) as $issue) {
+            $report->addIssue($issue);
+        }
+
+        if (! hash_equals(strtolower(trim($expectedChecksum)), strtolower($metadata->checksum))) {
+            $report->addIssue($this->error(
+                'checksum_mismatch',
+                'Approved source checksum does not match inspected source checksum.',
+                [
+                    'expected_checksum' => trim($expectedChecksum),
+                    'actual_checksum' => $metadata->checksum,
+                ]
+            ));
+        }
+
+        if (trim($sourceVersion) !== $metadata->sourceVersion) {
+            $report->addIssue($this->error(
+                'source_version_mismatch',
+                'Approved source version does not match inspected source version.',
+                [
+                    'expected_source_version' => trim($sourceVersion),
+                    'actual_source_version' => $metadata->sourceVersion,
+                ]
+            ));
+        }
+
+        if ($metadata->licenseStatus !== 'approved') {
+            $report->addIssue($this->error(
+                'license_not_approved',
+                'Approved source import requires licenseStatus=approved.',
+                ['license_status' => $metadata->licenseStatus]
+            ));
+        }
+
+        if (! $report->ok()) {
+            return $report;
+        }
+
+        $normalizer = $this->normalizerFor($metadata->sourceDataset);
+        if ($normalizer === null) {
+            $report->addIssue($this->error(
+                'normalizer_missing',
+                'No normalizer supports the requested source dataset.',
+                ['source_dataset' => $metadata->sourceDataset]
+            ));
+
+            return $report;
+        }
+
+        $resolver = new OriginalLanguageVersificationResolver(
+            $this->canonicalReferences,
+            array_merge(self::DEFAULT_EXCEPTION_MAP, $exceptionMap)
+        );
+        $termCandidateKeys = [];
+        $occurrenceCandidateKeys = [];
+        $skippedOccurrences = 0;
+        $chunk = [];
+
+        foreach ($this->streamRows($metadata, $maxRows) as $rowNumber => $row) {
+            $report->recordRowsRead();
+
+            $sourceReference = $this->sourceReferenceFromRow($metadata->sourceDataset, $row, $rowNumber);
+            if ($sourceReference === null) {
+                $report->recordRowsInvalid();
+                $report->recordRowsSkipped();
+                $report->recordInvalidReference();
+                $report->addIssue($this->error(
+                    'invalid_reference',
+                    'Source row reference could not be parsed before normalization.',
+                    ['row_number' => $rowNumber]
+                ));
+                continue;
+            }
+
+            if ($metadata->sourceDataset === OriginalWordOccurrence::SOURCE_STEP_TAHOT) {
+                $textType = $sourceReference['text_type'] ?? '';
+                if ($this->isTahotQereKethivTextType($textType)) {
+                    $report->recordRowsSkipped();
+                    $report->addIssue($this->warning(
+                        'qere_kethiv_variant_skipped',
+                        'TAHOT Q(K) variant row skipped by first-import policy.',
+                        $this->sourceReferenceContext($sourceReference, $rowNumber)
+                    ));
+                    continue;
+                }
+
+                if ($textType !== 'L') {
+                    $report->recordRowsSkipped();
+                    $report->addIssue($this->info(
+                        'tahot_non_base_text_type_skipped',
+                        'TAHOT non-base text type row skipped by first-import policy.',
+                        $this->sourceReferenceContext($sourceReference, $rowNumber)
+                    ));
+                    continue;
+                }
+            }
+
+            $resolvedReference = $resolver->resolve(
+                $sourceReference['book_code'],
+                $sourceReference['chapter'],
+                $sourceReference['verse'],
+                $this->sourceReferenceContext($sourceReference, $rowNumber)
+            );
+
+            foreach ($resolvedReference->issues as $issue) {
+                $report->addIssue($issue);
+            }
+
+            if ($resolvedReference->status === OriginalLanguageResolvedReference::STATUS_PSALM_TITLE) {
+                $report->recordRowsSkipped();
+                continue;
+            }
+
+            if ($resolvedReference->status === OriginalLanguageResolvedReference::STATUS_UNRESOLVED) {
+                $report->recordRowsInvalid();
+                $report->recordRowsSkipped();
+                $report->recordInvalidReference();
+                continue;
+            }
+
+            if ($metadata->sourceDataset === OriginalWordOccurrence::SOURCE_STEP_TAGNT && ! $this->tagntRowContainsSbl($row)) {
+                $report->recordRowsSkipped();
+                $report->addIssue($this->info(
+                    'tagnt_non_sbl_skipped',
+                    'TAGNT row skipped because the editions field does not contain the exact SBL token.',
+                    $this->sourceReferenceContext($sourceReference, $rowNumber)
+                ));
+                continue;
+            }
+
+            try {
+                $normalizedRows = $this->normalizeRows($normalizer, $row, $rowNumber);
+            } catch (InvalidArgumentException $exception) {
+                $report->recordRowsInvalid();
+                $report->recordRowsSkipped();
+                $report->addIssue($this->error(
+                    'normalization_failed',
+                    $exception->getMessage(),
+                    ['row_number' => $rowNumber, 'source_ref' => $sourceReference['source_ref']]
+                ));
+                continue;
+            }
+
+            if ($normalizedRows === []) {
+                $report->recordRowsSkipped();
+                continue;
+            }
+
+            $report->recordRowsValid();
+            $report->recordRowsNormalized(count($normalizedRows));
+
+            foreach ($normalizedRows as $normalizedRow) {
+                $termCandidateKeys[$this->termCandidateKey($normalizedRow)] = true;
+
+                $occurrenceKey = $this->occurrenceCandidateKey($normalizedRow, $resolvedReference);
+                if (isset($occurrenceCandidateKeys[$occurrenceKey])) {
+                    $this->recordIssue($report, $this->warning(
+                        'duplicate_occurrence',
+                        'Duplicate original word occurrence identity skipped in persistence candidates.',
+                        ['identity_key' => $occurrenceKey, 'source_ref' => $normalizedRow->sourceRef]
+                    ));
+                    $skippedOccurrences++;
+                    continue;
+                }
+
+                $occurrenceCandidateKeys[$occurrenceKey] = true;
+                $chunk[] = [
+                    'row' => $normalizedRow,
+                    'resolved_reference' => $resolvedReference,
+                ];
+
+                if (count($chunk) >= $batchSize) {
+                    if (! $report->ok()) {
+                        $report->recordFailedBatch();
+                        $report->recordTermsCandidateCount(count($termCandidateKeys));
+                        $report->recordOccurrencesCandidateCount(count($occurrenceCandidateKeys));
+
+                        return $report;
+                    }
+
+                    if (! $this->persistApprovedChunk($chunk, $bookIdsByCode, $report, $batchSize)) {
+                        $report->recordTermsCandidateCount(count($termCandidateKeys));
+                        $report->recordOccurrencesCandidateCount(count($occurrenceCandidateKeys));
+
+                        return $report;
+                    }
+
+                    $chunk = [];
+                }
+            }
+        }
+
+        if ($chunk !== []) {
+            if (! $report->ok()) {
+                $report->recordFailedBatch();
+                $report->recordTermsCandidateCount(count($termCandidateKeys));
+                $report->recordOccurrencesCandidateCount(count($occurrenceCandidateKeys));
+
+                return $report;
+            }
+
+            if (! $this->persistApprovedChunk($chunk, $bookIdsByCode, $report, $batchSize)) {
+                $report->recordTermsCandidateCount(count($termCandidateKeys));
+                $report->recordOccurrencesCandidateCount(count($occurrenceCandidateKeys));
+
+                return $report;
+            }
+        }
+
+        $report->recordOccurrencesSkipped($skippedOccurrences);
+        $report->recordTermsCandidateCount(count($termCandidateKeys));
+        $report->recordOccurrencesCandidateCount(count($occurrenceCandidateKeys));
+
+        return $report;
+    }
+
+    /**
+     * @param array<string, int> $bookIdsByCode
+     */
+    private function validateApprovedImportRequest(
+        bool $dryRunApproved,
+        string $expectedChecksum,
+        string $sourceVersion,
+        string $sourceUrl,
+        string $licenseStatus,
+        string $attribution,
+        array $bookIdsByCode,
+        ?int $maxRows,
+        int $batchSize
+    ): void {
+        if (! $dryRunApproved) {
+            throw new InvalidArgumentException('Write-enabled original language import requires dryRunApproved=true.');
+        }
+
+        if (trim($expectedChecksum) === '') {
+            throw new InvalidArgumentException('Write-enabled original language import requires an expected checksum.');
+        }
+
+        if (trim($sourceVersion) === '') {
+            throw new InvalidArgumentException('Write-enabled original language import requires a pinned source version.');
+        }
+
+        if (trim($sourceUrl) === '') {
+            throw new InvalidArgumentException('Write-enabled original language import requires a source URL.');
+        }
+
+        if (trim($licenseStatus) !== 'approved') {
+            throw new InvalidArgumentException('Write-enabled original language import requires licenseStatus=approved.');
+        }
+
+        if (trim($attribution) === '') {
+            throw new InvalidArgumentException('Write-enabled original language import requires attribution text.');
+        }
+
+        if ($bookIdsByCode === []) {
+            throw new InvalidArgumentException('Write-enabled original language import requires canonical book IDs by STEP book code.');
+        }
+
+        foreach ($bookIdsByCode as $bookCode => $bookId) {
+            if (trim((string) $bookCode) === '' || (int) $bookId < 1) {
+                throw new InvalidArgumentException('Canonical book ID map must contain non-empty book codes and positive IDs.');
+            }
+        }
+
+        if ($maxRows !== null && $maxRows < 1) {
+            throw new InvalidArgumentException('Write-enabled original language import maxRows must be null or greater than zero.');
+        }
+
+        if ($batchSize < 1) {
+            throw new InvalidArgumentException('Write-enabled original language import batchSize must be greater than zero.');
+        }
+
+        if ($batchSize > self::MAX_WRITE_BATCH_SIZE) {
+            throw new InvalidArgumentException('Write-enabled original language import batchSize must be 500 or less.');
+        }
+    }
+
+    /**
+     * @param array<int, array{row: OriginalLanguageNormalizedRow, resolved_reference: OriginalLanguageResolvedReference}> $chunk
+     * @param array<string, int> $bookIdsByCode
+     */
+    private function persistApprovedChunk(
+        array $chunk,
+        array $bookIdsByCode,
+        OriginalLanguageImportReport $report,
+        int $batchSize
+    ): bool {
+        $termsByIdentity = [];
+        $termIdentityByIndex = [];
+        $occurrenceDrafts = [];
+
+        foreach ($chunk as $index => $item) {
+            $normalizedRow = $item['row'];
+            $resolvedReference = $item['resolved_reference'];
+
+            $term = $this->termFromNormalizedRow($normalizedRow);
+            $termIdentity = $this->termRepository->buildIdentityKey(
+                $term->languageType,
+                $term->lemmaNormalized,
+                $term->strongsNumber,
+                $term->strongsExtended
+            );
+
+            $termsByIdentity[$termIdentity] = $term;
+            $termIdentityByIndex[$index] = $termIdentity;
+
+            try {
+                $occurrenceDrafts[$index] = $this->occurrenceFromNormalizedRow(
+                    $normalizedRow,
+                    $resolvedReference,
+                    1,
+                    $bookIdsByCode
+                );
+            } catch (InvalidArgumentException $exception) {
+                $report->recordFailedBatch();
+                $report->addIssue($this->error(
+                    'import_batch_validation_failed',
+                    $exception->getMessage(),
+                    ['source_ref' => $normalizedRow->sourceRef]
+                ));
+
+                return false;
+            }
+        }
+
+        foreach ($this->importValidator->validateTerms(array_values($termsByIdentity)) as $issue) {
+            $this->recordIssue($report, $issue);
+        }
+
+        foreach ($this->importValidator->validateOccurrences(array_values($occurrenceDrafts)) as $issue) {
+            $this->recordIssue($report, $issue);
+        }
+
+        if (! $report->ok()) {
+            $report->recordFailedBatch();
+
+            return false;
+        }
+
+        try {
+            $this->beginTransaction();
+
+            $existingTermIds = $this->termRepository->findIdsByIdentities(
+                $this->termIdentityPayloads(array_values($termsByIdentity)),
+                $batchSize
+            );
+            $termsToCreate = array_diff_key($termsByIdentity, $existingTermIds);
+            $createdTermIds = $this->termRepository->insertBatch(array_values($termsToCreate), $batchSize);
+            $termIdsByIdentity = $existingTermIds + $createdTermIds;
+            $matchedTerms = count($existingTermIds);
+            $createdTerms = count($createdTermIds);
+
+            $occurrencesByIdentity = [];
+            foreach ($chunk as $index => $item) {
+                $normalizedRow = $item['row'];
+                $resolvedReference = $item['resolved_reference'];
+                $termId = $termIdsByIdentity[$termIdentityByIndex[$index]] ?? 0;
+
+                if ($termId < 1) {
+                    throw new RuntimeException('Original language import could not resolve persisted term ID.');
+                }
+
+                $occurrence = $this->occurrenceFromNormalizedRow(
+                    $normalizedRow,
+                    $resolvedReference,
+                    $termId,
+                    $bookIdsByCode
+                );
+
+                $occurrenceIdentity = $this->occurrenceRepository->buildIdentityKey(
+                    $occurrence->sourceDataset,
+                    $occurrence->bookId,
+                    $occurrence->chapter,
+                    $occurrence->verse,
+                    $occurrence->wordOrder,
+                    $occurrence->subwordOrder,
+                    $occurrence->tokenType
+                );
+
+                $occurrencesByIdentity[$occurrenceIdentity] = $occurrence;
+            }
+
+            $existingOccurrenceIds = $this->occurrenceRepository->findIdsByIdentities(
+                $this->occurrenceIdentityPayloads(array_values($occurrencesByIdentity)),
+                $batchSize
+            );
+            $occurrencesToCreate = array_diff_key($occurrencesByIdentity, $existingOccurrenceIds);
+            $createdOccurrenceIds = $this->occurrenceRepository->insertBatch(array_values($occurrencesToCreate), $batchSize);
+            $matchedOccurrences = count($existingOccurrenceIds);
+            $createdOccurrences = count($createdOccurrenceIds);
+
+            $this->commitTransaction();
+
+            $report->recordTermsMatched($matchedTerms);
+            $report->recordTermsCreated($createdTerms);
+            $report->recordOccurrencesMatched($matchedOccurrences);
+            $report->recordOccurrencesCreated($createdOccurrences);
+
+            return true;
+        } catch (Throwable $exception) {
+            $this->rollbackTransaction();
+            $report->recordFailedBatch();
+            $report->addIssue($this->error(
+                'import_batch_failed',
+                $exception->getMessage()
+            ));
+
+            return false;
+        }
+    }
+
+    /**
+     * @param OriginalTerm[] $terms
+     *
+     * @return array<int, array{languageType: string, lemmaNormalized: string, strongsNumber: string, strongsExtended: string}>
+     */
+    private function termIdentityPayloads(array $terms): array
+    {
+        return array_map(
+            static fn (OriginalTerm $term): array => [
+                'languageType' => $term->languageType,
+                'lemmaNormalized' => $term->lemmaNormalized,
+                'strongsNumber' => $term->strongsNumber,
+                'strongsExtended' => $term->strongsExtended,
+            ],
+            $terms
+        );
+    }
+
+    /**
+     * @param OriginalWordOccurrence[] $occurrences
+     *
+     * @return array<int, array{
+     *     sourceDataset: string,
+     *     bookId: int,
+     *     chapter: int,
+     *     verse: int,
+     *     wordOrder: int,
+     *     subwordOrder: int,
+     *     tokenType: string
+     * }>
+     */
+    private function occurrenceIdentityPayloads(array $occurrences): array
+    {
+        return array_map(
+            static fn (OriginalWordOccurrence $occurrence): array => [
+                'sourceDataset' => $occurrence->sourceDataset,
+                'bookId' => $occurrence->bookId,
+                'chapter' => $occurrence->chapter,
+                'verse' => $occurrence->verse,
+                'wordOrder' => $occurrence->wordOrder,
+                'subwordOrder' => $occurrence->subwordOrder,
+                'tokenType' => $occurrence->tokenType,
+            ],
+            $occurrences
+        );
+    }
+
+    /**
+     * @param array<string, int> $bookIdsByCode
+     */
+    private function occurrenceFromNormalizedRow(
+        OriginalLanguageNormalizedRow $row,
+        OriginalLanguageResolvedReference $resolvedReference,
+        int $termId,
+        array $bookIdsByCode
+    ): OriginalWordOccurrence {
+        if (! $resolvedReference->isResolved()) {
+            throw new InvalidArgumentException('Original language occurrence requires a resolved canonical reference.');
+        }
+
+        $bookCode = (string) $resolvedReference->resolvedBookCode;
+        $bookId = (int) ($bookIdsByCode[$bookCode] ?? 0);
+        if ($bookId < 1) {
+            throw new InvalidArgumentException('Original language occurrence requires a canonical book ID for ' . $bookCode . '.');
+        }
+
+        return new OriginalWordOccurrence(
+            null,
+            $termId,
+            $bookId,
+            (int) $resolvedReference->resolvedChapter,
+            (int) $resolvedReference->resolvedVerse,
+            $row->wordOrder,
+            $row->subwordOrder,
+            $row->tokenType,
+            $row->surfaceForm,
+            $row->normalizedForm,
+            $row->morphology,
+            $row->grammarSummary,
+            $row->grammarNote,
+            $row->contextualFunction,
+            $row->sourceDataset,
+            $row->sourceRef
+        );
+    }
+
+    private function beginTransaction(): void
+    {
+        global $wpdb;
+
+        if ($wpdb->query('START TRANSACTION') === false) {
+            throw new RuntimeException('Original language import transaction could not start.');
+        }
+    }
+
+    private function commitTransaction(): void
+    {
+        global $wpdb;
+
+        if ($wpdb->query('COMMIT') === false) {
+            throw new RuntimeException('Original language import transaction could not commit.');
+        }
+    }
+
+    private function rollbackTransaction(): void
+    {
+        global $wpdb;
+
+        $wpdb->query('ROLLBACK');
     }
 
     private function normalizerFor(string $sourceDataset): ?OriginalLanguageNormalizerInterface
