@@ -174,17 +174,17 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 6A-1 - Original Language Read API Contract Documentation
+Phase 6A-3 - Original Language Read API
 ```
 
-OSHB, SBLGNT, read API implementation, UI, Interlinear UI, Strong's page, and Word Study work remain out of scope until explicitly approved.
+OSHB, SBLGNT, frontend UI, additional Interlinear API/UI, Strong's page, and Word Study work remain out of scope until explicitly approved.
 
-### Phase 6A-1 - Original Language Read API Contract
+### Phase 6A - Original Language Read API
 
 Status:
 
 ```txt
-Documentation only
+Phase 6A-3 completed in commit d8947cc: feat(scripture): add original language read API
 ```
 
 Current data state:
@@ -199,7 +199,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-Approved read-only scope:
+Implemented read-only scope:
 
 - No write/import endpoints.
 - No frontend.
@@ -208,14 +208,14 @@ Approved read-only scope:
 - No variant or qere-kethiv UI yet.
 - No interpretation, pictographic, or gematria API yet.
 
-Endpoint contract:
+Implemented routes:
 
 ```txt
-GET /wp-json/wcm/v1/original-language/{source}/{book}/{chapter}/{verse}
-GET /wp-json/wcm/v1/original-language/terms/{term_id}
-GET /wp-json/wcm/v1/original-language/terms/{term_id}/occurrences
-GET /wp-json/wcm/v1/original-language/strongs/{strongs_number}
-GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+GET /original-language/{source}/{book}/{chapter}/{verse}
+GET /original-language/interlinear/{source}/{book}/{chapter}/{verse}
+GET /original-language/terms/{term_id}
+GET /original-language/terms/{term_id}/occurrences
+GET /original-language/strongs/{strongs_number}
 ```
 
 Source rules:
@@ -228,6 +228,7 @@ Pagination rules:
 
 - Default `per_page=20`.
 - Maximum `per_page=100`.
+- Negative `page` or `per_page` values return `400 invalid_pagination`.
 - Pagination is required for term occurrences and Strong's occurrence-style lists.
 
 Safe public response fields:
@@ -258,6 +259,31 @@ Hold back from public responses:
 raw source JSON
 import diagnostics
 unapproved variant internals
+```
+
+Phase 6A-3 validation:
+
+```txt
+Matthew 1:1 => 8 occurrences
+Genesis 1:1 => 12 occurrences
+H1004 => 14 terms
+G2424 => 5 terms
+term lookup => success
+term occurrences => success
+```
+
+Security validation:
+
+- Read-only routes only.
+- No write routes.
+- No admin routes.
+- No import routes.
+- No raw source JSON.
+
+Next phase:
+
+```txt
+Word Study API
 ```
 
 Implementation order after separate approval:
@@ -339,7 +365,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-Full TAGNT Mat-Jhn import was later completed under separate explicit approval. Public original-language API and frontend surfaces have not been added.
+Full TAGNT Mat-Jhn import was later completed under separate explicit approval. The read-only Original Language API was later added in Phase 6A-3. Frontend surfaces have not been added.
 
 Phase 5E full TAGNT Mat-Jhn import summary:
 
@@ -567,7 +593,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-Public original-language API and frontend surfaces have not been run. Original Language Read API, Word Study API, and Interlinear API require separate explicit approval.
+The read-only Original Language API is complete. Frontend surfaces have not been run. Word Study API and additional Interlinear API work require separate explicit approval.
 
 Phase 5A entry requirements:
 

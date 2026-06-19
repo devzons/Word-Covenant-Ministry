@@ -15,13 +15,13 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 5E - Original Language Persistence Smoke Verification
+Phase 6A-3 - Original Language Read API
 ```
 
 Next major phase:
 
 ```txt
-Phase 6A-1 - Original Language Read API Contract Documentation
+Word Study API
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -42,14 +42,14 @@ The approved binary-stable original term identity implementation and migration a
 
 The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
 
-The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 documents the Original Language Read API contract. This does not approve API implementation, frontend work, or additional source imports.
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 documented the Original Language Read API contract, Phase 6A-2 added repository read methods, and Phase 6A-3 added the read-only REST API in commit `d8947cc` (`feat(scripture): add original language read API`). This does not approve frontend work, write/import endpoints, or additional source imports.
 
-## Phase 6A-1 Original Language Read API Contract
+## Phase 6A Original Language Read API
 
 Status:
 
 ```txt
-Documentation only
+Phase 6A-3 completed in commit d8947cc: feat(scripture): add original language read API
 ```
 
 Current data state:
@@ -64,7 +64,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-Approved read-only API scope for a future implementation phase:
+Implemented read-only API scope:
 
 - No write/import endpoints.
 - No frontend.
@@ -73,14 +73,14 @@ Approved read-only API scope for a future implementation phase:
 - No variant or qere-kethiv UI yet.
 - No interpretation, pictographic, or gematria API yet.
 
-Endpoint contract:
+Implemented routes:
 
 ```txt
-GET /wp-json/wcm/v1/original-language/{source}/{book}/{chapter}/{verse}
-GET /wp-json/wcm/v1/original-language/terms/{term_id}
-GET /wp-json/wcm/v1/original-language/terms/{term_id}/occurrences
-GET /wp-json/wcm/v1/original-language/strongs/{strongs_number}
-GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+GET /original-language/{source}/{book}/{chapter}/{verse}
+GET /original-language/interlinear/{source}/{book}/{chapter}/{verse}
+GET /original-language/terms/{term_id}
+GET /original-language/terms/{term_id}/occurrences
+GET /original-language/strongs/{strongs_number}
 ```
 
 Source rules:
@@ -93,6 +93,7 @@ Pagination rules:
 
 - Default `per_page=20`.
 - Maximum `per_page=100`.
+- Negative `page` or `per_page` values return `400 invalid_pagination`.
 - Pagination is required for term occurrences and Strong's occurrence-style lists.
 
 Safe public response fields:
@@ -125,13 +126,30 @@ import diagnostics
 unapproved variant internals
 ```
 
-Implementation order after explicit approval:
+Phase 6A-3 validation:
 
-1. Add repository joined read methods.
-2. Add `OriginalLanguageController`.
-3. Register routes in `ApiRegistrar`.
-4. Run REST smoke tests.
-5. Do not add frontend surfaces until the API is stable.
+```txt
+Matthew 1:1 => 8 occurrences
+Genesis 1:1 => 12 occurrences
+H1004 => 14 terms
+G2424 => 5 terms
+term lookup => success
+term occurrences => success
+```
+
+Security validation:
+
+- Read-only routes only.
+- No write routes.
+- No admin routes.
+- No import routes.
+- No raw source JSON.
+
+Next phase:
+
+```txt
+Word Study API
+```
 
 ## Phase 5 Breakdown
 
@@ -1489,7 +1507,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Original Language Read API, Word Study API, and Interlinear API require separate explicit approval before implementation.
+Original Language Read API is complete. Word Study API and additional Interlinear API work require separate explicit approval before implementation.
 ```
 
 ### Future - Read API Foundation

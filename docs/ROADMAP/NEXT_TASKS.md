@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Phase 6A-1 documents the Original Language Read API contract. Explicit approval is still required before Original Language Read API implementation, Word Study API implementation, Interlinear API implementation, or any frontend work.
+Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Explicit approval is still required before Word Study API implementation, additional Interlinear API work, frontend work, write/import endpoints, or any further source import execution.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 API contract documentation is the current roadmap task; implementation requires separate explicit approval.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 API contract documentation, Phase 6A-2 repository read methods, and Phase 6A-3 read-only REST API implementation are complete.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,15 +16,13 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Complete Phase 6A-1 Original Language Read API contract documentation.
-2. Decide whether to approve Phase 6A read-only Original Language API implementation.
-3. Decide whether to approve Word Study API planning or implementation.
-4. Decide whether to approve Interlinear API implementation beyond the basic read-only verse endpoint.
-5. Public original-language frontend surfaces only after API contracts are implemented and stable.
-6. Later: Interlinear UI.
-7. Later: Word Study UI.
-8. Later: Cross References.
-9. Later: Commentary Layer.
+1. Decide whether to approve Word Study API planning or implementation.
+2. Decide whether to approve Interlinear API implementation beyond the basic read-only verse endpoint.
+3. Public original-language frontend surfaces only after API contracts are implemented and stable.
+4. Later: Interlinear UI.
+5. Later: Word Study UI.
+6. Later: Cross References.
+7. Later: Commentary Layer.
 
 ## Phase 5E Smoke Status
 
@@ -184,12 +182,14 @@ Completed local write-smoke status:
   - duplicate hash groups=`0`
   - duplicate term identity groups=`0`
   - duplicate occurrence identity groups=`0`
-- Public original-language API and frontend surfaces have not been added.
 - Phase 6A-1 documents the Original Language Read API contract.
-- Next implementation candidate: read-only Original Language API.
-- Later phase candidates: Word Study API, richer Interlinear API/UI, Strong's pages, and original-language frontend surfaces.
+- Phase 6A-2 added original-language repository read methods.
+- Phase 6A-3 added the read-only Original Language REST API in commit `d8947cc`.
+- Public original-language frontend surfaces have not been added.
+- Next implementation candidate: Word Study API.
+- Later phase candidates: richer Interlinear API/UI, Strong's pages, and original-language frontend surfaces.
 
-## Phase 6A-1 Original Language Read API Contract
+## Phase 6A Original Language Read API
 
 Current original-language data state:
 
@@ -203,17 +203,17 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-Approved Phase 6A-1 scope:
+Phase 6A-3 implementation status:
 
-- Documentation only.
-- Read-only API contract only.
-- No code changes.
-- No DB writes.
-- No imports.
+- Completed in commit `d8947cc`.
+- Commit message: `feat(scripture): add original language read API`.
+- Read-only REST API only.
+- No write/import endpoints.
+- No admin routes.
 - No frontend.
-- No commit during documentation sync unless separately requested.
+- No raw source JSON.
 
-Phase 6A read-only implementation scope, if separately approved:
+Implemented read-only scope:
 
 - No write/import endpoints.
 - No frontend.
@@ -222,14 +222,14 @@ Phase 6A read-only implementation scope, if separately approved:
 - No variant or qere-kethiv UI yet.
 - No interpretation, pictographic, or gematria API yet.
 
-Contracted endpoints:
+Implemented routes:
 
 ```txt
-GET /wp-json/wcm/v1/original-language/{source}/{book}/{chapter}/{verse}
-GET /wp-json/wcm/v1/original-language/terms/{term_id}
-GET /wp-json/wcm/v1/original-language/terms/{term_id}/occurrences
-GET /wp-json/wcm/v1/original-language/strongs/{strongs_number}
-GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+GET /original-language/{source}/{book}/{chapter}/{verse}
+GET /original-language/interlinear/{source}/{book}/{chapter}/{verse}
+GET /original-language/terms/{term_id}
+GET /original-language/terms/{term_id}/occurrences
+GET /original-language/strongs/{strongs_number}
 ```
 
 Source rules:
@@ -242,6 +242,7 @@ Pagination rules:
 
 - Default `per_page=20`.
 - Maximum `per_page=100`.
+- Negative `page` or `per_page` values return `400 invalid_pagination`.
 - Pagination is required for term occurrences and Strong's occurrence-style lists.
 
 Safe public response fields:
@@ -270,13 +271,21 @@ Hold back from public responses:
 - import diagnostics
 - unapproved variant internals
 
-Recommended implementation order after approval:
+Phase 6A-3 validation:
 
-1. Add repository joined read methods.
-2. Add `OriginalLanguageController`.
-3. Register routes in `ApiRegistrar`.
-4. Run REST smoke tests.
-5. Keep frontend work blocked until the API is stable.
+```txt
+Matthew 1:1 => 8 occurrences
+Genesis 1:1 => 12 occurrences
+H1004 => 14 terms
+G2424 => 5 terms
+term lookup => success
+term occurrences => success
+```
+
+Next gate:
+
+1. Word Study API planning or implementation requires explicit approval.
+2. Keep frontend work blocked until API contracts are stable and explicitly approved.
 
 ## Required Pre-Work Before Code Changes
 
