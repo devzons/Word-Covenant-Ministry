@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Explicit approval for controlled TAHOT Job-Sng import, if the project is ready to proceed.
+Explicit approval for controlled TAHOT Isa-Mal import, if the project is ready to proceed.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, and controlled `STEP_TAHOT` Jos-Est local import are complete. Full TAGNT NT, TAHOT Gen-Deu, and TAHOT Jos-Est are imported. Any controlled TAHOT Job-Sng import requires separate explicit approval after reviewing the Jos-Est import results and rollback strategy.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, and controlled `STEP_TAHOT` Job-Sng retry import are complete. Full TAGNT NT, TAHOT Gen-Deu, TAHOT Jos-Est, and TAHOT Job-Sng are imported. Any controlled TAHOT Isa-Mal import requires separate explicit approval after reviewing the Job-Sng import results and rollback strategy.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,11 +16,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, the full TAGNT NT import result, and the controlled TAHOT Gen-Deu/Jos-Est import results.
-2. Decide whether to approve controlled TAHOT Job-Sng import.
-3. If approved, define the exact TAHOT Job-Sng source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
-4. If approved, run controlled TAHOT Job-Sng import only under the approved limits.
-5. Any larger TAHOT scope beyond Job-Sng only after separate explicit approval.
+1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, the full TAGNT NT import result, the controlled TAHOT Gen-Deu/Jos-Est import results, the term identity hash migration, and the controlled TAHOT Job-Sng retry import result.
+2. Decide whether to approve controlled TAHOT Isa-Mal import.
+3. If approved, define the exact TAHOT Isa-Mal source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
+4. If approved, run controlled TAHOT Isa-Mal import only under the approved limits.
+5. Any larger TAHOT scope beyond Isa-Mal only after separate explicit approval.
 6. Public original-language APIs only after data import and verification are approved.
 7. Later: Interlinear UI.
 8. Later: Word Study UI.
@@ -134,10 +134,39 @@ Completed local write-smoke status:
   - post counts: `14049` terms, `469045` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=331931`
   - coverage: `Joshua=18058`, `Judges=17501`, `Ruth=2258`, `1 Samuel=23439`, `2 Samuel=19418`, `1 Kings=22983`, `2 Kings=21349`, `1 Chronicles=19158`, `2 Chronicles=24016`, `Ezra=6600`, `Nehemiah=9638`, `Esther=5495`
   - duplicate groups=`0`
-- TAHOT has not been run beyond the tiny smoke and controlled Gen-Deu/Jos-Est imports.
+- Phase 5E-L2 binary-stable original term identity implementation is complete:
+  - `term_identity_hash` added to `wcm_original_terms`
+  - old collation-sensitive unique `term_identity` key removed
+  - nonunique `term_identity_text` lookup index retained
+  - binary-stable SHA-256 identity is authoritative for original terms
+- Phase 5E-L3 term identity hash migration is complete:
+  - backup path: `/private/tmp/wcm_phase_5e_l3_pre_term_identity_hash_migration.sql`
+  - counts unchanged: `14049` terms and `469045` occurrences
+  - `empty_hash_terms=0`
+  - `duplicate_hash_groups=0`
+- Controlled `STEP_TAHOT` Job-Sng retry local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=39090`, `rowsValid=38360`, `rowsNormalized=67815`, `rowsSkipped=730`
+  - skipped reasons: `qere_kethiv_variant_skipped=213`, `tahot_non_base_text_type_skipped=41`, `psalm_title=476`
+  - first successful run created `1161` terms and `67815` occurrences
+  - missingMorphology=`3749` warning-level
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`10.6089s`
+  - peakMemory=`61161472`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `67815` occurrences
+  - post counts: `15210` terms, `536860` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=399746`
+  - coverage: `Job=14807`, `Psalms=34226`, `Proverbs=11501`, `Ecclesiastes=5075`, `Song of Songs=2206`
+  - H1004A / `בֵּית` collation conflict resolved by hash identity
+  - duplicate hash groups=`0`
+  - duplicate term identity groups=`0`
+  - duplicate occurrence identity groups=`0`
+- TAHOT has not been run beyond the tiny smoke and controlled Gen-Deu/Jos-Est/Job-Sng imports.
 - Full OT has not been run.
 - Public original-language API and frontend surfaces have not been added.
-- TAHOT Job-Sng controlled import requires separate explicit approval.
+- TAHOT Isa-Mal controlled import requires separate explicit approval.
 
 ## Required Pre-Work Before Code Changes
 

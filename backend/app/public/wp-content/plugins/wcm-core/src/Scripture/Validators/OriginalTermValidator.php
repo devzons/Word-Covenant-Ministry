@@ -40,12 +40,18 @@ final class OriginalTermValidator
 
     public function buildIdentityKey(OriginalTerm $term): string
     {
-        return implode('|', [
-            $term->languageType,
-            $term->lemmaNormalized,
-            $term->strongsNumber,
-            $term->strongsExtended,
-        ]);
+        $payload = '';
+
+        foreach ([
+            trim($term->languageType),
+            trim($term->lemmaNormalized),
+            trim($term->strongsNumber),
+            trim($term->strongsExtended),
+        ] as $field) {
+            $payload .= pack('N', strlen($field)) . $field;
+        }
+
+        return hash('sha256', $payload);
     }
 
     public function validateStrongsNumber(string $strongsNumber): bool

@@ -21,7 +21,7 @@ Phase 5E - Original Language Persistence Smoke Verification
 Next major phase:
 
 ```txt
-Separately approved controlled TAHOT Job-Sng import decision
+Separately approved controlled TAHOT Isa-Mal import decision
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -36,7 +36,11 @@ The approved full `STEP_TAGNT` Act-Rev local import is complete. It used `batchS
 
 The approved controlled `STEP_TAHOT` Gen-Deu local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_j_pre_tahot_gen_deu_full.sql`.
 
-The approved controlled `STEP_TAHOT` Jos-Est local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_k_pre_tahot_jos_est_full.sql`. This does not approve Job-Sng, Isa-Mal, full OT import, public APIs, frontend work, or additional repository persistence.
+The approved controlled `STEP_TAHOT` Jos-Est local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_k_pre_tahot_jos_est_full.sql`.
+
+The approved binary-stable original term identity implementation and migration are complete. `term_identity_hash` is now the authoritative original term identity, the old collation-sensitive unique `term_identity` key has been removed, and the nonunique `term_identity_text` lookup index is retained.
+
+The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`. This does not approve Isa-Mal, full OT import, public APIs, frontend work, or additional repository persistence.
 
 ## Phase 5 Breakdown
 
@@ -1328,11 +1332,40 @@ Completed local verification:
   - post source counts: `STEP_TAGNT=137114`, `STEP_TAHOT=331931`
   - coverage: `Joshua=18058`, `Judges=17501`, `Ruth=2258`, `1 Samuel=23439`, `2 Samuel=19418`, `1 Kings=22983`, `2 Kings=21349`, `1 Chronicles=19158`, `2 Chronicles=24016`, `Ezra=6600`, `Nehemiah=9638`, `Esther=5495`
   - duplicate groups=`0`
+- Phase 5E-L2 binary-stable original term identity implementation completed:
+  - `term_identity_hash` added to `wcm_original_terms`
+  - old collation-sensitive unique `term_identity` key removed
+  - nonunique `term_identity_text` lookup index retained
+  - binary-stable SHA-256 identity is authoritative for original terms
+- Phase 5E-L3 term identity hash migration completed:
+  - backup path: `/private/tmp/wcm_phase_5e_l3_pre_term_identity_hash_migration.sql`
+  - counts unchanged: `14049` terms and `469045` occurrences
+  - `empty_hash_terms=0`
+  - `duplicate_hash_groups=0`
+- Controlled `STEP_TAHOT` Job-Sng retry local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=39090`, `rowsValid=38360`, `rowsNormalized=67815`, `rowsSkipped=730`
+  - skipped reasons: `qere_kethiv_variant_skipped=213`, `tahot_non_base_text_type_skipped=41`, `psalm_title=476`
+  - first successful run created `1161` terms and `67815` occurrences
+  - missingMorphology=`3749` warning-level
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`10.6089s`
+  - peakMemory=`61161472`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `67815` occurrences
+  - post counts: `15210` terms and `536860` occurrences
+  - post source counts: `STEP_TAGNT=137114`, `STEP_TAHOT=399746`
+  - coverage: `Job=14807`, `Psalms=34226`, `Proverbs=11501`, `Ecclesiastes=5075`, `Song of Songs=2206`
+  - H1004A / `בֵּית` collation conflict resolved by hash identity
+  - duplicate hash groups=`0`
+  - duplicate term groups=`0`
+  - duplicate occurrence groups=`0`
 
 Phase 5E did not perform:
 
 - Full STEP import.
-- Job-Sng import.
 - Isa-Mal import.
 - Full OT import.
 - OSHB import.
@@ -1344,7 +1377,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Controlled TAHOT Job-Sng requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
+Controlled TAHOT Isa-Mal requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
 ```
 
 ### Future - Read API Foundation

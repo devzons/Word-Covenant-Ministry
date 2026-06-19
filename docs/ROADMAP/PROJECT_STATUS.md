@@ -87,37 +87,37 @@ Phase 5E - Original Language Persistence Smoke Verification
 Status:
 
 ```txt
-TAHOT Jos-Est local import complete
+TAHOT Job-Sng retry local import complete
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, and controlled TAHOT Jos-Est local import
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, and controlled TAHOT Job-Sng retry import
 ```
 
 Active objective:
 
 ```txt
-Hold the original-language pipeline after the approved TAHOT Jos-Est local import until any TAHOT Job-Sng controlled import receives separate explicit approval.
+Hold the original-language pipeline after the approved TAHOT Job-Sng retry local import until any TAHOT Isa-Mal controlled import receives separate explicit approval.
 ```
 
 Next task:
 
 ```txt
-Explicit approval is required before any controlled TAHOT Job-Sng import.
+Explicit approval is required before any controlled TAHOT Isa-Mal import.
 ```
 
 Blocked items:
 
 ```txt
-Full original-language OT persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, and TAHOT Jos-Est has passed. TAHOT Job-Sng controlled import, other TAHOT files, public APIs, frontend work, and any further import execution require a separate explicit approval phase.
+Full original-language OT persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, and TAHOT Job-Sng retry has passed. TAHOT Isa-Mal controlled import, full OT import, public APIs, frontend work, and any further import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, and TAHOT Jos-Est local import are complete. Full TAGNT NT, TAHOT Gen-Deu, and TAHOT Jos-Est are imported. This does not authorize other TAHOT files, full OT import, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, and TAHOT Job-Sng retry import are complete. Full TAGNT NT, TAHOT Gen-Deu, TAHOT Jos-Est, and TAHOT Job-Sng are imported. This does not authorize Isa-Mal, full OT import, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
 ```
 
 Phase 5A source recommendation:
@@ -299,9 +299,27 @@ Phase 5C importer design analysis summary:
   - Jos-Est post counts: `14049` terms, `469045` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=331931`.
   - Jos-Est coverage: `Joshua=18058`, `Judges=17501`, `Ruth=2258`, `1 Samuel=23439`, `2 Samuel=19418`, `1 Kings=22983`, `2 Kings=21349`, `1 Chronicles=19158`, `2 Chronicles=24016`, `Ezra=6600`, `Nehemiah=9638`, `Esther=5495`.
   - Jos-Est duplicate groups=`0`.
-  - Job-Sng, Isa-Mal, full OT, public API, and frontend work have not been run.
+  - Phase 5E-L2 binary-stable original term identity implementation is complete:
+    - `term_identity_hash` added to `wcm_original_terms`.
+    - Old collation-sensitive unique `term_identity` key removed.
+    - Nonunique `term_identity_text` lookup index retained.
+    - Binary-stable SHA-256 identity is authoritative for original terms.
+  - Phase 5E-L3 term identity hash migration is complete:
+    - backup path: `/private/tmp/wcm_phase_5e_l3_pre_term_identity_hash_migration.sql`
+    - counts unchanged: `14049` terms and `469045` occurrences.
+    - `empty_hash_terms=0`.
+    - `duplicate_hash_groups=0`.
+  - Controlled `STEP_TAHOT` Job-Sng retry local import passed with `batchSize=250`.
+  - Backup path before Job-Sng retry import: `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
+  - Job-Sng retry first successful run: `rowsRead=39090`, `rowsValid=38360`, `rowsNormalized=67815`, `rowsSkipped=730`, `qere_kethiv_variant_skipped=213`, `tahot_non_base_text_type_skipped=41`, `psalm_title=476`, `termsCreated=1161`, `occurrencesCreated=67815`, `missingMorphology=3749`, `errors=0`, `failedBatches=0`, `runtime=10.6089s`, `peakMemory=61161472`.
+  - Job-Sng retry rerun was idempotent: `termsCreated=0`, `occurrencesCreated=0`, `occurrencesMatched=67815`.
+  - Job-Sng retry post counts: `15210` terms, `536860` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=399746`.
+  - Job-Sng coverage: `Job=14807`, `Psalms=34226`, `Proverbs=11501`, `Ecclesiastes=5075`, `Song of Songs=2206`.
+  - H1004A / `בֵּית` collation conflict resolved by hash identity.
+  - Duplicate hash groups=`0`; duplicate term groups=`0`; duplicate occurrence groups=`0`.
+  - Isa-Mal, full OT, public API, and frontend work have not been run.
   - Public original-language API and frontend surfaces have not been added.
-  - Controlled TAHOT Job-Sng requires separate explicit approval.
+  - Controlled TAHOT Isa-Mal requires separate explicit approval.
 
 Phase 5D full dry-run aggregate results:
 

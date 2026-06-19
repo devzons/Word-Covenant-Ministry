@@ -11,7 +11,6 @@ final class OriginalTermRepository
 {
     private const MAX_PER_PAGE = 50;
     private const DEFAULT_BATCH_SIZE = 500;
-    private const IDENTITY_DELIMITER = "\x1F";
 
     public function save(OriginalTerm $term): int
     {
@@ -19,6 +18,12 @@ final class OriginalTermRepository
 
         $tableName = $wpdb->prefix . 'wcm_original_terms';
         $now = current_time('mysql');
+        $identityHash = $this->buildIdentityHash(
+            $term->languageType,
+            $term->lemmaNormalized,
+            $term->strongsNumber,
+            $term->strongsExtended
+        );
 
         $data = [
             'language_type' => trim($term->languageType),
@@ -26,6 +31,7 @@ final class OriginalTermRepository
             'lemma_normalized' => trim($term->lemmaNormalized),
             'strongs_number' => trim($term->strongsNumber),
             'strongs_extended' => trim($term->strongsExtended),
+            'term_identity_hash' => $identityHash,
             'transliteration' => trim($term->transliteration),
             'root' => trim($term->root),
             'gloss' => $term->gloss,
@@ -33,7 +39,7 @@ final class OriginalTermRepository
             'updated_at' => $now,
         ];
 
-        $formats = ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'];
+        $formats = ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'];
 
         if ($term->id !== null) {
             $updated = $wpdb->update(
@@ -94,19 +100,19 @@ final class OriginalTermRepository
         }
 
         $tableName = $wpdb->prefix . 'wcm_original_terms';
+        $identityHash = $this->buildIdentityHash(
+            $languageType,
+            $lemmaNormalized,
+            $strongsNumber,
+            $strongsExtended
+        );
 
         $row = $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT * FROM {$tableName}
-                WHERE language_type = %s
-                AND lemma_normalized = %s
-                AND strongs_number = %s
-                AND strongs_extended = %s
+                WHERE term_identity_hash = %s
                 LIMIT 1",
-                $languageType,
-                $lemmaNormalized,
-                $strongsNumber,
-                $strongsExtended
+                $identityHash
             ),
             'ARRAY_A'
         );
@@ -165,12 +171,27 @@ final class OriginalTermRepository
         string $strongsNumber,
         string $strongsExtended
     ): string {
-        return implode(self::IDENTITY_DELIMITER, [
+        return $this->buildIdentityHash($languageType, $lemmaNormalized, $strongsNumber, $strongsExtended);
+    }
+
+    public function buildIdentityHash(
+        string $languageType,
+        string $lemmaNormalized,
+        string $strongsNumber,
+        string $strongsExtended
+    ): string {
+        $payload = '';
+
+        foreach ([
             trim($languageType),
             trim($lemmaNormalized),
             trim($strongsNumber),
             trim($strongsExtended),
-        ]);
+        ] as $field) {
+            $payload .= pack('N', strlen($field)) . $field;
+        }
+
+        return hash('sha256', $payload);
     }
 
     /**
@@ -205,17 +226,11 @@ final class OriginalTermRepository
             $values = [];
 
             foreach ($batch as $identity) {
-                $conditions[] = '(language_type = %s AND lemma_normalized = %s AND strongs_number = %s AND strongs_extended = %s)';
-                array_push(
-                    $values,
-                    $identity['language_type'],
-                    $identity['lemma_normalized'],
-                    $identity['strongs_number'],
-                    $identity['strongs_extended']
-                );
+                $conditions[] = 'term_identity_hash = %s';
+                $values[] = $identity['term_identity_hash'];
             }
 
-            $sql = "SELECT id, language_type, lemma_normalized, strongs_number, strongs_extended
+            $sql = "SELECT id, term_identity_hash
                 FROM {$tableName}
                 WHERE " . implode(' OR ', $conditions);
 
@@ -225,12 +240,7 @@ final class OriginalTermRepository
             }
 
             foreach ($rows as $row) {
-                $result[$this->buildIdentityKey(
-                    (string) $row['language_type'],
-                    (string) $row['lemma_normalized'],
-                    (string) $row['strongs_number'],
-                    (string) $row['strongs_extended']
-                )] = (int) $row['id'];
+                $result[(string) $row['term_identity_hash']] = (int) $row['id'];
             }
         }
 
@@ -316,7 +326,8 @@ final class OriginalTermRepository
      *     language_type: string,
      *     lemma_normalized: string,
      *     strongs_number: string,
-     *     strongs_extended: string
+     *     strongs_extended: string,
+     *     term_identity_hash: string
      * }>
      */
     private function normalizeIdentitySet(array $identities): array
@@ -340,6 +351,7 @@ final class OriginalTermRepository
                 'lemma_normalized' => $lemmaNormalized,
                 'strongs_number' => $strongsNumber,
                 'strongs_extended' => $strongsExtended,
+                'term_identity_hash' => $key,
             ];
         }
 

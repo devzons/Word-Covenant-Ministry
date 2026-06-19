@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace WCM\Database;
 
+use RuntimeException;
+use WCM\Scripture\Repositories\OriginalTermRepository;
+
 final class SchemaInstaller
 {
     public const DB_VERSION_OPTION = 'wcm_core_db_version';
-    public const DB_VERSION = '1.1.0';
+    public const DB_VERSION = '1.2.0';
 
     public function install(): void
     {
@@ -20,6 +23,7 @@ final class SchemaInstaller
         $charsetCollate = $wpdb->get_charset_collate();
 
         dbDelta($this->getSchemaSql($wpdb->prefix, $charsetCollate));
+        $this->migrateOriginalTermIdentityHash($wpdb->prefix . 'wcm_original_terms');
 
         update_option(self::DB_VERSION_OPTION, self::DB_VERSION);
     }
@@ -87,6 +91,7 @@ final class SchemaInstaller
                 lemma_normalized VARCHAR(255) NOT NULL,
                 strongs_number VARCHAR(50) NOT NULL DEFAULT '',
                 strongs_extended VARCHAR(100) NOT NULL DEFAULT '',
+                term_identity_hash CHAR(64) NOT NULL DEFAULT '',
                 transliteration VARCHAR(255) NOT NULL DEFAULT '',
                 root VARCHAR(255) NOT NULL DEFAULT '',
                 gloss TEXT NULL,
@@ -94,7 +99,7 @@ final class SchemaInstaller
                 created_at DATETIME NOT NULL,
                 updated_at DATETIME NOT NULL,
                 PRIMARY KEY  (id),
-                UNIQUE KEY term_identity (language_type, lemma_normalized, strongs_number, strongs_extended),
+                KEY term_identity_text (language_type, lemma_normalized, strongs_number, strongs_extended),
                 KEY language_strongs (language_type, strongs_number),
                 KEY language_extended_strongs (language_type, strongs_extended),
                 KEY language_lemma (language_type, lemma_normalized),
@@ -128,5 +133,152 @@ final class SchemaInstaller
                 KEY source_ref_lookup (source_dataset, source_ref)
             ) {$charsetCollate};",
         ];
+    }
+
+    private function migrateOriginalTermIdentityHash(string $tableName): void
+    {
+        global $wpdb;
+
+        if (! $this->tableExists($tableName)) {
+            return;
+        }
+
+        if (! $this->columnExists($tableName, 'term_identity_hash')) {
+            $added = $wpdb->query("ALTER TABLE {$tableName} ADD term_identity_hash CHAR(64) NOT NULL DEFAULT '' AFTER strongs_extended");
+            if ($added === false) {
+                throw new RuntimeException('Failed to add original term identity hash column.');
+            }
+        }
+
+        $this->backfillOriginalTermIdentityHashes($tableName);
+        $this->assertNoDuplicateOriginalTermIdentityHashes($tableName);
+
+        if (! $this->indexExists($tableName, 'term_identity_hash')) {
+            $created = $wpdb->query("ALTER TABLE {$tableName} ADD UNIQUE KEY term_identity_hash (term_identity_hash)");
+            if ($created === false) {
+                throw new RuntimeException('Failed to add original term identity hash unique key.');
+            }
+        }
+
+        if ($this->uniqueIndexExists($tableName, 'term_identity')) {
+            $dropped = $wpdb->query("ALTER TABLE {$tableName} DROP INDEX term_identity");
+            if ($dropped === false) {
+                throw new RuntimeException('Failed to drop collation-sensitive original term identity unique key.');
+            }
+        }
+    }
+
+    private function backfillOriginalTermIdentityHashes(string $tableName): void
+    {
+        global $wpdb;
+
+        $repository = new OriginalTermRepository();
+
+        do {
+            $rows = $wpdb->get_results(
+                "SELECT id, language_type, lemma_normalized, strongs_number, strongs_extended
+                FROM {$tableName}
+                WHERE term_identity_hash = ''
+                ORDER BY id ASC
+                LIMIT 500",
+                'ARRAY_A'
+            );
+
+            if (! is_array($rows)) {
+                throw new RuntimeException('Failed to read original terms for identity hash backfill.');
+            }
+
+            foreach ($rows as $row) {
+                $hash = $repository->buildIdentityHash(
+                    (string) $row['language_type'],
+                    (string) $row['lemma_normalized'],
+                    (string) $row['strongs_number'],
+                    (string) $row['strongs_extended']
+                );
+
+                $updated = $wpdb->update(
+                    $tableName,
+                    ['term_identity_hash' => $hash],
+                    ['id' => (int) $row['id']],
+                    ['%s'],
+                    ['%d']
+                );
+
+                if ($updated === false) {
+                    throw new RuntimeException('Failed to backfill original term identity hash for term ID ' . (int) $row['id'] . '.');
+                }
+            }
+        } while ($rows !== []);
+    }
+
+    private function assertNoDuplicateOriginalTermIdentityHashes(string $tableName): void
+    {
+        global $wpdb;
+
+        $duplicateHash = $wpdb->get_var(
+            "SELECT term_identity_hash
+            FROM {$tableName}
+            WHERE term_identity_hash <> ''
+            GROUP BY term_identity_hash
+            HAVING COUNT(*) > 1
+            LIMIT 1"
+        );
+
+        if (is_string($duplicateHash) && $duplicateHash !== '') {
+            throw new RuntimeException('Duplicate original term identity hash detected: ' . $duplicateHash);
+        }
+    }
+
+    private function tableExists(string $tableName): bool
+    {
+        global $wpdb;
+
+        return $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tableName)) === $tableName;
+    }
+
+    private function columnExists(string $tableName, string $columnName): bool
+    {
+        global $wpdb;
+
+        return $wpdb->get_var(
+            $wpdb->prepare("SHOW COLUMNS FROM {$tableName} LIKE %s", $columnName)
+        ) === $columnName;
+    }
+
+    private function indexExists(string $tableName, string $indexName): bool
+    {
+        foreach ($this->getIndexes($tableName) as $row) {
+            if ((string) ($row['Key_name'] ?? '') === $indexName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function uniqueIndexExists(string $tableName, string $indexName): bool
+    {
+        foreach ($this->getIndexes($tableName) as $row) {
+            if (
+                (string) ($row['Key_name'] ?? '') === $indexName
+                && (string) ($row['Non_unique'] ?? '1') === '0'
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getIndexes(string $tableName): array
+    {
+        global $wpdb;
+
+        $rows = $wpdb->get_results("SHOW INDEX FROM {$tableName}", 'ARRAY_A');
+
+        return is_array($rows) ? $rows : [];
     }
 }

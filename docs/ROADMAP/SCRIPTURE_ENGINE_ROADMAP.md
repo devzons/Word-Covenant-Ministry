@@ -78,11 +78,11 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: TAHOT Jos-Est Local Import Complete
+Status: TAHOT Job-Sng Retry Local Import Complete
 
 Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
 
-Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, and controlled `STEP_TAHOT` Jos-Est local import. Full TAGNT NT, TAHOT Gen-Deu, and TAHOT Jos-Est are imported. The project must still not proceed to other TAHOT files, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
+Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, and controlled `STEP_TAHOT` Job-Sng retry local import. Full TAGNT NT, TAHOT Gen-Deu, TAHOT Jos-Est, and TAHOT Job-Sng are imported. The project must still not proceed to Isa-Mal, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
 
 Subphases:
 
@@ -378,59 +378,65 @@ Deuteronomy=25772
 duplicate groups=0
 ```
 
-Phase 5E controlled TAHOT Jos-Est import summary:
+Phase 5E controlled TAHOT Job-Sng retry summary:
 
 ```txt
-Backup path: /private/tmp/wcm_phase_5e_k_pre_tahot_jos_est_full.sql
+Term identity hash migration:
+term_identity_hash added to wcm_original_terms
+old collation-sensitive unique term_identity key removed
+nonunique term_identity_text lookup index retained
+binary-stable SHA-256 identity authoritative
+migration backup: /private/tmp/wcm_phase_5e_l3_pre_term_identity_hash_migration.sql
+migration terms=14049 unchanged
+migration occurrences=469045 unchanged
+empty_hash_terms=0
+duplicate_hash_groups=0
+
+Backup path: /private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql
 sourceDataset=STEP_TAHOT
 batchSize=250
 
 First successful run:
-rowsRead=107259
-rowsValid=106536
-rowsNormalized=189960
-rowsSkipped=723
-qere_kethiv_variant_skipped=512
-tahot_non_base_text_type_skipped=211
-termsCreated=4465
-occurrencesCreated=189913
-occurrencesSkipped=47
-duplicateOccurrences=47 warning-level skips
-missingMorphology=8658
+rowsRead=39090
+rowsValid=38360
+rowsNormalized=67815
+rowsSkipped=730
+qere_kethiv_variant_skipped=213
+tahot_non_base_text_type_skipped=41
+psalm_title=476
+termsCreated=1161
+occurrencesCreated=67815
+missingMorphology=3749
 errors=0
 failedBatches=0
-runtime=30.4797s
-peakMemory=58523648
+runtime=10.6089s
+peakMemory=61161472
 
 Rerun idempotency:
 termsCreated=0
 occurrencesCreated=0
-occurrencesMatched=189913
+occurrencesMatched=67815
 
 Post counts:
-terms=14049
-occurrences=469045
+terms=15210
+occurrences=536860
 STEP_TAGNT=137114
-STEP_TAHOT=331931
+STEP_TAHOT=399746
 
 Coverage:
-Joshua=18058
-Judges=17501
-Ruth=2258
-1 Samuel=23439
-2 Samuel=19418
-1 Kings=22983
-2 Kings=21349
-1 Chronicles=19158
-2 Chronicles=24016
-Ezra=6600
-Nehemiah=9638
-Esther=5495
+Job=14807
+Psalms=34226
+Proverbs=11501
+Ecclesiastes=5075
+Song of Songs=2206
 
-duplicate groups=0
+H1004A / בֵּית collation conflict resolved by hash identity
+duplicate hash groups=0
+duplicate term groups=0
+duplicate occurrence groups=0
 ```
 
-Job-Sng, Isa-Mal, full OT, public original-language API, and frontend surfaces have not been run. Controlled TAHOT Job-Sng requires separate explicit approval.
+Isa-Mal, full OT, public original-language API, and frontend surfaces have not been run. Controlled TAHOT Isa-Mal requires separate explicit approval.
 
 Phase 5A entry requirements:
 
