@@ -15,13 +15,13 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 7I - Original Language Reader MVP QA
 ```
 
 Next major phase:
 
 ```txt
-Frontend original-language reader implementation after explicit approval
+Manual desktop/mobile browser QA, then Word Study Term panel or UX polish after explicit approval
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -42,7 +42,7 @@ The approved binary-stable original term identity implementation and migration a
 
 The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
 
-The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`. Phase 7A documents the Original Language Reader UI planning direction. This does not approve frontend implementation, write/import endpoints, or additional source imports.
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. This does not approve write/import endpoints, additional source imports, raw source export, occurrence dumps, distribution charts, dedicated Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, or interpretation/pictographic/gematria APIs.
 
 ## Phase 6A Original Language Read API
 
@@ -148,7 +148,7 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 7I - Original Language Reader MVP QA
 ```
 
 ## Phase 6B Word Study API
@@ -315,7 +315,7 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 7I - Original Language Reader MVP QA
 ```
 
 ## Phase 7A Original Language Reader UI Planning
@@ -323,7 +323,7 @@ Phase 7A - Original Language Reader UI Planning
 Status:
 
 ```txt
-Documentation only; frontend implementation not started
+Complete in commit e429cd0; superseded by Phase 7B through Phase 7H implementation
 ```
 
 UI direction:
@@ -381,12 +381,12 @@ Routing strategy:
 
 Implementation order after explicit approval:
 
-1. Frontend original-language types/API client.
-2. Reader mode URL state.
-3. Per-verse interlinear fetch.
-4. Token click panel.
-5. Strong overview panel.
-6. Term detail panel.
+1. Frontend original-language types/API client. Complete.
+2. Reader mode URL state. Complete.
+3. Per-verse interlinear fetch. Complete.
+4. Token click panel. Complete.
+5. Strong overview panel. Complete as MVP Strong Study Panel.
+6. Term detail panel. Deferred.
 
 Explicit exclusions:
 
@@ -394,6 +394,63 @@ Explicit exclusions:
 - No pictographic/gematria UI.
 - No full chapter interlinear prefetch.
 - No frontend pages for Strong or Word Study unless separately approved.
+
+## Phase 7B-7I Original Language Reader MVP
+
+Status:
+
+```txt
+Phase 7B through Phase 7H limited frontend implementation is complete. Phase 7I route/API smoke QA is documented; manual desktop/mobile browser QA remains required.
+```
+
+Implemented MVP features:
+
+- Shared frontend original-language TypeScript contracts.
+- Original Language, Word Study, and high-level Interlinear API client methods.
+- Reader mode control with `reader`, `original`, and `interlinear` query state.
+- Original mode expandable per-verse original-language previews.
+- Interlinear mode selected-verse high-level interlinear view.
+- Original word panel opened by token click.
+- Strong study panel opened from the original word panel.
+- Lazy per-verse API loading and component-level caching.
+- OT source routing to `STEP_TAHOT`.
+- NT source routing to `STEP_TAGNT`.
+
+Validation completed:
+
+- `npm run typecheck`.
+- `npm run lint`.
+- `git diff --check`.
+- Frontend route smoke checks for reader, original, and interlinear modes returned `200`.
+- Read-only API smoke checks for original-language verse, high-level interlinear verse, and Strong study returned `200`.
+
+QA limitation:
+
+```txt
+Automated browser click-through for desktop and mobile was not completed because the in-app browser Node REPL tool was unavailable and no local Playwright/Puppeteer package is installed.
+```
+
+Manual QA still required:
+
+- Desktop reader, original, and interlinear click-through.
+- Mobile reader, original, and interlinear click-through.
+- Console error inspection.
+- Browser network failed-request inspection.
+- Loading and empty state visual checks.
+- Token click behavior.
+- Strong click behavior.
+- Original word panel open/close behavior.
+- Strong study panel back/close behavior.
+- Route/query persistence.
+
+Deferred features:
+
+- Word Study Term panel.
+- Occurrence distribution UI.
+- Strong detail pages.
+- Dedicated Word Study pages.
+- Advanced search.
+- Morphology explorer.
 
 ## Phase 5 Breakdown
 
@@ -1751,7 +1808,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Original Language Read API, Word Study API, and high-level Interlinear API are complete. Phase 7A Original Language Reader UI planning is documented. Frontend implementation requires separate explicit approval.
+Original Language Read API, Word Study API, high-level Interlinear API, and limited Original Language Reader MVP frontend implementation are complete. Manual desktop/mobile browser QA remains the next gate before expanding the Word Study UI.
 ```
 
 ### Future - Read API Foundation
@@ -1868,10 +1925,13 @@ Frontend clients must request only the needed verse, passage, term, or paginated
 
 Phase 5A through Phase 5D are data and API foundation phases.
 
-Later UI phases may include:
+Later UI expansion phases may include:
 
-- Interlinear UI
-- Word Study UI
-- Strong's lookup UI
+- Word Study Term panel
+- Occurrence distribution UI
+- Strong detail pages
+- Dedicated Word Study pages
+- Advanced search
+- Morphology explorer
 - Cross Reference UI
 - Commentary Layer

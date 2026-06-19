@@ -81,43 +81,43 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 7I - Original Language Reader MVP QA
 ```
 
 Status:
 
 ```txt
-Phase 7A planning documented; frontend implementation not started
+Phase 7B through Phase 7H frontend implementation is complete. Phase 7I route/API smoke QA is documented; manual desktop/mobile browser QA remains required.
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, controlled TAHOT Isa-Mal import, Phase 6A Original Language Read API, Phase 6B Word Study API, and Phase 6C high-level Interlinear API
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, controlled TAHOT Isa-Mal import, Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A Original Language Reader UI Planning, Phase 7B frontend original-language types, Phase 7C frontend original-language API client, Phase 7D Reader Mode Control, Phase 7E Verse Original Language Preview, Phase 7F Interlinear Verse View, Phase 7G Original Word Panel, and Phase 7H Strong Study Panel
 ```
 
 Active objective:
 
 ```txt
-Document original-language reader UI direction before frontend implementation.
+Validate and document the Original Language Reader MVP.
 ```
 
 Next task:
 
 ```txt
-After explicit approval, implement original-language reader UI integration.
+Complete manual browser click-through QA for desktop and mobile, then decide whether to proceed to Word Study Term panel or UX polish.
 ```
 
 Blocked items:
 
 ```txt
-Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Phase 6C high-level Interlinear API implementation is complete. Phase 7A documents frontend UI planning only. Frontend implementation, write/import endpoints, and any further source import execution require a separate explicit approval phase.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Phase 6C high-level Interlinear API implementation is complete. Phase 7A planning and Phase 7B through Phase 7H limited frontend implementation are complete. Write/import endpoints, additional source imports, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, and morphology explorer require separate approval.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, and Phase 6C high-level Interlinear API are complete. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize frontend surfaces, write/import endpoints, raw source export, variant UI, or interpretation/pictographic/gematria APIs.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, and Phase 7B through Phase 7H limited frontend reader implementation are complete. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize write/import endpoints, raw source export, variant UI, occurrence dumps, distribution charts, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, or interpretation/pictographic/gematria APIs.
 ```
 
 Phase 5A source recommendation:
@@ -409,7 +409,7 @@ Phase 7A - Original Language Reader UI Planning
 Status:
 
 ```txt
-Documentation only; frontend implementation not started
+Complete in commit e429cd0; superseded by Phase 7B through Phase 7H implementation
 ```
 
 UI direction:
@@ -458,6 +458,76 @@ Proposed components:
 - `InterlinearVerse`
 - `InterlinearToken`
 - `OriginalWordPanel`
+
+## Phase 7B-7H Original Language Reader MVP
+
+Status:
+
+```txt
+Limited frontend MVP implemented
+```
+
+Completed commits:
+
+- `e800df2` - frontend original-language types.
+- `c0e805d` - frontend original-language API client.
+- `b14ce63` - reader mode control and `?mode=` URL state.
+- `a5e4c03` - verse original-language preview.
+- `da2e719` - interlinear selected-verse view.
+- `f5e6f0e` - original word panel.
+- `dbd63c2` - Strong study panel.
+
+MVP features completed:
+
+- Reader mode remains the default.
+- Reader mode URL state supports `?mode=reader`, `?mode=original`, and `?mode=interlinear`.
+- Reader route preserves locale, version, book, chapter, and mode during chapter/reference navigation.
+- Original mode lazily fetches one verse at a time through `GET /wp-json/wcm/v1/original-language/{source}/{book}/{chapter}/{verse}`.
+- Interlinear mode lazily fetches only the selected verse through `GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}`.
+- OT source selection uses `STEP_TAHOT`.
+- NT source selection uses `STEP_TAGNT`.
+- Original word panel opens from original preview and interlinear tokens.
+- Strong study panel opens from the Strong's number inside the original word panel through `GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}`.
+- No frontend bundling of Bible or original-language datasets.
+
+Phase 7I validation status:
+
+- `npm run typecheck` passed.
+- `npm run lint` passed.
+- `git diff --check` passed before documentation edits.
+- Local frontend route smoke checks returned `200`:
+  - `/en/bible/KRV/genesis/1?mode=reader`
+  - `/en/bible/KRV/genesis/1?mode=original`
+  - `/en/bible/KRV/genesis/1?mode=interlinear`
+  - `/en/bible/KRV/matthew/1?mode=interlinear`
+- Read-only API smoke checks returned `200`:
+  - `STEP_TAHOT` Genesis 1:1 original-language verse returned `12` occurrences.
+  - `STEP_TAHOT` Genesis 1:1 interlinear verse returned `12` tokens.
+  - `STEP_TAGNT` Matthew 1:1 interlinear verse returned `8` tokens.
+  - `H7225` Strong study returned `2` grouped terms and `51` occurrences.
+
+QA limitation:
+
+```txt
+Automated desktop/mobile browser click-through was not completed in this environment because the in-app browser Node REPL tool was unavailable and no local Playwright/Puppeteer package is installed. Console error verification, panel open/close visual verification, loading-state timing, mobile bottom-sheet behavior, and token/Strong click behavior still need manual browser QA.
+```
+
+Known limitations:
+
+- Original and interlinear data fetches are client-side and currently rely on the local API host being reachable.
+- Original preview, interlinear view, original word panel, and Strong study panel are MVP surfaces only.
+- Strong study panel shows grouped terms and summary counts, but no charts or occurrence drilldown.
+- Empty/error states exist, but they need manual browser verification.
+- Mobile and desktop responsive behavior needs a final human browser pass.
+
+Deferred features:
+
+- Word Study Term panel.
+- Occurrence distribution UI.
+- Strong detail pages.
+- Dedicated Word Study pages.
+- Advanced search.
+- Morphology explorer.
 - `StrongOverviewPanel`
 - `WordStudyPanel`
 

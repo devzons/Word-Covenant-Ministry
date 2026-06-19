@@ -24,6 +24,7 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - Verse Anchor Navigation implemented.
 - Active Verse Highlight implemented.
 - Chapter Boundary Navigation implemented.
+- Original Language Reader MVP implemented through Phase 7H.
 
 ## Phase Status
 
@@ -174,10 +175,10 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 7I - Original Language Reader MVP QA
 ```
 
-OSHB, SBLGNT, frontend UI implementation, and Strong's page work remain out of scope until explicitly approved.
+OSHB, SBLGNT, write/import endpoints, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, and morphology explorer remain out of scope until explicitly approved.
 
 ### Phase 6A - Original Language Read API
 
@@ -283,7 +284,7 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 7I - Original Language Reader MVP QA
 ```
 
 Next gate after separate approval:
@@ -467,7 +468,7 @@ Phase 7A - Original Language Reader UI Planning
 Status:
 
 ```txt
-Documentation only; frontend implementation not started
+Complete in commit e429cd0; superseded by Phase 7B through Phase 7H implementation
 ```
 
 UI direction:
@@ -525,12 +526,12 @@ Routing strategy:
 
 Implementation order after explicit approval:
 
-1. Frontend original-language types/API client.
-2. Reader mode URL state.
-3. Per-verse interlinear fetch.
-4. Token click panel.
-5. Strong overview panel.
-6. Term detail panel.
+1. Frontend original-language types/API client. Complete.
+2. Reader mode URL state. Complete.
+3. Per-verse interlinear fetch. Complete.
+4. Token click panel. Complete.
+5. Strong overview panel. Complete as MVP Strong Study Panel.
+6. Term detail panel. Deferred.
 
 Explicit exclusions:
 
@@ -538,6 +539,68 @@ Explicit exclusions:
 - No pictographic/gematria UI.
 - No full chapter interlinear prefetch.
 - No frontend pages for Strong or Word Study unless separately approved.
+
+### Phase 7B-7H - Original Language Reader MVP
+
+Status:
+
+```txt
+Limited frontend MVP implemented
+```
+
+Completed:
+
+- `frontend/src/types/original-language.ts`.
+- `frontend/src/lib/api/original-language.ts`.
+- `ReaderModeControl` with `?mode=reader`, `?mode=original`, and `?mode=interlinear`.
+- `VerseOriginalLanguagePreview` for lazy per-verse original-language previews.
+- `InterlinearVerse` for selected-verse high-level interlinear display.
+- `OriginalWordPanel` for token details.
+- `StrongStudyPanel` for Strong overview summaries and grouped terms.
+
+Performance guardrails:
+
+- Reader mode fetches normal chapter data only.
+- Original mode fetches original-language data per expanded verse.
+- Interlinear mode fetches only the selected verse.
+- No whole-chapter interlinear or original-language prefetch.
+- No frontend dataset bundling.
+
+### Phase 7I - Original Language Reader MVP QA
+
+Status:
+
+```txt
+Validation and documentation update in progress
+```
+
+Route/API smoke QA completed:
+
+- Reader, original, and interlinear frontend route requests returned `200`.
+- Genesis 1:1 original-language API returned `12` occurrences.
+- Genesis 1:1 high-level interlinear API returned `12` tokens.
+- Matthew 1:1 high-level interlinear API returned `8` tokens.
+- `H7225` Word Study Strong API returned grouped terms and summary counts.
+
+Validation completed:
+
+- `npm run typecheck`.
+- `npm run lint`.
+- `git diff --check`.
+
+QA limitation:
+
+- Automated desktop/mobile browser click-through was not completed because the in-app browser Node REPL tool was unavailable and no local Playwright/Puppeteer package is installed.
+- Console error verification, failed-request inspection from browser devtools, panel open/close visual checks, mobile bottom-sheet behavior, loading-state timing, token click behavior, Strong click behavior, and route/query persistence still need manual browser QA.
+
+Deferred features:
+
+- Word Study Term panel.
+- Occurrence distribution UI.
+- Strong detail pages.
+- Dedicated Word Study pages.
+- Advanced search.
+- Morphology explorer.
 
 Phase 5E local write smoke summary:
 
@@ -838,7 +901,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-The read-only Original Language API, Word Study API, and high-level Interlinear API are complete. Phase 7A Original Language Reader UI planning is documented. Frontend implementation requires separate explicit approval.
+The read-only Original Language API, Word Study API, high-level Interlinear API, and limited Original Language Reader MVP frontend implementation are complete. Manual desktop/mobile browser QA remains the next gate before expanding Word Study UI.
 
 Phase 5A entry requirements:
 
@@ -1077,19 +1140,15 @@ ADR-0009 mentions `FULLTEXT KEY text_search (text)`, but the current `SchemaInst
 
 ## Future Scripture Engine Work
 
-Future milestones after Reader UX Polish:
+Future milestones after Original Language Reader MVP QA:
 
-- Phase 5A - Source and Schema Analysis.
-- Verify OSHB/SBLGNT or other source license/provenance.
-- Define original language schema gap against ADR-0010.
-- Draft original language schema implementation plan.
-- Phase 5B - Original Language Schema Foundation.
-- Phase 5C - Import Foundation.
-- Phase 5D - Dry-run Pipeline.
-- Phase 5E - Persistence Smoke Verification.
-- Future - Read API Foundation.
-- Later: Interlinear UI.
-- Later: Word Study UI.
+- Manual desktop/mobile browser QA for the Original Language Reader MVP.
+- Word Study Term panel.
+- Occurrence distribution UI.
+- Strong detail pages.
+- Dedicated Word Study pages.
+- Advanced search.
+- Morphology explorer.
 - Later: Cross References.
 - Later: Commentary Layer.
 

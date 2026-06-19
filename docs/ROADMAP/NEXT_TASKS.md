@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documents the Original Language Reader UI planning direction. Explicit approval is still required before frontend implementation, write/import endpoints, or any further source import execution.
+Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, and Phase 6C high-level Interlinear API are complete. Phase 7A planning keeps the normal reader as the default and adds original-language depth only when the user opts in.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, and Phase 7B through Phase 7H frontend MVP implementation are complete. Phase 7I route/API smoke QA passed, but manual desktop/mobile browser click-through remains required because browser automation was unavailable in the validation environment.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,14 +16,16 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Complete Phase 7A Original Language Reader UI planning documentation.
-2. After explicit approval, implement frontend original-language types and API client work.
-3. After explicit approval, add reader mode URL state for `reader`, `original`, and `interlinear`.
-4. After explicit approval, add per-verse interlinear fetch behavior without whole-chapter interlinear prefetch.
-5. After explicit approval, add token click panels for desktop and mobile.
-6. Later: Strong's pages.
-7. Later: Cross References.
-8. Later: Commentary Layer.
+1. Complete manual desktop/mobile browser click-through QA for Reader mode, Original mode, Interlinear mode, Original Word Panel, and Strong Study Panel.
+2. Fix any UI, loading-state, panel, route/query, or console issues found during manual QA.
+3. After explicit approval, implement Word Study Term panel.
+4. Later: occurrence distribution UI.
+5. Later: Strong detail pages.
+6. Later: dedicated Word Study pages.
+7. Later: advanced search.
+8. Later: morphology explorer.
+9. Later: Cross References.
+10. Later: Commentary Layer.
 
 ## Phase 5E Smoke Status
 
@@ -188,9 +190,10 @@ Completed local write-smoke status:
 - Phase 6A-3 added the read-only Original Language REST API in commit `d8947cc`.
 - Phase 6B added the read-only Word Study API in commit `510fc63`.
 - Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`.
-- Public original-language frontend surfaces have not been added.
-- Next planning candidate: frontend integration and original language reader UI.
-- Later phase candidates: richer Interlinear API/UI, Strong's pages, and original-language frontend surfaces.
+- Phase 7A documented Original Language Reader UI planning in commit `e429cd0`.
+- Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP.
+- Next QA candidate: manual desktop/mobile click-through for reader, original, interlinear, original word panel, and Strong study panel.
+- Later phase candidates: Word Study Term panel, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, and morphology explorer.
 
 ## Phase 6A Original Language Read API
 
@@ -287,8 +290,8 @@ term occurrences => success
 
 Next gate:
 
-1. Frontend original-language reader implementation requires explicit approval.
-2. Strong's or Word Study frontend pages require separate explicit approval.
+1. Original Language Reader MVP manual browser QA.
+2. Word Study Term panel, occurrence distribution UI, Strong detail pages, and dedicated Word Study pages require separate explicit approval.
 
 ## Phase 6B Word Study API
 
@@ -456,7 +459,7 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 7I - Original Language Reader MVP QA
 ```
 
 ## Phase 7A Original Language Reader UI Planning
@@ -464,7 +467,7 @@ Phase 7A - Original Language Reader UI Planning
 Status:
 
 ```txt
-Documentation only; frontend implementation not started
+Phase 7A planning is complete. Phase 7B through Phase 7H limited frontend implementation is complete. Phase 7I manual browser QA remains.
 ```
 
 UI direction:
@@ -865,10 +868,12 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 - Do not run SBLGNT import.
 - Do not download, import, or transform STEP Bible, OSHB, SBLGNT, MorphGNT, OpenGNT, or other original-language datasets yet.
 - Do not run additional write-enabled original-language import execution until the next controlled import step is separately approved.
-- Do not create public original-language APIs yet.
+- Do not create write/import original-language APIs yet.
 - Do not create a generic search engine.
-- Do not build Interlinear UI yet.
-- Do not build a Strong's page yet.
-- Do not build Word Study UI yet.
+- Do not build occurrence distribution UI yet.
+- Do not build Strong detail pages yet.
+- Do not build dedicated Word Study pages yet.
+- Do not build advanced search yet.
+- Do not build morphology explorer yet.
 - Do not implement cross references or commentary.
 - Do not bundle full Bible or original-language datasets into the frontend.
