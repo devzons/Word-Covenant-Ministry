@@ -12,5 +12,6 @@ final class ApiRegistrar
         (new BibleSearchController())->registerRoutes();
         (new OriginalLanguageController())->registerRoutes();
         (new WordStudyController())->registerRoutes();
+        (new InterlinearController())->registerRoutes();
     }
 }
