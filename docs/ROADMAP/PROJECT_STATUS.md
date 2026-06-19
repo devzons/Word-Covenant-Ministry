@@ -81,43 +81,43 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 6B-1 - Word Study API Contract Documentation
+Phase 6C-1 - Interlinear API Contract Documentation
 ```
 
 Status:
 
 ```txt
-Word Study API contract documented; implementation not started
+Word Study API completed; Interlinear API contract documentation in progress
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, controlled TAHOT Isa-Mal import, Phase 6A-1 API contract documentation, Phase 6A-2 repository read methods, and Phase 6A-3 Original Language Read API
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, controlled TAHOT Isa-Mal import, Phase 6A Original Language Read API, and Phase 6B Word Study API
 ```
 
 Active objective:
 
 ```txt
-Document the Phase 6B Word Study API contract before implementation.
+Document the Phase 6C high-level Interlinear API contract before implementation.
 ```
 
 Next task:
 
 ```txt
-After explicit implementation approval, add the Phase 6B read-only Word Study API.
+After explicit implementation approval, add the Phase 6C read-only high-level Interlinear API.
 ```
 
 Blocked items:
 
 ```txt
-Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B-1 documents the Word Study API contract only. Frontend work, write/import endpoints, Word Study API implementation, and any further source import execution require a separate explicit approval phase.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Frontend work, write/import endpoints, Phase 6C Interlinear API implementation, and any further source import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 documented the read-only API contract, Phase 6A-2 added repository read methods, and Phase 6A-3 added the read-only REST API. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize frontend surfaces, write/import endpoints, raw source export, variant UI, or interpretation/pictographic/gematria APIs.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API and Phase 6B Word Study API are complete. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize frontend surfaces, write/import endpoints, raw source export, variant UI, or interpretation/pictographic/gematria APIs.
 ```
 
 Phase 5A source recommendation:
@@ -215,7 +215,7 @@ unapproved variant internals
 
 Implementation order after separate approval:
 
-1. Word Study API implementation requires explicit approval.
+1. High-level Interlinear API implementation requires explicit approval.
 2. No frontend until API contracts are stable and explicitly approved.
 
 Phase 6A-3 validation:
@@ -237,12 +237,12 @@ Security validation:
 - No import routes.
 - No raw source JSON.
 
-## Phase 6B-1 Word Study API Contract
+## Phase 6B Word Study API
 
 Status:
 
 ```txt
-Documentation only; implementation not started
+Phase 6B completed in commit 510fc63: feat(scripture): add word study API
 ```
 
 Current corpus state:
@@ -254,7 +254,7 @@ STEP_TAGNT=137114
 STEP_TAHOT=536149
 ```
 
-Approved contract scope:
+Completed read-only scope:
 
 - Read-only.
 - Data-driven only.
@@ -264,12 +264,19 @@ Approved contract scope:
 - No raw source JSON.
 - No frontend.
 
-Contracted endpoints:
+Implemented endpoints:
 
 ```txt
-GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
-GET /wp-json/wcm/v1/word-study/terms/{term_id}
-GET /wp-json/wcm/v1/word-study/terms/{term_id}/distribution
+GET /word-study/strongs/{strongs_number}
+GET /word-study/terms/{term_id}
+GET /word-study/terms/{term_id}/distribution
+```
+
+Validation:
+
+```txt
+H1004 => 14 terms, 2041 occurrences
+G2424 => 5 terms, 901 occurrences
 ```
 
 Deferred endpoints:
@@ -317,13 +324,70 @@ Pagination rules:
 - Maximum `per_page=100`.
 - Negative `page` or `per_page` values return `400 invalid_pagination`.
 
+Security validation:
+
+- Read-only routes only.
+- No raw source JSON.
+- No import diagnostics.
+- No theological interpretation fields.
+- No pictographic or gematria fields.
+
+## Phase 6C Interlinear API Contract
+
+Status:
+
+```txt
+Documentation only; implementation not started
+```
+
+Canonical high-level endpoint:
+
+```txt
+GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Existing lower-level endpoint remains available as token-only:
+
+```txt
+GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Response purpose:
+
+- Combine canonical Bible verse text with original-language tokens.
+- Preserve token order by `word_order` and `subword_order`.
+- Include term data, Strong's base and extended values, morphology, transliteration, and gloss.
+
+Source rules:
+
+- Accept `STEP_TAGNT`, `step_tagnt`, and `tagnt` aliases.
+- Accept `STEP_TAHOT`, `step_tahot`, and `tahot` aliases.
+- Normalize internally to canonical `source_dataset` values.
+
+Safety constraints:
+
+- Read-only.
+- No raw source JSON.
+- No import diagnostics.
+- No interpretation.
+- No pictographic or gematria API fields.
+- No frontend in this phase.
+
 Implementation order after separate approval:
 
-1. Repository aggregate methods.
-2. `WordStudyService`.
-3. `WordStudyController`.
-4. `ApiRegistrar` route registration.
-5. REST smoke tests.
+1. `InterlinearService`.
+2. `InterlinearController`.
+3. `ApiRegistrar` route registration.
+4. REST smoke checks.
+
+Planned smoke checks:
+
+```txt
+STEP_TAGNT/matthew/1/1
+STEP_TAHOT/genesis/1/1
+STEP_TAHOT/psalms/119/1
+STEP_TAHOT/esther/8/9
+```
 
 ## Phase 5 Entry Criteria
 

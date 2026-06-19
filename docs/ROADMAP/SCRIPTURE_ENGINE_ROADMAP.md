@@ -174,10 +174,10 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 6B-1 - Word Study API Contract Documentation
+Phase 6C-1 - Interlinear API Contract Documentation
 ```
 
-OSHB, SBLGNT, frontend UI, additional Interlinear API/UI, Strong's page, and Word Study work remain out of scope until explicitly approved.
+OSHB, SBLGNT, frontend UI, additional Interlinear API implementation/UI, and Strong's page work remain out of scope until explicitly approved.
 
 ### Phase 6A - Original Language Read API
 
@@ -283,20 +283,20 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 6B-1 - Word Study API Contract Documentation
+Phase 6C-1 - Interlinear API Contract Documentation
 ```
 
 Implementation order after separate approval:
 
-1. Word Study API implementation requires explicit approval.
+1. High-level Interlinear API implementation requires explicit approval.
 2. Keep frontend blocked until API contracts are stable and explicitly approved.
 
-### Phase 6B-1 - Word Study API Contract
+### Phase 6B - Word Study API
 
 Status:
 
 ```txt
-Documentation only; implementation not started
+Phase 6B completed in commit 510fc63: feat(scripture): add word study API
 ```
 
 Current corpus state:
@@ -308,7 +308,7 @@ STEP_TAGNT=137114
 STEP_TAHOT=536149
 ```
 
-Approved contract scope:
+Completed read-only scope:
 
 - Read-only.
 - Data-driven only.
@@ -318,12 +318,19 @@ Approved contract scope:
 - No raw source JSON.
 - No frontend.
 
-Endpoint contract:
+Implemented endpoints:
 
 ```txt
 GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
 GET /wp-json/wcm/v1/word-study/terms/{term_id}
 GET /wp-json/wcm/v1/word-study/terms/{term_id}/distribution
+```
+
+Validation:
+
+```txt
+H1004 => 14 terms, 2041 occurrences
+G2424 => 5 terms, 901 occurrences
 ```
 
 Deferred endpoints:
@@ -375,13 +382,70 @@ Pagination rules:
 - Maximum `per_page=100`.
 - Negative `page` or `per_page` values return `400 invalid_pagination`.
 
+Security validation:
+
+- Read-only routes only.
+- No raw source JSON.
+- No import diagnostics.
+- No theological interpretation fields.
+- No pictographic or gematria fields.
+
+### Phase 6C - Interlinear API Contract
+
+Status:
+
+```txt
+Documentation only; implementation not started
+```
+
+Canonical high-level endpoint:
+
+```txt
+GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Existing lower-level endpoint remains available as token-only:
+
+```txt
+GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Response purpose:
+
+- Combine canonical Bible verse text with original-language tokens.
+- Preserve token order by `word_order` and `subword_order`.
+- Include term data, Strong's base and extended values, morphology, transliteration, and gloss.
+
+Source rules:
+
+- Accept `STEP_TAGNT`, `step_tagnt`, and `tagnt` aliases.
+- Accept `STEP_TAHOT`, `step_tahot`, and `tahot` aliases.
+- Normalize internally to canonical `source_dataset` values.
+
+Safety constraints:
+
+- Read-only.
+- No raw source JSON.
+- No import diagnostics.
+- No interpretation.
+- No pictographic or gematria API fields.
+- No frontend in this phase.
+
 Implementation order after explicit approval:
 
-1. Repository aggregate methods.
-2. `WordStudyService`.
-3. `WordStudyController`.
-4. `ApiRegistrar` route registration.
-5. REST smoke tests.
+1. `InterlinearService`.
+2. `InterlinearController`.
+3. `ApiRegistrar` route registration.
+4. REST smoke checks.
+
+Planned smoke checks:
+
+```txt
+STEP_TAGNT/matthew/1/1
+STEP_TAHOT/genesis/1/1
+STEP_TAHOT/psalms/119/1
+STEP_TAHOT/esther/8/9
+```
 
 Phase 5E local write smoke summary:
 
@@ -682,7 +746,7 @@ duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-The read-only Original Language API is complete. Frontend surfaces have not been run. Word Study API and additional Interlinear API work require separate explicit approval.
+The read-only Original Language API and Word Study API are complete. Frontend surfaces have not been run. Phase 6C Interlinear API implementation requires separate explicit approval.
 
 Phase 5A entry requirements:
 

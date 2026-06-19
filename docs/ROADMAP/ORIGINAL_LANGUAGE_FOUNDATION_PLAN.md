@@ -15,13 +15,13 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 6A-3 - Original Language Read API
+Phase 6C-1 - Interlinear API Contract Documentation
 ```
 
 Next major phase:
 
 ```txt
-Phase 6B-1 - Word Study API Contract Documentation
+Phase 6C - High-Level Interlinear API
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -42,7 +42,7 @@ The approved binary-stable original term identity implementation and migration a
 
 The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
 
-The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 documented the Original Language Read API contract, Phase 6A-2 added repository read methods, and Phase 6A-3 added the read-only REST API in commit `d8947cc` (`feat(scripture): add original language read API`). This does not approve frontend work, write/import endpoints, or additional source imports.
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). This does not approve frontend work, write/import endpoints, or additional source imports.
 
 ## Phase 6A Original Language Read API
 
@@ -148,15 +148,15 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 6B-1 - Word Study API Contract Documentation
+Phase 6C-1 - Interlinear API Contract Documentation
 ```
 
-## Phase 6B-1 Word Study API Contract
+## Phase 6B Word Study API
 
 Status:
 
 ```txt
-Documentation only; implementation not started
+Phase 6B completed in commit 510fc63: feat(scripture): add word study API
 ```
 
 Current corpus state:
@@ -168,7 +168,7 @@ STEP_TAGNT=137114
 STEP_TAHOT=536149
 ```
 
-Approved contract scope:
+Completed read-only scope:
 
 - Read-only.
 - Data-driven only.
@@ -178,12 +178,19 @@ Approved contract scope:
 - No raw source JSON.
 - No frontend.
 
-Endpoint contract:
+Implemented endpoints:
 
 ```txt
 GET /wp-json/wcm/v1/word-study/strongs/{strongs_number}
 GET /wp-json/wcm/v1/word-study/terms/{term_id}
 GET /wp-json/wcm/v1/word-study/terms/{term_id}/distribution
+```
+
+Validation:
+
+```txt
+H1004 => 14 terms, 2041 occurrences
+G2424 => 5 terms, 901 occurrences
 ```
 
 Deferred endpoints:
@@ -231,13 +238,70 @@ Pagination rules:
 - Maximum `per_page=100`.
 - Negative `page` or `per_page` values return `400 invalid_pagination`.
 
+Security validation:
+
+- Read-only routes only.
+- No raw source JSON.
+- No import diagnostics.
+- No theological interpretation fields.
+- No pictographic or gematria fields.
+
+## Phase 6C Interlinear API Contract
+
+Status:
+
+```txt
+Documentation only; implementation not started
+```
+
+Canonical high-level endpoint:
+
+```txt
+GET /wp-json/wcm/v1/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Existing lower-level endpoint remains available as token-only:
+
+```txt
+GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Response purpose:
+
+- Combine canonical Bible verse text with original-language tokens.
+- Preserve token order by `word_order` and `subword_order`.
+- Include term data, Strong's base and extended values, morphology, transliteration, and gloss.
+
+Source rules:
+
+- Accept `STEP_TAGNT`, `step_tagnt`, and `tagnt` aliases.
+- Accept `STEP_TAHOT`, `step_tahot`, and `tahot` aliases.
+- Normalize internally to canonical `source_dataset` values.
+
+Safety constraints:
+
+- Read-only.
+- No raw source JSON.
+- No import diagnostics.
+- No interpretation.
+- No pictographic or gematria API fields.
+- No frontend in this phase.
+
 Implementation order after separate approval:
 
-1. Repository aggregate methods.
-2. `WordStudyService`.
-3. `WordStudyController`.
-4. `ApiRegistrar` route registration.
-5. REST smoke tests.
+1. `InterlinearService`.
+2. `InterlinearController`.
+3. `ApiRegistrar` route registration.
+4. REST smoke checks.
+
+Planned smoke checks:
+
+```txt
+STEP_TAGNT/matthew/1/1
+STEP_TAHOT/genesis/1/1
+STEP_TAHOT/psalms/119/1
+STEP_TAHOT/esther/8/9
+```
 
 ## Phase 5 Breakdown
 
@@ -1595,7 +1659,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Original Language Read API is complete. Phase 6B-1 documents the Word Study API contract only. Word Study API implementation and additional Interlinear API work require separate explicit approval before implementation.
+Original Language Read API and Word Study API are complete. Phase 6C documents the high-level Interlinear API contract only. Interlinear API implementation requires separate explicit approval before implementation.
 ```
 
 ### Future - Read API Foundation
