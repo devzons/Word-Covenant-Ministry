@@ -189,6 +189,134 @@ final class OriginalTermRepository
         );
     }
 
+    /**
+     * @return array<int, array{
+     *     strongs_extended: string,
+     *     term_count: int,
+     *     occurrence_count: int,
+     *     terms: array<int, array{
+     *         id: int,
+     *         language_type: string,
+     *         lemma: string,
+     *         lemma_normalized: string,
+     *         strongs_number: string,
+     *         strongs_extended: string,
+     *         transliteration: string,
+     *         gloss: string|null,
+     *         occurrence_count: int
+     *     }>
+     * }>
+     */
+    public function findGroupedByStrongsNumber(string $languageType, string $strongsNumber): array
+    {
+        global $wpdb;
+
+        $languageType = trim($languageType);
+        $strongsNumber = trim($strongsNumber);
+
+        if ($languageType === '' || $strongsNumber === '') {
+            return [];
+        }
+
+        $termsTable = $wpdb->prefix . 'wcm_original_terms';
+        $occurrencesTable = $wpdb->prefix . 'wcm_original_word_occurrences';
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT
+                    terms.id,
+                    terms.language_type,
+                    terms.lemma,
+                    terms.lemma_normalized,
+                    terms.strongs_number,
+                    terms.strongs_extended,
+                    terms.transliteration,
+                    terms.gloss,
+                    COUNT(occurrences.id) AS occurrence_count
+                FROM {$termsTable} terms
+                LEFT JOIN {$occurrencesTable} occurrences ON occurrences.term_id = terms.id
+                WHERE terms.language_type = %s
+                AND terms.strongs_number = %s
+                GROUP BY
+                    terms.id,
+                    terms.language_type,
+                    terms.lemma,
+                    terms.lemma_normalized,
+                    terms.strongs_number,
+                    terms.strongs_extended,
+                    terms.transliteration,
+                    terms.gloss
+                ORDER BY terms.strongs_extended ASC, terms.lemma_normalized ASC, terms.id ASC",
+                $languageType,
+                $strongsNumber
+            ),
+            'ARRAY_A'
+        );
+
+        if (! is_array($rows)) {
+            return [];
+        }
+
+        $groups = [];
+
+        foreach ($rows as $row) {
+            $strongsExtended = (string) $row['strongs_extended'];
+
+            if (! isset($groups[$strongsExtended])) {
+                $groups[$strongsExtended] = [
+                    'strongs_extended' => $strongsExtended,
+                    'term_count' => 0,
+                    'occurrence_count' => 0,
+                    'terms' => [],
+                ];
+            }
+
+            $occurrenceCount = (int) $row['occurrence_count'];
+            $groups[$strongsExtended]['term_count']++;
+            $groups[$strongsExtended]['occurrence_count'] += $occurrenceCount;
+            $groups[$strongsExtended]['terms'][] = [
+                'id' => (int) $row['id'],
+                'language_type' => (string) $row['language_type'],
+                'lemma' => (string) $row['lemma'],
+                'lemma_normalized' => (string) $row['lemma_normalized'],
+                'strongs_number' => (string) $row['strongs_number'],
+                'strongs_extended' => $strongsExtended,
+                'transliteration' => (string) $row['transliteration'],
+                'gloss' => $this->nullableString($row['gloss']),
+                'occurrence_count' => $occurrenceCount,
+            ];
+        }
+
+        return array_values($groups);
+    }
+
+    public function countOccurrencesByStrongsNumber(string $languageType, string $strongsNumber): int
+    {
+        global $wpdb;
+
+        $languageType = trim($languageType);
+        $strongsNumber = trim($strongsNumber);
+
+        if ($languageType === '' || $strongsNumber === '') {
+            return 0;
+        }
+
+        $termsTable = $wpdb->prefix . 'wcm_original_terms';
+        $occurrencesTable = $wpdb->prefix . 'wcm_original_word_occurrences';
+
+        return (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(occurrences.id)
+                FROM {$termsTable} terms
+                INNER JOIN {$occurrencesTable} occurrences ON occurrences.term_id = terms.id
+                WHERE terms.language_type = %s
+                AND terms.strongs_number = %s",
+                $languageType,
+                $strongsNumber
+            )
+        );
+    }
+
     public function buildIdentityKey(
         string $languageType,
         string $lemmaNormalized,

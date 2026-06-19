@@ -315,6 +315,192 @@ final class OriginalWordOccurrenceRepository
         );
     }
 
+    /**
+     * @return array<int, array{
+     *     book: array{
+     *         id: int,
+     *         slug: string,
+     *         name_en: string,
+     *         name_ko: string,
+     *         testament: string
+     *     },
+     *     occurrence_count: int
+     * }>
+     */
+    public function distributionByStrongsNumber(string $languageType, string $strongsNumber): array
+    {
+        global $wpdb;
+
+        $languageType = trim($languageType);
+        $strongsNumber = trim($strongsNumber);
+
+        if ($languageType === '' || $strongsNumber === '') {
+            return [];
+        }
+
+        $termsTable = $wpdb->prefix . 'wcm_original_terms';
+        $occurrencesTable = $wpdb->prefix . 'wcm_original_word_occurrences';
+        $booksTable = $wpdb->prefix . 'wcm_bible_books';
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT
+                    books.id AS book_id,
+                    books.slug,
+                    books.name_en,
+                    books.name_ko,
+                    books.testament,
+                    COUNT(occurrences.id) AS occurrence_count
+                FROM {$termsTable} terms
+                INNER JOIN {$occurrencesTable} occurrences ON occurrences.term_id = terms.id
+                INNER JOIN {$booksTable} books ON books.id = occurrences.book_id
+                WHERE terms.language_type = %s
+                AND terms.strongs_number = %s
+                GROUP BY books.id, books.slug, books.name_en, books.name_ko, books.testament, books.book_order
+                ORDER BY books.book_order ASC",
+                $languageType,
+                $strongsNumber
+            ),
+            'ARRAY_A'
+        );
+
+        if (! is_array($rows)) {
+            return [];
+        }
+
+        return array_map([$this, 'formatBookDistributionRow'], $rows);
+    }
+
+    /**
+     * @return array{total_occurrences: int, book_count: int, chapter_count: int}
+     */
+    public function summaryByTermId(int $termId): array
+    {
+        global $wpdb;
+
+        if ($termId < 1) {
+            return [
+                'total_occurrences' => 0,
+                'book_count' => 0,
+                'chapter_count' => 0,
+            ];
+        }
+
+        $tableName = $wpdb->prefix . 'wcm_original_word_occurrences';
+
+        $row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT
+                    COUNT(*) AS total_occurrences,
+                    COUNT(DISTINCT book_id) AS book_count,
+                    COUNT(DISTINCT CONCAT(book_id, ':', chapter)) AS chapter_count
+                FROM {$tableName}
+                WHERE term_id = %d",
+                $termId
+            ),
+            'ARRAY_A'
+        );
+
+        if (! is_array($row)) {
+            return [
+                'total_occurrences' => 0,
+                'book_count' => 0,
+                'chapter_count' => 0,
+            ];
+        }
+
+        return [
+            'total_occurrences' => (int) $row['total_occurrences'],
+            'book_count' => (int) $row['book_count'],
+            'chapter_count' => (int) $row['chapter_count'],
+        ];
+    }
+
+    /**
+     * @return array<int, array{
+     *     book: array{
+     *         id: int,
+     *         slug: string,
+     *         name_en: string,
+     *         name_ko: string,
+     *         testament: string
+     *     },
+     *     occurrence_count: int,
+     *     chapters: array<int, array{chapter: int, occurrence_count: int}>
+     * }>
+     */
+    public function distributionByTermId(int $termId): array
+    {
+        global $wpdb;
+
+        if ($termId < 1) {
+            return [];
+        }
+
+        $occurrencesTable = $wpdb->prefix . 'wcm_original_word_occurrences';
+        $booksTable = $wpdb->prefix . 'wcm_bible_books';
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT
+                    books.id AS book_id,
+                    books.slug,
+                    books.name_en,
+                    books.name_ko,
+                    books.testament,
+                    occurrences.chapter,
+                    COUNT(occurrences.id) AS occurrence_count
+                FROM {$occurrencesTable} occurrences
+                INNER JOIN {$booksTable} books ON books.id = occurrences.book_id
+                WHERE occurrences.term_id = %d
+                GROUP BY
+                    books.id,
+                    books.slug,
+                    books.name_en,
+                    books.name_ko,
+                    books.testament,
+                    books.book_order,
+                    occurrences.chapter
+                ORDER BY books.book_order ASC, occurrences.chapter ASC",
+                $termId
+            ),
+            'ARRAY_A'
+        );
+
+        if (! is_array($rows)) {
+            return [];
+        }
+
+        $distribution = [];
+
+        foreach ($rows as $row) {
+            $bookId = (int) $row['book_id'];
+            $occurrenceCount = (int) $row['occurrence_count'];
+
+            if (! isset($distribution[$bookId])) {
+                $distribution[$bookId] = [
+                    'book' => [
+                        'id' => $bookId,
+                        'slug' => (string) $row['slug'],
+                        'name_en' => (string) $row['name_en'],
+                        'name_ko' => (string) $row['name_ko'],
+                        'testament' => (string) $row['testament'],
+                    ],
+                    'occurrence_count' => 0,
+                    'chapters' => [],
+                ];
+            }
+
+            $distribution[$bookId]['occurrence_count'] += $occurrenceCount;
+            $distribution[$bookId]['chapters'][] = [
+                'chapter' => (int) $row['chapter'],
+                'occurrence_count' => $occurrenceCount,
+            ];
+        }
+
+        return array_values($distribution);
+    }
+
     public function buildIdentityKey(
         string $sourceDataset,
         int $bookId,
@@ -479,6 +665,28 @@ final class OriginalWordOccurrenceRepository
     private function nullableString(mixed $value): ?string
     {
         return $value === null ? null : (string) $value;
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     *
+     * @return array{
+     *     book: array{id: int, slug: string, name_en: string, name_ko: string, testament: string},
+     *     occurrence_count: int
+     * }
+     */
+    private function formatBookDistributionRow(array $row): array
+    {
+        return [
+            'book' => [
+                'id' => (int) $row['book_id'],
+                'slug' => (string) $row['slug'],
+                'name_en' => (string) $row['name_en'],
+                'name_ko' => (string) $row['name_ko'],
+                'testament' => (string) $row['testament'],
+            ],
+            'occurrence_count' => (int) $row['occurrence_count'],
+        ];
     }
 
     /**
