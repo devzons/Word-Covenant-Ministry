@@ -10,5 +10,6 @@ final class ApiRegistrar
     {
         (new BibleController())->registerRoutes();
         (new BibleSearchController())->registerRoutes();
+        (new OriginalLanguageController())->registerRoutes();
     }
 }
