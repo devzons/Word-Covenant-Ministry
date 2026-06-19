@@ -21,7 +21,7 @@ Phase 5E - Original Language Persistence Smoke Verification
 Next major phase:
 
 ```txt
-Separately approved controlled TAGNT Act-Rev import decision
+Separately approved controlled TAHOT Gen-Deu import decision
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -30,7 +30,9 @@ Phase 5E tiny local persistence smokes are complete. They verify the persistence
 
 The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import is also complete. It used `maxRows=1000`, `batchSize=100`, and the backup path `/private/tmp/wcm_phase_5e_g_pre_tagnt_1000.sql`.
 
-The approved full `STEP_TAGNT` Mat-Jhn local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_h_pre_tagnt_mat_jhn_full.sql`. It does not approve TAGNT Act-Rev import, full NT import, TAHOT import, full OT import, public APIs, frontend work, or additional repository persistence.
+The approved full `STEP_TAGNT` Mat-Jhn local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_h_pre_tagnt_mat_jhn_full.sql`.
+
+The approved full `STEP_TAGNT` Act-Rev local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_i_pre_tagnt_act_rev_full.sql`. Full TAGNT NT is imported. This does not approve TAHOT import beyond the tiny smoke, full OT import, public APIs, frontend work, or additional repository persistence.
 
 ## Phase 5 Breakdown
 
@@ -1266,13 +1268,30 @@ Completed local verification:
   - coverage: `Matthew=18297`, `Mark=11091`, `Luke=19408`, `John=15409`
   - duplicate groups=`0`
   - blank TAGNT morphology rows=`0`
+- Full `STEP_TAGNT` Act-Rev local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_i_pre_tagnt_act_rev_full.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=75112`, `rowsNormalized=72916`, `rowsSkipped=2196`
+  - first successful run created `2562` terms and `72909` occurrences
+  - first successful run skipped `7` duplicate occurrence candidates
+  - duplicateOccurrences=`7` warning-level skips
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`12.2309s`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `72909` occurrences
+  - idempotency rerun errors=`0`
+  - post counts: `5573` terms and `137118` occurrences
+  - post source counts: `STEP_TAGNT=137114`, `STEP_TAHOT=4`
+  - Full TAGNT NT imported: Mat-Jhn already completed; Act-Rev completed
+  - duplicate groups=`0`
+  - blank TAGNT morphology rows=`0`
 
 Phase 5E did not perform:
 
 - Full STEP import.
 - TAHOT full import.
-- TAGNT Act-Rev import.
-- Full NT import.
+- Full OT import.
 - OSHB import.
 - SBLGNT import.
 - Public original-language API work.
@@ -1282,7 +1301,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-TAGNT Act-Rev controlled import requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
+TAHOT Gen-Deu controlled import requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
 ```
 
 ### Future - Read API Foundation

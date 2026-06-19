@@ -78,11 +78,11 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: Full TAGNT Mat-Jhn Local Import Complete
+Status: Full TAGNT NT Local Import Complete
 
 Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
 
-Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import and full `STEP_TAGNT` Mat-Jhn local import. The project must still not proceed to TAGNT Act-Rev import, full NT import, TAHOT import, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
+Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, and full `STEP_TAGNT` Act-Rev local import. Full TAGNT NT is imported. The project must still not proceed to TAHOT import beyond the tiny smoke, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
 
 Subphases:
 
@@ -174,7 +174,7 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Separately approved controlled TAGNT Act-Rev import decision
+Separately approved controlled TAHOT Gen-Deu import decision
 ```
 
 Full STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
@@ -291,7 +291,48 @@ duplicate groups=0
 blank TAGNT morphology rows=0
 ```
 
-Full NT, TAHOT beyond tiny smoke, full OT, public original-language API, and frontend surfaces have not been run. TAGNT Act-Rev controlled import requires separate explicit approval.
+TAGNT Act-Rev import was later completed under separate explicit approval. TAHOT beyond tiny smoke, full OT, public original-language API, and frontend surfaces have not been run.
+
+Phase 5E full TAGNT Act-Rev import summary:
+
+```txt
+Backup path: /private/tmp/wcm_phase_5e_i_pre_tagnt_act_rev_full.sql
+sourceDataset=STEP_TAGNT
+batchSize=250
+
+First successful run:
+rowsRead=75112
+rowsNormalized=72916
+rowsSkipped=2196
+termsCreated=2562
+occurrencesCreated=72909
+occurrencesSkipped=7
+duplicateOccurrences=7 warning-level skips
+errors=0
+failedBatches=0
+runtime=12.2309s
+
+Rerun idempotency:
+termsCreated=0
+occurrencesCreated=0
+occurrencesMatched=72909
+errors=0
+
+Post counts:
+terms=5573
+occurrences=137118
+STEP_TAGNT=137114
+STEP_TAHOT=4
+
+Full TAGNT NT imported:
+Mat-Jhn already completed
+Act-Rev completed
+
+duplicate groups=0
+blank TAGNT morphology rows=0
+```
+
+TAHOT full import, full OT, public original-language API, and frontend surfaces have not been run. TAHOT Gen-Deu controlled import requires separate explicit approval.
 
 Phase 5A entry requirements:
 

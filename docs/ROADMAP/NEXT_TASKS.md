@@ -6,9 +6,9 @@
 
 ## Immediate Next Task
 
-Explicit approval for controlled TAGNT Act-Rev import, if the project is ready to proceed.
+Explicit approval for controlled TAHOT Gen-Deu import, if the project is ready to proceed.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import and full `STEP_TAGNT` Mat-Jhn local import are also complete. The next task is not a full NT import by default. Any controlled TAGNT Act-Rev import requires separate explicit approval after reviewing the Mat-Jhn import results and rollback strategy.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, and full `STEP_TAGNT` Act-Rev local import are complete. Full TAGNT NT is imported. Any controlled TAHOT Gen-Deu import requires separate explicit approval after reviewing the TAGNT NT import results and rollback strategy.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,11 +16,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, the controlled `STEP_TAGNT` 1,000-row import result, and the full TAGNT Mat-Jhn import result.
-2. Decide whether to approve controlled TAGNT Act-Rev import.
-3. If approved, define the exact TAGNT Act-Rev source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
-4. If approved, run controlled TAGNT Act-Rev import only under the approved limits.
-5. Any TAHOT larger import only after separate explicit approval.
+1. Review Phase 5D full dry-run aggregate results, Phase 5E write smoke reports, and the full TAGNT NT import result.
+2. Decide whether to approve controlled TAHOT Gen-Deu import.
+3. If approved, define the exact TAHOT Gen-Deu source scope, row limit or full-file scope, batch size, backup/export strategy, rollback plan, and verification report shape.
+4. If approved, run controlled TAHOT Gen-Deu import only under the approved limits.
+5. Any larger TAHOT scope beyond Gen-Deu only after separate explicit approval.
 6. Public original-language APIs only after data import and verification are approved.
 7. Later: Interlinear UI.
 8. Later: Word Study UI.
@@ -81,11 +81,27 @@ Completed local write-smoke status:
   - coverage: `Matthew=18297`, `Mark=11091`, `Luke=19408`, `John=15409`
   - duplicate groups=`0`
   - blank TAGNT morphology rows=`0`
-- Full NT has not been run.
+- Full `STEP_TAGNT` Act-Rev local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_i_pre_tagnt_act_rev_full.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=75112`, `rowsNormalized=72916`, `rowsSkipped=2196`
+  - first successful run created `2562` terms and `72909` occurrences
+  - first successful run skipped `7` duplicate occurrence candidates
+  - duplicateOccurrences=`7` warning-level skips
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`12.2309s`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `72909` occurrences
+  - idempotency rerun errors=`0`
+  - post counts: `5573` terms, `137118` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=4`
+  - Full TAGNT NT imported: Mat-Jhn already completed; Act-Rev completed
+  - duplicate groups=`0`
+  - blank TAGNT morphology rows=`0`
 - TAHOT has not been run beyond the tiny smoke.
 - Full OT has not been run.
 - Public original-language API and frontend surfaces have not been added.
-- TAGNT Act-Rev controlled import requires separate explicit approval.
+- TAHOT Gen-Deu controlled import requires separate explicit approval.
 
 ## Required Pre-Work Before Code Changes
 
