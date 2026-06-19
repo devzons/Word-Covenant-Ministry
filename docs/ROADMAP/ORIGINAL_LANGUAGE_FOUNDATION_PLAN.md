@@ -21,7 +21,7 @@ Phase 5E - Original Language Persistence Smoke Verification
 Next major phase:
 
 ```txt
-Original Language Read API / Word Study API / Interlinear API
+Phase 6A-1 - Original Language Read API Contract Documentation
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -42,7 +42,96 @@ The approved binary-stable original term identity implementation and migration a
 
 The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
 
-The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. This does not approve public APIs, frontend work, or additional source imports.
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 documents the Original Language Read API contract. This does not approve API implementation, frontend work, or additional source imports.
+
+## Phase 6A-1 Original Language Read API Contract
+
+Status:
+
+```txt
+Documentation only
+```
+
+Current data state:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+duplicate hash groups=0
+duplicate term groups=0
+duplicate occurrence groups=0
+```
+
+Approved read-only API scope for a future implementation phase:
+
+- No write/import endpoints.
+- No frontend.
+- No full dataset dumps.
+- No raw source export.
+- No variant or qere-kethiv UI yet.
+- No interpretation, pictographic, or gematria API yet.
+
+Endpoint contract:
+
+```txt
+GET /wp-json/wcm/v1/original-language/{source}/{book}/{chapter}/{verse}
+GET /wp-json/wcm/v1/original-language/terms/{term_id}
+GET /wp-json/wcm/v1/original-language/terms/{term_id}/occurrences
+GET /wp-json/wcm/v1/original-language/strongs/{strongs_number}
+GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Source rules:
+
+- Canonical source values are `STEP_TAGNT` and `STEP_TAHOT`.
+- Lowercase aliases may be accepted only if normalized internally to canonical values.
+- `source_dataset` is distinct from Bible version.
+
+Pagination rules:
+
+- Default `per_page=20`.
+- Maximum `per_page=100`.
+- Pagination is required for term occurrences and Strong's occurrence-style lists.
+
+Safe public response fields:
+
+```txt
+id
+language_type
+source_dataset
+source_ref
+word_order
+subword_order
+token_type
+surface_form
+normalized_form
+lemma
+lemma_normalized
+strongs_number
+strongs_extended
+transliteration
+morphology
+gloss
+contextual_function
+```
+
+Hold back from public responses:
+
+```txt
+raw source JSON
+import diagnostics
+unapproved variant internals
+```
+
+Implementation order after explicit approval:
+
+1. Add repository joined read methods.
+2. Add `OriginalLanguageController`.
+3. Register routes in `ApiRegistrar`.
+4. Run REST smoke tests.
+5. Do not add frontend surfaces until the API is stable.
 
 ## Phase 5 Breakdown
 

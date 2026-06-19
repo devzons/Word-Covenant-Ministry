@@ -81,13 +81,13 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 5E - Original Language Persistence Smoke Verification
+Phase 6A-1 - Original Language Read API Contract Documentation
 ```
 
 Status:
 
 ```txt
-Full original-language import complete
+Original Language Read API contract documented; implementation not started
 ```
 
 Completed phase:
@@ -99,25 +99,25 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Hold the completed original-language import state until Original Language Read API, Word Study API, and Interlinear API work receives explicit approval.
+Document the Phase 6A Original Language Read API contract before implementation.
 ```
 
 Next task:
 
 ```txt
-Next phase candidates are Original Language Read API, Word Study API, and Interlinear API.
+After explicit implementation approval, add the Phase 6A read-only Original Language API.
 ```
 
 Blocked items:
 
 ```txt
-Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Public APIs, frontend work, and any further source import execution require a separate explicit approval phase.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation, frontend work, and any further source import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A-1 documents the read-only API contract only. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize API implementation, frontend surfaces, write/import endpoints, raw source export, variant UI, or interpretation/pictographic/gematria APIs.
 ```
 
 Phase 5A source recommendation:
@@ -130,6 +130,95 @@ Greek reference text: SBLGNT
 MorphGNT: not a primary source before ShareAlike review
 OpenGNT: not the first production source because of provenance/license complexity
 ```
+
+## Phase 6A-1 Original Language Read API Contract
+
+Status:
+
+```txt
+Documentation only; implementation not started
+```
+
+Current original-language data state:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+duplicate hash groups=0
+duplicate term groups=0
+duplicate occurrence groups=0
+```
+
+Approved future read-only scope:
+
+- No write/import endpoints.
+- No frontend.
+- No full dataset dumps.
+- No raw source export.
+- No variant or qere-kethiv UI yet.
+- No interpretation, pictographic, or gematria API yet.
+
+Endpoint contract:
+
+```txt
+GET /wp-json/wcm/v1/original-language/{source}/{book}/{chapter}/{verse}
+GET /wp-json/wcm/v1/original-language/terms/{term_id}
+GET /wp-json/wcm/v1/original-language/terms/{term_id}/occurrences
+GET /wp-json/wcm/v1/original-language/strongs/{strongs_number}
+GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Source rules:
+
+- Canonical source values are `STEP_TAGNT` and `STEP_TAHOT`.
+- Lowercase aliases may be accepted only if normalized internally.
+- `source_dataset` is distinct from Bible version.
+
+Pagination rules:
+
+- Default `per_page=20`.
+- Maximum `per_page=100`.
+- Pagination is required for term occurrences and Strong's occurrence-style lists.
+
+Safe public response fields:
+
+```txt
+id
+language_type
+source_dataset
+source_ref
+word_order
+subword_order
+token_type
+surface_form
+normalized_form
+lemma
+lemma_normalized
+strongs_number
+strongs_extended
+transliteration
+morphology
+gloss
+contextual_function
+```
+
+Hold back from public responses:
+
+```txt
+raw source JSON
+import diagnostics
+unapproved variant internals
+```
+
+Implementation order after separate approval:
+
+1. Repository joined read methods.
+2. `OriginalLanguageController`.
+3. `ApiRegistrar` route registration.
+4. REST smoke tests.
+5. No frontend until API is stable.
 
 ## Phase 5 Entry Criteria
 

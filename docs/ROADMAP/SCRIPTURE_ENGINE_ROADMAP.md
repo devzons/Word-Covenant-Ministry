@@ -174,10 +174,99 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Original Language Read API / Word Study API / Interlinear API
+Phase 6A-1 - Original Language Read API Contract Documentation
 ```
 
-OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
+OSHB, SBLGNT, read API implementation, UI, Interlinear UI, Strong's page, and Word Study work remain out of scope until explicitly approved.
+
+### Phase 6A-1 - Original Language Read API Contract
+
+Status:
+
+```txt
+Documentation only
+```
+
+Current data state:
+
+```txt
+terms=16891
+occurrences=673263
+STEP_TAGNT=137114
+STEP_TAHOT=536149
+duplicate hash groups=0
+duplicate term groups=0
+duplicate occurrence groups=0
+```
+
+Approved read-only scope:
+
+- No write/import endpoints.
+- No frontend.
+- No full dataset dumps.
+- No raw source export.
+- No variant or qere-kethiv UI yet.
+- No interpretation, pictographic, or gematria API yet.
+
+Endpoint contract:
+
+```txt
+GET /wp-json/wcm/v1/original-language/{source}/{book}/{chapter}/{verse}
+GET /wp-json/wcm/v1/original-language/terms/{term_id}
+GET /wp-json/wcm/v1/original-language/terms/{term_id}/occurrences
+GET /wp-json/wcm/v1/original-language/strongs/{strongs_number}
+GET /wp-json/wcm/v1/original-language/interlinear/{source}/{book}/{chapter}/{verse}
+```
+
+Source rules:
+
+- Canonical source values are `STEP_TAGNT` and `STEP_TAHOT`.
+- Lowercase aliases may be accepted only if normalized internally to canonical source values.
+- `source_dataset` is distinct from Bible version.
+
+Pagination rules:
+
+- Default `per_page=20`.
+- Maximum `per_page=100`.
+- Pagination is required for term occurrences and Strong's occurrence-style lists.
+
+Safe public response fields:
+
+```txt
+id
+language_type
+source_dataset
+source_ref
+word_order
+subword_order
+token_type
+surface_form
+normalized_form
+lemma
+lemma_normalized
+strongs_number
+strongs_extended
+transliteration
+morphology
+gloss
+contextual_function
+```
+
+Hold back from public responses:
+
+```txt
+raw source JSON
+import diagnostics
+unapproved variant internals
+```
+
+Implementation order after separate approval:
+
+1. Add repository joined read methods.
+2. Add `OriginalLanguageController`.
+3. Register routes in `ApiRegistrar`.
+4. Run REST smoke tests.
+5. Keep frontend blocked until the API is stable.
 
 Phase 5E local write smoke summary:
 
