@@ -21,7 +21,7 @@ Phase 5E - Original Language Persistence Smoke Verification
 Next major phase:
 
 ```txt
-Separately approved controlled TAHOT Isa-Mal import decision
+Original Language Read API / Word Study API / Interlinear API
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -40,7 +40,9 @@ The approved controlled `STEP_TAHOT` Jos-Est local import is complete. It used `
 
 The approved binary-stable original term identity implementation and migration are complete. `term_identity_hash` is now the authoritative original term identity, the old collation-sensitive unique `term_identity` key has been removed, and the nonunique `term_identity_text` lookup index is retained.
 
-The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`. This does not approve Isa-Mal, full OT import, public APIs, frontend work, or additional repository persistence.
+The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
+
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. This does not approve public APIs, frontend work, or additional source imports.
 
 ## Phase 5 Breakdown
 
@@ -1362,12 +1364,33 @@ Completed local verification:
   - duplicate hash groups=`0`
   - duplicate term groups=`0`
   - duplicate occurrence groups=`0`
+- Phase 5E-M completed.
+- Controlled `STEP_TAHOT` Isa-Mal local import passed:
+  - backup path: `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`
+  - `batchSize=250`
+  - first successful run: `rowsRead=79313`, `rowsValid=78752`, `rowsNormalized=136403`, `rowsSkipped=561`
+  - skipped reasons: `qere_kethiv_variant_skipped=522`, `tahot_non_base_text_type_skipped=39`
+  - first successful run created `1681` terms and `136403` occurrences
+  - missingMorphology=`5569` warning-level
+  - errors=`0`
+  - failedBatches=`0`
+  - runtime=`19.8509s`
+  - peakMemory=`75317248`
+  - idempotency rerun created `0` terms and `0` occurrences
+  - idempotency rerun matched `136403` occurrences
+  - final counts: `16891` terms and `673263` occurrences
+  - final source counts: `STEP_TAGNT=137114`, `STEP_TAHOT=536149`
+  - full TAGNT NT complete
+  - full TAHOT OT complete
+  - OT books with TAHOT=`39`
+  - OT books missing TAHOT=`0`
+  - duplicate hash groups=`0`
+  - duplicate term groups=`0`
+  - duplicate occurrence groups=`0`
 
 Phase 5E did not perform:
 
 - Full STEP import.
-- Isa-Mal import.
-- Full OT import.
 - OSHB import.
 - SBLGNT import.
 - Public original-language API work.
@@ -1377,7 +1400,7 @@ Phase 5E did not perform:
 Next gate:
 
 ```txt
-Controlled TAHOT Isa-Mal requires separate explicit approval with exact source scope, row limits or full-file scope, batch size, rollback/export strategy, and verification report expectations.
+Original Language Read API, Word Study API, and Interlinear API require separate explicit approval before implementation.
 ```
 
 ### Future - Read API Foundation

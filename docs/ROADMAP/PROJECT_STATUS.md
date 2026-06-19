@@ -87,37 +87,37 @@ Phase 5E - Original Language Persistence Smoke Verification
 Status:
 
 ```txt
-TAHOT Job-Sng retry local import complete
+Full original-language import complete
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, and controlled TAHOT Job-Sng retry import
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, and controlled TAHOT Isa-Mal import
 ```
 
 Active objective:
 
 ```txt
-Hold the original-language pipeline after the approved TAHOT Job-Sng retry local import until any TAHOT Isa-Mal controlled import receives separate explicit approval.
+Hold the completed original-language import state until Original Language Read API, Word Study API, and Interlinear API work receives explicit approval.
 ```
 
 Next task:
 
 ```txt
-Explicit approval is required before any controlled TAHOT Isa-Mal import.
+Next phase candidates are Original Language Read API, Word Study API, and Interlinear API.
 ```
 
 Blocked items:
 
 ```txt
-Full original-language OT persistence import remains blocked. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, and TAHOT Job-Sng retry has passed. TAHOT Isa-Mal controlled import, full OT import, public APIs, frontend work, and any further import execution require a separate explicit approval phase.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Public APIs, frontend work, and any further source import execution require a separate explicit approval phase.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, and TAHOT Job-Sng retry import are complete. Full TAGNT NT, TAHOT Gen-Deu, TAHOT Jos-Est, and TAHOT Job-Sng are imported. This does not authorize Isa-Mal, full OT import, OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
+Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize public APIs or frontend surfaces.
 ```
 
 Phase 5A source recommendation:
@@ -317,9 +317,18 @@ Phase 5C importer design analysis summary:
   - Job-Sng coverage: `Job=14807`, `Psalms=34226`, `Proverbs=11501`, `Ecclesiastes=5075`, `Song of Songs=2206`.
   - H1004A / `בֵּית` collation conflict resolved by hash identity.
   - Duplicate hash groups=`0`; duplicate term groups=`0`; duplicate occurrence groups=`0`.
-  - Isa-Mal, full OT, public API, and frontend work have not been run.
+  - Phase 5E-M completed.
+  - Controlled `STEP_TAHOT` Isa-Mal local import passed with `batchSize=250`.
+  - Backup path before Isa-Mal import: `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`.
+  - Isa-Mal import first successful run: `rowsRead=79313`, `rowsValid=78752`, `rowsNormalized=136403`, `rowsSkipped=561`, `qere_kethiv_variant_skipped=522`, `tahot_non_base_text_type_skipped=39`, `termsCreated=1681`, `occurrencesCreated=136403`, `missingMorphology=5569`, `errors=0`, `failedBatches=0`, `runtime=19.8509s`, `peakMemory=75317248`.
+  - Isa-Mal import rerun was idempotent: `termsCreated=0`, `occurrencesCreated=0`, `occurrencesMatched=136403`.
+  - Final original-language import counts: `16891` terms, `673263` occurrences, `STEP_TAGNT=137114`, `STEP_TAHOT=536149`.
+  - Full TAGNT NT is complete.
+  - Full TAHOT OT is complete: OT books with TAHOT=`39`, OT books missing TAHOT=`0`.
+  - Duplicate hash groups=`0`; duplicate term groups=`0`; duplicate occurrence groups=`0`.
+  - Public API and frontend work have not been run.
   - Public original-language API and frontend surfaces have not been added.
-  - Controlled TAHOT Isa-Mal requires separate explicit approval.
+  - Next phase candidates are Original Language Read API, Word Study API, and Interlinear API.
 
 Phase 5D full dry-run aggregate results:
 

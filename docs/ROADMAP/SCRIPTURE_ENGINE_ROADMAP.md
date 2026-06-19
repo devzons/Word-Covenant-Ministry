@@ -78,11 +78,11 @@ Remaining polish candidates:
 
 ### Phase 5 Original Language Foundation
 
-Status: TAHOT Job-Sng Retry Local Import Complete
+Status: Full Original Language Import Complete
 
 Phase 5 started with source and schema analysis, then Phase 5B established the original-language data layer. Phase 5C completed source gate and normalizer foundation work. Phase 5D completed the dry-run import pipeline with zero hard errors.
 
-Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, and controlled `STEP_TAHOT` Job-Sng retry local import. Full TAGNT NT, TAHOT Gen-Deu, TAHOT Jos-Est, and TAHOT Job-Sng are imported. The project must still not proceed to Isa-Mal, full OT import, public original-language APIs, or frontend original-language features without separate explicit approval.
+Phase 5E verified the persistence skeleton through tiny local write smokes for `STEP_TAGNT` and `STEP_TAHOT`. It also completed the separately approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry local import, and controlled `STEP_TAHOT` Isa-Mal local import. Full TAGNT NT and full TAHOT OT are imported. The project must still not proceed to public original-language APIs or frontend original-language features without separate explicit approval.
 
 Subphases:
 
@@ -174,10 +174,10 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Separately approved controlled TAHOT Job-Sng import decision
+Original Language Read API / Word Study API / Interlinear API
 ```
 
-Full STEP, OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
+OSHB, SBLGNT, public API, UI, Interlinear, Strong's page, and Word Study work remain out of scope until explicitly approved.
 
 Phase 5E local write smoke summary:
 
@@ -378,7 +378,7 @@ Deuteronomy=25772
 duplicate groups=0
 ```
 
-Phase 5E controlled TAHOT Job-Sng retry summary:
+Phase 5E full original language import summary:
 
 ```txt
 Term identity hash migration:
@@ -392,51 +392,93 @@ migration occurrences=469045 unchanged
 empty_hash_terms=0
 duplicate_hash_groups=0
 
-Backup path: /private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql
+Job-Sng backup path: /private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql
+Job-Sng rowsRead=39090
+Job-Sng rowsValid=38360
+Job-Sng rowsNormalized=67815
+Job-Sng rowsSkipped=730
+Job-Sng qere_kethiv_variant_skipped=213
+Job-Sng tahot_non_base_text_type_skipped=41
+Job-Sng psalm_title=476
+Job-Sng termsCreated=1161
+Job-Sng occurrencesCreated=67815
+Job-Sng missingMorphology=3749
+Job-Sng errors=0
+Job-Sng failedBatches=0
+Job-Sng runtime=10.6089s
+Job-Sng peakMemory=61161472
+Job-Sng idempotency termsCreated=0
+Job-Sng idempotency occurrencesCreated=0
+Job-Sng idempotency occurrencesMatched=67815
+
+Isa-Mal backup path: /private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql
+Phase 5E-M completed
 sourceDataset=STEP_TAHOT
 batchSize=250
 
-First successful run:
-rowsRead=39090
-rowsValid=38360
-rowsNormalized=67815
-rowsSkipped=730
-qere_kethiv_variant_skipped=213
-tahot_non_base_text_type_skipped=41
-psalm_title=476
-termsCreated=1161
-occurrencesCreated=67815
-missingMorphology=3749
+Isa-Mal first successful run:
+rowsRead=79313
+rowsValid=78752
+rowsNormalized=136403
+rowsSkipped=561
+qere_kethiv_variant_skipped=522
+tahot_non_base_text_type_skipped=39
+termsCreated=1681
+occurrencesCreated=136403
+missingMorphology=5569
 errors=0
 failedBatches=0
-runtime=10.6089s
-peakMemory=61161472
+runtime=19.8509s
+peakMemory=75317248
 
-Rerun idempotency:
+Isa-Mal rerun idempotency:
 termsCreated=0
 occurrencesCreated=0
-occurrencesMatched=67815
+occurrencesMatched=136403
 
-Post counts:
-terms=15210
-occurrences=536860
+Final counts:
+terms=16891
+occurrences=673263
 STEP_TAGNT=137114
-STEP_TAHOT=399746
+STEP_TAHOT=536149
 
-Coverage:
+Job-Sng coverage:
 Job=14807
 Psalms=34226
 Proverbs=11501
 Ecclesiastes=5075
 Song of Songs=2206
 
+Isa-Mal coverage:
+Isaiah=28536
+Jeremiah=37565
+Lamentations=2599
+Ezekiel=32848
+Daniel=10362
+Hosea=4070
+Joel=1620
+Amos=3416
+Obadiah=495
+Jonah=1238
+Micah=2372
+Nahum=911
+Habakkuk=1124
+Zephaniah=1279
+Haggai=1067
+Zechariah=5433
+Malachi=1468
+
+full TAGNT NT complete
+full TAHOT OT complete
+OT books with TAHOT=39
+OT books missing TAHOT=0
 H1004A / בֵּית collation conflict resolved by hash identity
 duplicate hash groups=0
 duplicate term groups=0
 duplicate occurrence groups=0
 ```
 
-Isa-Mal, full OT, public original-language API, and frontend surfaces have not been run. Controlled TAHOT Isa-Mal requires separate explicit approval.
+Public original-language API and frontend surfaces have not been run. Original Language Read API, Word Study API, and Interlinear API require separate explicit approval.
 
 Phase 5A entry requirements:
 
