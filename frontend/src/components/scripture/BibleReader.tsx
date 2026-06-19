@@ -6,9 +6,13 @@ import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
 import { ReaderModeControl } from "@/components/scripture/ReaderModeControl";
+import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
 import { cn } from "@/lib/utils/cn";
 import type { BibleBookMetadata, BibleChapterResponse } from "@/types/bible";
-import type { OriginalLanguageReaderMode } from "@/types/original-language";
+import type {
+  OriginalLanguageReaderMode,
+  OriginalLanguageSourceDataset,
+} from "@/types/original-language";
 
 type BibleReaderProps = {
   bookMetadata: BibleBookMetadata;
@@ -91,6 +95,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
   const [activeVerseId, setActiveVerseId] = useState("");
   const chapterNumber = chapter.chapter;
   const currentBookIndex = bookOptions.findIndex((book) => book.slug === chapter.book);
+  const originalLanguageSource = getOriginalLanguageSource(chapter.book);
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -243,7 +248,17 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
                 >
                   {verse.verse}
                 </span>
-                <span className="text-zinc-950">{verse.text}</span>
+                <div className="flex flex-col">
+                  <span className="text-zinc-950">{verse.text}</span>
+                  {mode === "original" ? (
+                    <VerseOriginalLanguagePreview
+                      book={chapter.book}
+                      chapter={chapter.chapter}
+                      source={originalLanguageSource}
+                      verse={verse.verse}
+                    />
+                  ) : null}
+                </div>
               </li>
             );
           })}
@@ -289,4 +304,11 @@ function createReaderHref(
   });
 
   return `/${locale}/bible/${version}/${book}/${chapter}?${params.toString()}`;
+}
+
+function getOriginalLanguageSource(book: string): OriginalLanguageSourceDataset {
+  const matthewIndex = bookOptions.findIndex((bookOption) => bookOption.slug === "matthew");
+  const bookIndex = bookOptions.findIndex((bookOption) => bookOption.slug === book);
+
+  return bookIndex >= matthewIndex ? "STEP_TAGNT" : "STEP_TAHOT";
 }
