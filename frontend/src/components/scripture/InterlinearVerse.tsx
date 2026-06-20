@@ -35,10 +35,10 @@ const interlinearCopy = {
     englishGloss: "Gloss",
     morphology: "Morphology",
     morphologyCode: "Morphology code",
-    notProvided: "Not provided",
     selectVerse: "Select a verse to view interlinear details.",
     loading: "Loading interlinear verse...",
     error: "Interlinear verse could not be loaded.",
+    empty: "No original-language tokens were returned for this verse.",
   },
   ko: {
     transliteration: "음역",
@@ -48,10 +48,10 @@ const interlinearCopy = {
     englishGloss: "영어 뜻",
     morphology: "형태",
     morphologyCode: "원어 형태 코드",
-    notProvided: "제공되지 않음",
     selectVerse: "인터리니어를 보려면 절을 선택하세요.",
     loading: "인터리니어 절을 불러오는 중입니다...",
     error: "인터리니어 절을 불러올 수 없습니다.",
+    empty: "이 절의 원어 토큰이 없습니다.",
   },
 };
 
@@ -142,7 +142,11 @@ export function InterlinearVerse({
   }
 
   if (!selectedData) {
-    return null;
+    return (
+      <div className="rounded-md border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
+        {copy.loading}
+      </div>
+    );
   }
 
   const sentenceDirection = originalSentenceDirection(selectedData.tokens);
@@ -154,58 +158,65 @@ export function InterlinearVerse({
     >
       <div className="flex flex-col gap-7">
         <div className="min-w-0">
-          <ul
-            className="flex max-w-4xl flex-wrap items-end gap-x-3 gap-y-5 text-zinc-950"
-            dir={sentenceDirection}
-          >
-            {selectedData.tokens.map((token) => {
-              const transliteration = getLocalizedTransliteration(token.term, activeLocale);
-              const gloss = getLocalizedGloss(token.term, activeLocale);
-              const morphology = formatOriginalLanguageMorphology(
-                token.morphology,
-                activeLocale,
-              );
+          {selectedData.tokens.length > 0 ? (
+            <ul
+              className="flex max-w-4xl flex-wrap items-end gap-x-3 gap-y-5 text-zinc-950"
+              dir={sentenceDirection}
+            >
+              {selectedData.tokens.map((token) => {
+                const transliteration = getLocalizedTransliteration(token.term, activeLocale);
+                const gloss = getLocalizedGloss(token.term, activeLocale);
+                const morphology = formatOriginalLanguageMorphology(
+                  token.morphology,
+                  activeLocale,
+                );
 
-              return (
-                <li className="inline-flex" key={token.id}>
-                  <button
-                    className="group relative inline-flex flex-col items-center rounded px-1.5 py-1 text-center transition-colors hover:bg-zinc-100 focus-visible:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
-                    onClick={() => setSelectedWord(toPanelWord(token))}
-                    type="button"
-                  >
-                    <span
-                      className="text-xl font-semibold leading-8 text-zinc-950"
-                      dir={textDirection(token.term.language_type)}
+                return (
+                  <li className="inline-flex" key={token.id}>
+                    <button
+                      className="group relative inline-flex flex-col items-center rounded px-1.5 py-1 text-center transition-colors hover:bg-zinc-100 focus-visible:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
+                      onClick={() => setSelectedWord(toPanelWord(token))}
+                      type="button"
                     >
-                      {token.surface_form}
-                    </span>
-                    <span className={transliterationClassName(transliteration.isFallback)}>
-                      {transliteration.value || copy.notProvided}
-                    </span>
-                    <span
-                      className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-64 -translate-x-1/2 rounded-md border border-zinc-200 bg-white p-3 text-left text-xs leading-5 text-zinc-700 shadow-lg group-hover:block group-focus-visible:block"
-                      dir="ltr"
-                      role="tooltip"
-                    >
-                      <TooltipField label={copy.lemma} value={token.term.lemma} />
-                      <TooltipField label={copy.strongs} value={token.term.strongs_number} />
-                      <TooltipField
-                        label={gloss.label}
-                        value={gloss.value || copy.notProvided}
-                      />
-                      {morphology.display ? (
-                        <TooltipMorphologyField
-                          codeLabel={copy.morphologyCode}
-                          label={copy.morphology}
-                          morphology={morphology}
-                        />
+                      <span
+                        className="text-xl font-semibold leading-8 text-zinc-950"
+                        dir={textDirection(token.term.language_type)}
+                      >
+                        {token.surface_form}
+                      </span>
+                      {transliteration.value ? (
+                        <span className={transliterationClassName(transliteration.isFallback)}>
+                          {transliteration.value}
+                        </span>
                       ) : null}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                      <span
+                        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-64 -translate-x-1/2 rounded-md border border-zinc-200 bg-white p-3 text-left text-xs leading-5 text-zinc-700 shadow-lg group-hover:block group-focus-visible:block"
+                        dir="ltr"
+                        role="tooltip"
+                      >
+                        <TooltipField label={copy.lemma} value={token.term.lemma} />
+                        <TooltipField label={copy.strongs} value={token.term.strongs_number} />
+                        {gloss.value ? (
+                          <TooltipField label={gloss.label} value={gloss.value} />
+                        ) : null}
+                        {morphology.display ? (
+                          <TooltipMorphologyField
+                            codeLabel={copy.morphologyCode}
+                            label={copy.morphology}
+                            morphology={morphology}
+                          />
+                        ) : null}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div className="rounded-md border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
+              {copy.empty}
+            </div>
+          )}
         </div>
       </div>
 
