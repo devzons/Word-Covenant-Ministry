@@ -129,6 +129,7 @@ final class WordStudyService
             'transliteration' => $term->transliteration,
             'transliteration_ko' => $term->transliterationKo,
             'gloss' => $term->gloss,
+            'gloss_ko' => $term->glossKo,
         ];
     }
 

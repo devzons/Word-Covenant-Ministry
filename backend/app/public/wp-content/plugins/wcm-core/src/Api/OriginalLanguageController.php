@@ -366,6 +366,7 @@ final class OriginalLanguageController
                 'transliteration' => (string) $row['transliteration'],
                 'transliteration_ko' => $this->nullableString($row['transliteration_ko'] ?? null),
                 'gloss' => $this->nullableString($row['gloss']),
+                'gloss_ko' => $this->nullableString($row['gloss_ko'] ?? null),
             ],
         ];
     }
@@ -393,6 +394,7 @@ final class OriginalLanguageController
             'transliteration_ko' => $this->nullableString($row['transliteration_ko'] ?? null),
             'morphology' => (string) $row['morphology'],
             'gloss' => $this->nullableString($row['gloss']),
+            'gloss_ko' => $this->nullableString($row['gloss_ko'] ?? null),
             'contextual_function' => $this->nullableString($row['contextual_function']),
         ];
     }
@@ -412,6 +414,7 @@ final class OriginalLanguageController
             'transliteration' => $term->transliteration,
             'transliteration_ko' => $term->transliterationKo,
             'gloss' => $term->gloss,
+            'gloss_ko' => $term->glossKo,
         ];
     }
 

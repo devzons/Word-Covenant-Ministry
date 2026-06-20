@@ -29,6 +29,7 @@ final readonly class OriginalTerm
     public ?string $transliterationKo;
     public string $root;
     public ?string $gloss;
+    public ?string $glossKo;
     public ?string $definition;
 
     public function __construct(
@@ -42,6 +43,7 @@ final readonly class OriginalTerm
         ?string $transliterationKo = null,
         string $root = '',
         ?string $gloss = null,
+        ?string $glossKo = null,
         ?string $definition = null
     ) {
         $languageType = trim($languageType);
@@ -83,6 +85,7 @@ final readonly class OriginalTerm
         $this->transliterationKo = $transliterationKo;
         $this->root = $root;
         $this->gloss = $gloss;
+        $this->glossKo = $glossKo;
         $this->definition = $definition;
     }
 }

@@ -10,7 +10,7 @@ use WCM\Scripture\Repositories\OriginalTermRepository;
 final class SchemaInstaller
 {
     public const DB_VERSION_OPTION = 'wcm_core_db_version';
-    public const DB_VERSION = '1.3.0';
+    public const DB_VERSION = '1.4.0';
 
     public function install(): void
     {
@@ -25,6 +25,7 @@ final class SchemaInstaller
         dbDelta($this->getSchemaSql($wpdb->prefix, $charsetCollate));
         $this->migrateOriginalTermIdentityHash($wpdb->prefix . 'wcm_original_terms');
         $this->migrateOriginalTermKoreanTransliteration($wpdb->prefix . 'wcm_original_terms');
+        $this->migrateOriginalTermKoreanGloss($wpdb->prefix . 'wcm_original_terms');
 
         update_option(self::DB_VERSION_OPTION, self::DB_VERSION);
     }
@@ -97,6 +98,7 @@ final class SchemaInstaller
                 transliteration_ko VARCHAR(255) NULL,
                 root VARCHAR(255) NOT NULL DEFAULT '',
                 gloss TEXT NULL,
+                gloss_ko TEXT NULL,
                 definition LONGTEXT NULL,
                 created_at DATETIME NOT NULL,
                 updated_at DATETIME NOT NULL,
@@ -246,6 +248,24 @@ final class SchemaInstaller
         $added = $wpdb->query("ALTER TABLE {$tableName} ADD transliteration_ko VARCHAR(255) NULL AFTER transliteration");
         if ($added === false) {
             throw new RuntimeException('Failed to add original term Korean transliteration column.');
+        }
+    }
+
+    private function migrateOriginalTermKoreanGloss(string $tableName): void
+    {
+        global $wpdb;
+
+        if (! $this->tableExists($tableName)) {
+            return;
+        }
+
+        if ($this->columnExists($tableName, 'gloss_ko')) {
+            return;
+        }
+
+        $added = $wpdb->query("ALTER TABLE {$tableName} ADD gloss_ko TEXT NULL AFTER gloss");
+        if ($added === false) {
+            throw new RuntimeException('Failed to add original term Korean gloss column.');
         }
     }
 

@@ -238,7 +238,8 @@ final class OriginalWordOccurrenceRepository
                     terms.strongs_extended,
                     terms.transliteration,
                     terms.transliteration_ko,
-                    terms.gloss
+                    terms.gloss,
+                    terms.gloss_ko
                 FROM {$occurrencesTable} occurrences
                 INNER JOIN {$termsTable} terms ON terms.id = occurrences.term_id
                 WHERE occurrences.source_dataset = %s

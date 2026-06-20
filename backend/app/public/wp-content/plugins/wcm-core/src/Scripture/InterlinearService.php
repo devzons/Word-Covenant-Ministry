@@ -142,6 +142,7 @@ final class InterlinearService
                 'transliteration' => (string) $row['transliteration'],
                 'transliteration_ko' => $this->nullableString($row['transliteration_ko'] ?? null),
                 'gloss' => $this->nullableString($row['gloss']),
+                'gloss_ko' => $this->nullableString($row['gloss_ko'] ?? null),
             ],
         ];
     }
