@@ -53,7 +53,7 @@ function parseCliArguments(array $argv): array
         }
 
         if ($argument === '--seed-set') {
-            throw new RuntimeException('Use --seed-set=phase8c-approved or --seed-set=phase8e-approved-lexical.');
+            throw new RuntimeException('Use --seed-set=phase8c-approved, --seed-set=phase8e-approved-lexical, or --seed-set=phase8e5-approved-reviewed.');
         }
 
         throw new RuntimeException('Unknown argument: ' . $argument);
@@ -223,6 +223,7 @@ function reviewedGlossSeeds(string $seedSet): array
     return match ($seedSet) {
         'phase8c-approved' => phase8cApprovedGlossSeeds(),
         'phase8e-approved-lexical' => phase8eApprovedLexicalGlossSeeds(),
+        'phase8e5-approved-reviewed' => phase8e5ApprovedReviewedGlossSeeds(),
         default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
     };
 }
@@ -509,6 +510,94 @@ function phase8eApprovedLexicalGlossSeeds(): array
             'transliteration' => "'e.Chad",
             'gloss' => 'one',
             'gloss_ko' => '하나',
+        ],
+    ];
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     gloss: string,
+ *     gloss_ko: string
+ * }>
+ */
+function phase8e5ApprovedReviewedGlossSeeds(): array
+{
+    return [
+        [
+            'term_id' => 5578,
+            'language_type' => 'hebrew',
+            'lemma' => 'אֶ֫רֶץ',
+            'strongs_number' => 'H776',
+            'strongs_extended' => 'H0776G',
+            'transliteration' => "'A.retz",
+            'gloss' => 'country;_planet',
+            'gloss_ko' => '땅',
+        ],
+        [
+            'term_id' => 5739,
+            'language_type' => 'hebrew',
+            'lemma' => 'הוּא',
+            'strongs_number' => 'H1931',
+            'strongs_extended' => '',
+            'transliteration' => "hu'",
+            'gloss' => 'he;_she;_it',
+            'gloss_ko' => '그',
+        ],
+        [
+            'term_id' => 135,
+            'language_type' => 'greek',
+            'lemma' => 'οὐ',
+            'strongs_number' => 'G3756',
+            'strongs_extended' => '',
+            'transliteration' => 'ouk',
+            'gloss' => 'no',
+            'gloss_ko' => '아니다',
+        ],
+        [
+            'term_id' => 5783,
+            'language_type' => 'hebrew',
+            'lemma' => 'אָב',
+            'strongs_number' => 'H1',
+            'strongs_extended' => 'H0001G',
+            'transliteration' => "'a.Vi",
+            'gloss' => 'father',
+            'gloss_ko' => '아버지',
+        ],
+        [
+            'term_id' => 5956,
+            'language_type' => 'hebrew',
+            'lemma' => 'זֶה',
+            'strongs_number' => 'H2088',
+            'strongs_extended' => '',
+            'transliteration' => 'zeh',
+            'gloss' => 'this',
+            'gloss_ko' => '이것',
+        ],
+        [
+            'term_id' => 91,
+            'language_type' => 'greek',
+            'lemma' => 'μή',
+            'strongs_number' => 'G3361',
+            'strongs_extended' => '',
+            'transliteration' => 'mē',
+            'gloss' => 'not',
+            'gloss_ko' => '아니다',
+        ],
+        [
+            'term_id' => 5804,
+            'language_type' => 'hebrew',
+            'lemma' => 'עִם',
+            'strongs_number' => 'H5973',
+            'strongs_extended' => 'H5973A',
+            'transliteration' => "'i.Ma",
+            'gloss' => 'with',
+            'gloss_ko' => '함께',
         ],
     ];
 }
