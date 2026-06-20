@@ -39,7 +39,6 @@ const originalWordPanelCopy = {
     englishGloss: "Gloss",
     morphology: "Morphology",
     morphologyCode: "Morphology code",
-    notProvided: "Not provided",
   },
   ko: {
     title: "원어 단어",
@@ -56,7 +55,6 @@ const originalWordPanelCopy = {
     englishGloss: "영어 뜻",
     morphology: "형태",
     morphologyCode: "원어 형태 코드",
-    notProvided: "제공되지 않음",
   },
 };
 
@@ -148,13 +146,15 @@ function OriginalWordDetails({
           value={word.strongs_number}
         />
         <PanelField label={copy.strongsExtended} value={word.strongs_extended} />
-        <PanelField
-          isFallback={transliteration.isFallback}
-          label={copy.transliteration}
-          note={transliteration.isFallback ? copy.transliterationFallback : ""}
-          value={transliteration.value || copy.notProvided}
-        />
-        <PanelField label={gloss.label} value={gloss.value || copy.notProvided} />
+        {transliteration.value ? (
+          <PanelField
+            isFallback={transliteration.isFallback}
+            label={copy.transliteration}
+            note={transliteration.isFallback ? copy.transliterationFallback : ""}
+            value={transliteration.value}
+          />
+        ) : null}
+        {gloss.value ? <PanelField label={gloss.label} value={gloss.value} /> : null}
         {morphology.display ? (
           <MorphologyPanelField
             codeLabel={copy.morphologyCode}

@@ -189,15 +189,17 @@ function renderStrongStudyState({
                         key={term.id}
                       >
                         <p className="font-semibold text-zinc-950">{term.lemma}</p>
-                        <p
-                          className={
-                            transliteration.isFallback
-                              ? "text-sm italic text-zinc-500"
-                              : "text-sm text-zinc-600"
-                          }
-                        >
-                          {transliteration.value}
-                        </p>
+                        {transliteration.value ? (
+                          <p
+                            className={
+                              transliteration.isFallback
+                                ? "text-sm italic text-zinc-500"
+                                : "text-sm text-zinc-600"
+                            }
+                          >
+                            {transliteration.value}
+                          </p>
+                        ) : null}
                         {gloss.value ? (
                           <p
                             className={
