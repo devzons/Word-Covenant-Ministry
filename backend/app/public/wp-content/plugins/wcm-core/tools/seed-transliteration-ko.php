@@ -54,7 +54,7 @@ function parseCliArguments(array $argv): array
 
         if ($argument === '--seed-set') {
             throw new RuntimeException(
-                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, --seed-set=top-lexical-hebrew, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, --seed-set=phase8f3-top250-filled, --seed-set=phase8f5-top500-filled, or --seed-set=phase8f6-reviewed-remaining.'
+                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, --seed-set=top-lexical-hebrew, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, --seed-set=phase8f3-top250-filled, --seed-set=phase8f5-top500-filled, --seed-set=phase8f6-reviewed-remaining, or --seed-set=phase8f-transliteration-push.'
             );
         }
 
@@ -234,6 +234,7 @@ function reviewedSeeds(string $seedSet): array
         'phase8f3-top250-filled' => phase8f3Top250FilledReviewedSeeds(),
         'phase8f5-top500-filled' => phase8f5Top500FilledReviewedSeeds(),
         'phase8f6-reviewed-remaining' => phase8f6ReviewedRemainingSeeds(),
+        'phase8f-transliteration-push' => phase8fTransliterationPushSeeds(),
         default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
     };
 }
@@ -1188,6 +1189,88 @@ function readPhase8f6ApprovedWorksheetRows(string $path, string $valueColumn): a
         }
 
         if (($row[$valueColumn] ?? '') === '') {
+            continue;
+        }
+
+        $rows[] = $row;
+    }
+
+    fclose($handle);
+
+    return $rows;
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     source_dataset: string,
+ *     book_slug: string,
+ *     chapter: int,
+ *     verse: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     transliteration_ko: string
+ * }>
+ */
+function phase8fTransliterationPushSeeds(): array
+{
+    $worksheetPath = '/tmp/wcm_phase8f_transliteration_push_top1000_review.tsv';
+    $seedsByTermId = [];
+
+    foreach (readPhase8fTransliterationPushApprovedRows($worksheetPath) as $row) {
+        $seed = phase8f3ReviewedTransliterationSeed((int) $row['term_id'], $row['proposed_transliteration_ko']);
+        $seedsByTermId[$seed['term_id']] = $seed;
+    }
+
+    $seeds = array_values($seedsByTermId);
+
+    if (count($seeds) !== 1000) {
+        throw new RuntimeException('Phase 8F transliteration push seed set must contain exactly 1000 reviewed rows.');
+    }
+
+    return $seeds;
+}
+
+/**
+ * @return array<string, string>[]
+ */
+function readPhase8fTransliterationPushApprovedRows(string $path): array
+{
+    if (! is_file($path)) {
+        throw new RuntimeException('Phase 8F transliteration push worksheet not found: ' . $path);
+    }
+
+    $handle = fopen($path, 'rb');
+
+    if ($handle === false) {
+        throw new RuntimeException('Unable to read Phase 8F transliteration push worksheet: ' . $path);
+    }
+
+    $header = fgetcsv($handle, 0, "\t");
+
+    if (! is_array($header)) {
+        fclose($handle);
+        throw new RuntimeException('Phase 8F transliteration push worksheet is empty: ' . $path);
+    }
+
+    $rows = [];
+
+    while (($values = fgetcsv($handle, 0, "\t")) !== false) {
+        $row = array_combine($header, $values);
+
+        if (! is_array($row)) {
+            fclose($handle);
+            throw new RuntimeException('Phase 8F transliteration push worksheet row does not match the header.');
+        }
+
+        if (($row['recommended_action'] ?? '') !== 'approve_seed') {
+            continue;
+        }
+
+        if (($row['proposed_transliteration_ko'] ?? '') === '') {
             continue;
         }
 
