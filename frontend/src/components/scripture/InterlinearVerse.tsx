@@ -7,7 +7,7 @@ import {
   type OriginalWordPanelWord,
 } from "@/components/scripture/OriginalWordPanel";
 import { getInterlinearVerse } from "@/lib/api/original-language";
-import { formatMorphology } from "@/lib/utils/morphology";
+import { formatOriginalLanguageMorphology } from "@/lib/original-language/morphology";
 import type {
   HighLevelInterlinearResponse,
   HighLevelInterlinearToken,
@@ -34,6 +34,7 @@ const interlinearCopy = {
     gloss: "Gloss",
     englishGloss: "Gloss",
     morphology: "Morphology",
+    morphologyCode: "Morphology code",
     notProvided: "Not provided",
     selectVerse: "Select a verse to view interlinear details.",
     loading: "Loading interlinear verse...",
@@ -46,6 +47,7 @@ const interlinearCopy = {
     gloss: "뜻",
     englishGloss: "영어 뜻",
     morphology: "형태",
+    morphologyCode: "원어 형태 코드",
     notProvided: "제공되지 않음",
     selectVerse: "인터리니어를 보려면 절을 선택하세요.",
     loading: "인터리니어 절을 불러오는 중입니다...",
@@ -159,6 +161,10 @@ export function InterlinearVerse({
             {selectedData.tokens.map((token) => {
               const transliteration = getLocalizedTransliteration(token.term, activeLocale);
               const gloss = getLocalizedGloss(token.term, activeLocale);
+              const morphology = formatOriginalLanguageMorphology(
+                token.morphology,
+                activeLocale,
+              );
 
               return (
                 <li className="inline-flex" key={token.id}>
@@ -187,13 +193,13 @@ export function InterlinearVerse({
                         label={gloss.label}
                         value={gloss.value || copy.notProvided}
                       />
-                      <TooltipField
-                        label={copy.morphology}
-                        value={
-                          formatMorphology(token.morphology, activeLocale).display ||
-                          copy.notProvided
-                        }
-                      />
+                      {morphology.display ? (
+                        <TooltipMorphologyField
+                          codeLabel={copy.morphologyCode}
+                          label={copy.morphology}
+                          morphology={morphology}
+                        />
+                      ) : null}
                     </span>
                   </button>
                 </li>
@@ -293,6 +299,32 @@ function TooltipField({ label, value }: { label: string; value: string }) {
     <span className="block">
       <span className="font-semibold text-zinc-500">{label}: </span>
       <span className="break-words text-zinc-900">{value}</span>
+    </span>
+  );
+}
+
+function TooltipMorphologyField({
+  codeLabel,
+  label,
+  morphology,
+}: {
+  codeLabel: string;
+  label: string;
+  morphology: ReturnType<typeof formatOriginalLanguageMorphology>;
+}) {
+  if (morphology.isFallback) {
+    return <span className="block break-words text-zinc-900">{morphology.display}</span>;
+  }
+
+  return (
+    <span className="block">
+      <span className="font-semibold text-zinc-500">{label}: </span>
+      <span className="break-words text-zinc-900">{morphology.display}</span>
+      {morphology.display !== morphology.raw ? (
+        <span className="mt-0.5 block text-[11px] text-zinc-500">
+          {codeLabel}: {morphology.raw}
+        </span>
+      ) : null}
     </span>
   );
 }

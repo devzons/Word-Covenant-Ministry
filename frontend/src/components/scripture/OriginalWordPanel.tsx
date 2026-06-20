@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { StrongStudyPanel } from "@/components/scripture/StrongStudyPanel";
-import { formatMorphology } from "@/lib/utils/morphology";
+import { formatOriginalLanguageMorphology } from "@/lib/original-language/morphology";
 
 export type OriginalWordPanelWord = {
   surface_form: string;
@@ -38,6 +38,7 @@ const originalWordPanelCopy = {
     gloss: "Gloss",
     englishGloss: "Gloss",
     morphology: "Morphology",
+    morphologyCode: "Morphology code",
     notProvided: "Not provided",
   },
   ko: {
@@ -54,6 +55,7 @@ const originalWordPanelCopy = {
     gloss: "뜻",
     englishGloss: "영어 뜻",
     morphology: "형태",
+    morphologyCode: "원어 형태 코드",
     notProvided: "제공되지 않음",
   },
 };
@@ -114,7 +116,7 @@ function OriginalWordDetails({
   locale: "en" | "ko";
   copy: (typeof originalWordPanelCopy)["en"];
 }) {
-  const morphology = formatMorphology(word.morphology, locale);
+  const morphology = formatOriginalLanguageMorphology(word.morphology, locale);
   const transliteration = localizedTransliteration(word, locale);
   const gloss = localizedGloss(word, locale);
 
@@ -153,7 +155,13 @@ function OriginalWordDetails({
           value={transliteration.value || copy.notProvided}
         />
         <PanelField label={gloss.label} value={gloss.value || copy.notProvided} />
-        <PanelField label={copy.morphology} value={morphology.display || copy.notProvided} />
+        {morphology.display ? (
+          <MorphologyPanelField
+            codeLabel={copy.morphologyCode}
+            label={copy.morphology}
+            morphology={morphology}
+          />
+        ) : null}
       </dl>
     </>
   );
@@ -239,5 +247,34 @@ function StrongPanelField({
         </button>
       </dd>
     </div>
+  );
+}
+
+function MorphologyPanelField({
+  codeLabel,
+  label,
+  morphology,
+}: {
+  codeLabel: string;
+  label: string;
+  morphology: ReturnType<typeof formatOriginalLanguageMorphology>;
+}) {
+  if (morphology.isFallback) {
+    return (
+      <div>
+        <dt className="font-semibold text-zinc-500">{label}</dt>
+        <dd className="mt-1 break-words text-base text-zinc-950">
+          <span className="italic text-zinc-700">{morphology.display}</span>
+        </dd>
+      </div>
+    );
+  }
+
+  return (
+    <PanelField
+      label={label}
+      note={morphology.display !== morphology.raw ? `${codeLabel}: ${morphology.raw}` : ""}
+      value={morphology.display}
+    />
   );
 }
