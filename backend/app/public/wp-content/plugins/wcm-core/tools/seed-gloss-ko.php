@@ -53,7 +53,7 @@ function parseCliArguments(array $argv): array
         }
 
         if ($argument === '--seed-set') {
-            throw new RuntimeException('Use --seed-set=phase8c-approved, --seed-set=phase8e-approved-lexical, or --seed-set=phase8e5-approved-reviewed.');
+            throw new RuntimeException('Use --seed-set=phase8c-approved, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, or --seed-set=phase8f3-top250-filled.');
         }
 
         throw new RuntimeException('Unknown argument: ' . $argument);
@@ -224,6 +224,7 @@ function reviewedGlossSeeds(string $seedSet): array
         'phase8c-approved' => phase8cApprovedGlossSeeds(),
         'phase8e-approved-lexical' => phase8eApprovedLexicalGlossSeeds(),
         'phase8e5-approved-reviewed' => phase8e5ApprovedReviewedGlossSeeds(),
+        'phase8f3-top250-filled' => phase8f3Top250FilledGlossSeeds(),
         default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
     };
 }
@@ -599,6 +600,129 @@ function phase8e5ApprovedReviewedGlossSeeds(): array
             'gloss' => 'with',
             'gloss_ko' => '함께',
         ],
+    ];
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     gloss: string,
+ *     gloss_ko: string
+ * }>
+ */
+function phase8f3Top250FilledGlossSeeds(): array
+{
+    $worksheetPath = '/tmp/wcm_phase8f2_top250_gloss_filled.tsv';
+    $seedsByTermId = [];
+
+    foreach (readPhase8f3ApprovedWorksheetRows($worksheetPath, 'proposed_gloss_ko') as $row) {
+        $seed = phase8f3ReviewedGlossSeed((int) $row['term_id'], $row['proposed_gloss_ko']);
+        $seedsByTermId[$seed['term_id']] = $seed;
+    }
+
+    foreach ([101 => '주', 3 => '예수'] as $termId => $glossKo) {
+        $seed = phase8f3ReviewedGlossSeed($termId, $glossKo);
+        $seedsByTermId[$seed['term_id']] = $seed;
+    }
+
+    $seeds = array_values($seedsByTermId);
+
+    if (count($seeds) !== 66) {
+        throw new RuntimeException('Phase 8F-3 gloss seed set must contain exactly 66 reviewed rows.');
+    }
+
+    return $seeds;
+}
+
+/**
+ * @return array<string, string>[]
+ */
+function readPhase8f3ApprovedWorksheetRows(string $path, string $valueColumn): array
+{
+    if (! is_file($path)) {
+        throw new RuntimeException('Phase 8F-3 worksheet not found: ' . $path);
+    }
+
+    $handle = fopen($path, 'rb');
+
+    if ($handle === false) {
+        throw new RuntimeException('Unable to read Phase 8F-3 worksheet: ' . $path);
+    }
+
+    $header = fgetcsv($handle, 0, "\t");
+
+    if (! is_array($header)) {
+        fclose($handle);
+        throw new RuntimeException('Phase 8F-3 worksheet is empty: ' . $path);
+    }
+
+    $rows = [];
+
+    while (($values = fgetcsv($handle, 0, "\t")) !== false) {
+        $row = array_combine($header, $values);
+
+        if (! is_array($row)) {
+            fclose($handle);
+            throw new RuntimeException('Phase 8F-3 worksheet row does not match the header.');
+        }
+
+        if ((int) ($row['rank'] ?? 0) > 250) {
+            continue;
+        }
+
+        if (($row['recommendation'] ?? '') !== 'approve_seed') {
+            continue;
+        }
+
+        if (($row[$valueColumn] ?? '') === '') {
+            throw new RuntimeException('Approved Phase 8F-3 row is missing ' . $valueColumn . '.');
+        }
+
+        $rows[] = $row;
+    }
+
+    fclose($handle);
+
+    return $rows;
+}
+
+/**
+ * @return array{
+ *     term_id: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     gloss: string,
+ *     gloss_ko: string
+ * }
+ */
+function phase8f3ReviewedGlossSeed(int $termId, string $glossKo): array
+{
+    global $wpdb;
+
+    $termsTable = $wpdb->prefix . 'wcm_original_terms';
+    $term = readSeedTerm($termsTable, $termId);
+
+    if ($term === null) {
+        throw new RuntimeException('Missing Phase 8F-3 term ID ' . $termId . '.');
+    }
+
+    return [
+        'term_id' => $termId,
+        'language_type' => (string) $term['language_type'],
+        'lemma' => (string) $term['lemma'],
+        'strongs_number' => (string) $term['strongs_number'],
+        'strongs_extended' => (string) $term['strongs_extended'],
+        'transliteration' => (string) $term['transliteration'],
+        'gloss' => (string) $term['gloss'],
+        'gloss_ko' => $glossKo,
     ];
 }
 

@@ -54,7 +54,7 @@ function parseCliArguments(array $argv): array
 
         if ($argument === '--seed-set') {
             throw new RuntimeException(
-                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, --seed-set=top-lexical-hebrew, --seed-set=phase8e-approved-lexical, or --seed-set=phase8e5-approved-reviewed.'
+                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, --seed-set=top-lexical-hebrew, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, or --seed-set=phase8f3-top250-filled.'
             );
         }
 
@@ -231,6 +231,7 @@ function reviewedSeeds(string $seedSet): array
         'top-lexical-hebrew' => topLexicalHebrewReviewedSeeds(),
         'phase8e-approved-lexical' => phase8eApprovedLexicalReviewedSeeds(),
         'phase8e5-approved-reviewed' => phase8e5ApprovedReviewedSeeds(),
+        'phase8f3-top250-filled' => phase8f3Top250FilledReviewedSeeds(),
         default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
     };
 }
@@ -922,6 +923,157 @@ function phase8e5ApprovedReviewedSeeds(): array
             'transliteration' => "'i.Ma",
             'transliteration_ko' => '이마',
         ],
+    ];
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     source_dataset: string,
+ *     book_slug: string,
+ *     chapter: int,
+ *     verse: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     transliteration_ko: string
+ * }>
+ */
+function phase8f3Top250FilledReviewedSeeds(): array
+{
+    $worksheetPath = '/tmp/wcm_phase8f2_top250_transliteration_filled.tsv';
+    $seedsByTermId = [];
+
+    foreach (readPhase8f3ApprovedWorksheetRows($worksheetPath, 'proposed_transliteration_ko') as $row) {
+        $seed = phase8f3ReviewedTransliterationSeed((int) $row['term_id'], $row['proposed_transliteration_ko']);
+        $seedsByTermId[$seed['term_id']] = $seed;
+    }
+
+    foreach ([101 => '퀴리오스', 3 => '예수'] as $termId => $transliterationKo) {
+        $seed = phase8f3ReviewedTransliterationSeed($termId, $transliterationKo);
+        $seedsByTermId[$seed['term_id']] = $seed;
+    }
+
+    $seeds = array_values($seedsByTermId);
+
+    if (count($seeds) !== 47) {
+        throw new RuntimeException('Phase 8F-3 transliteration seed set must contain exactly 47 reviewed rows.');
+    }
+
+    return $seeds;
+}
+
+/**
+ * @return array<string, string>[]
+ */
+function readPhase8f3ApprovedWorksheetRows(string $path, string $valueColumn): array
+{
+    if (! is_file($path)) {
+        throw new RuntimeException('Phase 8F-3 worksheet not found: ' . $path);
+    }
+
+    $handle = fopen($path, 'rb');
+
+    if ($handle === false) {
+        throw new RuntimeException('Unable to read Phase 8F-3 worksheet: ' . $path);
+    }
+
+    $header = fgetcsv($handle, 0, "\t");
+
+    if (! is_array($header)) {
+        fclose($handle);
+        throw new RuntimeException('Phase 8F-3 worksheet is empty: ' . $path);
+    }
+
+    $rows = [];
+
+    while (($values = fgetcsv($handle, 0, "\t")) !== false) {
+        $row = array_combine($header, $values);
+
+        if (! is_array($row)) {
+            fclose($handle);
+            throw new RuntimeException('Phase 8F-3 worksheet row does not match the header.');
+        }
+
+        if ((int) ($row['rank'] ?? 0) > 250) {
+            continue;
+        }
+
+        if (($row['recommendation'] ?? '') !== 'approve_seed') {
+            continue;
+        }
+
+        if (($row[$valueColumn] ?? '') === '') {
+            throw new RuntimeException('Approved Phase 8F-3 row is missing ' . $valueColumn . '.');
+        }
+
+        $rows[] = $row;
+    }
+
+    fclose($handle);
+
+    return $rows;
+}
+
+/**
+ * @return array{
+ *     term_id: int,
+ *     source_dataset: string,
+ *     book_slug: string,
+ *     chapter: int,
+ *     verse: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     transliteration_ko: string
+ * }
+ */
+function phase8f3ReviewedTransliterationSeed(int $termId, string $transliterationKo): array
+{
+    global $wpdb;
+
+    $termsTable = $wpdb->prefix . 'wcm_original_terms';
+    $occurrencesTable = $wpdb->prefix . 'wcm_original_word_occurrences';
+    $booksTable = $wpdb->prefix . 'wcm_bible_books';
+    $term = readSeedTerm($termsTable, $termId);
+
+    if ($term === null) {
+        throw new RuntimeException('Missing Phase 8F-3 term ID ' . $termId . '.');
+    }
+
+    $occurrence = $wpdb->get_row(
+        $wpdb->prepare(
+            "SELECT occurrences.source_dataset, books.slug AS book_slug, occurrences.chapter, occurrences.verse
+            FROM {$occurrencesTable} occurrences
+            INNER JOIN {$booksTable} books ON books.id = occurrences.book_id
+            WHERE occurrences.term_id = %d
+            ORDER BY occurrences.id
+            LIMIT 1",
+            $termId
+        ),
+        'ARRAY_A'
+    );
+
+    if (! is_array($occurrence)) {
+        throw new RuntimeException('Phase 8F-3 term ID ' . $termId . ' has no occurrence anchor.');
+    }
+
+    return [
+        'term_id' => $termId,
+        'source_dataset' => (string) $occurrence['source_dataset'],
+        'book_slug' => (string) $occurrence['book_slug'],
+        'chapter' => (int) $occurrence['chapter'],
+        'verse' => (int) $occurrence['verse'],
+        'language_type' => (string) $term['language_type'],
+        'lemma' => (string) $term['lemma'],
+        'strongs_number' => (string) $term['strongs_number'],
+        'strongs_extended' => (string) $term['strongs_extended'],
+        'transliteration' => (string) $term['transliteration'],
+        'transliteration_ko' => $transliterationKo,
     ];
 }
 
