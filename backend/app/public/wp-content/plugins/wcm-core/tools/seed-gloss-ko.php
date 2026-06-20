@@ -13,8 +13,8 @@ try {
     loadComposerAutoload();
     bootstrapWordPress($arguments['dbSocket']);
 
-    $report = seedReviewedKoreanGlosses($arguments['apply']);
-    printSeedSummary($report, $arguments['apply']);
+    $report = seedReviewedKoreanGlosses($arguments['apply'], $arguments['seedSet']);
+    printSeedSummary($report, $arguments['apply'], $arguments['seedSet']);
 
     exit($report['ok'] ? 0 : 1);
 } catch (Throwable $exception) {
@@ -24,12 +24,13 @@ try {
 
 /**
  * @param string[] $argv
- * @return array{apply: bool, dbSocket: string|null}
+ * @return array{apply: bool, dbSocket: string|null, seedSet: string}
  */
 function parseCliArguments(array $argv): array
 {
     $apply = false;
     $dbSocket = null;
+    $seedSet = 'phase8c-approved';
 
     foreach (array_slice($argv, 1) as $argument) {
         if ($argument === '--apply') {
@@ -46,6 +47,15 @@ function parseCliArguments(array $argv): array
             throw new RuntimeException('Use --db-socket=/path/to/mysqld.sock.');
         }
 
+        if (str_starts_with($argument, '--seed-set=')) {
+            $seedSet = substr($argument, strlen('--seed-set='));
+            continue;
+        }
+
+        if ($argument === '--seed-set') {
+            throw new RuntimeException('Use --seed-set=phase8c-approved or --seed-set=phase8e-approved-lexical.');
+        }
+
         throw new RuntimeException('Unknown argument: ' . $argument);
     }
 
@@ -56,6 +66,7 @@ function parseCliArguments(array $argv): array
     return [
         'apply' => $apply,
         'dbSocket' => $dbSocket,
+        'seedSet' => $seedSet,
     ];
 }
 
@@ -207,7 +218,28 @@ function parseWpConfigConstant(string $config, string $constant): ?string
  *     gloss_ko: string
  * }>
  */
-function reviewedGlossSeeds(): array
+function reviewedGlossSeeds(string $seedSet): array
+{
+    return match ($seedSet) {
+        'phase8c-approved' => phase8cApprovedGlossSeeds(),
+        'phase8e-approved-lexical' => phase8eApprovedLexicalGlossSeeds(),
+        default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
+    };
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     gloss: string,
+ *     gloss_ko: string
+ * }>
+ */
+function phase8cApprovedGlossSeeds(): array
 {
     return [
         [
@@ -364,6 +396,124 @@ function reviewedGlossSeeds(): array
 }
 
 /**
+ * @return array<int, array{
+ *     term_id: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     gloss: string,
+ *     gloss_ko: string
+ * }>
+ */
+function phase8eApprovedLexicalGlossSeeds(): array
+{
+    return [
+        [
+            'term_id' => 6352,
+            'language_type' => 'hebrew',
+            'lemma' => 'מֶ֫לֶךְ',
+            'strongs_number' => 'H4428',
+            'strongs_extended' => 'H4428G',
+            'transliteration' => 'Me.lekh',
+            'gloss' => 'king',
+            'gloss_ko' => '왕',
+        ],
+        [
+            'term_id' => 7129,
+            'language_type' => 'hebrew',
+            'lemma' => 'יִשְׂרָאֵל',
+            'strongs_number' => 'H3478',
+            'strongs_extended' => '',
+            'transliteration' => "Yis.ra.'El",
+            'gloss' => 'Israel',
+            'gloss_ko' => '이스라엘',
+        ],
+        [
+            'term_id' => 7,
+            'language_type' => 'hebrew',
+            'lemma' => 'אֱלֹהִים',
+            'strongs_number' => 'H430',
+            'strongs_extended' => 'H0430G',
+            'transliteration' => "'E.lo.Him",
+            'gloss' => 'God',
+            'gloss_ko' => '하나님',
+        ],
+        [
+            'term_id' => 5602,
+            'language_type' => 'hebrew',
+            'lemma' => 'יוֹם',
+            'strongs_number' => 'H3117',
+            'strongs_extended' => 'H3117G',
+            'transliteration' => 'Yom',
+            'gloss' => 'day',
+            'gloss_ko' => '날',
+        ],
+        [
+            'term_id' => 6258,
+            'language_type' => 'hebrew',
+            'lemma' => 'עַם',
+            'strongs_number' => 'H5971',
+            'strongs_extended' => 'H5971A',
+            'transliteration' => "'am",
+            'gloss' => 'people',
+            'gloss_ko' => '백성',
+        ],
+        [
+            'term_id' => 129,
+            'language_type' => 'greek',
+            'lemma' => 'θεός',
+            'strongs_number' => 'G2316',
+            'strongs_extended' => '',
+            'transliteration' => 'theos',
+            'gloss' => 'God',
+            'gloss_ko' => '하나님',
+        ],
+        [
+            'term_id' => 5920,
+            'language_type' => 'hebrew',
+            'lemma' => 'עִיר',
+            'strongs_number' => 'H5892',
+            'strongs_extended' => 'H5892B',
+            'transliteration' => "'Ir",
+            'gloss' => 'city',
+            'gloss_ko' => '성읍',
+        ],
+        [
+            'term_id' => 5781,
+            'language_type' => 'hebrew',
+            'lemma' => 'אִישׁ',
+            'strongs_number' => 'H376',
+            'strongs_extended' => 'H0376G',
+            'transliteration' => "'Ish",
+            'gloss' => 'man',
+            'gloss_ko' => '남자',
+        ],
+        [
+            'term_id' => 10360,
+            'language_type' => 'hebrew',
+            'lemma' => 'דָּוִד',
+            'strongs_number' => 'H1732',
+            'strongs_extended' => '',
+            'transliteration' => 'da.Vid',
+            'gloss' => 'David',
+            'gloss_ko' => '다윗',
+        ],
+        [
+            'term_id' => 5606,
+            'language_type' => 'hebrew',
+            'lemma' => 'אֶחָד',
+            'strongs_number' => 'H259',
+            'strongs_extended' => '',
+            'transliteration' => "'e.Chad",
+            'gloss' => 'one',
+            'gloss_ko' => '하나',
+        ],
+    ];
+}
+
+/**
  * @return array{
  *     ok: bool,
  *     requested: int,
@@ -374,12 +524,12 @@ function reviewedGlossSeeds(): array
  *     updated_term_ids: int[]
  * }
  */
-function seedReviewedKoreanGlosses(bool $apply): array
+function seedReviewedKoreanGlosses(bool $apply, string $seedSet): array
 {
     global $wpdb;
 
     $termsTable = $wpdb->prefix . 'wcm_original_terms';
-    $seeds = reviewedGlossSeeds();
+    $seeds = reviewedGlossSeeds($seedSet);
     $errors = [];
     $validated = 0;
     $updated = 0;
@@ -608,9 +758,10 @@ function seedReport(
  *     updated_term_ids: int[]
  * } $report
  */
-function printSeedSummary(array $report, bool $apply): void
+function printSeedSummary(array $report, bool $apply, string $seedSet): void
 {
     fwrite(STDOUT, 'Mode: ' . ($apply ? 'apply' : 'dry-run') . "\n");
+    fwrite(STDOUT, 'Seed set: ' . $seedSet . "\n");
     fwrite(STDOUT, 'Requested seeds: ' . $report['requested'] . "\n");
     fwrite(STDOUT, 'Validated seeds: ' . $report['validated'] . "\n");
     fwrite(STDOUT, 'Updated terms: ' . $report['updated'] . "\n");

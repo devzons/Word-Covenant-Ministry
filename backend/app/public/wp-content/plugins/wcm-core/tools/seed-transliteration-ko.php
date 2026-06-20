@@ -54,7 +54,7 @@ function parseCliArguments(array $argv): array
 
         if ($argument === '--seed-set') {
             throw new RuntimeException(
-                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, or --seed-set=top-lexical-hebrew.'
+                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, --seed-set=top-lexical-hebrew, or --seed-set=phase8e-approved-lexical.'
             );
         }
 
@@ -229,6 +229,7 @@ function reviewedSeeds(string $seedSet): array
         'genesis-matthew-1-1' => genesisMatthewReviewedSeeds(),
         'top500-conservative' => top500ConservativeReviewedSeeds(),
         'top-lexical-hebrew' => topLexicalHebrewReviewedSeeds(),
+        'phase8e-approved-lexical' => phase8eApprovedLexicalReviewedSeeds(),
         default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
     };
 }
@@ -708,6 +709,144 @@ function topLexicalHebrewReviewedSeeds(): array
             'strongs_extended' => 'H3588A',
             'transliteration' => 'ki-',
             'transliteration_ko' => '키',
+        ],
+    ];
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     source_dataset: string,
+ *     book_slug: string,
+ *     chapter: int,
+ *     verse: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     transliteration_ko: string
+ * }>
+ */
+function phase8eApprovedLexicalReviewedSeeds(): array
+{
+    return [
+        [
+            'term_id' => 6352,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'genesis',
+            'chapter' => 14,
+            'verse' => 1,
+            'language_type' => 'hebrew',
+            'lemma' => 'מֶ֫לֶךְ',
+            'strongs_number' => 'H4428',
+            'strongs_extended' => 'H4428G',
+            'transliteration' => 'Me.lekh',
+            'transliteration_ko' => '멜레크',
+        ],
+        [
+            'term_id' => 7129,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'genesis',
+            'chapter' => 32,
+            'verse' => 28,
+            'language_type' => 'hebrew',
+            'lemma' => 'יִשְׂרָאֵל',
+            'strongs_number' => 'H3478',
+            'strongs_extended' => '',
+            'transliteration' => "Yis.ra.'El",
+            'transliteration_ko' => '이스라엘',
+        ],
+        [
+            'term_id' => 5602,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'genesis',
+            'chapter' => 1,
+            'verse' => 5,
+            'language_type' => 'hebrew',
+            'lemma' => 'יוֹם',
+            'strongs_number' => 'H3117',
+            'strongs_extended' => 'H3117G',
+            'transliteration' => 'Yom',
+            'transliteration_ko' => '욤',
+        ],
+        [
+            'term_id' => 6258,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'genesis',
+            'chapter' => 11,
+            'verse' => 6,
+            'language_type' => 'hebrew',
+            'lemma' => 'עַם',
+            'strongs_number' => 'H5971',
+            'strongs_extended' => 'H5971A',
+            'transliteration' => "'am",
+            'transliteration_ko' => '암',
+        ],
+        [
+            'term_id' => 129,
+            'source_dataset' => 'STEP_TAGNT',
+            'book_slug' => 'matthew',
+            'chapter' => 1,
+            'verse' => 23,
+            'language_type' => 'greek',
+            'lemma' => 'θεός',
+            'strongs_number' => 'G2316',
+            'strongs_extended' => '',
+            'transliteration' => 'theos',
+            'transliteration_ko' => '테오스',
+        ],
+        [
+            'term_id' => 5920,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'genesis',
+            'chapter' => 4,
+            'verse' => 17,
+            'language_type' => 'hebrew',
+            'lemma' => 'עִיר',
+            'strongs_number' => 'H5892',
+            'strongs_extended' => 'H5892B',
+            'transliteration' => "'Ir",
+            'transliteration_ko' => '이르',
+        ],
+        [
+            'term_id' => 5781,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'genesis',
+            'chapter' => 2,
+            'verse' => 23,
+            'language_type' => 'hebrew',
+            'lemma' => 'אִישׁ',
+            'strongs_number' => 'H376',
+            'strongs_extended' => 'H0376G',
+            'transliteration' => "'Ish",
+            'transliteration_ko' => '이쉬',
+        ],
+        [
+            'term_id' => 10360,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'ruth',
+            'chapter' => 4,
+            'verse' => 17,
+            'language_type' => 'hebrew',
+            'lemma' => 'דָּוִד',
+            'strongs_number' => 'H1732',
+            'strongs_extended' => '',
+            'transliteration' => 'da.Vid',
+            'transliteration_ko' => '다윗',
+        ],
+        [
+            'term_id' => 5606,
+            'source_dataset' => 'STEP_TAHOT',
+            'book_slug' => 'genesis',
+            'chapter' => 1,
+            'verse' => 5,
+            'language_type' => 'hebrew',
+            'lemma' => 'אֶחָד',
+            'strongs_number' => 'H259',
+            'strongs_extended' => '',
+            'transliteration' => "'e.Chad",
+            'transliteration_ko' => '에하드',
         ],
     ];
 }
