@@ -64,7 +64,7 @@ export default async function BibleSearchPage({
   }
 
   return (
-    <SiteShell>
+    <SiteShell locale={locale}>
       <Container>
         <BibleSearchResults
           errorMessage={errorMessage}

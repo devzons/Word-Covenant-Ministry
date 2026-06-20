@@ -35,7 +35,7 @@ export default async function BibleReaderPage({
   const chapterNumber = Number(chapter);
 
   if (!Number.isInteger(chapterNumber) || chapterNumber < 1) {
-    return <BibleReaderError message="Invalid chapter request." />;
+    return <BibleReaderError locale={locale} message="Invalid chapter request." />;
   }
 
   let bibleChapter: BibleChapterResponse | null = null;
@@ -56,15 +56,15 @@ export default async function BibleReaderPage({
   }
 
   if (isChapterOutOfRange) {
-    return <BibleReaderError message="Bible chapter could not be loaded." />;
+    return <BibleReaderError locale={locale} message="Bible chapter could not be loaded." />;
   }
 
   if (!bibleChapter || !bookMetadata) {
-    return <BibleReaderError message={errorMessage} />;
+    return <BibleReaderError locale={locale} message={errorMessage} />;
   }
 
   return (
-    <SiteShell>
+    <SiteShell locale={locale}>
       <Container>
         <BibleReader
           bookMetadata={bookMetadata}
@@ -85,9 +85,9 @@ function parseReaderMode(value: string | undefined): OriginalLanguageReaderMode 
   return "reader";
 }
 
-function BibleReaderError({ message }: { message: string }) {
+function BibleReaderError({ locale, message }: { locale: string; message: string }) {
   return (
-    <SiteShell>
+    <SiteShell locale={locale}>
       <Container>
         <div className="mx-auto max-w-3xl py-12">
           <div className="rounded-md border border-red-200 bg-red-50 p-5 text-sm text-red-800">

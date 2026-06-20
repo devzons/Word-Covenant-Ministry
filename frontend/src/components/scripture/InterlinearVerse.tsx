@@ -10,6 +10,7 @@ import { getInterlinearVerse } from "@/lib/api/original-language";
 import type {
   HighLevelInterlinearResponse,
   HighLevelInterlinearToken,
+  OriginalLanguageType,
   OriginalLanguageSourceDataset,
 } from "@/types/original-language";
 
@@ -115,42 +116,34 @@ export function InterlinearVerse({
         <p className="text-base leading-7 text-zinc-950">{selectedData.text}</p>
       </div>
 
-      <ul className="grid gap-3 sm:grid-cols-2">
+      <ul className="flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:overflow-visible">
         {selectedData.tokens.map((token) => (
-          <li key={token.id}>
+          <li className="shrink-0 sm:shrink" key={token.id}>
             <button
-              className="w-full rounded-md border border-zinc-200 bg-white p-3 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50"
+              className="flex min-h-36 w-36 flex-col items-center gap-1 rounded-md border border-zinc-200 bg-white px-2.5 py-3 text-center shadow-sm transition-colors hover:border-zinc-400 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
               onClick={() => setSelectedWord(toPanelWord(token))}
               type="button"
             >
-              <span className="block text-lg font-semibold text-zinc-950">
+              <span
+                className="w-full break-words text-lg font-semibold leading-6 text-zinc-950"
+                dir={textDirection(token.term.language_type)}
+              >
                 {token.surface_form}
               </span>
-              <span className="mt-2 grid gap-1 text-sm">
-                <span className="flex gap-2">
-                  <span className="w-24 shrink-0 font-medium text-zinc-500">Lemma</span>
-                  <span className="text-zinc-900">{token.term.lemma}</span>
-                </span>
-                <span className="flex gap-2">
-                  <span className="w-24 shrink-0 font-medium text-zinc-500">
-                    Strong&apos;s
-                  </span>
-                  <span className="text-zinc-900">{token.term.strongs_number}</span>
-                </span>
-                <span className="flex gap-2">
-                  <span className="w-24 shrink-0 font-medium text-zinc-500">
-                    Transliteration
-                  </span>
-                  <span className="text-zinc-900">{token.term.transliteration}</span>
-                </span>
-                {token.term.gloss ? (
-                  <span className="flex gap-2">
-                    <span className="w-24 shrink-0 font-medium text-zinc-500">
-                      Gloss
-                    </span>
-                    <span className="text-zinc-900">{token.term.gloss}</span>
-                  </span>
-                ) : null}
+              <span
+                className="w-full break-words text-sm leading-5 text-zinc-800"
+                dir={textDirection(token.term.language_type)}
+              >
+                {token.term.lemma}
+              </span>
+              <span className="text-xs font-semibold text-zinc-600">
+                {token.term.strongs_number}
+              </span>
+              <span className="w-full break-words text-xs text-zinc-600">
+                {token.term.transliteration || "Not provided"}
+              </span>
+              <span className="w-full break-words text-xs leading-4 text-zinc-500">
+                {token.term.gloss || "Not provided"}
               </span>
             </button>
           </li>
@@ -172,4 +165,8 @@ function toPanelWord(token: HighLevelInterlinearToken): OriginalWordPanelWord {
     gloss: token.term.gloss,
     morphology: token.morphology,
   };
+}
+
+function textDirection(languageType: OriginalLanguageType): "ltr" | "rtl" {
+  return languageType === "hebrew" ? "rtl" : "ltr";
 }

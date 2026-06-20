@@ -99,6 +99,8 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
   const currentBookIndex = bookOptions.findIndex((book) => book.slug === chapter.book);
   const originalLanguageSource = getOriginalLanguageSource(chapter.book);
   const isInterlinearMode = mode === "interlinear";
+  const visibleInterlinearVerse =
+    selectedInterlinearVerse ?? (isInterlinearMode ? (chapter.verses[0]?.verse ?? null) : null);
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -234,46 +236,57 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
             const verseId = `v${verse.verse}`;
             const isActive =
               activeVerseId === verseId ||
-              (isInterlinearMode && selectedInterlinearVerse === verse.verse);
+              (isInterlinearMode && visibleInterlinearVerse === verse.verse);
 
             return (
-              <li
-                className={cn(
-                  "grid scroll-mt-24 grid-cols-[2rem_1fr] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
-                  isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
-                )}
-                id={verseId}
-                key={verse.verse}
-              >
-                <span
+              <li className="flex flex-col" id={verseId} key={verse.verse}>
+                <div
                   className={cn(
-                    "pt-0.5 text-sm font-semibold text-zinc-500",
-                    isActive && "text-blue-700",
+                    "grid scroll-mt-24 grid-cols-[2rem_1fr] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
+                    isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
                   )}
                 >
-                  {verse.verse}
-                </span>
-                <div className="flex flex-col">
-                  {isInterlinearMode ? (
-                    <button
-                      className="text-left text-zinc-950 transition-colors hover:text-zinc-700"
-                      onClick={() => setSelectedInterlinearVerse(verse.verse)}
-                      type="button"
-                    >
-                      {verse.text}
-                    </button>
-                  ) : (
-                    <span className="text-zinc-950">{verse.text}</span>
-                  )}
-                  {mode === "original" ? (
-                    <VerseOriginalLanguagePreview
+                  <span
+                    className={cn(
+                      "pt-0.5 text-sm font-semibold text-zinc-500",
+                      isActive && "text-blue-700",
+                    )}
+                  >
+                    {verse.verse}
+                  </span>
+                  <div className="flex flex-col">
+                    {isInterlinearMode ? (
+                      <button
+                        className="text-left text-zinc-950 transition-colors hover:text-zinc-700"
+                        onClick={() => setSelectedInterlinearVerse(verse.verse)}
+                        type="button"
+                      >
+                        {verse.text}
+                      </button>
+                    ) : (
+                      <span className="text-zinc-950">{verse.text}</span>
+                    )}
+                    {mode === "original" ? (
+                      <VerseOriginalLanguagePreview
+                        book={chapter.book}
+                        chapter={chapter.chapter}
+                        source={originalLanguageSource}
+                        verse={verse.verse}
+                      />
+                    ) : null}
+                  </div>
+                </div>
+
+                {isInterlinearMode && visibleInterlinearVerse === verse.verse ? (
+                  <div className="mt-3 pl-0 sm:pl-10">
+                    <InterlinearVerse
                       book={chapter.book}
                       chapter={chapter.chapter}
                       source={originalLanguageSource}
-                      verse={verse.verse}
+                      verse={visibleInterlinearVerse}
                     />
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </li>
             );
           })}
@@ -283,15 +296,6 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
           No verses were returned for this chapter.
         </div>
       )}
-
-      {isInterlinearMode ? (
-        <InterlinearVerse
-          book={chapter.book}
-          chapter={chapter.chapter}
-          source={originalLanguageSource}
-          verse={selectedInterlinearVerse}
-        />
-      ) : null}
 
       <nav
         aria-label="Bible chapter navigation"
