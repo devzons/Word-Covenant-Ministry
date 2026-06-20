@@ -53,7 +53,7 @@ function parseCliArguments(array $argv): array
         }
 
         if ($argument === '--seed-set') {
-            throw new RuntimeException('Use --seed-set=phase8c-approved, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, --seed-set=phase8f3-top250-filled, --seed-set=phase8f5-top500-filled, or --seed-set=phase8f6-reviewed-remaining.');
+            throw new RuntimeException('Use --seed-set=phase8c-approved, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, --seed-set=phase8f3-top250-filled, --seed-set=phase8f5-top500-filled, --seed-set=phase8f6-reviewed-remaining, or --seed-set=phase8f-gloss-push.');
         }
 
         throw new RuntimeException('Unknown argument: ' . $argument);
@@ -227,6 +227,7 @@ function reviewedGlossSeeds(string $seedSet): array
         'phase8f3-top250-filled' => phase8f3Top250FilledGlossSeeds(),
         'phase8f5-top500-filled' => phase8f5Top500FilledGlossSeeds(),
         'phase8f6-reviewed-remaining' => phase8f6ReviewedRemainingGlossSeeds(),
+        'phase8f-gloss-push' => phase8fGlossPushSeeds(),
         default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
     };
 }
@@ -792,6 +793,85 @@ function phase8f6ReviewedRemainingGlossSeeds(): array
     }
 
     return $seeds;
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     gloss: string,
+ *     gloss_ko: string
+ * }>
+ */
+function phase8fGlossPushSeeds(): array
+{
+    $worksheetPath = '/tmp/wcm_phase8f_gloss_push_review.tsv';
+    $seedsByTermId = [];
+
+    foreach (readPhase8fGlossPushApprovedWorksheetRows($worksheetPath) as $row) {
+        $seed = phase8f3ReviewedGlossSeed((int) $row['term_id'], $row['proposed_gloss_ko']);
+        $seedsByTermId[$seed['term_id']] = $seed;
+    }
+
+    $seeds = array_values($seedsByTermId);
+
+    if (count($seeds) !== 330) {
+        throw new RuntimeException('Phase 8F gloss push seed set must contain exactly 330 approved rows.');
+    }
+
+    return $seeds;
+}
+
+/**
+ * @return array<string, string>[]
+ */
+function readPhase8fGlossPushApprovedWorksheetRows(string $path): array
+{
+    if (! is_file($path)) {
+        throw new RuntimeException('Phase 8F gloss push worksheet not found: ' . $path);
+    }
+
+    $handle = fopen($path, 'rb');
+
+    if ($handle === false) {
+        throw new RuntimeException('Unable to read Phase 8F gloss push worksheet: ' . $path);
+    }
+
+    $header = fgetcsv($handle, 0, "\t");
+
+    if (! is_array($header)) {
+        fclose($handle);
+        throw new RuntimeException('Phase 8F gloss push worksheet is empty: ' . $path);
+    }
+
+    $rows = [];
+
+    while (($values = fgetcsv($handle, 0, "\t")) !== false) {
+        $row = array_combine($header, $values);
+
+        if (! is_array($row)) {
+            fclose($handle);
+            throw new RuntimeException('Phase 8F gloss push worksheet row does not match the header.');
+        }
+
+        if (($row['recommendation'] ?? '') !== 'approve_seed') {
+            continue;
+        }
+
+        if (($row['proposed_gloss_ko'] ?? '') === '') {
+            continue;
+        }
+
+        $rows[] = $row;
+    }
+
+    fclose($handle);
+
+    return $rows;
 }
 
 /**
