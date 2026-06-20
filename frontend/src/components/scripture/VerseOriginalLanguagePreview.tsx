@@ -7,6 +7,7 @@ import {
   type OriginalWordPanelWord,
 } from "@/components/scripture/OriginalWordPanel";
 import { getOriginalLanguageVerse } from "@/lib/api/original-language";
+import { shouldDisplayOriginalLanguageToken } from "@/lib/original-language/presentation";
 import type {
   OriginalLanguageJoinedOccurrence,
   OriginalLanguageSourceDataset,
@@ -187,9 +188,15 @@ function renderPreviewState({
     return <p className="text-sm text-zinc-600">{copy.empty}</p>;
   }
 
+  const displayOccurrences = data.occurrences.filter(shouldDisplayOriginalLanguageToken);
+
+  if (displayOccurrences.length === 0) {
+    return <p className="text-sm text-zinc-600">{copy.empty}</p>;
+  }
+
   return (
     <ul className="flex flex-wrap gap-2">
-      {data.occurrences.map((occurrence) => (
+      {displayOccurrences.map((occurrence) => (
         <li key={occurrence.id}>
           <button
             aria-label={`${copy.openDetails}: ${occurrence.surface_form}`}

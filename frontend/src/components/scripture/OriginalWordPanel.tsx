@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { RefObject } from "react";
 
 import { StrongStudyPanel } from "@/components/scripture/StrongStudyPanel";
 import { formatOriginalLanguageMorphology } from "@/lib/original-language/morphology";
@@ -62,8 +63,38 @@ const originalWordPanelCopy = {
 
 export function OriginalWordPanel({ locale = "en", word, onClose }: OriginalWordPanelProps) {
   const [panelView, setPanelView] = useState<"word" | "strong">("word");
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const activeLocale = locale === "ko" ? "ko" : "en";
   const copy = originalWordPanelCopy[activeLocale];
+  const handleClose = useCallback(() => {
+    setPanelView("word");
+    onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!word) {
+      return undefined;
+    }
+
+    previousFocusRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previousFocusRef.current?.focus();
+      previousFocusRef.current = null;
+    };
+  }, [handleClose, word]);
 
   if (!word) {
     return null;
@@ -74,11 +105,12 @@ export function OriginalWordPanel({ locale = "en", word, onClose }: OriginalWord
       <button
         aria-label={copy.closePanel}
         className="absolute inset-0 bg-zinc-950/30"
-        onClick={onClose}
+        onClick={handleClose}
         type="button"
       />
       <aside
         aria-label={copy.dialog}
+        aria-modal="true"
         className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-lg bg-white p-5 shadow-2xl sm:inset-x-auto sm:bottom-0 sm:right-0 sm:top-0 sm:h-full sm:max-h-none sm:w-96 sm:rounded-none sm:border-l sm:border-zinc-200"
         role="dialog"
       >
@@ -91,7 +123,8 @@ export function OriginalWordPanel({ locale = "en", word, onClose }: OriginalWord
           />
         ) : (
           <OriginalWordDetails
-            onClose={onClose}
+            closeButtonRef={closeButtonRef}
+            onClose={handleClose}
             onOpenStrongStudy={() => setPanelView("strong")}
             locale={activeLocale}
             copy={copy}
@@ -105,12 +138,14 @@ export function OriginalWordPanel({ locale = "en", word, onClose }: OriginalWord
 
 function OriginalWordDetails({
   word,
+  closeButtonRef,
   onClose,
   onOpenStrongStudy,
   locale,
   copy,
 }: {
   word: OriginalWordPanelWord;
+  closeButtonRef: RefObject<HTMLButtonElement | null>;
   onClose: () => void;
   onOpenStrongStudy: () => void;
   locale: "en" | "ko";
@@ -134,6 +169,7 @@ function OriginalWordDetails({
         <button
           className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
           onClick={onClose}
+          ref={closeButtonRef}
           type="button"
         >
           {copy.close}

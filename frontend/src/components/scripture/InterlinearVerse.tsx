@@ -8,6 +8,7 @@ import {
 } from "@/components/scripture/OriginalWordPanel";
 import { getInterlinearVerse } from "@/lib/api/original-language";
 import { formatOriginalLanguageMorphology } from "@/lib/original-language/morphology";
+import { shouldDisplayOriginalLanguageToken } from "@/lib/original-language/presentation";
 import type {
   HighLevelInterlinearResponse,
   HighLevelInterlinearToken,
@@ -149,7 +150,8 @@ export function InterlinearVerse({
     );
   }
 
-  const sentenceDirection = originalSentenceDirection(selectedData.tokens);
+  const displayTokens = selectedData.tokens.filter(shouldDisplayOriginalLanguageToken);
+  const sentenceDirection = originalSentenceDirection(displayTokens);
 
   return (
     <section
@@ -158,12 +160,12 @@ export function InterlinearVerse({
     >
       <div className="flex flex-col gap-7">
         <div className="min-w-0">
-          {selectedData.tokens.length > 0 ? (
+          {displayTokens.length > 0 ? (
             <ul
               className="flex max-w-4xl flex-wrap items-end gap-x-3 gap-y-5 text-zinc-950"
               dir={sentenceDirection}
             >
-              {selectedData.tokens.map((token) => {
+              {displayTokens.map((token) => {
                 const transliteration = getLocalizedTransliteration(token.term, activeLocale);
                 const gloss = getLocalizedGloss(token.term, activeLocale);
                 const morphology = formatOriginalLanguageMorphology(
