@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-19
+2026-06-20
 
 ## Current Foundation
 
@@ -25,6 +25,10 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - Active Verse Highlight implemented.
 - Chapter Boundary Navigation implemented.
 - Original Language Reader MVP implemented through Phase 7H.
+- Phase 8A frontend/menu/navigation and interlinear UX cleanup completed.
+- Phase 8B Korean transliteration presentation data completed.
+- Phase 8C Korean gloss presentation data completed.
+- Phase 8D Morphology Korean Presentation is current.
 
 ## Phase Status
 
@@ -175,10 +179,10 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 7I - Original Language Reader MVP QA
+Phase 8D - Morphology Korean Presentation
 ```
 
-OSHB, SBLGNT, write/import endpoints, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, and morphology explorer remain out of scope until explicitly approved.
+OSHB, SBLGNT, WEB import, write/import endpoints, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, and morphology schema/API changes remain out of scope until explicitly approved.
 
 ### Phase 6A - Original Language Read API
 
@@ -284,7 +288,7 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 7I - Original Language Reader MVP QA
+Phase 8D - Morphology Korean Presentation
 ```
 
 Next gate after separate approval:
@@ -460,7 +464,7 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 8D - Morphology Korean Presentation
 ```
 
 ### Phase 7A - Original Language Reader UI Planning
@@ -571,7 +575,7 @@ Performance guardrails:
 Status:
 
 ```txt
-Validation and documentation update in progress
+Route/API smoke QA documented; later Phase 8 browser QA supersedes remaining manual QA.
 ```
 
 Route/API smoke QA completed:
@@ -601,6 +605,108 @@ Deferred features:
 - Dedicated Word Study pages.
 - Advanced search.
 - Morphology explorer.
+
+### Phase 8A - Frontend Foundation And Interlinear UX Cleanup
+
+Status:
+
+```txt
+Complete
+```
+
+Completed:
+
+- Frontend menu and page foundation.
+- Mobile navigation.
+- Locale switcher behavior.
+- Home, footer, and landing page updates.
+- Interlinear UX cleanup.
+- Removed duplicate Korean verse text from the interlinear block.
+- Removed remaining interlinear display headings so the block shows verse content, original-language tokens, and transliteration without section labels.
+- Localized Bible reference display by locale.
+
+### Phase 8B - Korean Transliteration Presentation Data
+
+Status:
+
+```txt
+Complete
+```
+
+Completed:
+
+- Added nullable `transliteration_ko` infrastructure to `wcm_original_terms`.
+- Exposed `transliteration_ko` additively in original-language, interlinear, and word-study responses.
+- Preserved existing `transliteration` unchanged.
+- Added controlled seed import path.
+- Imported reviewed Genesis 1:1 and Matthew 1:1 Korean transliteration seeds.
+- Imported conservative reviewed seed batches.
+- Frontend Korean locale uses `transliteration_ko` when available and falls back to source `transliteration` without pretending it is Korean.
+
+Current known coverage:
+
+```txt
+terms with transliteration_ko=32
+token occurrences covered=184519
+occurrence coverage=27.4067%
+```
+
+Deferred:
+
+- English Bible support remains Phase 9 work.
+- No `gloss_ko` work belongs to Phase 8B.
+
+### Phase 8C - Korean Gloss Presentation Data
+
+Status:
+
+```txt
+Complete
+```
+
+Completed:
+
+- Added nullable `gloss_ko` infrastructure to `wcm_original_terms`.
+- Exposed `gloss_ko` additively in original-language, interlinear, and word-study responses.
+- Preserved existing English/source `gloss` unchanged.
+- Added controlled `gloss_ko` seed importer.
+- Imported the first `15` reviewed Korean gloss seeds.
+- Frontend Korean locale displays `뜻` when `gloss_ko` exists.
+- Frontend Korean locale displays `영어 뜻` when falling back to source `gloss`.
+- English locale continues to display `Gloss`.
+
+### Phase 8D - Morphology Korean Presentation
+
+Status:
+
+```txt
+Active
+```
+
+Goal:
+
+Document and implement Korean morphology display for existing morphology codes without schema/API changes.
+
+Plan:
+
+- Phase 8D-1 morphology audit completed.
+- Phase 8D-2 parser policy documentation.
+- Phase 8D-3 parser utility and focused tests.
+- Phase 8D-4 frontend integration.
+- Phase 8D-5 browser QA.
+
+Morphology parser policy:
+
+- `morphology` remains occurrence-level source data.
+- Phase 8D must not add morphology schema fields.
+- Phase 8D must not change API response contracts.
+- Hebrew parser should handle STEP_TAHOT ETCBC/OpenScriptures-style compact codes, including optional leading `H` or `A`, noun/adjective gender-number-state patterns, particles/prepositions/conjunctions, verb stem/form/person/gender/number patterns, and suffix-pronoun patterns.
+- Greek parser should extend the current frontend formatter for STEP_TAGNT James Tauber-style codes, including hyphenated codes like `N-NSF` and `V-AAI-3S`, and plain codes like `CONJ`, `PREP`, `ADV`, `PRT`, and `PRT-N`.
+- Korean labels should use clear grammar terms such as `명사`, `동사`, `여성`, `단수`, `주격`, `전치사`, `접속사`, `부정과거`, `능동태`, and `직설법`.
+- English labels remain available for `en` locale.
+- Unknown or partially unsupported codes fall back to the raw code.
+- Empty morphology on punctuation/link markers should be suppressed in frontend display.
+- Raw morphology code remains available in detailed study UI for auditability.
 
 Phase 5E local write smoke summary:
 
@@ -1140,16 +1246,17 @@ ADR-0009 mentions `FULLTEXT KEY text_search (text)`, but the current `SchemaInst
 
 ## Future Scripture Engine Work
 
-Future milestones after Original Language Reader MVP QA:
+Current and future milestones:
 
-- Manual desktop/mobile browser QA for the Original Language Reader MVP.
+- Phase 8D Korean morphology presentation parser documentation and implementation.
+- Phase 8D browser QA for Korean and English morphology display.
 - Word Study Term panel.
-- Phase 8B Korean-first Original Language Presentation Data is documented in `docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md`; Phase 8B-1 approves `transliteration_ko` infrastructure only.
 - Occurrence distribution UI.
 - Strong detail pages.
 - Dedicated Word Study pages.
 - Advanced search.
 - Morphology explorer.
+- Phase 9 English Bible support and WEB import, after separate approval.
 - Later: Cross References.
 - Later: Commentary Layer.
 

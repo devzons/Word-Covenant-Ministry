@@ -15,7 +15,7 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 7I - Original Language Reader MVP QA
+Phase 8D - Morphology Korean Presentation
 ```
 
 Next major phase:
@@ -42,7 +42,7 @@ The approved binary-stable original term identity implementation and migration a
 
 The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
 
-The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. This does not approve write/import endpoints, additional source imports, raw source export, occurrence dumps, distribution charts, dedicated Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, or interpretation/pictographic/gematria APIs.
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, and Phase 8C Korean gloss data are complete. Phase 8D is current for Korean morphology presentation. This does not approve write/import endpoints, additional source imports, raw source export, occurrence dumps, distribution charts, dedicated Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, English Bible support, WEB import, morphology schema/API changes, or interpretation/pictographic/gematria APIs.
 
 ## Phase 6A Original Language Read API
 
@@ -148,7 +148,7 @@ Security validation:
 Next phase:
 
 ```txt
-Phase 7I - Original Language Reader MVP QA
+Phase 8D - Morphology Korean Presentation
 ```
 
 ## Phase 6B Word Study API
@@ -315,7 +315,7 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Phase 7I - Original Language Reader MVP QA
+Phase 8D - Morphology Korean Presentation
 ```
 
 ## Phase 7A Original Language Reader UI Planning
@@ -400,7 +400,7 @@ Explicit exclusions:
 Status:
 
 ```txt
-Phase 7B through Phase 7H limited frontend implementation is complete. Phase 7I route/API smoke QA is documented; manual desktop/mobile browser QA remains required.
+Phase 7B through Phase 7H limited frontend implementation is complete. Phase 7I route/API smoke QA is documented. Later Phase 8 browser QA supersedes the original manual QA gate.
 ```
 
 Implemented MVP features:
@@ -424,22 +424,16 @@ Validation completed:
 - Frontend route smoke checks for reader, original, and interlinear modes returned `200`.
 - Read-only API smoke checks for original-language verse, high-level interlinear verse, and Strong study returned `200`.
 
-QA limitation:
+Historical QA limitation:
 
 ```txt
 Automated browser click-through for desktop and mobile was not completed because the in-app browser Node REPL tool was unavailable and no local Playwright/Puppeteer package is installed.
 ```
 
-Manual QA still required:
+Current QA handoff:
 
-- Desktop reader, original, and interlinear click-through.
-- Mobile reader, original, and interlinear click-through.
-- Console error inspection.
-- Browser network failed-request inspection.
-- Loading and empty state visual checks.
-- Token click behavior.
-- Strong click behavior.
-- Original word panel open/close behavior.
+- Phase 8D-5 should perform browser QA for Korean and English morphology presentation.
+- Browser QA should include reader/original/interlinear flows, tooltip/panel behavior, console errors, network failures, and mobile layout.
 - Strong study panel back/close behavior.
 - Route/query persistence.
 
@@ -457,14 +451,22 @@ Deferred features:
 Status:
 
 ```txt
-Phase 8B-1 Korean Transliteration Infrastructure approved for implementation. Korean gloss, English Bible support, and Phase 9 work remain unapproved.
+Complete
 ```
 
 Purpose:
 
 Phase 8B defines how original-language terms should gain Korean-first display metadata for Korean readers while preserving the current original-language source data and existing response fields.
 
-Phase 8B-1 narrows the approved implementation scope to `transliteration_ko` only. It permits additive schema support and read-only API exposure for Korean transliteration while preserving the existing `transliteration` field unchanged.
+Phase 8B implemented `transliteration_ko` as additive Korean presentation data. It added nullable schema support, read-only API exposure, controlled seed import tooling, Genesis 1:1 and Matthew 1:1 reviewed seed values, and conservative reviewed seed batches.
+
+Current known Phase 8B coverage:
+
+```txt
+terms with transliteration_ko=32
+token occurrences covered=184519
+occurrence coverage=27.4067%
+```
 
 ### Current Limitation
 
@@ -497,11 +499,11 @@ Field rules:
 - `transliteration_ko` must not replace `lemma`, `lemma_normalized`, `surface_form`, `normalized_form`, `strongs_number`, or `strongs_extended`.
 - `transliteration_ko` should belong to term-level presentation data unless a later source review proves occurrence-level variation is required.
 - Generated or curated Korean transliteration rules require separate review before persistence.
-- Phase 8B-1 implements the infrastructure field only; it does not populate Korean transliteration data from a new source.
+- Phase 8B implemented infrastructure and approved reviewed seed values only; it did not implement full-corpus generation.
 
 ### Korean Gloss Field Strategy
 
-Phase 8B should preserve the existing source/import gloss field and add Korean presentation gloss as separate data.
+Phase 8B originally planned Korean gloss as future presentation data. Phase 8C later implemented the approved `gloss_ko` infrastructure, seed importer, first reviewed seeds, and frontend display/fallback.
 
 Proposed future field:
 
@@ -522,7 +524,9 @@ Field rules:
 
 Future API work may add Korean presentation fields to existing original-language, interlinear, and word-study responses without removing or renaming current fields.
 
-Phase 8B-1 implements read-only exposure for `transliteration_ko` only.
+Phase 8B implemented read-only exposure for `transliteration_ko`.
+
+Phase 8C implemented read-only exposure for `gloss_ko`.
 
 Candidate additive response fields:
 
@@ -537,7 +541,7 @@ API rules:
 - Existing clients must continue to work if Korean presentation fields are absent.
 - New Korean fields must be nullable or omitted when unavailable.
 - Responses must not include full datasets, raw source JSON, import diagnostics, theological interpretation, pictographic fields, or gematria fields.
-- API changes beyond Phase 8B-1 `transliteration_ko` read-only exposure require separate approval and validation because they change the public response contract.
+- API changes beyond the completed additive `transliteration_ko` and `gloss_ko` response fields require separate approval and validation because they change the public response contract.
 
 ### Frontend Fallback Rule
 
@@ -577,16 +581,88 @@ Korean presentation data may later inform English support, but Phase 8B must not
 
 ### Explicit Non-Implementation Scope
 
-Phase 8B documentation does not approve:
+Phase 8B and Phase 8C completion does not approve:
 
-- `gloss_ko` database changes.
-- Importer changes.
+- Full-corpus generated Korean transliteration.
+- Unreviewed Korean gloss imports.
 - Source data changes.
-- Frontend changes.
 - New endpoints.
 - New committed generated data.
 - English Bible support.
+- WEB import.
+- Morphology schema/API changes.
 - Theological interpretation, commentary, pictographic, or gematria fields.
+
+## Phase 8C Korean Gloss Presentation Data
+
+Status:
+
+```txt
+Complete
+```
+
+Completed:
+
+- `gloss_ko` nullable schema support on `wcm_original_terms`.
+- Additive read-only API exposure alongside existing `gloss`.
+- Controlled `gloss_ko` seed importer.
+- First `15` reviewed Korean gloss seeds.
+- Frontend Korean locale displays `뜻` when `gloss_ko` exists.
+- Frontend Korean locale displays `영어 뜻` when falling back to source `gloss`.
+- English locale continues to display `Gloss`.
+
+## Phase 8D Morphology Korean Presentation
+
+Status:
+
+```txt
+Active
+```
+
+Goal:
+
+Document and implement Korean morphology display for existing morphology codes without schema/API changes.
+
+Phase 8D plan:
+
+- Phase 8D-1 morphology audit completed.
+- Phase 8D-2 parser policy documentation.
+- Phase 8D-3 parser utility and focused tests.
+- Phase 8D-4 frontend integration.
+- Phase 8D-5 browser QA.
+
+### Morphology Parser Policy
+
+Raw morphology remains occurrence-level source data:
+
+```txt
+wcm_original_word_occurrences.morphology
+```
+
+Phase 8D must not add morphology schema fields and must not change API response contracts.
+
+Hebrew parser approach:
+
+- Target STEP_TAHOT ETCBC/OpenScriptures-style compact codes.
+- Handle optional leading `H` or `A` language marker.
+- Parse noun/adjective gender-number-state patterns such as `Ncfsa` and `HNcmsc`.
+- Parse particles, prepositions, conjunctions, object indicators, and articles such as `HR`, `HC`, `HTd`, and `HTo`.
+- Parse verb stem/form/person/gender/number patterns such as `HVqp3ms`.
+- Parse suffix-pronoun patterns such as `Sp3ms`.
+
+Greek parser approach:
+
+- Extend the existing frontend morphology formatter.
+- Parse STEP_TAGNT James Tauber-style hyphenated codes such as `N-NSF`, `T-NSM`, `V-AAI-3S`, and `V-2AAI-3S`.
+- Parse plain STEP_TAGNT codes such as `CONJ`, `PREP`, `ADV`, `PRT`, and `PRT-N`.
+
+Presentation labels:
+
+- Korean labels should use clear grammar terms such as `명사`, `동사`, `여성`, `남성`, `단수`, `복수`, `주격`, `목적격`, `전치사`, `접속사`, `부정과거`, `능동태`, and `직설법`.
+- English labels should remain available for `en` locale, such as `Noun`, `Verb`, `Feminine`, `Singular`, `Nominative`, `Preposition`, and `Conjunction`.
+- Unknown or partially unsupported codes must fall back to the raw morphology code.
+- Empty morphology on punctuation/link markers should be suppressed in frontend display.
+- Raw morphology code should remain available in detailed study UI for auditability.
 
 ## Phase 5 Breakdown
 

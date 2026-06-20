@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-19
+2026-06-20
 
 ## Purpose
 
@@ -81,43 +81,43 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-Phase 7I - Original Language Reader MVP QA
+Phase 8D - Morphology Korean Presentation
 ```
 
 Status:
 
 ```txt
-Phase 7B through Phase 7H frontend implementation is complete. Phase 7I route/API smoke QA is documented; manual desktop/mobile browser QA remains required.
+Phase 8A, Phase 8B, and Phase 8C are complete. Phase 8D is active for documenting and implementing Korean morphology display for existing occurrence-level morphology codes without schema or API changes.
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E small local write smoke verification, controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, full TAGNT NT local import, controlled TAHOT Gen-Deu local import, controlled TAHOT Jos-Est local import, binary-stable original term identity migration, controlled TAHOT Job-Sng retry import, controlled TAHOT Isa-Mal import, Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A Original Language Reader UI Planning, Phase 7B frontend original-language types, Phase 7C frontend original-language API client, Phase 7D Reader Mode Control, Phase 7E Verse Original Language Preview, Phase 7F Interlinear Verse View, Phase 7G Original Word Panel, and Phase 7H Strong Study Panel
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E original-language import completion, Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A Original Language Reader UI Planning, Phase 7B through Phase 7H Original Language Reader MVP, Phase 8A frontend/menu/navigation and interlinear UX cleanup, Phase 8B Korean transliteration presentation data, and Phase 8C Korean gloss presentation data
 ```
 
 Active objective:
 
 ```txt
-Validate and document the Original Language Reader MVP.
+Document and implement Korean morphology display for existing morphology codes without schema/API changes.
 ```
 
 Next task:
 
 ```txt
-Complete manual browser click-through QA for desktop and mobile, then decide whether to proceed to Word Study Term panel or UX polish.
+Phase 8D-2 parser policy documentation, then Phase 8D-3 parser utility/tests.
 ```
 
 Blocked items:
 
 ```txt
-Full TAGNT NT and full TAHOT OT persistence imports are complete. STEP_TAHOT and STEP_TAGNT dry-run processing is complete with zero hard errors, tiny local write smokes have passed, the controlled STEP_TAGNT 1,000-row local import has passed, full TAGNT Mat-Jhn has passed, TAGNT Act-Rev has passed, TAHOT Gen-Deu has passed, TAHOT Jos-Est has passed, binary-stable original term identity migration has passed, TAHOT Job-Sng retry has passed, and TAHOT Isa-Mal has passed. Phase 6A read-only API implementation is complete. Phase 6B Word Study API implementation is complete. Phase 6C high-level Interlinear API implementation is complete. Phase 7A planning and Phase 7B through Phase 7H limited frontend implementation are complete. Write/import endpoints, additional source imports, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, and morphology explorer require separate approval.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. Phase 6A read-only API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A planning, Phase 7B through Phase 7H frontend implementation, Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, and Phase 8C Korean gloss data are complete. Write/import endpoints, additional source imports, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, English Bible support, WEB import, and morphology schema/API changes require separate approval.
 ```
 
 Current phase boundary:
 
 ```txt
-Phase 5E small local write smoke verification, the approved controlled TAGNT 1,000-row local import, full TAGNT Mat-Jhn local import, TAGNT Act-Rev local import, TAHOT Gen-Deu local import, TAHOT Jos-Est local import, binary-stable original term identity migration, TAHOT Job-Sng retry import, and TAHOT Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, and Phase 7B through Phase 7H limited frontend reader implementation are complete. This does not authorize OSHB, SBLGNT, or other dataset import. It also does not authorize write/import endpoints, raw source export, variant UI, occurrence dumps, distribution charts, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, or interpretation/pictographic/gematria APIs.
+Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend reader implementation, Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, and Phase 8C Korean gloss data are complete. Phase 8D may add Korean/English presentation parsing for existing `morphology` strings in the frontend. This does not authorize OSHB, SBLGNT, WEB, or other dataset import. It also does not authorize write/import endpoints, raw source export, variant UI, occurrence dumps, distribution charts, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, morphology DB columns, morphology API fields, or interpretation/pictographic/gematria APIs.
 ```
 
 Phase 5A source recommendation:
@@ -130,6 +130,72 @@ Greek reference text: SBLGNT
 MorphGNT: not a primary source before ShareAlike review
 OpenGNT: not the first production source because of provenance/license complexity
 ```
+
+## Phase 8A-8C Completion Summary
+
+Phase 8A completed frontend foundation and Korean-first reader cleanup:
+
+- Frontend menu and page foundation.
+- Mobile navigation.
+- Locale switcher behavior.
+- Home, footer, and landing page updates.
+- Interlinear UX cleanup, including removal of duplicate Korean verse text inside the interlinear block and removal of section headings from interlinear display.
+
+Phase 8B completed Korean transliteration presentation data:
+
+- `transliteration_ko` nullable schema support on `wcm_original_terms`.
+- Additive read-only API exposure in original-language, interlinear, and word-study responses.
+- Controlled seed importer pattern.
+- Reviewed Genesis 1:1 and Matthew 1:1 seed import.
+- Conservative seed batches for high-frequency reviewed terms.
+- Current known coverage after approved seeds: `32` terms, `184,519` token occurrences, `27.4067%` occurrence coverage.
+- Existing `transliteration` remains unchanged.
+- English Bible support remains deferred to Phase 9.
+
+Phase 8C completed Korean gloss presentation data:
+
+- `gloss_ko` nullable schema support on `wcm_original_terms`.
+- Additive read-only API exposure in original-language, interlinear, and word-study responses.
+- Controlled `gloss_ko` seed importer.
+- First `15` reviewed Korean gloss seeds imported.
+- Frontend Korean gloss display uses `gloss_ko` when available.
+- Frontend Korean fallback labels English source gloss as `영어 뜻`.
+- English locale continues to label source gloss as `Gloss`.
+
+## Phase 8D Morphology Korean Presentation
+
+Current phase:
+
+```txt
+Phase 8D - Morphology Korean Presentation
+```
+
+Active objective:
+
+```txt
+Document and implement Korean morphology display for existing morphology codes without schema/API changes.
+```
+
+Phase 8D plan:
+
+- Phase 8D-1 morphology audit completed.
+- Phase 8D-2 parser policy documentation.
+- Phase 8D-3 parser utility and focused tests.
+- Phase 8D-4 frontend integration in interlinear tooltip, Original Word Panel, and related original-language displays.
+- Phase 8D-5 browser QA for Korean and English morphology presentation.
+
+Morphology parser policy:
+
+- Raw `morphology` remains occurrence-level source data.
+- No schema change is required for Phase 8D.
+- No API change is required for Phase 8D.
+- Hebrew parser should handle STEP_TAHOT ETCBC/OpenScriptures-style compact codes, including optional leading `H` or `A`, noun/adjective gender-number-state patterns, particles/prepositions/conjunctions, verb stem/form/person/gender/number patterns, and suffix-pronoun patterns.
+- Greek parser should extend the existing frontend formatter for STEP_TAGNT James Tauber-style morphology, including hyphenated codes such as `N-NSF` and `V-AAI-3S`, plus plain codes such as `CONJ`, `PREP`, `ADV`, `PRT`, and `PRT-N`.
+- Korean labels must be explicit presentation labels, for example `명사`, `동사`, `여성`, `단수`, `주격`, `전치사`, `접속사`, `부정과거`, `능동태`, and `직설법`.
+- English labels must remain available for `en` locale, for example `Noun`, `Verb`, `Feminine`, `Singular`, `Nominative`, `Preposition`, and `Conjunction`.
+- Unknown or partially unsupported codes must fall back to the raw morphology code without inventing unsupported grammar labels.
+- Empty morphology on punctuation/link markers should be suppressed in frontend display.
+- Raw morphology code should remain available in detailed study UI for auditability, even when an expanded Korean or English label is shown.
 
 ## Phase 6A Original Language Read API
 
@@ -401,7 +467,7 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Phase 7A - Original Language Reader UI Planning
+Phase 8D - Morphology Korean Presentation
 ```
 
 ## Phase 7A Original Language Reader UI Planning

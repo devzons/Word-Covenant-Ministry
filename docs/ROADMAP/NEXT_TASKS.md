@@ -2,13 +2,13 @@
 
 ## Date
 
-2026-06-19
+2026-06-20
 
 ## Immediate Next Task
 
-Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP.
+Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. Phase 8A completed frontend/menu/navigation foundation and interlinear UX cleanup. Phase 8B completed Korean transliteration presentation data. Phase 8C completed Korean gloss presentation data.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. The approved controlled `STEP_TAGNT` Mat-Jhn 1,000-row local import, full `STEP_TAGNT` Mat-Jhn local import, full `STEP_TAGNT` Act-Rev local import, controlled `STEP_TAHOT` Gen-Deu local import, controlled `STEP_TAHOT` Jos-Est local import, binary-stable original term identity migration, controlled `STEP_TAHOT` Job-Sng retry import, and controlled `STEP_TAHOT` Isa-Mal import are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, and Phase 7B through Phase 7H frontend MVP implementation are complete. Phase 7I route/API smoke QA passed, but manual desktop/mobile browser click-through remains required because browser automation was unavailable in the validation environment.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend MVP implementation, Phase 8A, Phase 8B, and Phase 8C are complete. Current work is Phase 8D - Morphology Korean Presentation.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,16 +16,18 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Complete manual desktop/mobile browser click-through QA for Reader mode, Original mode, Interlinear mode, Original Word Panel, and Strong Study Panel.
-2. Fix any UI, loading-state, panel, route/query, or console issues found during manual QA.
-3. After explicit approval, implement Word Study Term panel.
-4. Later: occurrence distribution UI.
-5. Later: Strong detail pages.
-6. Later: dedicated Word Study pages.
-7. Later: advanced search.
-8. Later: morphology explorer.
-9. Later: Cross References.
-10. Later: Commentary Layer.
+1. Phase 8D-2: document morphology parser policy.
+2. Phase 8D-3: implement morphology parser utility and focused tests.
+3. Phase 8D-4: integrate Korean/English morphology display into original-language frontend surfaces.
+4. Phase 8D-5: browser QA for Korean and English morphology display.
+5. After explicit approval, implement Word Study Term panel.
+6. Later: occurrence distribution UI.
+7. Later: Strong detail pages.
+8. Later: dedicated Word Study pages.
+9. Later: advanced search.
+10. Later: morphology explorer.
+11. Later: Cross References.
+12. Later: Commentary Layer.
 
 ## Phase 5E Smoke Status
 
@@ -459,8 +461,31 @@ STEP_TAHOT=536149
 Next phase:
 
 ```txt
-Phase 7I - Original Language Reader MVP QA
+Phase 8D - Morphology Korean Presentation
 ```
+
+Phase 8D current objective:
+
+```txt
+Document and implement Korean morphology display for existing morphology codes without schema/API changes.
+```
+
+Phase 8D plan:
+
+- Phase 8D-1 morphology audit completed.
+- Phase 8D-2 parser policy documentation.
+- Phase 8D-3 parser utility and focused tests.
+- Phase 8D-4 frontend integration.
+- Phase 8D-5 browser QA.
+
+Parser policy summary:
+
+- Hebrew parser targets STEP_TAHOT ETCBC/OpenScriptures-style compact codes.
+- Greek parser targets STEP_TAGNT James Tauber-style hyphenated and plain codes.
+- Korean labels must be explicit grammar labels; English labels remain available for `en`.
+- Unknown codes fall back to the raw morphology code.
+- Empty punctuation/link morphology display is suppressed.
+- Raw codes remain available for auditability.
 
 ## Phase 7A Original Language Reader UI Planning
 
