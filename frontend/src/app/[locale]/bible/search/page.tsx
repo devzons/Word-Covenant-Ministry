@@ -33,6 +33,7 @@ export default async function BibleSearchPage({
   searchParams,
 }: BibleSearchPageProps) {
   const { locale } = await params;
+  const activeLocale = locale === "en" ? "en" : "ko";
   const query = await searchParams;
   const q = typeof query.q === "string" ? query.q.trim() : "";
   const translation =
@@ -49,7 +50,7 @@ export default async function BibleSearchPage({
   let errorMessage = "";
 
   if (q.length > 0 && q.length < 2) {
-    errorMessage = "Search query must be at least 2 characters.";
+    errorMessage = searchPageCopy[activeLocale].shortQuery;
   } else if (q.length >= 2) {
     try {
       search = await searchBible({
@@ -59,7 +60,7 @@ export default async function BibleSearchPage({
         perPage,
       });
     } catch {
-      errorMessage = "Bible search could not be loaded.";
+      errorMessage = searchPageCopy[activeLocale].loadError;
     }
   }
 
@@ -79,6 +80,17 @@ export default async function BibleSearchPage({
     </SiteShell>
   );
 }
+
+const searchPageCopy = {
+  en: {
+    shortQuery: "Search query must be at least 2 characters.",
+    loadError: "Bible search could not be loaded.",
+  },
+  ko: {
+    shortQuery: "검색어는 2자 이상이어야 합니다.",
+    loadError: "성경 검색을 불러올 수 없습니다.",
+  },
+};
 
 function parsePositiveInt(value: string | undefined, fallback: number): number {
   const parsed = Number(value);

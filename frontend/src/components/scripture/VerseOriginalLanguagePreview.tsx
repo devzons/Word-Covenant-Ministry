@@ -18,6 +18,24 @@ type VerseOriginalLanguagePreviewProps = {
   book: string;
   chapter: number;
   verse: number;
+  locale: string;
+};
+
+const originalPreviewCopy = {
+  en: {
+    loadError: "Original language preview could not be loaded.",
+    show: "Show original",
+    hide: "Hide original",
+    loading: "Loading original language...",
+    empty: "No original language tokens loaded.",
+  },
+  ko: {
+    loadError: "원어 보기를 불러올 수 없습니다.",
+    show: "원어 보기",
+    hide: "원어 숨기기",
+    loading: "원어를 불러오는 중입니다...",
+    empty: "불러온 원어 토큰이 없습니다.",
+  },
 };
 
 export function VerseOriginalLanguagePreview({
@@ -25,7 +43,10 @@ export function VerseOriginalLanguagePreview({
   book,
   chapter,
   verse,
+  locale,
 }: VerseOriginalLanguagePreviewProps) {
+  const activeLocale = locale === "en" ? "en" : "ko";
+  const copy = originalPreviewCopy[activeLocale];
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -47,7 +68,7 @@ export function VerseOriginalLanguagePreview({
       const response = await getOriginalLanguageVerse(source, book, chapter, verse);
       setData(response);
     } catch {
-      setErrorMessage("Original language preview could not be loaded.");
+      setErrorMessage(copy.loadError);
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +82,7 @@ export function VerseOriginalLanguagePreview({
         onClick={handleToggle}
         type="button"
       >
-        {isExpanded ? "Hide original" : "Show original"}
+        {isExpanded ? copy.hide : copy.show}
       </button>
 
       {isExpanded ? (
@@ -70,12 +91,17 @@ export function VerseOriginalLanguagePreview({
             data,
             errorMessage,
             isLoading,
+            locale: activeLocale,
             onSelectWord: setSelectedWord,
           })}
         </div>
       ) : null}
 
-      <OriginalWordPanel word={selectedWord} onClose={() => setSelectedWord(null)} />
+      <OriginalWordPanel
+        locale={locale}
+        word={selectedWord}
+        onClose={() => setSelectedWord(null)}
+      />
     </div>
   );
 }
@@ -84,15 +110,19 @@ function renderPreviewState({
   data,
   errorMessage,
   isLoading,
+  locale,
   onSelectWord,
 }: {
   data: OriginalLanguageVerseResponse | null;
   errorMessage: string;
   isLoading: boolean;
+  locale: "en" | "ko";
   onSelectWord: (word: OriginalWordPanelWord) => void;
 }) {
+  const copy = originalPreviewCopy[locale];
+
   if (isLoading) {
-    return <p className="text-sm text-zinc-600">Loading original language...</p>;
+    return <p className="text-sm text-zinc-600">{copy.loading}</p>;
   }
 
   if (errorMessage) {
@@ -100,7 +130,7 @@ function renderPreviewState({
   }
 
   if (!data || data.occurrences.length === 0) {
-    return <p className="text-sm text-zinc-600">No original language tokens loaded.</p>;
+    return <p className="text-sm text-zinc-600">{copy.empty}</p>;
   }
 
   return (
@@ -133,6 +163,7 @@ function toPanelWord(occurrence: OriginalLanguageJoinedOccurrence): OriginalWord
     strongs_number: occurrence.term.strongs_number,
     strongs_extended: occurrence.term.strongs_extended,
     transliteration: occurrence.term.transliteration,
+    transliteration_ko: occurrence.term.transliteration_ko,
     gloss: occurrence.term.gloss,
     morphology: occurrence.morphology,
   };

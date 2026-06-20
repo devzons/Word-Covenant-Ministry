@@ -13,11 +13,14 @@ type ReaderModeControlProps = {
 
 const readerModes: Array<{
   value: OriginalLanguageReaderMode;
-  label: string;
+  label: {
+    en: string;
+    ko: string;
+  };
 }> = [
-  { value: "reader", label: "Reader" },
-  { value: "original", label: "Original" },
-  { value: "interlinear", label: "Interlinear" },
+  { value: "reader", label: { en: "Reader", ko: "본문" } },
+  { value: "original", label: { en: "Original", ko: "원어 보기" } },
+  { value: "interlinear", label: { en: "Interlinear", ko: "행간 보기" } },
 ];
 
 export function ReaderModeControl({
@@ -27,8 +30,10 @@ export function ReaderModeControl({
   chapter,
   mode,
 }: ReaderModeControlProps) {
+  const activeLocale = locale === "en" ? "en" : "ko";
+
   return (
-    <nav aria-label="Reader mode" className="flex overflow-x-auto">
+    <nav aria-label={activeLocale === "ko" ? "읽기 모드" : "Reader mode"} className="flex overflow-x-auto">
       <div className="inline-flex min-w-full rounded-md border border-zinc-300 bg-white p-1 sm:min-w-0">
         {readerModes.map((readerMode) => {
           const isActive = readerMode.value === mode;
@@ -51,7 +56,7 @@ export function ReaderModeControl({
               })}
               key={readerMode.value}
             >
-              {readerMode.label}
+              {readerMode.label[activeLocale]}
             </Link>
           );
         })}

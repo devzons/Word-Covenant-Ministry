@@ -30,12 +30,13 @@ export default async function BibleReaderPage({
   searchParams,
 }: BibleReaderPageProps) {
   const { locale, version, book, chapter } = await params;
+  const activeLocale = locale === "en" ? "en" : "ko";
   const query = await searchParams;
   const mode = parseReaderMode(query.mode);
   const chapterNumber = Number(chapter);
 
   if (!Number.isInteger(chapterNumber) || chapterNumber < 1) {
-    return <BibleReaderError locale={locale} message="Invalid chapter request." />;
+    return <BibleReaderError locale={locale} message={readerPageCopy[activeLocale].invalidChapter} />;
   }
 
   let bibleChapter: BibleChapterResponse | null = null;
@@ -52,11 +53,11 @@ export default async function BibleReaderPage({
       bibleChapter = await getBibleChapter(version, book, chapterNumber);
     }
   } catch {
-    errorMessage = "Bible chapter could not be loaded.";
+    errorMessage = readerPageCopy[activeLocale].chapterLoadError;
   }
 
   if (isChapterOutOfRange) {
-    return <BibleReaderError locale={locale} message="Bible chapter could not be loaded." />;
+    return <BibleReaderError locale={locale} message={readerPageCopy[activeLocale].chapterLoadError} />;
   }
 
   if (!bibleChapter || !bookMetadata) {
@@ -76,6 +77,17 @@ export default async function BibleReaderPage({
     </SiteShell>
   );
 }
+
+const readerPageCopy = {
+  en: {
+    invalidChapter: "Invalid chapter request.",
+    chapterLoadError: "Bible chapter could not be loaded.",
+  },
+  ko: {
+    invalidChapter: "잘못된 장 요청입니다.",
+    chapterLoadError: "성경 장을 불러올 수 없습니다.",
+  },
+};
 
 function parseReaderMode(value: string | undefined): OriginalLanguageReaderMode {
   if (value === "original" || value === "interlinear") {

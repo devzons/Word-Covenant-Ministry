@@ -52,6 +52,7 @@ export type OriginalLanguageTerm = {
   strongs_number: string;
   strongs_extended: string;
   transliteration: string;
+  transliteration_ko?: string | null;
   gloss: string | null;
 };
 
@@ -101,6 +102,7 @@ export type OriginalLanguageInterlinearToken = {
   strongs_number: string;
   strongs_extended: string;
   transliteration: string;
+  transliteration_ko?: string | null;
   morphology: string;
   gloss: string | null;
   contextual_function: string | null;

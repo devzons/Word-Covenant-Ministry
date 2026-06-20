@@ -23,82 +23,116 @@ type BibleReaderProps = {
 };
 
 const bookOptions = [
-  { slug: "genesis", label: "창세기", chapterCount: 50 },
-  { slug: "exodus", label: "출애굽기", chapterCount: 40 },
-  { slug: "leviticus", label: "레위기", chapterCount: 27 },
-  { slug: "numbers", label: "민수기", chapterCount: 36 },
-  { slug: "deuteronomy", label: "신명기", chapterCount: 34 },
-  { slug: "joshua", label: "여호수아", chapterCount: 24 },
-  { slug: "judges", label: "사사기", chapterCount: 21 },
-  { slug: "ruth", label: "룻기", chapterCount: 4 },
-  { slug: "1-samuel", label: "사무엘상", chapterCount: 31 },
-  { slug: "2-samuel", label: "사무엘하", chapterCount: 24 },
-  { slug: "1-kings", label: "열왕기상", chapterCount: 22 },
-  { slug: "2-kings", label: "열왕기하", chapterCount: 25 },
-  { slug: "1-chronicles", label: "역대상", chapterCount: 29 },
-  { slug: "2-chronicles", label: "역대하", chapterCount: 36 },
-  { slug: "ezra", label: "에스라", chapterCount: 10 },
-  { slug: "nehemiah", label: "느헤미야", chapterCount: 13 },
-  { slug: "esther", label: "에스더", chapterCount: 10 },
-  { slug: "job", label: "욥기", chapterCount: 42 },
-  { slug: "psalms", label: "시편", chapterCount: 150 },
-  { slug: "proverbs", label: "잠언", chapterCount: 31 },
-  { slug: "ecclesiastes", label: "전도서", chapterCount: 12 },
-  { slug: "song-of-songs", label: "아가", chapterCount: 8 },
-  { slug: "isaiah", label: "이사야", chapterCount: 66 },
-  { slug: "jeremiah", label: "예레미야", chapterCount: 52 },
-  { slug: "lamentations", label: "예레미야애가", chapterCount: 5 },
-  { slug: "ezekiel", label: "에스겔", chapterCount: 48 },
-  { slug: "daniel", label: "다니엘", chapterCount: 12 },
-  { slug: "hosea", label: "호세아", chapterCount: 14 },
-  { slug: "joel", label: "요엘", chapterCount: 3 },
-  { slug: "amos", label: "아모스", chapterCount: 9 },
-  { slug: "obadiah", label: "오바댜", chapterCount: 1 },
-  { slug: "jonah", label: "요나", chapterCount: 4 },
-  { slug: "micah", label: "미가", chapterCount: 7 },
-  { slug: "nahum", label: "나훔", chapterCount: 3 },
-  { slug: "habakkuk", label: "하박국", chapterCount: 3 },
-  { slug: "zephaniah", label: "스바냐", chapterCount: 3 },
-  { slug: "haggai", label: "학개", chapterCount: 2 },
-  { slug: "zechariah", label: "스가랴", chapterCount: 14 },
-  { slug: "malachi", label: "말라기", chapterCount: 4 },
-  { slug: "matthew", label: "마태복음", chapterCount: 28 },
-  { slug: "mark", label: "마가복음", chapterCount: 16 },
-  { slug: "luke", label: "누가복음", chapterCount: 24 },
-  { slug: "john", label: "요한복음", chapterCount: 21 },
-  { slug: "acts", label: "사도행전", chapterCount: 28 },
-  { slug: "romans", label: "로마서", chapterCount: 16 },
-  { slug: "1-corinthians", label: "고린도전서", chapterCount: 16 },
-  { slug: "2-corinthians", label: "고린도후서", chapterCount: 13 },
-  { slug: "galatians", label: "갈라디아서", chapterCount: 6 },
-  { slug: "ephesians", label: "에베소서", chapterCount: 6 },
-  { slug: "philippians", label: "빌립보서", chapterCount: 4 },
-  { slug: "colossians", label: "골로새서", chapterCount: 4 },
-  { slug: "1-thessalonians", label: "데살로니가전서", chapterCount: 5 },
-  { slug: "2-thessalonians", label: "데살로니가후서", chapterCount: 3 },
-  { slug: "1-timothy", label: "디모데전서", chapterCount: 6 },
-  { slug: "2-timothy", label: "디모데후서", chapterCount: 4 },
-  { slug: "titus", label: "디도서", chapterCount: 3 },
-  { slug: "philemon", label: "빌레몬서", chapterCount: 1 },
-  { slug: "hebrews", label: "히브리서", chapterCount: 13 },
-  { slug: "james", label: "야고보서", chapterCount: 5 },
-  { slug: "1-peter", label: "베드로전서", chapterCount: 5 },
-  { slug: "2-peter", label: "베드로후서", chapterCount: 3 },
-  { slug: "1-john", label: "요한일서", chapterCount: 5 },
-  { slug: "2-john", label: "요한이서", chapterCount: 1 },
-  { slug: "3-john", label: "요한삼서", chapterCount: 1 },
-  { slug: "jude", label: "유다서", chapterCount: 1 },
-  { slug: "revelation", label: "요한계시록", chapterCount: 22 },
+  { slug: "genesis", label: { en: "Genesis", ko: "창세기" }, chapterCount: 50 },
+  { slug: "exodus", label: { en: "Exodus", ko: "출애굽기" }, chapterCount: 40 },
+  { slug: "leviticus", label: { en: "Leviticus", ko: "레위기" }, chapterCount: 27 },
+  { slug: "numbers", label: { en: "Numbers", ko: "민수기" }, chapterCount: 36 },
+  { slug: "deuteronomy", label: { en: "Deuteronomy", ko: "신명기" }, chapterCount: 34 },
+  { slug: "joshua", label: { en: "Joshua", ko: "여호수아" }, chapterCount: 24 },
+  { slug: "judges", label: { en: "Judges", ko: "사사기" }, chapterCount: 21 },
+  { slug: "ruth", label: { en: "Ruth", ko: "룻기" }, chapterCount: 4 },
+  { slug: "1-samuel", label: { en: "1 Samuel", ko: "사무엘상" }, chapterCount: 31 },
+  { slug: "2-samuel", label: { en: "2 Samuel", ko: "사무엘하" }, chapterCount: 24 },
+  { slug: "1-kings", label: { en: "1 Kings", ko: "열왕기상" }, chapterCount: 22 },
+  { slug: "2-kings", label: { en: "2 Kings", ko: "열왕기하" }, chapterCount: 25 },
+  { slug: "1-chronicles", label: { en: "1 Chronicles", ko: "역대상" }, chapterCount: 29 },
+  { slug: "2-chronicles", label: { en: "2 Chronicles", ko: "역대하" }, chapterCount: 36 },
+  { slug: "ezra", label: { en: "Ezra", ko: "에스라" }, chapterCount: 10 },
+  { slug: "nehemiah", label: { en: "Nehemiah", ko: "느헤미야" }, chapterCount: 13 },
+  { slug: "esther", label: { en: "Esther", ko: "에스더" }, chapterCount: 10 },
+  { slug: "job", label: { en: "Job", ko: "욥기" }, chapterCount: 42 },
+  { slug: "psalms", label: { en: "Psalms", ko: "시편" }, chapterCount: 150 },
+  { slug: "proverbs", label: { en: "Proverbs", ko: "잠언" }, chapterCount: 31 },
+  { slug: "ecclesiastes", label: { en: "Ecclesiastes", ko: "전도서" }, chapterCount: 12 },
+  { slug: "song-of-songs", label: { en: "Song of Songs", ko: "아가" }, chapterCount: 8 },
+  { slug: "isaiah", label: { en: "Isaiah", ko: "이사야" }, chapterCount: 66 },
+  { slug: "jeremiah", label: { en: "Jeremiah", ko: "예레미야" }, chapterCount: 52 },
+  { slug: "lamentations", label: { en: "Lamentations", ko: "예레미야애가" }, chapterCount: 5 },
+  { slug: "ezekiel", label: { en: "Ezekiel", ko: "에스겔" }, chapterCount: 48 },
+  { slug: "daniel", label: { en: "Daniel", ko: "다니엘" }, chapterCount: 12 },
+  { slug: "hosea", label: { en: "Hosea", ko: "호세아" }, chapterCount: 14 },
+  { slug: "joel", label: { en: "Joel", ko: "요엘" }, chapterCount: 3 },
+  { slug: "amos", label: { en: "Amos", ko: "아모스" }, chapterCount: 9 },
+  { slug: "obadiah", label: { en: "Obadiah", ko: "오바댜" }, chapterCount: 1 },
+  { slug: "jonah", label: { en: "Jonah", ko: "요나" }, chapterCount: 4 },
+  { slug: "micah", label: { en: "Micah", ko: "미가" }, chapterCount: 7 },
+  { slug: "nahum", label: { en: "Nahum", ko: "나훔" }, chapterCount: 3 },
+  { slug: "habakkuk", label: { en: "Habakkuk", ko: "하박국" }, chapterCount: 3 },
+  { slug: "zephaniah", label: { en: "Zephaniah", ko: "스바냐" }, chapterCount: 3 },
+  { slug: "haggai", label: { en: "Haggai", ko: "학개" }, chapterCount: 2 },
+  { slug: "zechariah", label: { en: "Zechariah", ko: "스가랴" }, chapterCount: 14 },
+  { slug: "malachi", label: { en: "Malachi", ko: "말라기" }, chapterCount: 4 },
+  { slug: "matthew", label: { en: "Matthew", ko: "마태복음" }, chapterCount: 28 },
+  { slug: "mark", label: { en: "Mark", ko: "마가복음" }, chapterCount: 16 },
+  { slug: "luke", label: { en: "Luke", ko: "누가복음" }, chapterCount: 24 },
+  { slug: "john", label: { en: "John", ko: "요한복음" }, chapterCount: 21 },
+  { slug: "acts", label: { en: "Acts", ko: "사도행전" }, chapterCount: 28 },
+  { slug: "romans", label: { en: "Romans", ko: "로마서" }, chapterCount: 16 },
+  { slug: "1-corinthians", label: { en: "1 Corinthians", ko: "고린도전서" }, chapterCount: 16 },
+  { slug: "2-corinthians", label: { en: "2 Corinthians", ko: "고린도후서" }, chapterCount: 13 },
+  { slug: "galatians", label: { en: "Galatians", ko: "갈라디아서" }, chapterCount: 6 },
+  { slug: "ephesians", label: { en: "Ephesians", ko: "에베소서" }, chapterCount: 6 },
+  { slug: "philippians", label: { en: "Philippians", ko: "빌립보서" }, chapterCount: 4 },
+  { slug: "colossians", label: { en: "Colossians", ko: "골로새서" }, chapterCount: 4 },
+  { slug: "1-thessalonians", label: { en: "1 Thessalonians", ko: "데살로니가전서" }, chapterCount: 5 },
+  { slug: "2-thessalonians", label: { en: "2 Thessalonians", ko: "데살로니가후서" }, chapterCount: 3 },
+  { slug: "1-timothy", label: { en: "1 Timothy", ko: "디모데전서" }, chapterCount: 6 },
+  { slug: "2-timothy", label: { en: "2 Timothy", ko: "디모데후서" }, chapterCount: 4 },
+  { slug: "titus", label: { en: "Titus", ko: "디도서" }, chapterCount: 3 },
+  { slug: "philemon", label: { en: "Philemon", ko: "빌레몬서" }, chapterCount: 1 },
+  { slug: "hebrews", label: { en: "Hebrews", ko: "히브리서" }, chapterCount: 13 },
+  { slug: "james", label: { en: "James", ko: "야고보서" }, chapterCount: 5 },
+  { slug: "1-peter", label: { en: "1 Peter", ko: "베드로전서" }, chapterCount: 5 },
+  { slug: "2-peter", label: { en: "2 Peter", ko: "베드로후서" }, chapterCount: 3 },
+  { slug: "1-john", label: { en: "1 John", ko: "요한일서" }, chapterCount: 5 },
+  { slug: "2-john", label: { en: "2 John", ko: "요한이서" }, chapterCount: 1 },
+  { slug: "3-john", label: { en: "3 John", ko: "요한삼서" }, chapterCount: 1 },
+  { slug: "jude", label: { en: "Jude", ko: "유다서" }, chapterCount: 1 },
+  { slug: "revelation", label: { en: "Revelation", ko: "요한계시록" }, chapterCount: 22 },
 ];
+
+const bibleReaderCopy = {
+  en: {
+    book: "Book",
+    chapter: "Chapter",
+    go: "Go",
+    searchPlaceholder: "Search KRV",
+    search: "Search",
+    noVerses: "No verses were returned for this chapter.",
+    chapterNav: "Bible chapter navigation",
+    previousChapter: "Previous chapter",
+    nextChapter: "Next chapter",
+  },
+  ko: {
+    book: "성경",
+    chapter: "장",
+    go: "이동",
+    searchPlaceholder: "KRV 검색",
+    search: "검색",
+    noVerses: "이 장의 본문이 없습니다.",
+    chapterNav: "성경 장 이동",
+    previousChapter: "이전 장",
+    nextChapter: "다음 장",
+  },
+};
 
 export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReaderProps) {
   const router = useRouter();
+  const activeLocale = locale === "en" ? "en" : "ko";
+  const copy = bibleReaderCopy[activeLocale];
   const [activeVerseId, setActiveVerseId] = useState("");
   const [selectedInterlinearVerse, setSelectedInterlinearVerse] = useState<number | null>(null);
   const chapterNumber = chapter.chapter;
   const currentBookIndex = bookOptions.findIndex((book) => book.slug === chapter.book);
+  const currentBook = bookOptions[currentBookIndex] ?? null;
   const originalLanguageSource = getOriginalLanguageSource(chapter.book);
   const isInterlinearMode = mode === "interlinear";
+  const chapterReference = localizedChapterReference({
+    bookMetadata,
+    chapter: chapterNumber,
+    locale: activeLocale,
+    option: currentBook,
+  });
   const visibleInterlinearVerse =
     selectedInterlinearVerse ?? (isInterlinearMode ? (chapter.verses[0]?.verse ?? null) : null);
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
@@ -154,14 +188,19 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
   }, []);
 
   return (
-    <article className="mx-auto flex w-full max-w-3xl flex-col gap-8 py-8 sm:py-12">
+    <article
+      className={cn(
+        "mx-auto flex w-full flex-col gap-8 py-8 sm:py-12",
+        isInterlinearMode ? "max-w-6xl" : "max-w-3xl",
+      )}
+    >
       <header className="flex flex-col gap-5 border-b border-zinc-200 pb-6">
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
             {chapter.translation}
           </p>
           <h1 className="text-3xl font-semibold text-zinc-950 sm:text-4xl">
-            {chapter.reference}
+            {chapterReference}
           </h1>
         </div>
 
@@ -170,7 +209,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
           onSubmit={handleReferenceChange}
         >
           <label className="flex flex-col gap-1 text-sm font-medium text-zinc-700">
-            Book
+            {copy.book}
             <select
               className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
               defaultValue={chapter.book}
@@ -178,13 +217,13 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
             >
               {bookOptions.map((book) => (
                 <option key={book.slug} value={book.slug}>
-                  {book.label}
+                  {book.label[activeLocale]}
                 </option>
               ))}
             </select>
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-zinc-700">
-            Chapter
+            {copy.chapter}
             <input
               className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
               defaultValue={chapter.chapter}
@@ -197,7 +236,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
             className="h-11 self-end rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
             type="submit"
           >
-            Go
+            {copy.go}
           </button>
         </form>
 
@@ -217,7 +256,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
             className="min-h-11 flex-1 rounded-md border border-zinc-300 px-3 text-base text-zinc-950"
             minLength={2}
             name="q"
-            placeholder="Search KRV"
+            placeholder={copy.searchPlaceholder}
             required
             type="search"
           />
@@ -225,7 +264,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
             className="min-h-11 rounded-md border border-zinc-300 px-4 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
             type="submit"
           >
-            Search
+            {copy.search}
           </button>
         </form>
       </header>
@@ -270,6 +309,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
                       <VerseOriginalLanguagePreview
                         book={chapter.book}
                         chapter={chapter.chapter}
+                        locale={locale}
                         source={originalLanguageSource}
                         verse={verse.verse}
                       />
@@ -278,10 +318,11 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
                 </div>
 
                 {isInterlinearMode && visibleInterlinearVerse === verse.verse ? (
-                  <div className="mt-3 pl-0 sm:pl-10">
+                  <div className="mt-3">
                     <InterlinearVerse
                       book={chapter.book}
                       chapter={chapter.chapter}
+                      locale={locale}
                       source={originalLanguageSource}
                       verse={visibleInterlinearVerse}
                     />
@@ -293,27 +334,27 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
         </ol>
       ) : (
         <div className="rounded-md border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
-          No verses were returned for this chapter.
+          {copy.noVerses}
         </div>
       )}
 
       <nav
-        aria-label="Bible chapter navigation"
+        aria-label={copy.chapterNav}
         className="flex items-center justify-between border-t border-zinc-200 pt-6"
       >
         {previousHref ? (
           <Link className="text-sm font-semibold text-zinc-900 hover:text-zinc-600" href={previousHref}>
-            Previous chapter
+            {copy.previousChapter}
           </Link>
         ) : (
-          <span className="text-sm text-zinc-400">Previous chapter</span>
+          <span className="text-sm text-zinc-400">{copy.previousChapter}</span>
         )}
         {nextHref ? (
           <Link className="text-sm font-semibold text-zinc-900 hover:text-zinc-600" href={nextHref}>
-            Next chapter
+            {copy.nextChapter}
           </Link>
         ) : (
-          <span className="text-sm text-zinc-400">Next chapter</span>
+          <span className="text-sm text-zinc-400">{copy.nextChapter}</span>
         )}
       </nav>
     </article>
@@ -339,4 +380,24 @@ function getOriginalLanguageSource(book: string): OriginalLanguageSourceDataset 
   const bookIndex = bookOptions.findIndex((bookOption) => bookOption.slug === book);
 
   return bookIndex >= matthewIndex ? "STEP_TAGNT" : "STEP_TAHOT";
+}
+
+function localizedChapterReference({
+  bookMetadata,
+  chapter,
+  locale,
+  option,
+}: {
+  bookMetadata: BibleBookMetadata;
+  chapter: number;
+  locale: "en" | "ko";
+  option: (typeof bookOptions)[number] | null;
+}): string {
+  const bookName = option?.label[locale] ?? bookMetadata.name;
+
+  if (locale === "ko") {
+    return `${bookName} ${chapter}장`;
+  }
+
+  return `${bookName} ${chapter}`;
 }

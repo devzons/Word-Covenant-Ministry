@@ -20,7 +20,7 @@ export function SiteShell({
     <div className={cn("flex min-h-screen flex-col bg-white text-zinc-950", className)}>
       <SiteHeader locale={locale} />
       <main className="flex-1">{children}</main>
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </div>
   );
 }

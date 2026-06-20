@@ -21,6 +21,8 @@ export function BibleSearchResults({
   search,
   errorMessage,
 }: BibleSearchResultsProps) {
+  const activeLocale = locale === "en" ? "en" : "ko";
+  const copy = searchCopy[activeLocale];
   const total = search?.total ?? 0;
   const hasPreviousPage = page > 1;
   const hasNextPage = page * perPage < total;
@@ -33,10 +35,10 @@ export function BibleSearchResults({
             {translation}
           </p>
           <h1 className="text-3xl font-semibold text-zinc-950 sm:text-4xl">
-            Bible Search
+            {copy.title}
           </h1>
           <p className="text-sm text-zinc-600">
-            {q ? `Search results for "${q}"` : "Enter a search query."}
+            {q ? copy.resultsFor(q) : copy.enterQuery}
           </p>
         </div>
 
@@ -46,7 +48,7 @@ export function BibleSearchResults({
           method="get"
         >
           <label className="flex flex-col gap-1 text-sm font-medium text-zinc-700">
-            Query
+            {copy.query}
             <input
               className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
               defaultValue={q}
@@ -57,7 +59,7 @@ export function BibleSearchResults({
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-zinc-700">
-            Version
+            {copy.version}
             <select
               className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
               defaultValue={translation}
@@ -72,13 +74,14 @@ export function BibleSearchResults({
             className="h-11 self-end rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
             type="submit"
           >
-            Search
+            {copy.search}
           </button>
         </form>
       </header>
 
       {renderSearchState({
         locale,
+        copy,
         q,
         search,
         errorMessage,
@@ -86,11 +89,11 @@ export function BibleSearchResults({
 
       {search && total > 0 ? (
         <nav
-          aria-label="Search pagination"
+          aria-label={copy.pagination}
           className="flex flex-col gap-3 border-t border-zinc-200 pt-6 sm:flex-row sm:items-center sm:justify-between"
         >
           <p className="text-sm text-zinc-600">
-            Total {total.toLocaleString()} results
+            {copy.totalResults(total)}
           </p>
           <div className="flex items-center gap-3">
             {hasPreviousPage ? (
@@ -98,24 +101,24 @@ export function BibleSearchResults({
                 className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-semibold text-zinc-900 hover:bg-zinc-50"
                 href={createSearchHref(locale, q, translation, page - 1, perPage)}
               >
-                Previous
+                {copy.previous}
               </Link>
             ) : (
               <span className="rounded-md border border-zinc-200 px-4 py-2 text-sm text-zinc-400">
-                Previous
+                {copy.previous}
               </span>
             )}
-            <span className="text-sm text-zinc-600">Page {page}</span>
+            <span className="text-sm text-zinc-600">{copy.page(page)}</span>
             {hasNextPage ? (
               <Link
                 className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-semibold text-zinc-900 hover:bg-zinc-50"
                 href={createSearchHref(locale, q, translation, page + 1, perPage)}
               >
-                Next
+                {copy.next}
               </Link>
             ) : (
               <span className="rounded-md border border-zinc-200 px-4 py-2 text-sm text-zinc-400">
-                Next
+                {copy.next}
               </span>
             )}
           </div>
@@ -125,14 +128,50 @@ export function BibleSearchResults({
   );
 }
 
+const searchCopy = {
+  en: {
+    title: "Bible Search",
+    enterQuery: "Enter a search query.",
+    resultsFor: (q: string) => `Search results for "${q}"`,
+    query: "Query",
+    version: "Version",
+    search: "Search",
+    pagination: "Search pagination",
+    totalResults: (total: number) => `Total ${total.toLocaleString()} results`,
+    previous: "Previous",
+    next: "Next",
+    page: (page: number) => `Page ${page}`,
+    emptyQuery: "Enter a search query.",
+    noResults: "No search results.",
+  },
+  ko: {
+    title: "성경 검색",
+    enterQuery: "검색어를 입력하세요.",
+    resultsFor: (q: string) => `"${q}" 검색 결과`,
+    query: "검색어",
+    version: "번역",
+    search: "검색",
+    pagination: "검색 페이지 이동",
+    totalResults: (total: number) => `총 ${total.toLocaleString()}개 결과`,
+    previous: "이전",
+    next: "다음",
+    page: (page: number) => `${page}쪽`,
+    emptyQuery: "검색어를 입력하세요.",
+    noResults: "검색 결과가 없습니다.",
+  },
+};
+
 function renderSearchState({
+  copy,
   locale,
   q,
   search,
   errorMessage,
-}: Pick<BibleSearchResultsProps, "locale" | "q" | "search" | "errorMessage">) {
+}: Pick<BibleSearchResultsProps, "locale" | "q" | "search" | "errorMessage"> & {
+  copy: (typeof searchCopy)["en"];
+}) {
   if (!q) {
-    return <StatusMessage message="검색어를 입력하세요." />;
+    return <StatusMessage message={copy.emptyQuery} />;
   }
 
   if (errorMessage) {
@@ -140,7 +179,7 @@ function renderSearchState({
   }
 
   if (!search || search.results.length === 0) {
-    return <StatusMessage message="검색 결과가 없습니다." />;
+    return <StatusMessage message={copy.noResults} />;
   }
 
   return (

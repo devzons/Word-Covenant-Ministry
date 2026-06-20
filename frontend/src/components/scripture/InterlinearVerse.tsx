@@ -7,9 +7,11 @@ import {
   type OriginalWordPanelWord,
 } from "@/components/scripture/OriginalWordPanel";
 import { getInterlinearVerse } from "@/lib/api/original-language";
+import { formatMorphology } from "@/lib/utils/morphology";
 import type {
   HighLevelInterlinearResponse,
   HighLevelInterlinearToken,
+  OriginalLanguageTerm,
   OriginalLanguageType,
   OriginalLanguageSourceDataset,
 } from "@/types/original-language";
@@ -19,21 +21,57 @@ type InterlinearVerseProps = {
   book: string;
   chapter: number;
   verse: number | null;
+  locale: string;
 };
 
 type InterlinearCache = Record<number, HighLevelInterlinearResponse>;
+
+const interlinearCopy = {
+  en: {
+    transliteration: "Transliteration",
+    lemma: "Lemma",
+    strongs: "Strong's",
+    gloss: "Gloss",
+    morphology: "Morphology",
+    notProvided: "Not provided",
+    selectVerse: "Select a verse to view interlinear details.",
+    loading: "Loading interlinear verse...",
+    error: "Interlinear verse could not be loaded.",
+  },
+  ko: {
+    transliteration: "음역",
+    lemma: "원형",
+    strongs: "스트롱 번호",
+    gloss: "뜻",
+    morphology: "형태",
+    notProvided: "제공되지 않음",
+    selectVerse: "인터리니어를 보려면 절을 선택하세요.",
+    loading: "인터리니어 절을 불러오는 중입니다...",
+    error: "인터리니어 절을 불러올 수 없습니다.",
+  },
+};
+
+type ActiveLocale = "en" | "ko";
+
+type TransliterationDisplay = {
+  value: string;
+  isFallback: boolean;
+};
 
 export function InterlinearVerse({
   source,
   book,
   chapter,
   verse,
+  locale,
 }: InterlinearVerseProps) {
   const [cache, setCache] = useState<InterlinearCache>({});
   const [loadingVerse, setLoadingVerse] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedWord, setSelectedWord] = useState<OriginalWordPanelWord | null>(null);
   const selectedData = verse ? cache[verse] : null;
+  const activeLocale = locale === "en" ? "en" : "ko";
+  const copy = interlinearCopy[activeLocale];
 
   useEffect(() => {
     let isCurrent = true;
@@ -57,7 +95,7 @@ export function InterlinearVerse({
         }
       } catch {
         if (isCurrent) {
-          setErrorMessage("Interlinear verse could not be loaded.");
+          setErrorMessage(copy.error);
         }
       } finally {
         if (isCurrent) {
@@ -73,12 +111,12 @@ export function InterlinearVerse({
     return () => {
       isCurrent = false;
     };
-  }, [book, cache, chapter, source, verse]);
+  }, [book, cache, chapter, copy.error, source, verse]);
 
   if (!verse) {
     return (
       <div className="rounded-md border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
-        Select a verse to view interlinear details.
+        {copy.selectVerse}
       </div>
     );
   }
@@ -86,7 +124,7 @@ export function InterlinearVerse({
   if (loadingVerse === verse && !selectedData) {
     return (
       <div className="rounded-md border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
-        Loading interlinear verse...
+        {copy.loading}
       </div>
     );
   }
@@ -103,54 +141,70 @@ export function InterlinearVerse({
     return null;
   }
 
+  const sentenceDirection = originalSentenceDirection(selectedData.tokens);
+
   return (
     <section
-      aria-label={`${selectedData.book.name_en} ${selectedData.reference.chapter}:${selectedData.reference.verse} interlinear`}
-      className="rounded-md border border-zinc-200 bg-zinc-50 p-4"
+      aria-label={`${localizedReference(selectedData, activeLocale)} interlinear`}
+      className="rounded-md border border-zinc-200 bg-white p-4 shadow-sm ring-1 ring-zinc-100 sm:p-5"
     >
-      <div className="mb-4 flex flex-col gap-1">
-        <p className="text-sm font-semibold text-zinc-600">
-          {selectedData.book.name_en} {selectedData.reference.chapter}:
-          {selectedData.reference.verse}
-        </p>
-        <p className="text-base leading-7 text-zinc-950">{selectedData.text}</p>
+      <div className="flex flex-col gap-7">
+        <div className="min-w-0">
+          <ul
+            className="flex max-w-4xl flex-wrap items-end gap-x-3 gap-y-5 text-zinc-950"
+            dir={sentenceDirection}
+          >
+            {selectedData.tokens.map((token) => {
+              const transliteration = getLocalizedTransliteration(token.term, activeLocale);
+
+              return (
+                <li className="inline-flex" key={token.id}>
+                  <button
+                    className="group relative inline-flex flex-col items-center rounded px-1.5 py-1 text-center transition-colors hover:bg-zinc-100 focus-visible:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
+                    onClick={() => setSelectedWord(toPanelWord(token))}
+                    type="button"
+                  >
+                    <span
+                      className="text-xl font-semibold leading-8 text-zinc-950"
+                      dir={textDirection(token.term.language_type)}
+                    >
+                      {token.surface_form}
+                    </span>
+                    <span className={transliterationClassName(transliteration.isFallback)}>
+                      {transliteration.value || copy.notProvided}
+                    </span>
+                    <span
+                      className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-64 -translate-x-1/2 rounded-md border border-zinc-200 bg-white p-3 text-left text-xs leading-5 text-zinc-700 shadow-lg group-hover:block group-focus-visible:block"
+                      dir="ltr"
+                      role="tooltip"
+                    >
+                      <TooltipField label={copy.lemma} value={token.term.lemma} />
+                      <TooltipField label={copy.strongs} value={token.term.strongs_number} />
+                      <TooltipField
+                        label={copy.gloss}
+                        value={token.term.gloss || copy.notProvided}
+                      />
+                      <TooltipField
+                        label={copy.morphology}
+                        value={
+                          formatMorphology(token.morphology, activeLocale).display ||
+                          copy.notProvided
+                        }
+                      />
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
 
-      <ul className="flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:overflow-visible">
-        {selectedData.tokens.map((token) => (
-          <li className="shrink-0 sm:shrink" key={token.id}>
-            <button
-              className="flex min-h-36 w-36 flex-col items-center gap-1 rounded-md border border-zinc-200 bg-white px-2.5 py-3 text-center shadow-sm transition-colors hover:border-zinc-400 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
-              onClick={() => setSelectedWord(toPanelWord(token))}
-              type="button"
-            >
-              <span
-                className="w-full break-words text-lg font-semibold leading-6 text-zinc-950"
-                dir={textDirection(token.term.language_type)}
-              >
-                {token.surface_form}
-              </span>
-              <span
-                className="w-full break-words text-sm leading-5 text-zinc-800"
-                dir={textDirection(token.term.language_type)}
-              >
-                {token.term.lemma}
-              </span>
-              <span className="text-xs font-semibold text-zinc-600">
-                {token.term.strongs_number}
-              </span>
-              <span className="w-full break-words text-xs text-zinc-600">
-                {token.term.transliteration || "Not provided"}
-              </span>
-              <span className="w-full break-words text-xs leading-4 text-zinc-500">
-                {token.term.gloss || "Not provided"}
-              </span>
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      <OriginalWordPanel word={selectedWord} onClose={() => setSelectedWord(null)} />
+      <OriginalWordPanel
+        locale={activeLocale}
+        word={selectedWord}
+        onClose={() => setSelectedWord(null)}
+      />
     </section>
   );
 }
@@ -162,6 +216,7 @@ function toPanelWord(token: HighLevelInterlinearToken): OriginalWordPanelWord {
     strongs_number: token.term.strongs_number,
     strongs_extended: token.term.strongs_extended,
     transliteration: token.term.transliteration,
+    transliteration_ko: token.term.transliteration_ko,
     gloss: token.term.gloss,
     morphology: token.morphology,
   };
@@ -169,4 +224,54 @@ function toPanelWord(token: HighLevelInterlinearToken): OriginalWordPanelWord {
 
 function textDirection(languageType: OriginalLanguageType): "ltr" | "rtl" {
   return languageType === "hebrew" ? "rtl" : "ltr";
+}
+
+function originalSentenceDirection(tokens: HighLevelInterlinearToken[]): "ltr" | "rtl" {
+  return tokens.some((token) => token.term.language_type === "hebrew") ? "rtl" : "ltr";
+}
+
+function getLocalizedTransliteration(
+  term: Pick<OriginalLanguageTerm, "transliteration" | "transliteration_ko">,
+  locale: ActiveLocale,
+): TransliterationDisplay {
+  if (locale === "ko" && term.transliteration_ko) {
+    return {
+      value: term.transliteration_ko,
+      isFallback: false,
+    };
+  }
+
+  return {
+    value: term.transliteration,
+    isFallback: locale === "ko",
+  };
+}
+
+function transliterationClassName(isFallback: boolean): string {
+  return [
+    "mt-0.5 max-w-28 break-words text-xs leading-4",
+    isFallback ? "text-zinc-500 italic" : "text-zinc-600",
+  ].join(" ");
+}
+
+function localizedReference(
+  data: HighLevelInterlinearResponse,
+  locale: ActiveLocale,
+): string {
+  const bookName = locale === "ko" ? data.book.name_ko || data.book.name_en : data.book.name_en;
+
+  if (locale === "ko") {
+    return `${bookName} ${data.reference.chapter}장 ${data.reference.verse}절`;
+  }
+
+  return `${bookName} ${data.reference.chapter}:${data.reference.verse}`;
+}
+
+function TooltipField({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="block">
+      <span className="font-semibold text-zinc-500">{label}: </span>
+      <span className="break-words text-zinc-900">{value}</span>
+    </span>
+  );
 }
