@@ -28,6 +28,19 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 10. Later: morphology explorer.
 11. Later: Cross References.
 12. Later: Commentary Layer.
+13. Future, after Phase 8 original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+
+Future Hebrew-Greek bridge planning is documented in:
+
+```txt
+docs/ROADMAP/HEBREW_GREEK_BRIDGE_PLAN.md
+```
+
+Boundary:
+
+- Do not auto-equate Hebrew/Aramaic `Hxxxx` Strong's values with Greek `Gxxxx` Strong's values.
+- Any Hebrew-Greek relationship must be curated or source-backed.
+- A relationship means "related for study," not "identical."
 
 ## Phase 5E Smoke Status
 

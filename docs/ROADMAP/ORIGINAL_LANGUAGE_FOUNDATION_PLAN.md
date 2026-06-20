@@ -2127,6 +2127,15 @@ Relationship table role:
 - Do not use it as the primary store for word occurrences.
 - Use relationship types such as `same_original_word`, `word_study`, `same_theme`, and `cross_reference` after authoritative source data exists.
 
+Future Hebrew-Greek bridge:
+
+- Old Testament Hebrew/Aramaic Strong's values (`Hxxxx`) and New Testament Greek Strong's values (`Gxxxx`) are separate systems and must not be auto-equated.
+- The project needs a future curated relationship layer for source-backed study relationships between Hebrew/Aramaic and Greek original terms.
+- Example study relationships include `H430` אֱלֹהִים with `G2316` θεός, `H3068` יהוה with `G2962` κύριος, and `H2233` זֶרַע with `G4690` σπέρμα.
+- A relationship means "related for study," not "identical."
+- Suggested future phase: Phase 10 - Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+- Detailed plan: `docs/ROADMAP/HEBREW_GREEK_BRIDGE_PLAN.md`.
+
 ## Frontend Rule
 
 Do not bundle original-language datasets into the frontend.

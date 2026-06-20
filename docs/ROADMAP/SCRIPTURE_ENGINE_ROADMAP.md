@@ -1257,6 +1257,7 @@ Current and future milestones:
 - Advanced search.
 - Morphology explorer.
 - Phase 9 English Bible support and WEB import, after separate approval.
+- Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation, after Phase 8 original-language MVP stabilization and separate approval.
 - Later: Cross References.
 - Later: Commentary Layer.
 
@@ -1264,4 +1265,10 @@ Detailed Phase 5 plan:
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
+```
+
+Future Hebrew-Greek bridge planning:
+
+```txt
+docs/ROADMAP/HEBREW_GREEK_BRIDGE_PLAN.md
 ```
