@@ -147,13 +147,30 @@ function renderPreviewState({
             </span>
             <span className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-xs text-zinc-600">
               <span>{occurrence.term.strongs_number}</span>
-              {occurrence.term.gloss ? <span>{occurrence.term.gloss}</span> : null}
+              {localizedGloss(occurrence, locale) ? (
+                <span>{localizedGloss(occurrence, locale)}</span>
+              ) : null}
             </span>
           </button>
         </li>
       ))}
     </ul>
   );
+}
+
+function localizedGloss(
+  occurrence: OriginalLanguageJoinedOccurrence,
+  locale: "en" | "ko",
+): string {
+  if (locale === "ko" && occurrence.term.gloss_ko) {
+    return occurrence.term.gloss_ko;
+  }
+
+  if (locale === "ko" && occurrence.term.gloss) {
+    return `영어 뜻: ${occurrence.term.gloss}`;
+  }
+
+  return occurrence.term.gloss || "";
 }
 
 function toPanelWord(occurrence: OriginalLanguageJoinedOccurrence): OriginalWordPanelWord {
@@ -165,6 +182,7 @@ function toPanelWord(occurrence: OriginalLanguageJoinedOccurrence): OriginalWord
     transliteration: occurrence.term.transliteration,
     transliteration_ko: occurrence.term.transliteration_ko,
     gloss: occurrence.term.gloss,
+    gloss_ko: occurrence.term.gloss_ko,
     morphology: occurrence.morphology,
   };
 }

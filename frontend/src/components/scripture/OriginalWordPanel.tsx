@@ -13,6 +13,7 @@ export type OriginalWordPanelWord = {
   transliteration: string;
   transliteration_ko?: string | null;
   gloss: string | null;
+  gloss_ko?: string | null;
   morphology: string;
 };
 
@@ -35,6 +36,7 @@ const originalWordPanelCopy = {
     transliteration: "Transliteration",
     transliterationFallback: "",
     gloss: "Gloss",
+    englishGloss: "Gloss",
     morphology: "Morphology",
     notProvided: "Not provided",
   },
@@ -50,6 +52,7 @@ const originalWordPanelCopy = {
     transliteration: "음역",
     transliterationFallback: "기존 원어 음역",
     gloss: "뜻",
+    englishGloss: "영어 뜻",
     morphology: "형태",
     notProvided: "제공되지 않음",
   },
@@ -113,6 +116,7 @@ function OriginalWordDetails({
 }) {
   const morphology = formatMorphology(word.morphology, locale);
   const transliteration = localizedTransliteration(word, locale);
+  const gloss = localizedGloss(word, locale);
 
   return (
     <>
@@ -148,7 +152,7 @@ function OriginalWordDetails({
           note={transliteration.isFallback ? copy.transliterationFallback : ""}
           value={transliteration.value || copy.notProvided}
         />
-        <PanelField label={copy.gloss} value={word.gloss || copy.notProvided} />
+        <PanelField label={gloss.label} value={gloss.value || copy.notProvided} />
         <PanelField label={copy.morphology} value={morphology.display || copy.notProvided} />
       </dl>
     </>
@@ -193,6 +197,23 @@ function localizedTransliteration(
   return {
     value: word.transliteration,
     isFallback: locale === "ko",
+  };
+}
+
+function localizedGloss(
+  word: Pick<OriginalWordPanelWord, "gloss" | "gloss_ko">,
+  locale: "en" | "ko",
+): { label: string; value: string } {
+  if (locale === "ko" && word.gloss_ko) {
+    return {
+      label: originalWordPanelCopy.ko.gloss,
+      value: word.gloss_ko,
+    };
+  }
+
+  return {
+    label: locale === "ko" ? originalWordPanelCopy.ko.englishGloss : originalWordPanelCopy.en.gloss,
+    value: word.gloss || "",
   };
 }
 

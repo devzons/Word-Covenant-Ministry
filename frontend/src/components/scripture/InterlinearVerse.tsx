@@ -32,6 +32,7 @@ const interlinearCopy = {
     lemma: "Lemma",
     strongs: "Strong's",
     gloss: "Gloss",
+    englishGloss: "Gloss",
     morphology: "Morphology",
     notProvided: "Not provided",
     selectVerse: "Select a verse to view interlinear details.",
@@ -43,6 +44,7 @@ const interlinearCopy = {
     lemma: "원형",
     strongs: "스트롱 번호",
     gloss: "뜻",
+    englishGloss: "영어 뜻",
     morphology: "형태",
     notProvided: "제공되지 않음",
     selectVerse: "인터리니어를 보려면 절을 선택하세요.",
@@ -156,6 +158,7 @@ export function InterlinearVerse({
           >
             {selectedData.tokens.map((token) => {
               const transliteration = getLocalizedTransliteration(token.term, activeLocale);
+              const gloss = getLocalizedGloss(token.term, activeLocale);
 
               return (
                 <li className="inline-flex" key={token.id}>
@@ -181,8 +184,8 @@ export function InterlinearVerse({
                       <TooltipField label={copy.lemma} value={token.term.lemma} />
                       <TooltipField label={copy.strongs} value={token.term.strongs_number} />
                       <TooltipField
-                        label={copy.gloss}
-                        value={token.term.gloss || copy.notProvided}
+                        label={gloss.label}
+                        value={gloss.value || copy.notProvided}
                       />
                       <TooltipField
                         label={copy.morphology}
@@ -218,6 +221,7 @@ function toPanelWord(token: HighLevelInterlinearToken): OriginalWordPanelWord {
     transliteration: token.term.transliteration,
     transliteration_ko: token.term.transliteration_ko,
     gloss: token.term.gloss,
+    gloss_ko: token.term.gloss_ko,
     morphology: token.morphology,
   };
 }
@@ -244,6 +248,23 @@ function getLocalizedTransliteration(
   return {
     value: term.transliteration,
     isFallback: locale === "ko",
+  };
+}
+
+function getLocalizedGloss(
+  term: Pick<OriginalLanguageTerm, "gloss" | "gloss_ko">,
+  locale: ActiveLocale,
+): { label: string; value: string } {
+  if (locale === "ko" && term.gloss_ko) {
+    return {
+      label: interlinearCopy.ko.gloss,
+      value: term.gloss_ko,
+    };
+  }
+
+  return {
+    label: locale === "ko" ? interlinearCopy.ko.englishGloss : interlinearCopy.en.gloss,
+    value: term.gloss || "",
   };
 }
 

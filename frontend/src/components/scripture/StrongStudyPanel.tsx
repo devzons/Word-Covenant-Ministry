@@ -23,6 +23,8 @@ const strongStudyPanelCopy = {
     totalTerms: "Total Terms",
     totalOccurrences: "Total Occurrences",
     groupedTerms: "Grouped Terms",
+    gloss: "Gloss",
+    englishGloss: "Gloss",
     terms: "terms",
     noGroupedTerms: "No grouped terms returned.",
   },
@@ -36,6 +38,8 @@ const strongStudyPanelCopy = {
     totalTerms: "총 단어",
     totalOccurrences: "총 출현",
     groupedTerms: "묶인 단어",
+    gloss: "뜻",
+    englishGloss: "영어 뜻",
     terms: "단어",
     noGroupedTerms: "묶인 단어가 없습니다.",
   },
@@ -175,26 +179,42 @@ function renderStrongStudyState({
                 </div>
 
                 <ul className="mt-3 flex flex-col gap-2">
-                  {group.terms.map((term) => (
-                    <li
-                      className="rounded border border-zinc-200 bg-white p-2"
-                      key={term.id}
-                    >
-                      <p className="font-semibold text-zinc-950">{term.lemma}</p>
-                      <p
-                        className={
-                          localizedTransliteration(term, locale).isFallback
-                            ? "text-sm italic text-zinc-500"
-                            : "text-sm text-zinc-600"
-                        }
+                  {group.terms.map((term) => {
+                    const transliteration = localizedTransliteration(term, locale);
+                    const gloss = localizedGloss(term, locale);
+
+                    return (
+                      <li
+                        className="rounded border border-zinc-200 bg-white p-2"
+                        key={term.id}
                       >
-                        {localizedTransliteration(term, locale).value}
-                      </p>
-                      {term.gloss ? (
-                        <p className="mt-1 text-sm text-zinc-800">{term.gloss}</p>
-                      ) : null}
-                    </li>
-                  ))}
+                        <p className="font-semibold text-zinc-950">{term.lemma}</p>
+                        <p
+                          className={
+                            transliteration.isFallback
+                              ? "text-sm italic text-zinc-500"
+                              : "text-sm text-zinc-600"
+                          }
+                        >
+                          {transliteration.value}
+                        </p>
+                        {gloss.value ? (
+                          <p
+                            className={
+                              gloss.isFallback
+                                ? "mt-1 text-sm italic text-zinc-700"
+                                : "mt-1 text-sm text-zinc-800"
+                            }
+                          >
+                            <span className="font-semibold text-zinc-500">
+                              {gloss.label}:{" "}
+                            </span>
+                            {gloss.value}
+                          </p>
+                        ) : null}
+                      </li>
+                    );
+                  })}
                 </ul>
               </li>
             ))}
@@ -240,6 +260,25 @@ function localizedTransliteration(
 
   return {
     value: term.transliteration,
+    isFallback: locale === "ko",
+  };
+}
+
+function localizedGloss(
+  term: Pick<WordStudyTerm, "gloss" | "gloss_ko">,
+  locale: "en" | "ko",
+): { label: string; value: string; isFallback: boolean } {
+  if (locale === "ko" && term.gloss_ko) {
+    return {
+      label: strongStudyPanelCopy.ko.gloss,
+      value: term.gloss_ko,
+      isFallback: false,
+    };
+  }
+
+  return {
+    label: locale === "ko" ? strongStudyPanelCopy.ko.englishGloss : strongStudyPanelCopy.en.gloss,
+    value: term.gloss || "",
     isFallback: locale === "ko",
   };
 }

@@ -54,6 +54,7 @@ export type OriginalLanguageTerm = {
   transliteration: string;
   transliteration_ko?: string | null;
   gloss: string | null;
+  gloss_ko?: string | null;
 };
 
 export type OriginalLanguageOccurrence = {
@@ -105,6 +106,7 @@ export type OriginalLanguageInterlinearToken = {
   transliteration_ko?: string | null;
   morphology: string;
   gloss: string | null;
+  gloss_ko?: string | null;
   contextual_function: string | null;
 };
 
