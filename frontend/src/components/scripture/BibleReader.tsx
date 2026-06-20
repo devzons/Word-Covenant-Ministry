@@ -102,6 +102,8 @@ const bibleReaderCopy = {
     chapterNav: "Bible chapter navigation",
     previousChapter: "Previous chapter",
     nextChapter: "Next chapter",
+    selectOriginalVerse: "Select verse for original-language preview",
+    selectInterlinearVerse: "Select verse for interlinear view",
   },
   ko: {
     book: "성경",
@@ -113,6 +115,8 @@ const bibleReaderCopy = {
     chapterNav: "성경 장 이동",
     previousChapter: "이전 장",
     nextChapter: "다음 장",
+    selectOriginalVerse: "원어 미리보기 절 선택",
+    selectInterlinearVerse: "행간 보기 절 선택",
   },
 };
 
@@ -121,11 +125,13 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderCopy[activeLocale];
   const [activeVerseId, setActiveVerseId] = useState("");
+  const [selectedOriginalVerse, setSelectedOriginalVerse] = useState<number | null>(null);
   const [selectedInterlinearVerse, setSelectedInterlinearVerse] = useState<number | null>(null);
   const chapterNumber = chapter.chapter;
   const currentBookIndex = bookOptions.findIndex((book) => book.slug === chapter.book);
   const currentBook = bookOptions[currentBookIndex] ?? null;
   const originalLanguageSource = getOriginalLanguageSource(chapter.book);
+  const isOriginalMode = mode === "original";
   const isInterlinearMode = mode === "interlinear";
   const chapterReference = localizedChapterReference({
     bookMetadata,
@@ -135,6 +141,8 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
   });
   const visibleInterlinearVerse =
     selectedInterlinearVerse ?? (isInterlinearMode ? (chapter.verses[0]?.verse ?? null) : null);
+  const visibleOriginalVerse =
+    selectedOriginalVerse ?? (isOriginalMode ? (chapter.verses[0]?.verse ?? null) : null);
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -188,8 +196,8 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
   }, []);
 
   return (
-    <article className="flex w-full flex-col gap-8 py-8 sm:py-12">
-      <header className="flex flex-col gap-5 border-b border-zinc-200 pb-6">
+    <article className="flex w-full min-w-0 flex-col gap-8 overflow-x-hidden py-8 sm:py-12">
+      <header className="flex min-w-0 max-w-full flex-col gap-5 border-b border-zinc-200 pb-6">
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
             {chapter.translation}
@@ -200,13 +208,13 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
         </div>
 
         <form
-          className="grid gap-3 rounded-md border border-zinc-200 bg-zinc-50 p-3 sm:grid-cols-[1fr_120px_auto]"
+          className="grid min-w-0 max-w-full gap-3 rounded-md border border-zinc-200 bg-zinc-50 p-3 sm:grid-cols-[minmax(0,1fr)_120px_auto]"
           onSubmit={handleReferenceChange}
         >
-          <label className="flex flex-col gap-1 text-sm font-medium text-zinc-700">
+          <label className="flex min-w-0 flex-col gap-1 text-sm font-medium text-zinc-700">
             {copy.book}
             <select
-              className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
+              className="h-11 min-w-0 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
               defaultValue={chapter.book}
               name="book"
             >
@@ -217,10 +225,10 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
               ))}
             </select>
           </label>
-          <label className="flex flex-col gap-1 text-sm font-medium text-zinc-700">
+          <label className="flex min-w-0 flex-col gap-1 text-sm font-medium text-zinc-700">
             {copy.chapter}
             <input
-              className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
+              className="h-11 min-w-0 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
               defaultValue={chapter.chapter}
               min={1}
               name="chapter"
@@ -243,12 +251,12 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
           version={chapter.translation}
         />
 
-        <form action={searchUrl} className="flex flex-col gap-2 sm:flex-row" method="get">
+        <form action={searchUrl} className="flex min-w-0 flex-col gap-2 sm:flex-row" method="get">
           <input name="translation" type="hidden" value={chapter.translation} />
           <input name="page" type="hidden" value="1" />
           <input name="per_page" type="hidden" value="20" />
           <input
-            className="min-h-11 flex-1 rounded-md border border-zinc-300 px-3 text-base text-zinc-950"
+            className="min-h-11 min-w-0 flex-1 rounded-md border border-zinc-300 px-3 text-base text-zinc-950"
             minLength={2}
             name="q"
             placeholder={copy.searchPlaceholder}
@@ -265,18 +273,25 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
       </header>
 
       {chapter.verses.length > 0 ? (
-        <ol className={cn("flex flex-col gap-0", isInterlinearMode ? "max-w-6xl" : "max-w-3xl")}>
+        <ol
+          className={cn(
+            "flex w-full min-w-0 flex-col gap-0",
+            isInterlinearMode || isOriginalMode ? "max-w-6xl" : "max-w-3xl",
+          )}
+        >
           {chapter.verses.map((verse) => {
             const verseId = `v${verse.verse}`;
             const isActive =
               activeVerseId === verseId ||
-              (isInterlinearMode && visibleInterlinearVerse === verse.verse);
+              (isInterlinearMode && visibleInterlinearVerse === verse.verse) ||
+              (isOriginalMode && visibleOriginalVerse === verse.verse);
+            const isSelectableStudyMode = isOriginalMode || isInterlinearMode;
 
             return (
               <li className="flex flex-col" id={verseId} key={verse.verse}>
                 <div
                   className={cn(
-                    "grid scroll-mt-24 grid-cols-[2rem_1fr] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
+                    "grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
                     isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
                   )}
                 >
@@ -288,20 +303,34 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
                   >
                     {verse.verse}
                   </span>
-                  <div className="flex flex-col">
-                    {isInterlinearMode ? (
+                  <div className="flex min-w-0 flex-col">
+                    {isSelectableStudyMode ? (
                       <button
-                        className="text-left text-zinc-950 transition-colors hover:text-zinc-700"
-                        onClick={() => setSelectedInterlinearVerse(verse.verse)}
+                        className="min-w-0 break-words text-left text-zinc-950 transition-colors hover:text-zinc-700"
+                        aria-label={
+                          isOriginalMode
+                            ? `${copy.selectOriginalVerse}: ${verse.verse}`
+                            : `${copy.selectInterlinearVerse}: ${verse.verse}`
+                        }
+                        onClick={() => {
+                          if (isOriginalMode) {
+                            setSelectedOriginalVerse(verse.verse);
+                          }
+
+                          if (isInterlinearMode) {
+                            setSelectedInterlinearVerse(verse.verse);
+                          }
+                        }}
                         type="button"
                       >
                         {verse.text}
                       </button>
                     ) : (
-                      <span className="text-zinc-950">{verse.text}</span>
+                      <span className="break-words text-zinc-950">{verse.text}</span>
                     )}
-                    {mode === "original" ? (
+                    {isOriginalMode && visibleOriginalVerse === verse.verse ? (
                       <VerseOriginalLanguagePreview
+                        autoLoad
                         book={chapter.book}
                         chapter={chapter.chapter}
                         locale={locale}

@@ -29,10 +29,11 @@ const originalWordPanelCopy = {
     dialog: "Original word details",
     closePanel: "Close original word panel",
     close: "Close",
-    back: "Back",
+    back: "Word details",
     lemma: "Lemma",
     strongs: "Strong's",
     strongsExtended: "Strong's Extended",
+    strongStudyAction: "Open Strong study",
     transliteration: "Transliteration",
     transliterationFallback: "",
     gloss: "Gloss",
@@ -45,10 +46,11 @@ const originalWordPanelCopy = {
     dialog: "원어 단어 정보",
     closePanel: "원어 단어 패널 닫기",
     close: "닫기",
-    back: "뒤로",
+    back: "단어 정보",
     lemma: "원형",
     strongs: "스트롱 번호",
     strongsExtended: "확장 스트롱 번호",
+    strongStudyAction: "스트롱 연구 열기",
     transliteration: "음역",
     transliterationFallback: "기존 원어 음역",
     gloss: "뜻",
@@ -141,6 +143,7 @@ function OriginalWordDetails({
       <dl className="mt-5 grid gap-4 text-sm">
         <PanelField label={copy.lemma} value={word.lemma} />
         <StrongPanelField
+          actionLabel={copy.strongStudyAction}
           label={copy.strongs}
           onOpenStrongStudy={onOpenStrongStudy}
           value={word.strongs_number}
@@ -226,10 +229,12 @@ function localizedGloss(
 }
 
 function StrongPanelField({
+  actionLabel,
   label,
   value,
   onOpenStrongStudy,
 }: {
+  actionLabel: string;
   label: string;
   value: string;
   onOpenStrongStudy: () => void;
@@ -239,11 +244,13 @@ function StrongPanelField({
       <dt className="font-semibold text-zinc-500">{label}</dt>
       <dd className="mt-1">
         <button
-          className="break-words text-left text-base font-semibold text-zinc-950 underline decoration-zinc-300 underline-offset-4 transition-colors hover:text-zinc-700"
+          aria-label={`${actionLabel}: ${value}`}
+          className="inline-flex flex-col rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-left transition-colors hover:border-zinc-300 hover:bg-white"
           onClick={onOpenStrongStudy}
           type="button"
         >
-          {value}
+          <span className="break-words text-base font-semibold text-zinc-950">{value}</span>
+          <span className="mt-0.5 text-xs font-medium text-zinc-500">{actionLabel}</span>
         </button>
       </dd>
     </div>

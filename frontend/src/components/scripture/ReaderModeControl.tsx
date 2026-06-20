@@ -33,8 +33,11 @@ export function ReaderModeControl({
   const activeLocale = locale === "en" ? "en" : "ko";
 
   return (
-    <nav aria-label={activeLocale === "ko" ? "읽기 모드" : "Reader mode"} className="flex overflow-x-auto">
-      <div className="inline-flex min-w-full rounded-md border border-zinc-300 bg-white p-1 sm:min-w-0">
+    <nav
+      aria-label={activeLocale === "ko" ? "읽기 모드" : "Reader mode"}
+      className="w-full min-w-0 max-w-full overflow-hidden"
+    >
+      <div className="grid w-full min-w-0 max-w-full grid-cols-3 rounded-md border border-zinc-300 bg-white p-1 sm:inline-grid sm:w-auto">
         {readerModes.map((readerMode) => {
           const isActive = readerMode.value === mode;
 
@@ -42,7 +45,7 @@ export function ReaderModeControl({
             <Link
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex h-9 flex-1 items-center justify-center rounded px-3 text-sm font-semibold transition-colors sm:flex-none",
+                "flex min-h-10 min-w-0 items-center justify-center rounded px-1.5 text-center text-xs font-semibold leading-4 whitespace-normal transition-colors sm:h-9 sm:min-h-0 sm:px-3 sm:text-sm",
                 isActive
                   ? "bg-zinc-950 text-white"
                   : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950",

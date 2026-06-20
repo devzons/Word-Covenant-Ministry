@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   OriginalWordPanel,
@@ -19,6 +19,7 @@ type VerseOriginalLanguagePreviewProps = {
   chapter: number;
   verse: number;
   locale: string;
+  autoLoad?: boolean;
 };
 
 const originalPreviewCopy = {
@@ -28,6 +29,7 @@ const originalPreviewCopy = {
     hide: "Hide original",
     loading: "Loading original language...",
     empty: "No original language tokens loaded.",
+    openDetails: "Open word details",
   },
   ko: {
     loadError: "원어 보기를 불러올 수 없습니다.",
@@ -35,6 +37,7 @@ const originalPreviewCopy = {
     hide: "원어 숨기기",
     loading: "원어를 불러오는 중입니다...",
     empty: "불러온 원어 토큰이 없습니다.",
+    openDetails: "단어 정보 열기",
   },
 };
 
@@ -44,20 +47,19 @@ export function VerseOriginalLanguagePreview({
   chapter,
   verse,
   locale,
+  autoLoad = false,
 }: VerseOriginalLanguagePreviewProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = originalPreviewCopy[activeLocale];
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isManuallyExpanded, setIsManuallyExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState<OriginalLanguageVerseResponse | null>(null);
   const [selectedWord, setSelectedWord] = useState<OriginalWordPanelWord | null>(null);
+  const isExpanded = autoLoad || isManuallyExpanded;
 
-  async function handleToggle() {
-    const nextExpanded = !isExpanded;
-    setIsExpanded(nextExpanded);
-
-    if (!nextExpanded || data || isLoading) {
+  async function loadOriginalLanguage() {
+    if (data || isLoading) {
       return;
     }
 
@@ -74,16 +76,68 @@ export function VerseOriginalLanguagePreview({
     }
   }
 
+  useEffect(() => {
+    let isCurrent = true;
+
+    async function loadAutoPreview() {
+      if (data) {
+        return;
+      }
+
+      setIsLoading(true);
+      setErrorMessage("");
+
+      try {
+        const response = await getOriginalLanguageVerse(source, book, chapter, verse);
+
+        if (isCurrent) {
+          setData(response);
+        }
+      } catch {
+        if (isCurrent) {
+          setErrorMessage(copy.loadError);
+        }
+      } finally {
+        if (isCurrent) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    if (!autoLoad) {
+      return undefined;
+    }
+
+    void loadAutoPreview();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [autoLoad, book, chapter, copy.loadError, data, source, verse]);
+
+  async function handleToggle() {
+    const nextExpanded = !isManuallyExpanded;
+    setIsManuallyExpanded(nextExpanded);
+
+    if (!nextExpanded) {
+      return;
+    }
+
+    await loadOriginalLanguage();
+  }
+
   return (
-    <div className="mt-3 flex flex-col gap-3">
-      <button
-        aria-expanded={isExpanded}
-        className="w-fit rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
-        onClick={handleToggle}
-        type="button"
-      >
-        {isExpanded ? copy.hide : copy.show}
-      </button>
+    <div className={autoLoad ? "flex flex-col gap-3" : "mt-3 flex flex-col gap-3"}>
+      {autoLoad ? null : (
+        <button
+          aria-expanded={isExpanded}
+          className="w-fit rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+          onClick={handleToggle}
+          type="button"
+        >
+          {isExpanded ? copy.hide : copy.show}
+        </button>
+      )}
 
       {isExpanded ? (
         <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
@@ -138,6 +192,7 @@ function renderPreviewState({
       {data.occurrences.map((occurrence) => (
         <li key={occurrence.id}>
           <button
+            aria-label={`${copy.openDetails}: ${occurrence.surface_form}`}
             className="rounded border border-zinc-200 bg-white px-2.5 py-2 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50"
             onClick={() => onSelectWord(toPanelWord(occurrence))}
             type="button"
