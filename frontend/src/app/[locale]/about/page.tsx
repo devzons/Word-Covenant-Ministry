@@ -27,14 +27,14 @@ export default async function AboutPage({ params }: AboutPageProps) {
   return (
     <SiteShell locale={activeLocale}>
       <Container>
-        <section className="mx-auto flex max-w-3xl flex-col gap-4 py-12 sm:py-16">
+        <section className="flex flex-col gap-4 py-12 sm:py-16">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
             Word Covenant Ministry
           </p>
           <h1 className="text-3xl font-semibold text-zinc-950 sm:text-4xl">
             {pageCopy.title}
           </h1>
-          <p className="text-base leading-7 text-zinc-600">{pageCopy.body}</p>
+          <p className="max-w-3xl text-base leading-7 text-zinc-600">{pageCopy.body}</p>
         </section>
       </Container>
     </SiteShell>

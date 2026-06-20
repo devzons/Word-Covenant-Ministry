@@ -188,12 +188,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
   }, []);
 
   return (
-    <article
-      className={cn(
-        "mx-auto flex w-full flex-col gap-8 py-8 sm:py-12",
-        isInterlinearMode ? "max-w-6xl" : "max-w-3xl",
-      )}
-    >
+    <article className="flex w-full flex-col gap-8 py-8 sm:py-12">
       <header className="flex flex-col gap-5 border-b border-zinc-200 pb-6">
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
@@ -270,7 +265,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
       </header>
 
       {chapter.verses.length > 0 ? (
-        <ol className="flex flex-col gap-0">
+        <ol className={cn("flex flex-col gap-0", isInterlinearMode ? "max-w-6xl" : "max-w-3xl")}>
           {chapter.verses.map((verse) => {
             const verseId = `v${verse.verse}`;
             const isActive =

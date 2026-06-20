@@ -28,7 +28,7 @@ export function BibleSearchResults({
   const hasNextPage = page * perPage < total;
 
   return (
-    <article className="mx-auto flex w-full max-w-3xl flex-col gap-8 py-8 sm:py-12">
+    <article className="flex w-full flex-col gap-8 py-8 sm:py-12">
       <header className="flex flex-col gap-5 border-b border-zinc-200 pb-6">
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">

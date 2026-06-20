@@ -33,8 +33,8 @@ export default async function SermonsPage({ params }: SermonsPageProps) {
   return (
     <SiteShell locale={activeLocale}>
       <Container>
-        <section className="mx-auto flex max-w-3xl flex-col gap-6 py-12 sm:py-16">
-          <div className="flex flex-col gap-3">
+        <section className="flex flex-col gap-6 py-12 sm:py-16">
+          <div className="flex max-w-3xl flex-col gap-3">
             <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
               Word Covenant Ministry
             </p>

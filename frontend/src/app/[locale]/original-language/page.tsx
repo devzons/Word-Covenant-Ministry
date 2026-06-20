@@ -42,7 +42,7 @@ export default async function OriginalLanguagePage({ params }: OriginalLanguageP
   return (
     <SiteShell locale={activeLocale}>
       <Container>
-        <section className="mx-auto flex max-w-4xl flex-col gap-8 py-12 sm:py-16">
+        <section className="flex flex-col gap-8 py-12 sm:py-16">
           <div className="flex max-w-3xl flex-col gap-3">
             <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
               {pageCopy.eyebrow}
