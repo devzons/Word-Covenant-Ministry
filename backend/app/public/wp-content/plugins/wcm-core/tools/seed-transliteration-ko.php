@@ -54,7 +54,7 @@ function parseCliArguments(array $argv): array
 
         if ($argument === '--seed-set') {
             throw new RuntimeException(
-                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, --seed-set=top-lexical-hebrew, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, or --seed-set=phase8f3-top250-filled.'
+                'Use --seed-set=genesis-matthew-1-1, --seed-set=top500-conservative, --seed-set=top-lexical-hebrew, --seed-set=phase8e-approved-lexical, --seed-set=phase8e5-approved-reviewed, --seed-set=phase8f3-top250-filled, or --seed-set=phase8f5-top500-filled.'
             );
         }
 
@@ -232,6 +232,7 @@ function reviewedSeeds(string $seedSet): array
         'phase8e-approved-lexical' => phase8eApprovedLexicalReviewedSeeds(),
         'phase8e5-approved-reviewed' => phase8e5ApprovedReviewedSeeds(),
         'phase8f3-top250-filled' => phase8f3Top250FilledReviewedSeeds(),
+        'phase8f5-top500-filled' => phase8f5Top500FilledReviewedSeeds(),
         default => throw new RuntimeException('Unknown seed set: ' . $seedSet),
     };
 }
@@ -1075,6 +1076,108 @@ function phase8f3ReviewedTransliterationSeed(int $termId, string $transliteratio
         'transliteration' => (string) $term['transliteration'],
         'transliteration_ko' => $transliterationKo,
     ];
+}
+
+/**
+ * @return array<int, array{
+ *     term_id: int,
+ *     source_dataset: string,
+ *     book_slug: string,
+ *     chapter: int,
+ *     verse: int,
+ *     language_type: string,
+ *     lemma: string,
+ *     strongs_number: string,
+ *     strongs_extended: string,
+ *     transliteration: string,
+ *     transliteration_ko: string
+ * }>
+ */
+function phase8f5Top500FilledReviewedSeeds(): array
+{
+    $worksheetPath = '/tmp/wcm_phase8f4_top500_transliteration_filled.tsv';
+    $seedsByTermId = [];
+
+    foreach (readPhase8f5ApprovedWorksheetRows($worksheetPath, 'proposed_transliteration_ko') as $row) {
+        $seed = phase8f3ReviewedTransliterationSeed((int) $row['term_id'], $row['proposed_transliteration_ko']);
+        $seedsByTermId[$seed['term_id']] = $seed;
+    }
+
+    $seeds = array_values($seedsByTermId);
+
+    if (count($seeds) !== 275) {
+        throw new RuntimeException('Phase 8F-5 transliteration seed set must contain exactly 275 reviewed rows.');
+    }
+
+    return $seeds;
+}
+
+/**
+ * @return array<string, string>[]
+ */
+function readPhase8f5ApprovedWorksheetRows(string $path, string $valueColumn): array
+{
+    if (! is_file($path)) {
+        throw new RuntimeException('Phase 8F-5 worksheet not found: ' . $path);
+    }
+
+    $handle = fopen($path, 'rb');
+
+    if ($handle === false) {
+        throw new RuntimeException('Unable to read Phase 8F-5 worksheet: ' . $path);
+    }
+
+    $header = fgetcsv($handle, 0, "\t");
+
+    if (! is_array($header)) {
+        fclose($handle);
+        throw new RuntimeException('Phase 8F-5 worksheet is empty: ' . $path);
+    }
+
+    $rows = [];
+
+    while (($values = fgetcsv($handle, 0, "\t")) !== false) {
+        $row = array_combine($header, $values);
+
+        if (! is_array($row)) {
+            fclose($handle);
+            throw new RuntimeException('Phase 8F-5 worksheet row does not match the header.');
+        }
+
+        if ((int) ($row['rank'] ?? 0) > 500) {
+            continue;
+        }
+
+        if (($row['recommendation'] ?? '') !== 'approve_seed') {
+            continue;
+        }
+
+        if (($row[$valueColumn] ?? '') === '') {
+            continue;
+        }
+
+        if (phase8f5IsForbiddenWorksheetRow($row)) {
+            continue;
+        }
+
+        $rows[] = $row;
+    }
+
+    fclose($handle);
+
+    return $rows;
+}
+
+/**
+ * @param array<string, string> $row
+ */
+function phase8f5IsForbiddenWorksheetRow(array $row): bool
+{
+    $forbiddenLemmas = ['אָדוֹן', 'יְהֹוִה', 'צָבָא', 'אֵל', 'יָרֵא'];
+    $forbiddenGlosses = ['lord', 'YHWH|Yahweh', 'Hosts', 'God', 'awesome(god)'];
+
+    return in_array($row['lemma'] ?? '', $forbiddenLemmas, true)
+        || in_array($row['current_gloss'] ?? '', $forbiddenGlosses, true);
 }
 
 /**
