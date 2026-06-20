@@ -452,6 +452,142 @@ Deferred features:
 - Advanced search.
 - Morphology explorer.
 
+## Phase 8B Korean-First Original Language Presentation Data
+
+Status:
+
+```txt
+Phase 8B-1 Korean Transliteration Infrastructure approved for implementation. Korean gloss, English Bible support, and Phase 9 work remain unapproved.
+```
+
+Purpose:
+
+Phase 8B defines how original-language terms should gain Korean-first display metadata for Korean readers while preserving the current original-language source data and existing response fields.
+
+Phase 8B-1 narrows the approved implementation scope to `transliteration_ko` only. It permits additive schema support and read-only API exposure for Korean transliteration while preserving the existing `transliteration` field unchanged.
+
+### Current Limitation
+
+The current original-language data model and public responses expose source-oriented fields:
+
+```txt
+transliteration
+gloss
+```
+
+These fields are useful for source audit and basic display, but they are not Korean-first presentation fields. The existing `transliteration` value is not guaranteed to be Hangul-readable, and the existing `gloss` value is not guaranteed to be Korean. As a result, Korean readers may see original-language panels and interlinear tokens that still depend on English-oriented source glosses or academic romanization.
+
+This limitation affects presentation only. It does not invalidate the imported STEP_TAHOT or STEP_TAGNT source data, original term identity, occurrence identity, morphology data, Strong's lookup behavior, or current read-only API contracts.
+
+### Korean Transliteration Field Strategy
+
+Phase 8B should preserve the existing source/import transliteration field and add Korean presentation transliteration as separate data.
+
+Proposed future field:
+
+```txt
+transliteration_ko
+```
+
+Field rules:
+
+- `transliteration` remains the source-oriented transliteration field.
+- `transliteration_ko` is a Korean-facing Hangul pronunciation aid for display.
+- `transliteration_ko` must be additive and nullable.
+- `transliteration_ko` must not replace `lemma`, `lemma_normalized`, `surface_form`, `normalized_form`, `strongs_number`, or `strongs_extended`.
+- `transliteration_ko` should belong to term-level presentation data unless a later source review proves occurrence-level variation is required.
+- Generated or curated Korean transliteration rules require separate review before persistence.
+- Phase 8B-1 implements the infrastructure field only; it does not populate Korean transliteration data from a new source.
+
+### Korean Gloss Field Strategy
+
+Phase 8B should preserve the existing source/import gloss field and add Korean presentation gloss as separate data.
+
+Proposed future field:
+
+```txt
+gloss_ko
+```
+
+Field rules:
+
+- `gloss` remains the source-oriented gloss field.
+- `gloss_ko` is a concise Korean lexical gloss for reader-facing display.
+- `gloss_ko` must be additive and nullable.
+- `gloss_ko` must not become authored interpretation, theology, commentary, pictographic observation, or grammar explanation.
+- `gloss_ko` should prefer short lexical meaning suitable for token panels and Strong study summaries.
+- Longer Korean explanation, definition, or ministry-authored interpretation belongs in a later Word Study or editorial content phase, not Phase 8B presentation fields.
+
+### Additive API Response Plan
+
+Future API work may add Korean presentation fields to existing original-language, interlinear, and word-study responses without removing or renaming current fields.
+
+Phase 8B-1 implements read-only exposure for `transliteration_ko` only.
+
+Candidate additive response fields:
+
+```txt
+transliteration_ko
+gloss_ko
+```
+
+API rules:
+
+- Existing `transliteration` and `gloss` fields remain stable.
+- Existing clients must continue to work if Korean presentation fields are absent.
+- New Korean fields must be nullable or omitted when unavailable.
+- Responses must not include full datasets, raw source JSON, import diagnostics, theological interpretation, pictographic fields, or gematria fields.
+- API changes beyond Phase 8B-1 `transliteration_ko` read-only exposure require separate approval and validation because they change the public response contract.
+
+### Frontend Fallback Rule
+
+Frontend display should prefer Korean presentation fields when they exist, then fall back safely to current source fields.
+
+Planned display priority:
+
+```txt
+Transliteration display:
+transliteration_ko -> transliteration -> empty unavailable state
+
+Gloss display:
+gloss_ko -> gloss -> empty unavailable state
+```
+
+Fallback rules:
+
+- Do not silently label `transliteration` as Korean transliteration.
+- Do not silently label `gloss` as Korean gloss.
+- If only source-oriented fields are available, the UI may display them as source/original-language data, not as Korean-localized data.
+- Empty unavailable states are preferred over misleading localization.
+- Frontend behavior changes require separate implementation approval.
+
+### English Bible Support Deferred To Phase 9
+
+Phase 8B is Korean-first and should not expand the English Bible experience.
+
+Deferred to Phase 9:
+
+- English Bible reader original-language presentation strategy.
+- English-specific gloss strategy beyond the existing source `gloss`.
+- English-localized transliteration or pronunciation policy.
+- English WEB-centered original-language reader behavior.
+- Cross-locale SEO or metadata behavior for original-language study pages.
+
+Korean presentation data may later inform English support, but Phase 8B must not implement or imply English Bible feature parity.
+
+### Explicit Non-Implementation Scope
+
+Phase 8B documentation does not approve:
+
+- `gloss_ko` database changes.
+- Importer changes.
+- Source data changes.
+- Frontend changes.
+- New endpoints.
+- New committed generated data.
+- English Bible support.
+- Theological interpretation, commentary, pictographic, or gematria fields.
+
 ## Phase 5 Breakdown
 
 ### Phase 5A - Source and Schema Analysis

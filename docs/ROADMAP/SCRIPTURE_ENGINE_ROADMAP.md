@@ -1144,6 +1144,7 @@ Future milestones after Original Language Reader MVP QA:
 
 - Manual desktop/mobile browser QA for the Original Language Reader MVP.
 - Word Study Term panel.
+- Phase 8B Korean-first Original Language Presentation Data is documented in `docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md`; Phase 8B-1 approves `transliteration_ko` infrastructure only.
 - Occurrence distribution UI.
 - Strong detail pages.
 - Dedicated Word Study pages.
