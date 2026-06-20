@@ -237,6 +237,7 @@ final class OriginalWordOccurrenceRepository
                     terms.strongs_number,
                     terms.strongs_extended,
                     terms.transliteration,
+                    terms.transliteration_ko,
                     terms.gloss
                 FROM {$occurrencesTable} occurrences
                 INNER JOIN {$termsTable} terms ON terms.id = occurrences.term_id

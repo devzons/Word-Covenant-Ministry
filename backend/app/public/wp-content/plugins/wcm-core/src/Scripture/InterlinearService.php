@@ -140,6 +140,7 @@ final class InterlinearService
                 'strongs_number' => (string) $row['strongs_number'],
                 'strongs_extended' => (string) $row['strongs_extended'],
                 'transliteration' => (string) $row['transliteration'],
+                'transliteration_ko' => $this->nullableString($row['transliteration_ko'] ?? null),
                 'gloss' => $this->nullableString($row['gloss']),
             ],
         ];

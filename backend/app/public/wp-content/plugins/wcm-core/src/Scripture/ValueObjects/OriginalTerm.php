@@ -26,6 +26,7 @@ final readonly class OriginalTerm
     public string $strongsNumber;
     public string $strongsExtended;
     public string $transliteration;
+    public ?string $transliterationKo;
     public string $root;
     public ?string $gloss;
     public ?string $definition;
@@ -38,6 +39,7 @@ final readonly class OriginalTerm
         string $strongsNumber = '',
         string $strongsExtended = '',
         string $transliteration = '',
+        ?string $transliterationKo = null,
         string $root = '',
         ?string $gloss = null,
         ?string $definition = null
@@ -48,6 +50,7 @@ final readonly class OriginalTerm
         $strongsNumber = trim($strongsNumber);
         $strongsExtended = trim($strongsExtended);
         $transliteration = trim($transliteration);
+        $transliterationKo = $transliterationKo === null ? null : trim($transliterationKo);
         $root = trim($root);
 
         if ($id !== null && $id < 1) {
@@ -77,6 +80,7 @@ final readonly class OriginalTerm
         $this->strongsNumber = $strongsNumber;
         $this->strongsExtended = $strongsExtended;
         $this->transliteration = $transliteration;
+        $this->transliterationKo = $transliterationKo;
         $this->root = $root;
         $this->gloss = $gloss;
         $this->definition = $definition;

@@ -1175,6 +1175,7 @@ final class OriginalLanguageImportService
             $row->strongsNumber,
             $row->strongsExtended,
             $row->transliteration,
+            null,
             $row->root,
             $row->gloss,
             $row->definition

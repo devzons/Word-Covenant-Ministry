@@ -33,13 +33,14 @@ final class OriginalTermRepository
             'strongs_extended' => trim($term->strongsExtended),
             'term_identity_hash' => $identityHash,
             'transliteration' => trim($term->transliteration),
+            'transliteration_ko' => $term->transliterationKo,
             'root' => trim($term->root),
             'gloss' => $term->gloss,
             'definition' => $term->definition,
             'updated_at' => $now,
         ];
 
-        $formats = ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'];
+        $formats = ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'];
 
         if ($term->id !== null) {
             $updated = $wpdb->update(
@@ -202,6 +203,7 @@ final class OriginalTermRepository
      *         strongs_number: string,
      *         strongs_extended: string,
      *         transliteration: string,
+     *         transliteration_ko: string|null,
      *         gloss: string|null,
      *         occurrence_count: int
      *     }>
@@ -231,6 +233,7 @@ final class OriginalTermRepository
                     terms.strongs_number,
                     terms.strongs_extended,
                     terms.transliteration,
+                    terms.transliteration_ko,
                     terms.gloss,
                     COUNT(occurrences.id) AS occurrence_count
                 FROM {$termsTable} terms
@@ -245,6 +248,7 @@ final class OriginalTermRepository
                     terms.strongs_number,
                     terms.strongs_extended,
                     terms.transliteration,
+                    terms.transliteration_ko,
                     terms.gloss
                 ORDER BY terms.strongs_extended ASC, terms.lemma_normalized ASC, terms.id ASC",
                 $languageType,
@@ -282,6 +286,7 @@ final class OriginalTermRepository
                 'strongs_number' => (string) $row['strongs_number'],
                 'strongs_extended' => $strongsExtended,
                 'transliteration' => (string) $row['transliteration'],
+                'transliteration_ko' => $this->nullableString($row['transliteration_ko']),
                 'gloss' => $this->nullableString($row['gloss']),
                 'occurrence_count' => $occurrenceCount,
             ];
@@ -451,6 +456,7 @@ final class OriginalTermRepository
             (string) $row['strongs_number'],
             (string) $row['strongs_extended'],
             (string) $row['transliteration'],
+            $this->nullableString($row['transliteration_ko'] ?? null),
             (string) $row['root'],
             $this->nullableString($row['gloss']),
             $this->nullableString($row['definition'])

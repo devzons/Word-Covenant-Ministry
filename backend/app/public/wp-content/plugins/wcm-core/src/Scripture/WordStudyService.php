@@ -127,6 +127,7 @@ final class WordStudyService
             'strongs_number' => $term->strongsNumber,
             'strongs_extended' => $term->strongsExtended,
             'transliteration' => $term->transliteration,
+            'transliteration_ko' => $term->transliterationKo,
             'gloss' => $term->gloss,
         ];
     }

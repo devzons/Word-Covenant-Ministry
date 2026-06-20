@@ -364,6 +364,7 @@ final class OriginalLanguageController
                 'strongs_number' => (string) $row['strongs_number'],
                 'strongs_extended' => (string) $row['strongs_extended'],
                 'transliteration' => (string) $row['transliteration'],
+                'transliteration_ko' => $this->nullableString($row['transliteration_ko'] ?? null),
                 'gloss' => $this->nullableString($row['gloss']),
             ],
         ];
@@ -389,6 +390,7 @@ final class OriginalLanguageController
             'strongs_number' => (string) $row['strongs_number'],
             'strongs_extended' => (string) $row['strongs_extended'],
             'transliteration' => (string) $row['transliteration'],
+            'transliteration_ko' => $this->nullableString($row['transliteration_ko'] ?? null),
             'morphology' => (string) $row['morphology'],
             'gloss' => $this->nullableString($row['gloss']),
             'contextual_function' => $this->nullableString($row['contextual_function']),
@@ -408,6 +410,7 @@ final class OriginalLanguageController
             'strongs_number' => $term->strongsNumber,
             'strongs_extended' => $term->strongsExtended,
             'transliteration' => $term->transliteration,
+            'transliteration_ko' => $term->transliterationKo,
             'gloss' => $term->gloss,
         ];
     }
