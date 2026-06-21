@@ -1,0 +1,82 @@
+{
+  "package_id": "original-language.step-tahot-tagnt.2026-06-21.001",
+  "package_type": "original_language",
+  "package_version": "1.0.0",
+  "generated_at": "2026-06-21T00:00:00Z",
+  "generated_by": "export-original-language-package.php",
+  "git_commit": "example",
+  "db_version": "1.4.0",
+  "schema": {
+    "terms_table": "wcm_original_terms",
+    "occurrences_table": "wcm_original_word_occurrences",
+    "required_term_fields": [
+      "id",
+      "term_identity_hash",
+      "language_type",
+      "lemma",
+      "lemma_normalized",
+      "strongs_number",
+      "strongs_extended",
+      "transliteration",
+      "transliteration_ko",
+      "root",
+      "gloss",
+      "gloss_ko",
+      "definition",
+      "created_at",
+      "updated_at"
+    ],
+    "required_occurrence_fields": [
+      "id",
+      "term_id",
+      "term_identity_hash",
+      "book_id",
+      "chapter",
+      "verse",
+      "word_order",
+      "subword_order",
+      "token_type",
+      "surface_form",
+      "normalized_form",
+      "morphology",
+      "grammar_summary",
+      "grammar_note",
+      "contextual_function",
+      "source_dataset",
+      "source_ref",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  "expected_counts": {
+    "original_terms": 16891,
+    "original_word_occurrences": 673263
+  },
+  "source_datasets": {
+    "STEP_TAHOT": 536149,
+    "STEP_TAGNT": 137114
+  },
+  "seed_sets": [
+    "phase8f-transliteration-push",
+    "phase8f-gloss-60",
+    "phase8f-gloss-60-policy"
+  ],
+  "files": [
+    {
+      "path": "original-terms.jsonl",
+      "record_type": "original_term",
+      "expected_count": 16891,
+      "sha256": "example"
+    },
+    {
+      "path": "original-word-occurrences.jsonl",
+      "record_type": "original_word_occurrence",
+      "expected_count": 673263,
+      "sha256": "example"
+    }
+  ],
+  "policy_notes": [
+    "SQL dumps are not part of the official original-language package format.",
+    "Reviewed transliteration_ko and gloss_ko values must not be overwritten by conflicting package values."
+  ]
+}

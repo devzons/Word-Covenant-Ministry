@@ -80,3 +80,24 @@ coverage/
 !/backend/app/public/wp-content/plugins/wcm-core/**
 /backend/app/public/wp-content/plugins/wcm-core/vendor/
 /backend/app/public/wp-content/plugins/wcm-core/node_modules/
+
+# Word Covenant Ministry generated data / local migration artifacts
+backups/
+storage/exports/
+storage/imports/
+
+docs/data-packages/**/*.jsonl
+docs/data-packages/**/*.sql
+docs/data-packages/**/*.zip
+docs/data-packages/**/*.tar
+docs/data-packages/**/*.gz
+docs/data-packages/**/*.sha256.generated
+docs/data-packages/**/generated/
+
+backend/app/public/wp-content/plugins/wcm-core/*.sql
+backend/app/public/wp-content/plugins/wcm-core/**/*.sql
+
+# Allow documentation and tiny examples
+!docs/data-packages/**/README.md
+!docs/data-packages/**/manifest.example.json
+!docs/data-packages/**/sample-*.jsonl
