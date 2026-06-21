@@ -48,3 +48,4 @@ Alternatives Considered
 - [ADR-0013 Content Domain Model](0013-content-domain-model.md)
 - [ADR-0014 Bible Import Pipeline Strategy](0014-bible-import-pipeline-strategy.md)
 - [ADR-0015 Source Data Management Strategy](0015-source-data-management-strategy.md)
+- [ADR-0016 Deployment Version-Control Strategy](0016-deployment-version-control-strategy.md)

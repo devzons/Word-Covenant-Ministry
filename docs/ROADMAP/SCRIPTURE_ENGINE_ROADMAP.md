@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-20
+2026-06-21
 
 ## Current Foundation
 
@@ -28,7 +28,64 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - Phase 8A frontend/menu/navigation and interlinear UX cleanup completed.
 - Phase 8B Korean transliteration presentation data completed.
 - Phase 8C Korean gloss presentation data completed.
-- Phase 8D Morphology Korean Presentation is current.
+- Phase 8D morphology Korean presentation completed.
+- Phase 8E/8F reviewed Korean original-language coverage expansion completed through local development.
+- Current planning focus is deployment/version-control, schema migration, and seed migration policy before staging or production promotion.
+
+## Deployment and Seed Migration Policy
+
+WCM release, schema, and seed migration strategy is documented in:
+
+```txt
+docs/DECISIONS/0016-deployment-version-control-strategy.md
+docs/ROADMAP/DEPLOYMENT_VERSION_CONTROL_RUNBOOK.md
+```
+
+Release code should use annotated semantic Git tags such as:
+
+```txt
+v0.9.0-beta.1
+v0.9.0-beta.2
+v0.8.6
+v0.8.7
+```
+
+The `wcm-core.php` plugin header version should match the backend plugin release version. Plugin version and Git tag should move together.
+
+Schema changes remain tied to `SchemaInstaller` and a stored database version option such as `wcm_core_db_version`. Every schema change must increment `db_version`, and migrations should be additive and idempotent when possible.
+
+Original-language seed imports must use stable seed IDs and dry-run/apply workflow. Current seed ID examples:
+
+```txt
+phase8f-transliteration-push
+phase8f-gloss-60
+phase8f-gloss-60-policy
+```
+
+Future seed ID format:
+
+```txt
+seed.original_language.gloss_ko.2026-06-21.001
+```
+
+Seed sets should record `seed_set`, `version`, `checksum`, `target_table`, `target_field`, `expected_count`, `applied_count`, and policy notes.
+
+A future live database tracking table should record applied seed migrations:
+
+```txt
+wcm_seed_migrations
+```
+
+Proposed statuses:
+
+```txt
+dry_run_passed
+applied
+rolled_back
+failed
+```
+
+Future rollback support should use `wcm_seed_migration_rows` or a generated backup file before apply to preserve prior row values.
 
 ## Phase Status
 
@@ -179,10 +236,10 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Phase 8D - Morphology Korean Presentation
+Deployment and seed migration tracking implementation, only after explicit approval
 ```
 
-OSHB, SBLGNT, WEB import, write/import endpoints, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, and morphology schema/API changes remain out of scope until explicitly approved.
+OSHB, SBLGNT, WEB import, write/import endpoints, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, morphology schema/API changes, production deployment automation, and seed migration tracking table implementation remain out of scope until explicitly approved.
 
 ### Phase 6A - Original Language Read API
 

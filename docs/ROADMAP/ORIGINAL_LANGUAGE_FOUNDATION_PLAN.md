@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-19
+2026-06-21
 
 ## Purpose
 
@@ -15,13 +15,13 @@ This is not a new ADR. It concretizes ADR-0010 Original Language Data Model and 
 Current official phase:
 
 ```txt
-Phase 8D - Morphology Korean Presentation
+Beta Release Readiness - Deployment and Version-Control Planning
 ```
 
 Next major phase:
 
 ```txt
-Manual desktop/mobile browser QA, then Word Study Term panel or UX polish after explicit approval
+Implement deployment and seed migration tracking only after explicit approval, then Word Study Term panel or additional UX polish after separate approval
 ```
 
 Phase 5D Original Language dry-run pipeline is complete. The dry-run pipeline includes source gates, source-specific normalizers, versification resolution, dry-run import service behavior, and full STEP_TAHOT / STEP_TAGNT read-only audit results with zero hard errors.
@@ -42,7 +42,7 @@ The approved binary-stable original term identity implementation and migration a
 
 The approved controlled `STEP_TAHOT` Job-Sng retry local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_l4_pre_tahot_job_sng_retry.sql`.
 
-The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, and Phase 8C Korean gloss data are complete. Phase 8D is current for Korean morphology presentation. This does not approve write/import endpoints, additional source imports, raw source export, occurrence dumps, distribution charts, dedicated Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, English Bible support, WEB import, morphology schema/API changes, or interpretation/pictographic/gematria APIs.
+The approved controlled `STEP_TAHOT` Isa-Mal local import is complete. It used `batchSize=250` and the backup path `/private/tmp/wcm_phase_5e_m_pre_tahot_isa_mal_full.sql`. Full TAGNT NT and full TAHOT OT are imported. Phase 6A added the Original Language Read API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B added the Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C added the high-level Interlinear API in commits `1930d36` and `d89e3aa`. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, Phase 8C Korean gloss data, Phase 8D morphology presentation, and later Phase 8 beta cleanup and Korean original-language coverage expansion are complete through local development. Current documentation work formalizes deployment/version-control, schema migration, and seed migration policy. This does not approve write/import endpoints, additional source imports, raw source export, occurrence dumps, distribution charts, dedicated Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, English Bible support, WEB import, morphology schema/API changes, interpretation/pictographic/gematria APIs, production deployment automation, or seed migration tracking table implementation.
 
 ## Phase 6A Original Language Read API
 
