@@ -2,6 +2,10 @@
 .DS_Store
 Thumbs.db
 
+# macOS
+.DS_Store
+**/.DS_Store
+
 # IDE and editor files
 .idea/
 .vscode/

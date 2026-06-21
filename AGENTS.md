@@ -12,6 +12,21 @@ Codex is the Implementation Agent.
 
 Both roles must follow this project constitution, inspect the repository before work, and use repository documentation instead of conversation memory as the source of truth.
 
+# Workflow Trigger Rule
+
+When a user issues one of the following trigger phrases, the agent must read the linked workflow document first and follow it before performing the requested operational work.
+
+- `Word Covenant Ministry 작업 시작`
+  - Read `docs/WORKFLOWS/SESSION_START_WORKFLOW.md` first.
+- `Word Covenant Ministry 작업 종료`
+  - Read `docs/WORKFLOWS/SESSION_END_WORKFLOW.md` first.
+- `Word Covenant Ministry 로컬 동기화`
+  - Read `docs/WORKFLOWS/LOCAL_SYNC_WORKFLOW.md` first.
+- `Word Covenant Ministry Data Package`
+  - Read `docs/WORKFLOWS/DATA_PACKAGE_WORKFLOW.md` first.
+- `Word Covenant Ministry 라이브 배포`
+  - Read `docs/WORKFLOWS/LIVE_DEPLOYMENT_WORKFLOW.md` first.
+
 # Mandatory New Session Start Rule
 
 This rule applies to ChatGPT, Codex, Cursor, Claude Code, Copilot, and any future coding agent.
