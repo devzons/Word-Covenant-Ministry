@@ -18,10 +18,13 @@ When a user issues one of the following trigger phrases, the agent must read the
 
 - `Word Covenant Ministry 작업 시작`
   - Read `docs/WORKFLOWS/SESSION_START_WORKFLOW.md` first.
+  - Run `scripts/wcm-session-start.sh` or provide that command if direct execution is not possible.
 - `Word Covenant Ministry 작업 종료`
   - Read `docs/WORKFLOWS/SESSION_END_WORKFLOW.md` first.
+  - Run `scripts/wcm-session-end.sh` or provide that command if direct execution is not possible.
 - `Word Covenant Ministry 로컬 동기화`
   - Read `docs/WORKFLOWS/LOCAL_SYNC_WORKFLOW.md` first.
+  - Use `scripts/wcm-db-status.sh` and `scripts/wcm-data-package-status.sh` for verification.
 - `Word Covenant Ministry Data Package`
   - Read `docs/WORKFLOWS/DATA_PACKAGE_WORKFLOW.md` first.
 - `Word Covenant Ministry 라이브 배포`

@@ -12,6 +12,13 @@ Use this workflow when the trigger phrase is:
 Word Covenant Ministry 로컬 동기화
 ```
 
+The standard verification helpers are:
+
+```bash
+scripts/wcm-db-status.sh
+scripts/wcm-data-package-status.sh
+```
+
 ## Core Principles
 
 - Git synchronizes source and documentation, not database state.
@@ -48,6 +55,13 @@ git pull
 ```
 
 Only do this after the session-start safety check confirms it is safe.
+
+After pull, verify with:
+
+```bash
+scripts/wcm-db-status.sh
+scripts/wcm-data-package-status.sh
+```
 
 ### 2. Decide Data Movement Method
 

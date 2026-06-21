@@ -14,6 +14,14 @@ Use this workflow when the trigger phrase is:
 Word Covenant Ministry 작업 시작
 ```
 
+The standard local command is:
+
+```bash
+scripts/wcm-session-start.sh
+```
+
+When the user says `Word Covenant Ministry 작업 시작`, the agent should read this workflow and run `scripts/wcm-session-start.sh` or provide that command if direct execution is not possible.
+
 ## Core Principles
 
 - Repository documentation is the source of truth.
@@ -31,6 +39,12 @@ Run:
 
 ```bash
 git status
+```
+
+For the standard local routine, prefer:
+
+```bash
+scripts/wcm-session-start.sh
 ```
 
 Confirm:
@@ -89,6 +103,18 @@ Focus on:
 
 ### 5. Verify Current DB State
 
+Use:
+
+```bash
+scripts/wcm-db-status.sh
+```
+
+If DB access cannot be confirmed automatically, the start routine should continue and report:
+
+```txt
+DB status needs manual verification
+```
+
 Confirm the schema version option exists and record its value:
 
 ```txt
@@ -115,6 +141,12 @@ Minimum operating expectation:
 If a required table is missing, stop and report before implementation.
 
 ### 6. Verify Data Package State
+
+Use:
+
+```bash
+scripts/wcm-data-package-status.sh
+```
 
 Confirm whether the latest approved Data Package exists outside the project, for example:
 

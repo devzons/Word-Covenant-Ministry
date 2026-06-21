@@ -12,6 +12,12 @@ Use this workflow when the trigger phrase is:
 Word Covenant Ministry Data Package
 ```
 
+The standard status helper is:
+
+```bash
+scripts/wcm-data-package-status.sh
+```
+
 ## Data Package Objective
 
 The Original Language Data Package exists to move approved original-language data between environments without relying on a full SQL dump.
@@ -51,6 +57,16 @@ Backups belong outside the repository:
 ```
 
 DB files must not be stored under the public project tree.
+
+If `docs/data-packages/original-language/generated` is missing or incomplete, `scripts/wcm-data-package-status.sh` should report:
+
+```txt
+Data package not present; this is okay if DB is already populated
+```
+
+If the generated package is present, the same script should run the package verifier and report the result without running import or `--apply`.
+
+If verifier execution fails because of PHP or Local/Flywheel DB connectivity, the script should still exit successfully and report the verifier failure reason for manual review.
 
 ## Generated Git Policy
 

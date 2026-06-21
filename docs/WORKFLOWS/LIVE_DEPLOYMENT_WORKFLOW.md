@@ -12,6 +12,10 @@ Use this workflow when the trigger phrase is:
 Word Covenant Ministry 라이브 배포
 ```
 
+Local helper scripts such as `scripts/wcm-session-start.sh`, `scripts/wcm-session-end.sh`, `scripts/wcm-db-status.sh`, and `scripts/wcm-data-package-status.sh` are not live apply scripts.
+
+They may assist with local inspection and reporting, but live work still requires manual backup, verify, dry-run, apply, and explicit approval.
+
 ## Core Principles
 
 - Backup first, always.

@@ -12,6 +12,14 @@ Use this workflow when the trigger phrase is:
 Word Covenant Ministry 작업 종료
 ```
 
+The standard local command is:
+
+```bash
+scripts/wcm-session-end.sh
+```
+
+When the user says `Word Covenant Ministry 작업 종료`, the agent should read this workflow and run `scripts/wcm-session-end.sh` or provide that command if direct execution is not possible.
+
 ## Core Principles
 
 - End the session with a verified Git view.
@@ -27,6 +35,12 @@ Run:
 
 ```bash
 git status --short --ignored
+```
+
+For the standard local routine, prefer:
+
+```bash
+scripts/wcm-session-end.sh
 ```
 
 Confirm:
@@ -78,6 +92,12 @@ If generated artifacts are visible in Git unexpectedly, stop and fix the classif
 
 ### 5. Check DB Count Snapshot
 
+Use:
+
+```bash
+scripts/wcm-db-status.sh
+```
+
 Reconfirm row counts for the relevant tables when the session affected data planning, migration planning, or import workflow documentation:
 
 ```txt
@@ -119,6 +139,12 @@ Typical rule:
 
 - documentation-only session: usually no export or ZIP needed
 - reviewed data-state handoff session: package action may be needed later, with explicit approval
+
+Use:
+
+```bash
+scripts/wcm-data-package-status.sh
+```
 
 ### 8. Hold Commit and Push
 
