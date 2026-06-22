@@ -111,7 +111,7 @@ export function OriginalWordPanel({ locale = "en", word, onClose }: OriginalWord
       <aside
         aria-label={copy.dialog}
         aria-modal="true"
-        className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-lg bg-white p-5 shadow-2xl sm:inset-x-auto sm:bottom-0 sm:right-0 sm:top-0 sm:h-full sm:max-h-none sm:w-96 sm:rounded-none sm:border-l sm:border-zinc-200"
+        className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-lg bg-white p-5 shadow-2xl sm:inset-x-auto sm:bottom-auto sm:right-6 sm:top-24 sm:h-auto sm:max-h-[calc(100vh-8rem)] sm:w-[420px] sm:rounded-lg sm:border sm:border-zinc-200"
         role="dialog"
       >
         {panelView === "strong" ? (
