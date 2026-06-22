@@ -253,9 +253,10 @@ Phase 9 English Bible support and WEB import planning is documented in:
 ```txt
 docs/ROADMAP/ENGLISH_BIBLE_SUPPORT_PLAN.md
 docs/ROADMAP/WEB_IMPORT_READINESS_REVIEW.md
+docs/ROADMAP/WEB_IMPORT_EXECUTION_SPEC.md
 ```
 
-WEB import remains blocked until the readiness review gates are satisfied: exact source/provenance, license text, checksum/manifest, local dry-run plan, expected count validation, generated file ignore policy, and rollback plan. No WEB download, import, schema change, migration, backend runtime change, or production database write is authorized by the roadmap.
+WEB import remains blocked until the readiness review and execution specification gates are satisfied: exact source/provenance, license text, checksum/manifest, local dry-run plan, expected count validation, generated file ignore policy, rollback plan, and explicit apply approval. No WEB download, import, schema change, migration, backend runtime change, or production database write is authorized by the roadmap.
 
 Gospel Harmony planning is documented in:
 
