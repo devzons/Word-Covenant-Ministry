@@ -257,7 +257,7 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
           <input name="per_page" type="hidden" value="20" />
           <input
             className="min-h-11 min-w-0 flex-1 rounded-md border border-zinc-300 px-3 text-base text-zinc-950"
-            minLength={2}
+            minLength={1}
             name="q"
             placeholder={copy.searchPlaceholder}
             required

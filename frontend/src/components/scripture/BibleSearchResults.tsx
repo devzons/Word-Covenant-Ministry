@@ -52,7 +52,7 @@ export function BibleSearchResults({
             <input
               className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
               defaultValue={q}
-              minLength={2}
+              minLength={1}
               name="q"
               placeholder="태초"
               type="search"

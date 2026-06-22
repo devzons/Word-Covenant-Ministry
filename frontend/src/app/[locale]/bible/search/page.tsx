@@ -49,9 +49,7 @@ export default async function BibleSearchPage({
   let search: BibleSearchResponse | null = null;
   let errorMessage = "";
 
-  if (q.length > 0 && q.length < 2) {
-    errorMessage = searchPageCopy[activeLocale].shortQuery;
-  } else if (q.length >= 2) {
+  if (q.length >= 1) {
     try {
       search = await searchBible({
         q,
@@ -83,11 +81,9 @@ export default async function BibleSearchPage({
 
 const searchPageCopy = {
   en: {
-    shortQuery: "Search query must be at least 2 characters.",
     loadError: "Bible search could not be loaded.",
   },
   ko: {
-    shortQuery: "검색어는 2자 이상이어야 합니다.",
     loadError: "성경 검색을 불러올 수 없습니다.",
   },
 };

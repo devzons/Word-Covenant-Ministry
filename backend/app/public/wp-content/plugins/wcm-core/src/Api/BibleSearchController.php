@@ -11,7 +11,7 @@ use WP_REST_Response;
 final class BibleSearchController
 {
     private const NAMESPACE = 'wcm/v1';
-    private const MIN_QUERY_LENGTH = 2;
+    private const MIN_QUERY_LENGTH = 1;
     private const DEFAULT_PAGE = 1;
     private const DEFAULT_PER_PAGE = 20;
     private const MAX_PER_PAGE = 50;
