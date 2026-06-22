@@ -162,7 +162,7 @@ function OriginalWordDetails({
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
             {copy.title}
           </p>
-          <h2 className="mt-1 text-2xl font-semibold text-zinc-950">
+          <h2 className={surfaceFormClassName(word.surface_form)}>
             {word.surface_form}
           </h2>
         </div>
@@ -320,4 +320,17 @@ function MorphologyPanelField({
       value={morphology.display}
     />
   );
+}
+
+function surfaceFormClassName(value: string): string {
+  return [
+    "mt-1 text-2xl font-semibold text-zinc-950",
+    isHebrewText(value) ? "font-hebrew" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function isHebrewText(value: string): boolean {
+  return /[\u0590-\u05ff]/.test(value);
 }

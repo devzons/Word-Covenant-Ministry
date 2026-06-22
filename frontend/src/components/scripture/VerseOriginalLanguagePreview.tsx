@@ -25,18 +25,18 @@ type VerseOriginalLanguagePreviewProps = {
 
 const originalPreviewCopy = {
   en: {
-    loadError: "Original language preview could not be loaded.",
-    show: "Show original",
-    hide: "Hide original",
-    loading: "Loading original language...",
+    loadError: "Original text could not be loaded.",
+    show: "Show original text",
+    hide: "Hide original text",
+    loading: "Loading original text...",
     empty: "No original language tokens loaded.",
     openDetails: "Open word details",
   },
   ko: {
-    loadError: "원어 보기를 불러올 수 없습니다.",
-    show: "원어 보기",
-    hide: "원어 숨기기",
-    loading: "원어를 불러오는 중입니다...",
+    loadError: "원문보기를 불러올 수 없습니다.",
+    show: "원문보기",
+    hide: "원문 숨기기",
+    loading: "원문을 불러오는 중입니다...",
     empty: "불러온 원어 토큰이 없습니다.",
     openDetails: "단어 정보 열기",
   },
@@ -141,7 +141,7 @@ export function VerseOriginalLanguagePreview({
       )}
 
       {isExpanded ? (
-        <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
+        <div className="bg-zinc-50/70 px-3 py-4">
           {renderPreviewState({
             data,
             errorMessage,
@@ -194,45 +194,30 @@ function renderPreviewState({
     return <p className="text-sm text-zinc-600">{copy.empty}</p>;
   }
 
+  const direction = getOriginalTextDirection(displayOccurrences);
+  const isHebrew = direction === "rtl";
+
   return (
-    <ul className="flex flex-wrap gap-2">
-      {displayOccurrences.map((occurrence) => (
-        <li key={occurrence.id}>
+    <div
+      className={isHebrew ? "text-right" : "text-left"}
+      dir={direction}
+      lang={isHebrew ? "he" : "grc"}
+    >
+      <p className={originalTextClassName(isHebrew)}>
+        {displayOccurrences.map((occurrence) => (
           <button
             aria-label={`${copy.openDetails}: ${occurrence.surface_form}`}
-            className="rounded border border-zinc-200 bg-white px-2.5 py-2 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50"
+            className={originalTokenClassName(isHebrew)}
+            key={occurrence.id}
             onClick={() => onSelectWord(toPanelWord(occurrence))}
             type="button"
           >
-            <span className="block text-base font-semibold text-zinc-950">
-              {occurrence.surface_form}
-            </span>
-            <span className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-xs text-zinc-600">
-              <span>{occurrence.term.strongs_number}</span>
-              {localizedGloss(occurrence, locale) ? (
-                <span>{localizedGloss(occurrence, locale)}</span>
-              ) : null}
-            </span>
+            {occurrence.surface_form}
           </button>
-        </li>
-      ))}
-    </ul>
+        ))}
+      </p>
+    </div>
   );
-}
-
-function localizedGloss(
-  occurrence: OriginalLanguageJoinedOccurrence,
-  locale: "en" | "ko",
-): string {
-  if (locale === "ko" && occurrence.term.gloss_ko) {
-    return occurrence.term.gloss_ko;
-  }
-
-  if (locale === "ko" && occurrence.term.gloss) {
-    return `영어 뜻: ${occurrence.term.gloss}`;
-  }
-
-  return occurrence.term.gloss || "";
 }
 
 function toPanelWord(occurrence: OriginalLanguageJoinedOccurrence): OriginalWordPanelWord {
@@ -247,4 +232,30 @@ function toPanelWord(occurrence: OriginalLanguageJoinedOccurrence): OriginalWord
     gloss_ko: occurrence.term.gloss_ko,
     morphology: occurrence.morphology,
   };
+}
+
+function getOriginalTextDirection(
+  occurrences: OriginalLanguageJoinedOccurrence[],
+): "ltr" | "rtl" {
+  const languageType = occurrences[0]?.term.language_type;
+
+  return languageType === "hebrew" ? "rtl" : "ltr";
+}
+
+function originalTextClassName(isHebrew: boolean): string {
+  return [
+    "text-2xl leading-loose text-zinc-950 sm:text-3xl",
+    isHebrew ? "font-hebrew" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function originalTokenClassName(isHebrew: boolean): string {
+  return [
+    "mx-0.5 rounded-sm px-0.5 transition-colors hover:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900",
+    isHebrew ? "font-hebrew" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 }

@@ -19,7 +19,7 @@ const readerModes: Array<{
   };
 }> = [
   { value: "reader", label: { en: "Reader", ko: "본문" } },
-  { value: "original", label: { en: "Original", ko: "원어 보기" } },
+  { value: "original", label: { en: "Original Text", ko: "원문보기" } },
   { value: "interlinear", label: { en: "Interlinear", ko: "행간 보기" } },
 ];
 

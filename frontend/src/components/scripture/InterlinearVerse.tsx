@@ -181,7 +181,7 @@ export function InterlinearVerse({
                       type="button"
                     >
                       <span
-                        className="text-xl font-semibold leading-8 text-zinc-950"
+                        className={originalSurfaceClassName(token.term.language_type)}
                         dir={textDirection(token.term.language_type)}
                       >
                         {token.surface_form}
@@ -247,6 +247,15 @@ function toPanelWord(token: HighLevelInterlinearToken): OriginalWordPanelWord {
 
 function textDirection(languageType: OriginalLanguageType): "ltr" | "rtl" {
   return languageType === "hebrew" ? "rtl" : "ltr";
+}
+
+function originalSurfaceClassName(languageType: OriginalLanguageType): string {
+  return [
+    "text-xl font-semibold leading-8 text-zinc-950",
+    languageType === "hebrew" ? "font-hebrew" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 }
 
 function originalSentenceDirection(tokens: HighLevelInterlinearToken[]): "ltr" | "rtl" {
