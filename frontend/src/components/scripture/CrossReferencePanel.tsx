@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { RefObject } from "react";
 
 import { getCrossReferences } from "@/lib/api/cross-references";
+import { getBibleChapter } from "@/lib/api/bible";
+import type { BibleVerse } from "@/types/bible";
 import type {
   CrossReferenceItem,
   CrossReferenceResponse,
@@ -19,6 +22,7 @@ type CrossReferencePanelProps = {
 };
 
 const CROSS_REFERENCE_PER_PAGE = 20;
+const MAX_PREVIEW_VERSES = 10;
 
 const crossReferencePanelCopy = {
   en: {
@@ -36,7 +40,16 @@ const crossReferencePanelCopy = {
     source: "Source",
     attributionLabel: "Attribution",
     total: "total",
-    openReference: "Open passage",
+    viewPassage: "View passage",
+    openInReader: "Open in Reader",
+    close: "Close",
+    closePreview: "Close passage preview",
+    previewDialog: "Passage preview",
+    loadingPassage: "Loading passage...",
+    passageError: "Unable to load passage.",
+    passageUnavailable: "This passage is unavailable for the selected version.",
+    unsupportedRange: "This range is not supported in preview.",
+    version: "Version",
   },
   ko: {
     title: "관련 구절",
@@ -53,8 +66,28 @@ const crossReferencePanelCopy = {
     source: "출처",
     attributionLabel: "출처 표기",
     total: "전체",
-    openReference: "본문 열기",
+    viewPassage: "본문 보기",
+    openInReader: "성경 본문으로 이동",
+    close: "닫기",
+    closePreview: "본문 미리보기 닫기",
+    previewDialog: "본문 미리보기",
+    loadingPassage: "본문을 불러오는 중입니다.",
+    passageError: "본문을 불러오지 못했습니다.",
+    passageUnavailable: "이 번역본에서 본문을 찾을 수 없습니다.",
+    unsupportedRange: "이 범위는 미리보기에서 지원하지 않습니다.",
+    version: "번역",
   },
+};
+
+type PassagePreviewCacheEntry =
+  | { status: "ready"; verses: BibleVerse[] }
+  | { status: "error"; message: string }
+  | { status: "unsupported"; message: string };
+
+type PassagePreviewTarget = {
+  href: string;
+  reference: CrossReferenceTargetReference;
+  referenceLabel: string;
 };
 
 export function CrossReferencePanel({
@@ -70,6 +103,9 @@ export function CrossReferencePanel({
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [previewTarget, setPreviewTarget] = useState<PassagePreviewTarget | null>(null);
+  const [previewCache, setPreviewCache] = useState<Record<string, PassagePreviewCacheEntry>>({});
+  const previewReturnFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!verse) {
@@ -142,6 +178,16 @@ export function CrossReferencePanel({
     }
   }
 
+  function handleOpenPreview(target: PassagePreviewTarget) {
+    previewReturnFocusRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setPreviewTarget(target);
+  }
+
+  function handleClosePreview() {
+    setPreviewTarget(null);
+  }
+
   return (
     <div className="flex min-w-0 flex-col gap-4">
       <div>
@@ -169,6 +215,7 @@ export function CrossReferencePanel({
                 item={item}
                 key={crossReferenceItemKey(item, index)}
                 locale={activeLocale}
+                onPreview={handleOpenPreview}
                 translation={translation}
               />
             ))}
@@ -192,6 +239,18 @@ export function CrossReferencePanel({
           />
         </div>
       ) : null}
+
+      {previewTarget ? (
+        <PassagePreviewModal
+          cache={previewCache}
+          copy={copy}
+          onCacheChange={setPreviewCache}
+          onClose={handleClosePreview}
+          returnFocusRef={previewReturnFocusRef}
+          target={previewTarget}
+          translation={translation}
+        />
+      ) : null}
     </div>
   );
 }
@@ -200,11 +259,13 @@ function CrossReferenceItemView({
   copy,
   item,
   locale,
+  onPreview,
   translation,
 }: {
   copy: (typeof crossReferencePanelCopy)["en"];
   item: CrossReferenceItem;
   locale: "en" | "ko";
+  onPreview: (target: PassagePreviewTarget) => void;
   translation: string;
 }) {
   const label = item.relationship_type === "theme" ? copy.relatedTheme : item.relationship_label;
@@ -224,19 +285,268 @@ function CrossReferenceItemView({
         </span>
       </div>
 
-      <Link
-        aria-label={`${copy.openReference}: ${referenceLabel}`}
-        className="mt-3 block text-sm font-semibold text-zinc-950 underline-offset-2 hover:underline"
-        href={href}
-      >
+      <p className="mt-3 text-sm font-semibold text-zinc-950">
         {referenceLabel}
-      </Link>
+      </p>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100"
+          onClick={() =>
+            onPreview({
+              href,
+              reference: item.target_reference,
+              referenceLabel,
+            })
+          }
+          type="button"
+        >
+          {copy.viewPassage}
+        </button>
+        <Link
+          aria-label={`${copy.openInReader}: ${referenceLabel}`}
+          className="rounded-md border border-zinc-200 px-3 py-1.5 text-sm font-semibold text-zinc-700 underline-offset-2 transition-colors hover:bg-zinc-50 hover:underline"
+          href={href}
+        >
+          {copy.openInReader}
+        </Link>
+      </div>
 
       <p className="mt-2 text-xs text-zinc-500">
         {copy.source}: {sourceName}
       </p>
     </li>
   );
+}
+
+function PassagePreviewModal({
+  cache,
+  copy,
+  onCacheChange,
+  onClose,
+  returnFocusRef,
+  target,
+  translation,
+}: {
+  cache: Record<string, PassagePreviewCacheEntry>;
+  copy: (typeof crossReferencePanelCopy)["en"];
+  onCacheChange: (cache: Record<string, PassagePreviewCacheEntry>) => void;
+  onClose: () => void;
+  returnFocusRef: RefObject<HTMLElement | null>;
+  target: PassagePreviewTarget;
+  translation: string;
+}) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const cacheKey = passagePreviewCacheKey(translation, target.reference);
+  const cachedPreview = cache[cacheKey] ?? null;
+  const isLoading = !cachedPreview;
+
+  useEffect(() => {
+    closeButtonRef.current?.focus();
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      returnFocusRef.current?.focus();
+      returnFocusRef.current = null;
+    };
+  }, [onClose, returnFocusRef]);
+
+  useEffect(() => {
+    if (cachedPreview) {
+      return;
+    }
+
+    const rangeValidation = validatePreviewRange(target.reference, copy.unsupportedRange);
+    if (rangeValidation.status === "unsupported") {
+      onCacheChange({
+        ...cache,
+        [cacheKey]: rangeValidation,
+      });
+      return;
+    }
+
+    let isCurrent = true;
+
+    async function loadPassagePreview() {
+      try {
+        const chapter = await getBibleChapter(
+          translation,
+          target.reference.book,
+          target.reference.start_chapter,
+        );
+        const endVerse = target.reference.end_verse ?? target.reference.start_verse;
+        const verses = chapter.verses.filter(
+          (verse) =>
+            verse.verse >= target.reference.start_verse && verse.verse <= endVerse,
+        );
+        const nextPreview: PassagePreviewCacheEntry =
+          verses.length > 0
+            ? { status: "ready", verses }
+            : { status: "error", message: copy.passageUnavailable };
+
+        if (isCurrent) {
+          onCacheChange({
+            ...cache,
+            [cacheKey]: nextPreview,
+          });
+        }
+      } catch {
+        if (isCurrent) {
+          onCacheChange({
+            ...cache,
+            [cacheKey]: { status: "error", message: copy.passageError },
+          });
+        }
+      }
+    }
+
+    void loadPassagePreview();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [
+    cache,
+    cacheKey,
+    cachedPreview,
+    copy.passageError,
+    copy.passageUnavailable,
+    copy.unsupportedRange,
+    onCacheChange,
+    target.reference,
+    translation,
+  ]);
+
+  const preview = cache[cacheKey] ?? null;
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <button
+        aria-label={copy.closePreview}
+        className="absolute inset-0 bg-zinc-950/40"
+        onClick={onClose}
+        type="button"
+      />
+      <section
+        aria-labelledby="cross-reference-preview-title"
+        aria-modal="true"
+        className="absolute inset-x-4 top-16 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-lg border border-zinc-200 bg-white p-5 shadow-2xl sm:left-1/2 sm:right-auto sm:w-full sm:max-w-lg sm:-translate-x-1/2"
+        role="dialog"
+      >
+        <div className="flex items-start justify-between gap-4 border-b border-zinc-200 pb-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              {copy.previewDialog}
+            </p>
+            <h2
+              className="mt-1 text-lg font-semibold text-zinc-950"
+              id="cross-reference-preview-title"
+            >
+              {target.referenceLabel}
+            </h2>
+            <p className="mt-1 text-sm text-zinc-500">
+              {copy.version}: {translation}
+            </p>
+          </div>
+          <button
+            className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+            onClick={onClose}
+            ref={closeButtonRef}
+            type="button"
+          >
+            {copy.close}
+          </button>
+        </div>
+
+        <div className="mt-5">
+          {isLoading ? <CrossReferenceStatus message={copy.loadingPassage} /> : null}
+
+          {!isLoading && preview?.status === "unsupported" ? (
+            <CrossReferenceStatus message={preview.message} />
+          ) : null}
+
+          {!isLoading && preview?.status === "error" ? (
+            <CrossReferenceStatus message={preview.message} tone="error" />
+          ) : null}
+
+          {!isLoading && preview?.status === "ready" ? (
+            <ol className="flex flex-col gap-3">
+              {preview.verses.map((verse) => (
+                <li className="text-base leading-7 text-zinc-900" key={verse.verse}>
+                  <span className="mr-2 align-super text-xs font-semibold text-zinc-500">
+                    {verse.verse}
+                  </span>
+                  {verse.text}
+                </li>
+              ))}
+            </ol>
+          ) : null}
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-2 border-t border-zinc-200 pt-4">
+          <Link
+            className="rounded-md bg-zinc-950 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700"
+            href={target.href}
+            onClick={onClose}
+          >
+            {copy.openInReader}
+          </Link>
+          <button
+            className="rounded-md border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+            onClick={onClose}
+            type="button"
+          >
+            {copy.close}
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function validatePreviewRange(
+  reference: CrossReferenceTargetReference,
+  message: string,
+): PassagePreviewCacheEntry | { status: "supported" } {
+  const endChapter = reference.end_chapter ?? reference.start_chapter;
+  const endVerse = reference.end_verse ?? reference.start_verse;
+  const verseCount = endVerse - reference.start_verse + 1;
+
+  if (
+    endChapter !== reference.start_chapter ||
+    verseCount < 1 ||
+    verseCount > MAX_PREVIEW_VERSES
+  ) {
+    return { status: "unsupported", message };
+  }
+
+  return { status: "supported" };
+}
+
+function passagePreviewCacheKey(
+  translation: string,
+  reference: CrossReferenceTargetReference,
+): string {
+  return [
+    translation,
+    reference.book,
+    reference.start_chapter,
+    reference.start_verse,
+    reference.end_chapter ?? "",
+    reference.end_verse ?? "",
+  ].join(":");
 }
 
 function CrossReferenceStatus({
