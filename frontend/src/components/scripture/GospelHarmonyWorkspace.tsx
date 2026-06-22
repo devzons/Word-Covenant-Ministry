@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   gospelHarmonyUnits,
   type GospelHarmonyBook,
   type GospelHarmonyPassage,
 } from "@/data/gospelHarmonyUnits";
+import { getBibleChapter } from "@/lib/api/bible";
+import type { BibleVerse } from "@/types/bible";
 
 type GospelHarmonyWorkspaceProps = {
   locale: "en" | "ko";
@@ -20,8 +22,11 @@ const gospelHarmonyCopy = {
     description: "A study tool for comparing Matthew, Mark, and Luke in parallel by event unit.",
     selectEvent: "Select Event",
     parallelPassages: "Parallel Passages",
-    openPassage: "Open Passage",
+    wholeChapter: "Full chapter",
     noPassage: "No linked passage yet.",
+    loading: "Loading passage...",
+    error: "Passage could not be loaded.",
+    noText: "No passage text returned.",
     johnNote: "John references are retained for future expansion.",
     columns: {
       matthew: "Matthew",
@@ -35,8 +40,11 @@ const gospelHarmonyCopy = {
     description: "마태·마가·누가복음을 사건 단위로 병행 비교하는 연구 도구입니다.",
     selectEvent: "사건 선택",
     parallelPassages: "병행 본문",
-    openPassage: "본문 보기",
+    wholeChapter: "전체 장 보기",
     noPassage: "아직 연결된 본문이 없습니다.",
+    loading: "본문을 불러오는 중입니다...",
+    error: "본문을 불러올 수 없습니다.",
+    noText: "본문이 없습니다.",
     johnNote: "요한복음 참조는 향후 확장을 위해 보존합니다.",
     columns: {
       matthew: "마태복음",
@@ -47,10 +55,13 @@ const gospelHarmonyCopy = {
 };
 
 const gospelColumns = ["matthew", "mark", "luke"] as const;
+const gospelHarmonyTranslation = "KRV";
 
 export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) {
   const copy = gospelHarmonyCopy[locale];
   const [selectedUnitId, setSelectedUnitId] = useState(gospelHarmonyUnits[0]?.id ?? "");
+  const [openMobileColumn, setOpenMobileColumn] =
+    useState<(typeof gospelColumns)[number]>("matthew");
   const selectedUnit =
     gospelHarmonyUnits.find((unit) => unit.id === selectedUnitId) ?? gospelHarmonyUnits[0];
 
@@ -117,8 +128,10 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
               <HarmonyColumn
                 column={column}
                 copy={copy}
+                isMobileOpen={openMobileColumn === column}
                 key={column}
                 locale={locale}
+                onToggleMobile={() => setOpenMobileColumn(column)}
                 passage={selectedUnit.passages[column]}
               />
             ))}
@@ -136,34 +149,163 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
 function HarmonyColumn({
   column,
   copy,
+  isMobileOpen,
   locale,
+  onToggleMobile,
   passage,
 }: {
   column: (typeof gospelColumns)[number];
   copy: (typeof gospelHarmonyCopy)["en"];
+  isMobileOpen: boolean;
   locale: "en" | "ko";
+  onToggleMobile: () => void;
   passage?: GospelHarmonyPassage;
 }) {
   return (
-    <section className="min-h-40 rounded-md border border-zinc-200 bg-white p-4">
-      <h3 className="text-lg font-semibold text-zinc-950">{copy.columns[column]}</h3>
-      {passage ? (
-        <div className="mt-4 flex flex-col gap-3">
-          <p className="text-base font-semibold text-zinc-900">
-            {formatPassage(passage, locale)}
-          </p>
-          <Link
-            className="inline-flex w-fit rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
-            href={`/${locale}/bible/KRV/${passage.book}/${passage.startChapter}?mode=reader#v${passage.startVerse}`}
-          >
-            {copy.openPassage}
-          </Link>
-        </div>
-      ) : (
-        <p className="mt-4 text-sm text-zinc-600">{copy.noPassage}</p>
-      )}
+    <section className="min-h-40 rounded-md border border-zinc-200 bg-white">
+      <button
+        aria-expanded={isMobileOpen}
+        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left lg:hidden"
+        onClick={onToggleMobile}
+        type="button"
+      >
+        <span className="text-lg font-semibold text-zinc-950">{copy.columns[column]}</span>
+        <span className="text-sm font-semibold text-zinc-500">
+          {isMobileOpen ? "-" : "+"}
+        </span>
+      </button>
+
+      <div className="hidden border-b border-zinc-200 px-4 py-3 lg:block">
+        <h3 className="text-lg font-semibold text-zinc-950">{copy.columns[column]}</h3>
+      </div>
+
+      <div className={isMobileOpen ? "px-4 pb-4 lg:block lg:p-4" : "hidden lg:block lg:p-4"}>
+        {passage ? (
+          <HarmonyPassageContent copy={copy} locale={locale} passage={passage} />
+        ) : (
+          <p className="text-sm text-zinc-600">{copy.noPassage}</p>
+        )}
+      </div>
     </section>
   );
+}
+
+function HarmonyPassageContent({
+  copy,
+  locale,
+  passage,
+}: {
+  copy: (typeof gospelHarmonyCopy)["en"];
+  locale: "en" | "ko";
+  passage: GospelHarmonyPassage;
+}) {
+  const [verses, setVerses] = useState<BibleVerse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    async function loadPassage() {
+      setIsLoading(true);
+      setErrorMessage("");
+      setVerses([]);
+
+      try {
+        const chapter = await getBibleChapter(
+          gospelHarmonyTranslation,
+          passage.book,
+          passage.startChapter,
+        );
+        const selectedVerses = chapter.verses.filter((verse) =>
+          isVerseInPassageRange(verse.verse, passage),
+        );
+
+        if (isCurrent) {
+          setVerses(selectedVerses);
+        }
+      } catch {
+        if (isCurrent) {
+          setErrorMessage(copy.error);
+        }
+      } finally {
+        if (isCurrent) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    void loadPassage();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [copy.error, passage]);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="text-sm font-semibold text-zinc-600">
+        {formatPassage(passage, locale)}
+      </p>
+
+      {renderPassageState({ copy, errorMessage, isLoading, verses })}
+
+      <Link
+        className="text-sm font-semibold text-zinc-900 underline-offset-2 hover:underline"
+        href={`/${locale}/bible/${gospelHarmonyTranslation}/${passage.book}/${passage.startChapter}?mode=reader#v${passage.startVerse}`}
+      >
+        {copy.wholeChapter}
+      </Link>
+    </div>
+  );
+}
+
+function renderPassageState({
+  copy,
+  errorMessage,
+  isLoading,
+  verses,
+}: {
+  copy: (typeof gospelHarmonyCopy)["en"];
+  errorMessage: string;
+  isLoading: boolean;
+  verses: BibleVerse[];
+}) {
+  if (isLoading) {
+    return <p className="text-sm text-zinc-600">{copy.loading}</p>;
+  }
+
+  if (errorMessage) {
+    return <p className="text-sm text-red-700">{errorMessage}</p>;
+  }
+
+  if (verses.length === 0) {
+    return <p className="text-sm text-zinc-600">{copy.noText}</p>;
+  }
+
+  return (
+    <ol className="flex flex-col gap-2">
+      {verses.map((verse) => (
+        <li
+          className="grid grid-cols-[1.75rem_minmax(0,1fr)] gap-2 text-base leading-7"
+          key={verse.verse}
+        >
+          <span className="pt-0.5 text-sm font-semibold text-zinc-500">{verse.verse}</span>
+          <span className="break-words text-zinc-900">{verse.text}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function isVerseInPassageRange(verse: number, passage: GospelHarmonyPassage): boolean {
+  if (passage.endChapter && passage.endChapter !== passage.startChapter) {
+    return verse >= passage.startVerse;
+  }
+
+  const endVerse = passage.endVerse ?? passage.startVerse;
+
+  return verse >= passage.startVerse && verse <= endVerse;
 }
 
 function formatPassage(passage: GospelHarmonyPassage, locale: "en" | "ko"): string {
