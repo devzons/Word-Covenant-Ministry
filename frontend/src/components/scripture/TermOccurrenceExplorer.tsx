@@ -29,7 +29,7 @@ const perPage = 20;
 const termOccurrenceExplorerCopy = {
   en: {
     title: "All Occurrences",
-    back: "Term study",
+    back: "Back to Term Study",
     loading: "Loading occurrences...",
     error: "Occurrences could not be loaded.",
     empty: "No occurrences returned.",
@@ -45,7 +45,7 @@ const termOccurrenceExplorerCopy = {
   },
   ko: {
     title: "전체 출현",
-    back: "단어 연구",
+    back: "단어 연구로 돌아가기",
     loading: "출현 목록을 불러오는 중입니다...",
     error: "출현 목록을 불러올 수 없습니다.",
     empty: "출현 목록이 없습니다.",

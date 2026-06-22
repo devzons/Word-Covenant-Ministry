@@ -45,8 +45,6 @@ const termStudyPanelCopy = {
     sourceRef: "Reference",
     surfaceForm: "Form",
     morphology: "Morphology",
-    page: "Page",
-    perPage: "Per Page",
     noSamples: "No sample occurrences returned.",
     viewAllOccurrences: "View all occurrences",
     viewDistribution: "View Distribution",
@@ -72,8 +70,6 @@ const termStudyPanelCopy = {
     sourceRef: "참조",
     surfaceForm: "표기",
     morphology: "형태",
-    page: "페이지",
-    perPage: "페이지당",
     noSamples: "출현 예시가 없습니다.",
     viewAllOccurrences: "전체 출현 보기",
     viewDistribution: "분포 보기",
@@ -265,8 +261,6 @@ function renderTermStudyState({
           label={copy.chapterCount}
           value={data.summary.chapter_count.toLocaleString()}
         />
-        <SummaryField label={copy.page} value={data.page.toLocaleString()} />
-        <SummaryField label={copy.perPage} value={data.per_page.toLocaleString()} />
       </dl>
 
       {distribution ? (
@@ -280,27 +274,9 @@ function renderTermStudyState({
       ) : null}
 
       <section>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-            {copy.samples}
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            <button
-              className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
-              onClick={onOpenDistribution}
-              type="button"
-            >
-              {copy.viewDistribution}
-            </button>
-            <button
-              className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
-              onClick={onOpenOccurrences}
-              type="button"
-            >
-              {copy.viewAllOccurrences}
-            </button>
-          </div>
-        </div>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
+          {copy.samples}
+        </h3>
         {data.sample_occurrences.length > 0 ? (
           <ul className="mt-3 flex flex-col gap-2">
             {data.sample_occurrences.map((occurrence) => (

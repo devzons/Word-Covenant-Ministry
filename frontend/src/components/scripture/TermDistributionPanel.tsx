@@ -18,7 +18,7 @@ type TermDistributionPanelProps = {
 const termDistributionPanelCopy = {
   en: {
     title: "Distribution",
-    back: "Term study",
+    back: "Back to Term Study",
     loading: "Loading distribution...",
     error: "Distribution could not be loaded.",
     empty: "No distribution returned.",
@@ -31,7 +31,7 @@ const termDistributionPanelCopy = {
   },
   ko: {
     title: "분포",
-    back: "단어 연구",
+    back: "단어 연구로 돌아가기",
     loading: "분포를 불러오는 중입니다...",
     error: "분포를 불러올 수 없습니다.",
     empty: "분포 정보가 없습니다.",

@@ -28,8 +28,8 @@ const strongStudyPanelCopy = {
     englishGloss: "Gloss",
     terms: "terms",
     noGroupedTerms: "No grouped terms returned.",
-    openTermStudy: "Open term study",
-    termStudyBack: "Strong study",
+    openTermStudy: "View term study",
+    termStudyBack: "Back to Strong Study",
   },
   ko: {
     title: "Strong 연구",
@@ -45,8 +45,8 @@ const strongStudyPanelCopy = {
     englishGloss: "영어 뜻",
     terms: "단어",
     noGroupedTerms: "묶인 단어가 없습니다.",
-    openTermStudy: "단어 연구 열기",
-    termStudyBack: "Strong 연구",
+    openTermStudy: "단어 연구 보기",
+    termStudyBack: "Strong 연구로 돌아가기",
   },
 };
 
@@ -207,9 +207,7 @@ function renderStrongStudyState({
                     const gloss = localizedGloss(term, locale);
 
                     return (
-                      <li
-                        key={term.id}
-                      >
+                      <li key={term.id}>
                         <button
                           aria-label={`${copy.openTermStudy}: ${term.lemma}`}
                           className="w-full rounded border border-zinc-200 bg-white p-2 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
