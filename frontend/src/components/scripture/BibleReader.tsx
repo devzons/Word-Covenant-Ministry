@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { InterlinearVerse } from "@/components/scripture/InterlinearVerse";
 import { ReaderModeControl } from "@/components/scripture/ReaderModeControl";
+import { ReaderSearchPanel } from "@/components/scripture/ReaderSearchPanel";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
 import { cn } from "@/lib/utils/cn";
 import type { BibleBookMetadata, BibleChapterResponse } from "@/types/bible";
@@ -18,6 +19,7 @@ import type {
 type BibleReaderProps = {
   bookMetadata: BibleBookMetadata;
   chapter: BibleChapterResponse;
+  initialSearchQuery?: string;
   locale: string;
   mode: OriginalLanguageReaderMode;
 };
@@ -96,8 +98,6 @@ const bibleReaderCopy = {
     book: "Book",
     chapter: "Chapter",
     go: "Go",
-    searchPlaceholder: "Search KRV",
-    search: "Search",
     noVerses: "No verses were returned for this chapter.",
     chapterNav: "Bible chapter navigation",
     previousChapter: "Previous chapter",
@@ -109,8 +109,6 @@ const bibleReaderCopy = {
     book: "성경",
     chapter: "장",
     go: "이동",
-    searchPlaceholder: "KRV 검색",
-    search: "검색",
     noVerses: "이 장의 본문이 없습니다.",
     chapterNav: "성경 장 이동",
     previousChapter: "이전 장",
@@ -120,7 +118,13 @@ const bibleReaderCopy = {
   },
 };
 
-export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReaderProps) {
+export function BibleReader({
+  bookMetadata,
+  chapter,
+  initialSearchQuery = "",
+  locale,
+  mode,
+}: BibleReaderProps) {
   const router = useRouter();
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderCopy[activeLocale];
@@ -166,8 +170,6 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
       : nextBook
         ? createReaderHref(locale, chapter.translation, nextBook.slug, 1, mode)
         : null;
-  const searchUrl = `/${locale}/bible/search`;
-
   function handleReferenceChange(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -250,137 +252,135 @@ export function BibleReader({ bookMetadata, chapter, locale, mode }: BibleReader
           mode={mode}
           version={chapter.translation}
         />
-
-        <form action={searchUrl} className="flex min-w-0 flex-col gap-2 sm:flex-row" method="get">
-          <input name="translation" type="hidden" value={chapter.translation} />
-          <input name="page" type="hidden" value="1" />
-          <input name="per_page" type="hidden" value="20" />
-          <input
-            className="min-h-11 min-w-0 flex-1 rounded-md border border-zinc-300 px-3 text-base text-zinc-950"
-            minLength={1}
-            name="q"
-            placeholder={copy.searchPlaceholder}
-            required
-            type="search"
-          />
-          <button
-            className="min-h-11 rounded-md border border-zinc-300 px-4 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
-            type="submit"
-          >
-            {copy.search}
-          </button>
-        </form>
       </header>
 
-      {chapter.verses.length > 0 ? (
-        <ol
-          className={cn(
-            "flex w-full min-w-0 flex-col gap-0",
-            isInterlinearMode || isOriginalMode ? "max-w-6xl" : "max-w-3xl",
-          )}
-        >
-          {chapter.verses.map((verse) => {
-            const verseId = `v${verse.verse}`;
-            const isActive =
-              activeVerseId === verseId ||
-              (isInterlinearMode && visibleInterlinearVerse === verse.verse) ||
-              (isOriginalMode && visibleOriginalVerse === verse.verse);
-            const isSelectableStudyMode = isOriginalMode || isInterlinearMode;
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.75fr)] lg:items-start xl:grid-cols-[minmax(0,55fr)_minmax(420px,45fr)] xl:gap-10">
+        <div className="flex min-w-0 flex-col gap-8">
+          {chapter.verses.length > 0 ? (
+            <ol
+              className={cn(
+                "flex w-full min-w-0 flex-col gap-0",
+                isInterlinearMode || isOriginalMode ? "max-w-6xl" : "max-w-4xl",
+              )}
+            >
+              {chapter.verses.map((verse) => {
+                const verseId = `v${verse.verse}`;
+                const isActive =
+                  activeVerseId === verseId ||
+                  (isInterlinearMode && visibleInterlinearVerse === verse.verse) ||
+                  (isOriginalMode && visibleOriginalVerse === verse.verse);
+                const isSelectableStudyMode = isOriginalMode || isInterlinearMode;
 
-            return (
-              <li className="flex flex-col" id={verseId} key={verse.verse}>
-                <div
-                  className={cn(
-                    "grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
-                    isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "pt-0.5 text-sm font-semibold text-zinc-500",
-                      isActive && "text-blue-700",
-                    )}
-                  >
-                    {verse.verse}
-                  </span>
-                  <div className="flex min-w-0 flex-col">
-                    {isSelectableStudyMode ? (
-                      <button
-                        className="min-w-0 break-words text-left text-zinc-950 transition-colors hover:text-zinc-700"
-                        aria-label={
-                          isOriginalMode
-                            ? `${copy.selectOriginalVerse}: ${verse.verse}`
-                            : `${copy.selectInterlinearVerse}: ${verse.verse}`
-                        }
-                        onClick={() => {
-                          if (isOriginalMode) {
-                            setSelectedOriginalVerse(verse.verse);
-                          }
-
-                          if (isInterlinearMode) {
-                            setSelectedInterlinearVerse(verse.verse);
-                          }
-                        }}
-                        type="button"
+                return (
+                  <li className="flex flex-col" id={verseId} key={verse.verse}>
+                    <div
+                      className={cn(
+                        "grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
+                        isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "pt-0.5 text-sm font-semibold text-zinc-500",
+                          isActive && "text-blue-700",
+                        )}
                       >
-                        {verse.text}
-                      </button>
-                    ) : (
-                      <span className="break-words text-zinc-950">{verse.text}</span>
-                    )}
-                    {isOriginalMode && visibleOriginalVerse === verse.verse ? (
-                      <VerseOriginalLanguagePreview
-                        autoLoad
-                        book={chapter.book}
-                        chapter={chapter.chapter}
-                        locale={locale}
-                        source={originalLanguageSource}
-                        verse={verse.verse}
-                      />
+                        {verse.verse}
+                      </span>
+                      <div className="flex min-w-0 flex-col">
+                        {isSelectableStudyMode ? (
+                          <button
+                            className="min-w-0 break-words text-left text-zinc-950 transition-colors hover:text-zinc-700"
+                            aria-label={
+                              isOriginalMode
+                                ? `${copy.selectOriginalVerse}: ${verse.verse}`
+                                : `${copy.selectInterlinearVerse}: ${verse.verse}`
+                            }
+                            onClick={() => {
+                              if (isOriginalMode) {
+                                setSelectedOriginalVerse(verse.verse);
+                              }
+
+                              if (isInterlinearMode) {
+                                setSelectedInterlinearVerse(verse.verse);
+                              }
+                            }}
+                            type="button"
+                          >
+                            {verse.text}
+                          </button>
+                        ) : (
+                          <span className="break-words text-zinc-950">{verse.text}</span>
+                        )}
+                        {isOriginalMode && visibleOriginalVerse === verse.verse ? (
+                          <VerseOriginalLanguagePreview
+                            autoLoad
+                            book={chapter.book}
+                            chapter={chapter.chapter}
+                            locale={locale}
+                            source={originalLanguageSource}
+                            verse={verse.verse}
+                          />
+                        ) : null}
+                      </div>
+                    </div>
+
+                    {isInterlinearMode && visibleInterlinearVerse === verse.verse ? (
+                      <div className="mt-3">
+                        <InterlinearVerse
+                          book={chapter.book}
+                          chapter={chapter.chapter}
+                          locale={locale}
+                          source={originalLanguageSource}
+                          verse={visibleInterlinearVerse}
+                        />
+                      </div>
                     ) : null}
-                  </div>
-                </div>
+                  </li>
+                );
+              })}
+            </ol>
+          ) : (
+            <div className="rounded-md border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
+              {copy.noVerses}
+            </div>
+          )}
 
-                {isInterlinearMode && visibleInterlinearVerse === verse.verse ? (
-                  <div className="mt-3">
-                    <InterlinearVerse
-                      book={chapter.book}
-                      chapter={chapter.chapter}
-                      locale={locale}
-                      source={originalLanguageSource}
-                      verse={visibleInterlinearVerse}
-                    />
-                  </div>
-                ) : null}
-              </li>
-            );
-          })}
-        </ol>
-      ) : (
-        <div className="rounded-md border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
-          {copy.noVerses}
+          <nav
+            aria-label={copy.chapterNav}
+            className="flex items-center justify-between border-t border-zinc-200 pt-6"
+          >
+            {previousHref ? (
+              <Link
+                className="text-sm font-semibold text-zinc-900 hover:text-zinc-600"
+                href={previousHref}
+              >
+                {copy.previousChapter}
+              </Link>
+            ) : (
+              <span className="text-sm text-zinc-400">{copy.previousChapter}</span>
+            )}
+            {nextHref ? (
+              <Link
+                className="text-sm font-semibold text-zinc-900 hover:text-zinc-600"
+                href={nextHref}
+              >
+                {copy.nextChapter}
+              </Link>
+            ) : (
+              <span className="text-sm text-zinc-400">{copy.nextChapter}</span>
+            )}
+          </nav>
         </div>
-      )}
 
-      <nav
-        aria-label={copy.chapterNav}
-        className="flex items-center justify-between border-t border-zinc-200 pt-6"
-      >
-        {previousHref ? (
-          <Link className="text-sm font-semibold text-zinc-900 hover:text-zinc-600" href={previousHref}>
-            {copy.previousChapter}
-          </Link>
-        ) : (
-          <span className="text-sm text-zinc-400">{copy.previousChapter}</span>
-        )}
-        {nextHref ? (
-          <Link className="text-sm font-semibold text-zinc-900 hover:text-zinc-600" href={nextHref}>
-            {copy.nextChapter}
-          </Link>
-        ) : (
-          <span className="text-sm text-zinc-400">{copy.nextChapter}</span>
-        )}
-      </nav>
+        <ReaderSearchPanel
+          initialSearchQuery={initialSearchQuery}
+          key={`${chapter.translation}-${chapter.book}-${chapter.chapter}-${mode}-${initialSearchQuery}`}
+          locale={locale}
+          mode={mode}
+          translation={chapter.translation}
+        />
+      </div>
     </article>
   );
 }

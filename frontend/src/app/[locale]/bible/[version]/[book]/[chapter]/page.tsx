@@ -12,6 +12,7 @@ type BibleReaderPageProps = {
   params: Promise<BibleReaderParams>;
   searchParams: Promise<{
     mode?: string;
+    q?: string;
   }>;
 };
 
@@ -66,14 +67,15 @@ export default async function BibleReaderPage({
 
   return (
     <SiteShell locale={locale}>
-      <Container>
+      <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <BibleReader
           bookMetadata={bookMetadata}
           chapter={bibleChapter}
+          initialSearchQuery={query.q ?? ""}
           locale={locale}
           mode={mode}
         />
-      </Container>
+      </div>
     </SiteShell>
   );
 }
