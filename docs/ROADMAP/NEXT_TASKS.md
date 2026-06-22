@@ -2,13 +2,13 @@
 
 ## Date
 
-2026-06-21
+2026-06-22
 
 ## Immediate Next Task
 
-Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. Phase 8A completed frontend/menu/navigation foundation and interlinear UX cleanup. Phase 8B completed Korean transliteration presentation data. Phase 8C completed Korean gloss presentation data. Later Phase 8 morphology presentation, UX cleanup, and reviewed transliteration/gloss coverage expansion work has been completed through local development.
+Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. Phase 8A completed frontend/menu/navigation foundation and interlinear UX cleanup. Phase 8B completed Korean transliteration presentation data. Phase 8C completed Korean gloss presentation data. Later Phase 8 morphology presentation, UX cleanup, reviewed transliteration/gloss coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference frontend foundation, and Gospel Harmony frontend foundation work has been completed through local development.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend MVP implementation, Phase 8A through later Phase 8 beta cleanup and Korean original-language coverage expansion are complete through local development. Current work is deployment/version-control documentation and release migration planning.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend MVP implementation, Phase 8A through later Phase 8 beta cleanup and Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference frontend foundation, and Gospel Harmony frontend foundation are complete through local development. Current work is Scripture Research UX stabilization and documentation alignment.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,19 +16,16 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Document deployment/version-control strategy and production release runbook.
-2. After explicit approval, implement seed migration tracking and release automation support.
-3. After explicit approval, implement Word Study Term panel.
-4. After current UX cleanup and separate approval, Phase 9 planning: English Bible support / WEB import planning.
-5. Gospel Harmony frontend foundation and future harmony-unit planning.
-6. Later: occurrence distribution UI.
-7. Later: Strong detail pages.
-8. Later: dedicated Word Study pages.
-9. Later: advanced search.
-10. Later: morphology explorer.
-11. Later: Cross References.
-12. Later: Commentary Layer.
-13. Future, after Phase 8 original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+1. Commit the completed Scripture UX, Word Study, Cross Reference foundation, Gospel Harmony foundation, and roadmap/status documentation when approved.
+2. Phase 9 planning: English Bible support / WEB import planning remains planned only; no WEB import has started.
+3. Cross Reference data/source/API planning after separate approval.
+4. Gospel Harmony data/source/API planning after separate approval.
+5. After explicit approval, implement seed migration tracking and release automation support.
+6. Later: Strong detail pages or dedicated Word Study pages.
+7. Later: advanced search.
+8. Later: morphology explorer.
+9. Later: Commentary Layer.
+10. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 

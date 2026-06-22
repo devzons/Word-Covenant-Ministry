@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-21
+2026-06-22
 
 ## Current Foundation
 
@@ -30,7 +30,14 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - Phase 8C Korean gloss presentation data completed.
 - Phase 8D morphology Korean presentation completed.
 - Phase 8E/8F reviewed Korean original-language coverage expansion completed through local development.
-- Current planning focus is deployment/version-control, schema migration, and seed migration policy before staging or production promotion.
+- Bible Study Workspace completed with integrated right-side research panel foundation.
+- Search Workspace completed with compact concordance-style results and one-character KRV search support.
+- Original Text view completed as source-text reading mode distinct from Interlinear.
+- Word Study Panel completed through Strong Study, Term Study, Scripture Insight, Distribution, and Occurrence Explorer.
+- Cross Reference frontend foundation added as a placeholder research panel layer.
+- Gospel Harmony frontend foundation added as a placeholder workspace.
+- English Bible Support remains planned only; WEB import has not started.
+- Current stabilization focus is Scripture Research UX QA, documentation alignment, and commit preparation.
 
 ## Deployment and Seed Migration Policy
 
@@ -236,10 +243,10 @@ Remaining non-hard dry-run issues:
 Current next phase:
 
 ```txt
-Deployment and seed migration tracking implementation, only after explicit approval
+Scripture Research UX stabilization and commit preparation
 ```
 
-OSHB, SBLGNT, WEB import, write/import endpoints, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, morphology schema/API changes, production deployment automation, and seed migration tracking table implementation remain out of scope until explicitly approved.
+OSHB, SBLGNT, WEB import, write/import endpoints, Cross Reference data/API, Gospel Harmony data/API, advanced search, morphology explorer, morphology schema/API changes, production deployment automation, and seed migration tracking table implementation remain out of scope until explicitly approved.
 
 Phase 9 English Bible support and WEB import planning is documented in:
 
