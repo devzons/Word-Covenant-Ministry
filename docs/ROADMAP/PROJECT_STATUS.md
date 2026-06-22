@@ -99,13 +99,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Maintain Scripture Research UX stabilization while keeping English Bible Support, WEB import, Cross Reference data/API, Gospel Harmony data/API, and production data changes behind separate approval.
+Maintain Scripture Research UX stabilization while keeping English Bible Support, WEB import, Cross Reference data/API, Gospel Harmony data/API, and production data changes behind separate approval. WEB Import Readiness Review is documented; import remains blocked until source, license, provenance, checksum, dry-run, and rollback requirements are approved.
 ```
 
 Next task:
 
 ```txt
-Commit the completed frontend UX/documentation work when approved, then continue with Phase 9 English Bible Support planning or Cross Reference/Gospel Harmony data planning only after separate approval.
+Commit the completed frontend UX/documentation work when approved, then continue with Phase 9 English Bible Support source/license review or Cross Reference/Gospel Harmony data planning only after separate approval. WEB download/import is not approved.
 ```
 
 Blocked items:
