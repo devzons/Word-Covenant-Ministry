@@ -10,7 +10,7 @@ use WCM\Scripture\Repositories\OriginalTermRepository;
 final class SchemaInstaller
 {
     public const DB_VERSION_OPTION = 'wcm_core_db_version';
-    public const DB_VERSION = '1.4.0';
+    public const DB_VERSION = '1.5.0';
 
     public function install(): void
     {
@@ -40,6 +40,7 @@ final class SchemaInstaller
         $versesTable = $prefix . 'wcm_bible_verses';
         $originalTermsTable = $prefix . 'wcm_original_terms';
         $originalWordOccurrencesTable = $prefix . 'wcm_original_word_occurrences';
+        $crossReferencesTable = $prefix . 'wcm_cross_references';
 
         return [
             "CREATE TABLE {$versionsTable} (
@@ -135,6 +136,37 @@ final class SchemaInstaller
                 KEY term_lookup (term_id),
                 KEY term_reference_lookup (term_id, book_id, chapter, verse),
                 KEY source_ref_lookup (source_dataset, source_ref)
+            ) {$charsetCollate};",
+            "CREATE TABLE {$crossReferencesTable} (
+                id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                source_book VARCHAR(64) NOT NULL,
+                source_start_chapter SMALLINT UNSIGNED NOT NULL,
+                source_start_verse SMALLINT UNSIGNED NOT NULL,
+                source_end_chapter SMALLINT UNSIGNED NULL,
+                source_end_verse SMALLINT UNSIGNED NULL,
+                target_book VARCHAR(64) NOT NULL,
+                target_start_chapter SMALLINT UNSIGNED NOT NULL,
+                target_start_verse SMALLINT UNSIGNED NOT NULL,
+                target_end_chapter SMALLINT UNSIGNED NULL,
+                target_end_verse SMALLINT UNSIGNED NULL,
+                relationship_type VARCHAR(50) NOT NULL,
+                source_dataset VARCHAR(50) NOT NULL,
+                source_score INT NULL,
+                confidence VARCHAR(50) NOT NULL DEFAULT 'source_backed',
+                review_status VARCHAR(50) NOT NULL DEFAULT 'unreviewed',
+                package_id VARCHAR(191) NOT NULL,
+                source_checksum CHAR(64) NOT NULL,
+                relationship_identity_hash CHAR(64) NOT NULL,
+                created_at DATETIME NOT NULL,
+                updated_at DATETIME NOT NULL,
+                PRIMARY KEY  (id),
+                UNIQUE KEY relationship_identity_hash (relationship_identity_hash),
+                KEY source_lookup (source_book, source_start_chapter, source_start_verse),
+                KEY target_lookup (target_book, target_start_chapter, target_start_verse),
+                KEY relationship_type_lookup (relationship_type),
+                KEY source_dataset_lookup (source_dataset),
+                KEY review_status_lookup (review_status),
+                KEY package_lookup (package_id)
             ) {$charsetCollate};",
         ];
     }

@@ -36,7 +36,7 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - Word Study Panel completed through Strong Study, Term Study, Scripture Insight, Distribution, and Occurrence Explorer.
 - Cross Reference frontend foundation added as a placeholder research panel layer.
 - Gospel Harmony frontend foundation added as a placeholder workspace.
-- English Bible Support remains planned only; WEB import has not started.
+- English Bible Support has completed local WEB apply only; staging and production WEB promotion remain unapproved.
 - Current stabilization focus is Scripture Research UX QA, documentation alignment, and commit preparation.
 
 ## Deployment and Seed Migration Policy
@@ -246,7 +246,7 @@ Current next phase:
 Scripture Research UX stabilization and commit preparation
 ```
 
-OSHB, SBLGNT, WEB import, write/import endpoints, Cross Reference data/API, Gospel Harmony data/API, advanced search, morphology explorer, morphology schema/API changes, production deployment automation, and seed migration tracking table implementation remain out of scope until explicitly approved.
+OSHB, SBLGNT, additional Bible imports, WEB staging/production promotion, write/import endpoints, Cross Reference data/API, Gospel Harmony data/API, advanced search, morphology explorer, morphology schema/API changes, production deployment automation, and seed migration tracking table implementation remain out of scope until explicitly approved.
 
 Phase 9 English Bible support and WEB import planning is documented in:
 
@@ -254,9 +254,10 @@ Phase 9 English Bible support and WEB import planning is documented in:
 docs/ROADMAP/ENGLISH_BIBLE_SUPPORT_PLAN.md
 docs/ROADMAP/WEB_IMPORT_READINESS_REVIEW.md
 docs/ROADMAP/WEB_IMPORT_EXECUTION_SPEC.md
+docs/ROADMAP/WEB_LOCAL_APPLY_REPORT.md
 ```
 
-WEB import remains blocked until the readiness review and execution specification gates are satisfied: exact source/provenance, license text, checksum/manifest, local dry-run plan, expected count validation, generated file ignore policy, rollback plan, and explicit apply approval. No WEB download, import, schema change, migration, backend runtime change, or production database write is authorized by the roadmap.
+WEB local apply passed after source/provenance review, license review, checksum/manifest, local dry-run, expected count validation, generated file ignore policy, rollback plan, and explicit local apply approval. No WEB staging apply, production apply, schema change, migration, backend runtime change, or production database write is authorized by the roadmap.
 
 Gospel Harmony planning is documented in:
 

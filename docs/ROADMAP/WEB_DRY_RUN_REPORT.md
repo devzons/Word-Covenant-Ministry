@@ -6,11 +6,11 @@
 
 ## Purpose
 
-This report records the local-only WEB dry run for the approved `engwebp_usfm.zip` source package.
+This report records the local-only WEB dry-run re-execution after approval of the WEB Empty Verse Policy.
 
 This dry run did not write to the database, did not run apply, did not change schema, did not add migrations, did not change backend runtime code, and did not touch production.
 
-## Source Metadata
+## Source Package
 
 Source package:
 
@@ -61,13 +61,14 @@ source_name=World English Bible Protestant
 source_edition=WEBP / ENGWEBP / engwebp
 source_url=https://ebible.org/Scriptures/engwebp_usfm.zip
 downloaded_at=2026-06-22T17:58:47Z
-verified_at=2026-06-22T18:01:50Z
+verified_at=2026-06-22T18:15:27Z
 checksum_sha256=96f740d3ea2107cc3d8be80aa3e0da8d00e37a3f0926dca59eb7ec652e932cc8
 file_count=72
 usfm_file_count=68
 license_status=public_domain_reviewed_for_dry_run
 expected_bible_version_code=WEB
 expected_book_count=66
+importer_version=temporary-local-dry-run-2026-06-22-approved-omissions
 ```
 
 License/provenance note:
@@ -84,11 +85,13 @@ The dry-run parser:
 - normalized verse rows in memory only.
 - extracted canonical 66-book verse text.
 - removed USFM footnotes, cross references, word-study markup, headings, and formatting markers.
+- classified approved footnote-only verse markers as `approved_omission`.
+- did not create Bible verse rows for approved omissions.
 - did not write to the database.
 - did not create a production importer.
 - did not create a committed backend tool.
 
-The parser emitted local PHP startup warnings from the current PHP extension configuration (`opcache`, `xdebug`, `imagick`), but it completed and produced the report. These warnings are environment-level extension mismatch warnings, not parser validation failures.
+The parser emitted local PHP startup warnings from the current PHP extension configuration (`opcache`, `xdebug`, `imagick`), but syntax check and dry-run execution completed. These warnings are environment-level extension mismatch warnings, not parser validation failures.
 
 ## Counts
 
@@ -97,15 +100,20 @@ archive files=72
 USFM files=68
 canonical books parsed=66
 chapters parsed=1189
-verses parsed=31101
+source verse markers parsed=31101
+normalized verse rows=31096
 duplicates=0
 missing books=0
 chapter count issues=0
 unsupported books=0
 unparsed markers=0
+approved omissions=5
+empty verse failures outside approved list=0
 ```
 
 The 68 USFM files include 66 canonical Bible books plus front matter/glossary support files. Only canonical Bible books were normalized.
+
+The source package contains `31,101` canonical verse markers. The dry-run produced `31,096` normalized verse rows because five approved footnote-only markers were omitted according to `WEB_EMPTY_VERSE_POLICY.md`.
 
 ## Duplicate Report
 
@@ -121,43 +129,45 @@ Result:
 No duplicate verse keys detected.
 ```
 
-## Missing Verse Report
+## Missing Report
 
 Result:
 
 ```txt
+No missing books detected.
+No chapter count issues detected.
 No missing verses were detected by the current canonical chapter mapping.
 ```
 
-## Empty Verse Text Report
+## Approved Omissions
 
-Blocking issue:
-
-```txt
-Empty verse text detected.
-```
-
-Affected references:
+Approved omissions:
 
 ```txt
-luke 17:36
-acts 8:37
-acts 15:34
-acts 24:7
-romans 16:25
+Luke 17:36  reason=footnote_only_marker  source=72-LUKengwebp.usfm
+Acts 8:37  reason=footnote_only_marker  source=74-ACTengwebp.usfm
+Acts 15:34 reason=footnote_only_marker  source=74-ACTengwebp.usfm
+Acts 24:7  reason=footnote_only_marker  source=74-ACTengwebp.usfm
+Romans 16:25 reason=footnote_only_marker source=75-ROMengwebp.usfm
 ```
 
-Inspection result:
+These references are listed in:
 
-These references are present in the source package as verse markers whose content is footnote-only. Because the first-phase parser intentionally removes footnotes, the normalized verse text becomes empty. The current dry-run checklist requires empty verse text to fail the dry run.
+```txt
+docs/ROADMAP/WEB_EMPTY_VERSE_POLICY.md
+```
 
-This is not approved for apply until an explicit WEB empty-verse policy is chosen, for example:
+The parser did not create verse rows for these references.
 
-- store an empty verse placeholder with a reviewed note.
-- omit these rows and record them as known textual-variant gaps.
-- preserve a non-scripture footnote note outside the verse text field in a future schema-supported phase.
+## Empty Verse Failures
 
-No policy decision is made by this report.
+Result:
+
+```txt
+Empty verse failures outside approved list=0
+```
+
+Any future unapproved empty verse remains a blocking dry-run failure.
 
 ## Spot Checks
 
@@ -200,21 +210,7 @@ Source: 96-REVengwebp.usfm
 Status: passed
 ```
 
-## Dry-Run Result
-
-Final status:
-
-```txt
-dry_run_failed
-```
-
-Reason:
-
-```txt
-5 empty verse text rows were detected after first-phase USFM cleanup.
-```
-
-Confirmed non-actions:
+## Non-Actions Confirmed
 
 ```txt
 DB write performed: no
@@ -225,23 +221,38 @@ Backend runtime changed: no
 Production changed: no
 ```
 
+## Dry-Run Result
+
+Final status:
+
+```txt
+dry_run_passed
+```
+
+Reason:
+
+```txt
+All structural validation checks passed, and the only empty verse markers were the five approved footnote-only omissions.
+```
+
 ## Apply Readiness
 
 Apply readiness:
 
 ```txt
-not ready
+conditionally ready for local apply review
 ```
 
-The source package is parseable and the major structural counts are promising, but apply must remain blocked until the empty-verse handling policy is explicitly reviewed and approved.
+Local apply is still not approved. This result only means the dry-run report is now suitable for review as a precondition to a future, separately approved local apply decision.
+
+Staging and production remain out of scope.
 
 ## Recommendation
 
 Recommended next step:
 
-1. Approve a WEB empty-verse policy for footnote-only verse markers.
-2. Update the future local WEB importer design to enforce that policy.
-3. Re-run dry-run after policy implementation.
-4. Consider local apply only if the next dry-run passes and a local rollback plan is confirmed.
+1. Review this passed dry-run report.
+2. Confirm local rollback requirements.
+3. Request explicit local apply approval only if the project is ready to write WEB data to the local database.
 
-Production remains out of scope.
+Do not run local apply, staging apply, production apply, schema changes, migrations, or backend runtime changes without separate approval.

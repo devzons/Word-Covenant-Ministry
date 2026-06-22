@@ -17,7 +17,7 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 ## Current Priority Order
 
 1. Commit the completed Scripture UX, Word Study, Cross Reference foundation, Gospel Harmony foundation, and roadmap/status documentation when approved.
-2. Phase 9 planning: English Bible support / WEB import planning remains planned only; no WEB import has started. WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Dry Run Report, and WEB Empty Verse Policy are documented. WEB local dry-run completed with five footnote-only verse markers requiring approved omission handling. WEB Empty Verse Policy approval is pending before dry-run re-execution.
+2. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
 3. Cross Reference data/source/API planning after separate approval.
 4. Gospel Harmony data/source/API planning after separate approval.
 5. After explicit approval, implement seed migration tracking and release automation support.
@@ -36,6 +36,8 @@ docs/ROADMAP/WEB_IMPORT_EXECUTION_SPEC.md
 docs/ROADMAP/WEB_DRY_RUN_CHECKLIST.md
 docs/ROADMAP/WEB_DRY_RUN_REPORT.md
 docs/ROADMAP/WEB_EMPTY_VERSE_POLICY.md
+docs/ROADMAP/WEB_LOCAL_APPLY_REVIEW.md
+docs/ROADMAP/WEB_LOCAL_APPLY_REPORT.md
 ```
 
 Gospel Harmony planning is documented in:

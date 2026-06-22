@@ -16,7 +16,7 @@ const researchPanelNavigationCopy = {
     sections: {
       search: "Search",
       insight: "Insight",
-      "cross-reference": "Cross Ref",
+      "cross-reference": "Related Passages",
     },
   },
   ko: {
@@ -24,7 +24,7 @@ const researchPanelNavigationCopy = {
     sections: {
       search: "검색",
       insight: "통찰",
-      "cross-reference": "참조",
+      "cross-reference": "관련 구절",
     },
   },
 };
@@ -50,13 +50,13 @@ export function ResearchPanelNavigation({
       </h2>
       <nav
         aria-label={copy.title}
-        className="grid grid-cols-3 rounded-md border border-zinc-200 bg-white p-1"
+        className="flex flex-wrap gap-1 rounded-md border border-zinc-200 bg-white p-1"
       >
         {visibleResearchSections.map((section) => (
           <button
             aria-pressed={activeSection === section}
             className={cn(
-              "rounded px-3 py-2 text-sm font-semibold transition-colors",
+              "min-w-max flex-1 rounded px-3 py-2 text-sm font-semibold transition-colors",
               activeSection === section
                 ? "bg-zinc-950 text-white"
                 : "text-zinc-600 hover:bg-zinc-100",
