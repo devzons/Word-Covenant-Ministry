@@ -133,7 +133,7 @@ export function ReaderSearchPanel({
   }
 
   return (
-    <aside className="min-w-0 w-full rounded-md border border-zinc-200 bg-zinc-50 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+    <div className="min-w-0 w-full">
       <div className="flex min-w-0 flex-col gap-4">
         <h2 className="text-base font-semibold text-zinc-950">{copy.title}</h2>
 
@@ -167,7 +167,7 @@ export function ReaderSearchPanel({
           search,
         })}
       </div>
-    </aside>
+    </div>
   );
 }
 
