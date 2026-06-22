@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { getWordStudyStrong } from "@/lib/api/original-language";
+import { TermStudyPanel } from "@/components/scripture/TermStudyPanel";
 import type { WordStudyStrongsResponse, WordStudyTerm } from "@/types/original-language";
 
 type StrongStudyPanelProps = {
@@ -27,6 +28,8 @@ const strongStudyPanelCopy = {
     englishGloss: "Gloss",
     terms: "terms",
     noGroupedTerms: "No grouped terms returned.",
+    openTermStudy: "Open term study",
+    termStudyBack: "Strong study",
   },
   ko: {
     title: "Strong 연구",
@@ -42,6 +45,8 @@ const strongStudyPanelCopy = {
     englishGloss: "영어 뜻",
     terms: "단어",
     noGroupedTerms: "묶인 단어가 없습니다.",
+    openTermStudy: "단어 연구 열기",
+    termStudyBack: "Strong 연구",
   },
 };
 
@@ -54,6 +59,10 @@ export function StrongStudyPanel({
   const [data, setData] = useState<WordStudyStrongsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedTerm, setSelectedTerm] = useState<{
+    strongsNumber: string;
+    termId: number;
+  } | null>(null);
   const activeLocale = locale === "ko" ? "ko" : "en";
   const copy = strongStudyPanelCopy[activeLocale];
 
@@ -88,6 +97,17 @@ export function StrongStudyPanel({
     };
   }, [copy.error, strongsNumber]);
 
+  if (selectedTerm !== null && selectedTerm.strongsNumber === strongsNumber) {
+    return (
+      <TermStudyPanel
+        backLabel={copy.termStudyBack}
+        locale={activeLocale}
+        onBack={() => setSelectedTerm(null)}
+        termId={selectedTerm.termId}
+      />
+    );
+  }
+
   return (
     <div>
       <div className="flex items-start justify-between gap-4 border-b border-zinc-200 pb-4">
@@ -115,6 +135,7 @@ export function StrongStudyPanel({
           errorMessage,
           isLoading,
           locale: activeLocale,
+          onSelectTerm: (termId) => setSelectedTerm({ strongsNumber, termId }),
         })}
       </div>
     </div>
@@ -127,12 +148,14 @@ function renderStrongStudyState({
   errorMessage,
   isLoading,
   locale,
+  onSelectTerm,
 }: {
   copy: (typeof strongStudyPanelCopy)["en"];
   data: WordStudyStrongsResponse | null;
   errorMessage: string;
   isLoading: boolean;
   locale: "en" | "ko";
+  onSelectTerm: (termId: number) => void;
 }) {
   if (isLoading) {
     return <p className="text-sm text-zinc-600">{copy.loading}</p>;
@@ -185,35 +208,46 @@ function renderStrongStudyState({
 
                     return (
                       <li
-                        className="rounded border border-zinc-200 bg-white p-2"
                         key={term.id}
                       >
-                        <p className="font-semibold text-zinc-950">{term.lemma}</p>
-                        {transliteration.value ? (
-                          <p
-                            className={
-                              transliteration.isFallback
-                                ? "text-sm italic text-zinc-500"
-                                : "text-sm text-zinc-600"
-                            }
-                          >
-                            {transliteration.value}
-                          </p>
-                        ) : null}
-                        {gloss.value ? (
-                          <p
-                            className={
-                              gloss.isFallback
-                                ? "mt-1 text-sm italic text-zinc-700"
-                                : "mt-1 text-sm text-zinc-800"
-                            }
-                          >
-                            <span className="font-semibold text-zinc-500">
-                              {gloss.label}:{" "}
+                        <button
+                          aria-label={`${copy.openTermStudy}: ${term.lemma}`}
+                          className="w-full rounded border border-zinc-200 bg-white p-2 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                          onClick={() => onSelectTerm(term.id)}
+                          type="button"
+                        >
+                          <span className="block font-semibold text-zinc-950">
+                            {term.lemma}
+                          </span>
+                          {transliteration.value ? (
+                            <span
+                              className={
+                                transliteration.isFallback
+                                  ? "block text-sm italic text-zinc-500"
+                                  : "block text-sm text-zinc-600"
+                              }
+                            >
+                              {transliteration.value}
                             </span>
-                            {gloss.value}
-                          </p>
-                        ) : null}
+                          ) : null}
+                          {gloss.value ? (
+                            <span
+                              className={
+                                gloss.isFallback
+                                  ? "mt-1 block text-sm italic text-zinc-700"
+                                  : "mt-1 block text-sm text-zinc-800"
+                              }
+                            >
+                              <span className="font-semibold text-zinc-500">
+                                {gloss.label}:{" "}
+                              </span>
+                              {gloss.value}
+                            </span>
+                          ) : null}
+                          <span className="mt-1 block text-xs font-medium text-zinc-500">
+                            {copy.openTermStudy}
+                          </span>
+                        </button>
                       </li>
                     );
                   })}
