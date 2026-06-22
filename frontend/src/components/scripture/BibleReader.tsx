@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { CrossReferencePanel } from "@/components/scripture/CrossReferencePanel";
 import { InterlinearVerse } from "@/components/scripture/InterlinearVerse";
+import { PassageInsightPanel } from "@/components/scripture/PassageInsightPanel";
 import { ReaderModeControl } from "@/components/scripture/ReaderModeControl";
 import { ReaderSearchPanel } from "@/components/scripture/ReaderSearchPanel";
 import {
@@ -161,6 +162,7 @@ export function BibleReader({
     : null;
   const crossReferenceVerse =
     activeVerseNumber ?? visibleInterlinearVerse ?? visibleOriginalVerse ?? null;
+  const activeStudyVerse = crossReferenceVerse;
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -405,7 +407,22 @@ export function BibleReader({
               mode={mode}
               translation={chapter.translation}
             />
-          ) : (
+          ) : null}
+
+          {activeResearchSection === "insight" ? (
+            <PassageInsightPanel
+              book={chapter.book}
+              bookLabel={currentBook?.label[activeLocale] ?? bookMetadata.name}
+              chapter={chapter.chapter}
+              locale={locale}
+              mode={mode}
+              selectedVerse={activeStudyVerse}
+              translation={chapter.translation}
+              verseCount={chapter.verses.length}
+            />
+          ) : null}
+
+          {activeResearchSection === "cross-reference" ? (
             <CrossReferencePanel
               book={chapter.book}
               chapter={chapter.chapter}
@@ -413,7 +430,7 @@ export function BibleReader({
               translation={chapter.translation}
               verse={crossReferenceVerse}
             />
-          )}
+          ) : null}
         </aside>
       </div>
     </article>

@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils/cn";
 
-export type ResearchPanelSection = "search" | "cross-reference";
+export type ResearchPanelSection = "search" | "insight" | "cross-reference";
 
 type ResearchPanelNavigationProps = {
   activeSection: ResearchPanelSection;
@@ -15,6 +15,7 @@ const researchPanelNavigationCopy = {
     title: "Study",
     sections: {
       search: "Search",
+      insight: "Insight",
       "cross-reference": "Cross Ref",
     },
   },
@@ -22,12 +23,17 @@ const researchPanelNavigationCopy = {
     title: "연구",
     sections: {
       search: "검색",
+      insight: "통찰",
       "cross-reference": "참조",
     },
   },
 };
 
-const visibleResearchSections: ResearchPanelSection[] = ["search", "cross-reference"];
+const visibleResearchSections: ResearchPanelSection[] = [
+  "search",
+  "insight",
+  "cross-reference",
+];
 
 export function ResearchPanelNavigation({
   activeSection,
@@ -44,7 +50,7 @@ export function ResearchPanelNavigation({
       </h2>
       <nav
         aria-label={copy.title}
-        className="grid grid-cols-2 rounded-md border border-zinc-200 bg-white p-1"
+        className="grid grid-cols-3 rounded-md border border-zinc-200 bg-white p-1"
       >
         {visibleResearchSections.map((section) => (
           <button

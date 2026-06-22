@@ -3,8 +3,8 @@
 import Link from "next/link";
 
 import {
-  curatedCrossReferences,
   type CuratedCrossReference,
+  getCrossReferencesForPassage,
   type ScriptureReferenceRange,
 } from "@/data/crossReferences";
 
@@ -42,9 +42,7 @@ export function CrossReferencePanel({
 }: CrossReferencePanelProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = crossReferencePanelCopy[activeLocale];
-  const matches = curatedCrossReferences.filter((reference) =>
-    matchesCurrentReference(reference.source, { book, chapter, verse }),
-  );
+  const matches = getCrossReferencesForPassage({ book, chapter, verse });
 
   return (
     <div className="flex min-w-0 flex-col gap-4">
@@ -120,54 +118,6 @@ function CrossReferenceItem({
       </div>
     </li>
   );
-}
-
-function matchesCurrentReference(
-  source: ScriptureReferenceRange,
-  current: { book: string; chapter: number; verse?: number | null },
-): boolean {
-  if (source.book !== current.book) {
-    return false;
-  }
-
-  if (current.verse === null || current.verse === undefined) {
-    return isChapterInRange(source, current.chapter);
-  }
-
-  return isVerseInRange(source, current.chapter, current.verse);
-}
-
-function isChapterInRange(source: ScriptureReferenceRange, chapter: number): boolean {
-  const endChapter = source.endChapter ?? source.chapter;
-
-  return chapter >= source.chapter && chapter <= endChapter;
-}
-
-function isVerseInRange(
-  source: ScriptureReferenceRange,
-  chapter: number,
-  verse: number,
-): boolean {
-  const endChapter = source.endChapter ?? source.chapter;
-  const endVerse = source.endVerse ?? source.verse;
-
-  if (chapter < source.chapter || chapter > endChapter) {
-    return false;
-  }
-
-  if (source.chapter === endChapter) {
-    return verse >= source.verse && verse <= endVerse;
-  }
-
-  if (chapter === source.chapter) {
-    return verse >= source.verse;
-  }
-
-  if (chapter === endChapter) {
-    return verse <= endVerse;
-  }
-
-  return true;
 }
 
 function formatReference(reference: ScriptureReferenceRange, locale: "en" | "ko"): string {

@@ -112,3 +112,65 @@ export const curatedCrossReferences: CuratedCrossReference[] = [
     label: { ko: "씨 뿌리는 비유 병행", en: "Sower parable parallels" },
   },
 ];
+
+export function getCrossReferencesForPassage({
+  book,
+  chapter,
+  verse,
+}: {
+  book: string;
+  chapter: number;
+  verse?: number | null;
+}): CuratedCrossReference[] {
+  return curatedCrossReferences.filter((reference) =>
+    matchesReferenceRange(reference.source, { book, chapter, verse }),
+  );
+}
+
+export function matchesReferenceRange(
+  source: ScriptureReferenceRange,
+  current: { book: string; chapter: number; verse?: number | null },
+): boolean {
+  if (source.book !== current.book) {
+    return false;
+  }
+
+  if (current.verse === null || current.verse === undefined) {
+    return isChapterInRange(source, current.chapter);
+  }
+
+  return isVerseInRange(source, current.chapter, current.verse);
+}
+
+function isChapterInRange(source: ScriptureReferenceRange, chapter: number): boolean {
+  const endChapter = source.endChapter ?? source.chapter;
+
+  return chapter >= source.chapter && chapter <= endChapter;
+}
+
+function isVerseInRange(
+  source: ScriptureReferenceRange,
+  chapter: number,
+  verse: number,
+): boolean {
+  const endChapter = source.endChapter ?? source.chapter;
+  const endVerse = source.endVerse ?? source.verse;
+
+  if (chapter < source.chapter || chapter > endChapter) {
+    return false;
+  }
+
+  if (source.chapter === endChapter) {
+    return verse >= source.verse && verse <= endVerse;
+  }
+
+  if (chapter === source.chapter) {
+    return verse >= source.verse;
+  }
+
+  if (chapter === endChapter) {
+    return verse <= endVerse;
+  }
+
+  return true;
+}
