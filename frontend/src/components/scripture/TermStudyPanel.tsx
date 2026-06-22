@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 
 import { TermDistributionPanel } from "@/components/scripture/TermDistributionPanel";
 import { TermOccurrenceExplorer } from "@/components/scripture/TermOccurrenceExplorer";
-import { getWordStudyTerm } from "@/lib/api/original-language";
+import {
+  getWordStudyTerm,
+  getWordStudyTermDistribution,
+} from "@/lib/api/original-language";
 import { formatOriginalLanguageMorphology } from "@/lib/original-language/morphology";
 import type {
   OriginalLanguageOccurrence,
   OriginalLanguageTerm,
+  WordStudyTermDistributionResponse,
   WordStudyTermResponse,
 } from "@/types/original-language";
 
@@ -35,6 +39,8 @@ const termStudyPanelCopy = {
     totalOccurrences: "Total Occurrences",
     bookCount: "Books",
     chapterCount: "Chapters",
+    scriptureInsight: "Scripture Insight",
+    commonBooks: "Most frequent books",
     samples: "Sample Occurrences",
     sourceRef: "Reference",
     surfaceForm: "Form",
@@ -60,6 +66,8 @@ const termStudyPanelCopy = {
     totalOccurrences: "총 출현",
     bookCount: "출현 책",
     chapterCount: "출현 장",
+    scriptureInsight: "성경 사용 요약",
+    commonBooks: "많이 나오는 책",
     samples: "출현 예시",
     sourceRef: "참조",
     surfaceForm: "표기",
@@ -82,6 +90,7 @@ export function TermStudyPanel({
     "summary",
   );
   const [data, setData] = useState<WordStudyTermResponse | null>(null);
+  const [distribution, setDistribution] = useState<WordStudyTermDistributionResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const activeLocale = locale === "ko" ? "ko" : "en";
@@ -118,6 +127,32 @@ export function TermStudyPanel({
       isCurrent = false;
     };
   }, [copy.error, termId]);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    async function loadScriptureInsight() {
+      setDistribution(null);
+
+      try {
+        const response = await getWordStudyTermDistribution(termId);
+
+        if (isCurrent) {
+          setDistribution(response);
+        }
+      } catch {
+        if (isCurrent) {
+          setDistribution(null);
+        }
+      }
+    }
+
+    void loadScriptureInsight();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [termId]);
 
   if (panelView === "occurrences") {
     return (
@@ -165,6 +200,7 @@ export function TermStudyPanel({
         {renderTermStudyState({
           copy,
           data,
+          distribution,
           errorMessage,
           isLoading,
           locale: activeLocale,
@@ -179,6 +215,7 @@ export function TermStudyPanel({
 function renderTermStudyState({
   copy,
   data,
+  distribution,
   errorMessage,
   isLoading,
   locale,
@@ -187,6 +224,7 @@ function renderTermStudyState({
 }: {
   copy: (typeof termStudyPanelCopy)["en"];
   data: WordStudyTermResponse | null;
+  distribution: WordStudyTermDistributionResponse | null;
   errorMessage: string;
   isLoading: boolean;
   locale: "en" | "ko";
@@ -231,6 +269,16 @@ function renderTermStudyState({
         <SummaryField label={copy.perPage} value={data.per_page.toLocaleString()} />
       </dl>
 
+      {distribution ? (
+        <ScriptureInsight
+          copy={copy}
+          distribution={distribution}
+          locale={locale}
+          onOpenDistribution={onOpenDistribution}
+          onOpenOccurrences={onOpenOccurrences}
+        />
+      ) : null}
+
       <section>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
@@ -270,6 +318,81 @@ function renderTermStudyState({
       </section>
     </div>
   );
+}
+
+function ScriptureInsight({
+  copy,
+  distribution,
+  locale,
+  onOpenDistribution,
+  onOpenOccurrences,
+}: {
+  copy: (typeof termStudyPanelCopy)["en"];
+  distribution: WordStudyTermDistributionResponse;
+  locale: "en" | "ko";
+  onOpenDistribution: () => void;
+  onOpenOccurrences: () => void;
+}) {
+  const topBooks = distribution.books
+    .slice()
+    .sort((first, second) => second.occurrence_count - first.occurrence_count)
+    .slice(0, 3);
+
+  return (
+    <section className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
+      <div className="flex flex-col gap-2">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
+          {copy.scriptureInsight}
+        </h3>
+        <p className="text-base font-semibold text-zinc-950">
+          {insightSummary(distribution, locale)}
+        </p>
+        {topBooks.length > 0 ? (
+          <p className="text-sm leading-6 text-zinc-700">
+            <span className="font-semibold text-zinc-500">{copy.commonBooks}: </span>
+            {topBooks
+              .map((book) => {
+                const bookName = locale === "ko" ? book.book.name_ko : book.book.name_en;
+
+                return `${bookName} ${book.occurrence_count.toLocaleString()}`;
+              })
+              .join(", ")}
+          </p>
+        ) : null}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+          onClick={onOpenDistribution}
+          type="button"
+        >
+          {copy.viewDistribution}
+        </button>
+        <button
+          className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+          onClick={onOpenOccurrences}
+          type="button"
+        >
+          {copy.viewAllOccurrences}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function insightSummary(
+  distribution: WordStudyTermDistributionResponse,
+  locale: "en" | "ko",
+): string {
+  const totalOccurrences = distribution.summary.total_occurrences.toLocaleString();
+  const bookCount = distribution.summary.book_count.toLocaleString();
+  const chapterCount = distribution.summary.chapter_count.toLocaleString();
+
+  if (locale === "ko") {
+    return `총 ${totalOccurrences}회 · ${bookCount}권 · ${chapterCount}장`;
+  }
+
+  return `${totalOccurrences} total · ${bookCount} books · ${chapterCount} chapters`;
 }
 
 function SummaryField({ label, value }: { label: string; value: string }) {
