@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { TermOccurrenceExplorer } from "@/components/scripture/TermOccurrenceExplorer";
 import { getWordStudyTerm } from "@/lib/api/original-language";
 import { formatOriginalLanguageMorphology } from "@/lib/original-language/morphology";
 import type {
@@ -40,6 +41,7 @@ const termStudyPanelCopy = {
     page: "Page",
     perPage: "Per Page",
     noSamples: "No sample occurrences returned.",
+    viewAllOccurrences: "View all occurrences",
   },
   ko: {
     title: "단어 연구",
@@ -63,6 +65,7 @@ const termStudyPanelCopy = {
     page: "페이지",
     perPage: "페이지당",
     noSamples: "출현 예시가 없습니다.",
+    viewAllOccurrences: "전체 출현 보기",
   },
 };
 
@@ -72,6 +75,7 @@ export function TermStudyPanel({
   termId,
   onBack,
 }: TermStudyPanelProps) {
+  const [panelView, setPanelView] = useState<"summary" | "occurrences">("summary");
   const [data, setData] = useState<WordStudyTermResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -110,6 +114,16 @@ export function TermStudyPanel({
     };
   }, [copy.error, termId]);
 
+  if (panelView === "occurrences") {
+    return (
+      <TermOccurrenceExplorer
+        locale={activeLocale}
+        onBack={() => setPanelView("summary")}
+        termId={termId}
+      />
+    );
+  }
+
   return (
     <div>
       <div className="flex items-start justify-between gap-4 border-b border-zinc-200 pb-4">
@@ -137,6 +151,7 @@ export function TermStudyPanel({
           errorMessage,
           isLoading,
           locale: activeLocale,
+          onOpenOccurrences: () => setPanelView("occurrences"),
         })}
       </div>
     </div>
@@ -149,12 +164,14 @@ function renderTermStudyState({
   errorMessage,
   isLoading,
   locale,
+  onOpenOccurrences,
 }: {
   copy: (typeof termStudyPanelCopy)["en"];
   data: WordStudyTermResponse | null;
   errorMessage: string;
   isLoading: boolean;
   locale: "en" | "ko";
+  onOpenOccurrences: () => void;
 }) {
   if (isLoading) {
     return <p className="text-sm text-zinc-600">{copy.loading}</p>;
@@ -195,9 +212,18 @@ function renderTermStudyState({
       </dl>
 
       <section>
-        <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-          {copy.samples}
-        </h3>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {copy.samples}
+          </h3>
+          <button
+            className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+            onClick={onOpenOccurrences}
+            type="button"
+          >
+            {copy.viewAllOccurrences}
+          </button>
+        </div>
         {data.sample_occurrences.length > 0 ? (
           <ul className="mt-3 flex flex-col gap-2">
             {data.sample_occurrences.map((occurrence) => (
