@@ -9,6 +9,10 @@ import { CrossReferencePanel } from "@/components/scripture/CrossReferencePanel"
 import { InterlinearVerse } from "@/components/scripture/InterlinearVerse";
 import { ReaderModeControl } from "@/components/scripture/ReaderModeControl";
 import { ReaderSearchPanel } from "@/components/scripture/ReaderSearchPanel";
+import {
+  ResearchPanelNavigation,
+  type ResearchPanelSection,
+} from "@/components/scripture/ResearchPanelNavigation";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
 import { cn } from "@/lib/utils/cn";
 import type { BibleBookMetadata, BibleChapterResponse } from "@/types/bible";
@@ -24,8 +28,6 @@ type BibleReaderProps = {
   locale: string;
   mode: OriginalLanguageReaderMode;
 };
-
-type StudyPanelTab = "search" | "cross-reference";
 
 const bookOptions = [
   { slug: "genesis", label: { en: "Genesis", ko: "창세기" }, chapterCount: 50 },
@@ -108,8 +110,6 @@ const bibleReaderCopy = {
     selectOriginalVerse: "Select verse for original-language preview",
     selectInterlinearVerse: "Select verse for interlinear view",
     studyPanel: "Study panel",
-    searchTab: "Search",
-    crossReferenceTab: "Cross Ref",
   },
   ko: {
     book: "성경",
@@ -122,8 +122,6 @@ const bibleReaderCopy = {
     selectOriginalVerse: "원어 미리보기 절 선택",
     selectInterlinearVerse: "행간 보기 절 선택",
     studyPanel: "연구 패널",
-    searchTab: "검색",
-    crossReferenceTab: "참조",
   },
 };
 
@@ -138,7 +136,8 @@ export function BibleReader({
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderCopy[activeLocale];
   const [activeVerseId, setActiveVerseId] = useState("");
-  const [studyPanelTab, setStudyPanelTab] = useState<StudyPanelTab>("search");
+  const [activeResearchSection, setActiveResearchSection] =
+    useState<ResearchPanelSection>("search");
   const [selectedOriginalVerse, setSelectedOriginalVerse] = useState<number | null>(null);
   const [selectedInterlinearVerse, setSelectedInterlinearVerse] = useState<number | null>(null);
   const chapterNumber = chapter.chapter;
@@ -392,20 +391,13 @@ export function BibleReader({
           aria-label={copy.studyPanel}
           className="min-w-0 w-full rounded-md border border-zinc-200 bg-zinc-50 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto"
         >
-          <div className="mb-4 grid grid-cols-2 rounded-md border border-zinc-200 bg-white p-1">
-            <StudyPanelTabButton
-              isActive={studyPanelTab === "search"}
-              label={copy.searchTab}
-              onClick={() => setStudyPanelTab("search")}
-            />
-            <StudyPanelTabButton
-              isActive={studyPanelTab === "cross-reference"}
-              label={copy.crossReferenceTab}
-              onClick={() => setStudyPanelTab("cross-reference")}
-            />
-          </div>
+          <ResearchPanelNavigation
+            activeSection={activeResearchSection}
+            locale={locale}
+            onSectionChange={setActiveResearchSection}
+          />
 
-          {studyPanelTab === "search" ? (
+          {activeResearchSection === "search" ? (
             <ReaderSearchPanel
               initialSearchQuery={initialSearchQuery}
               key={`${chapter.translation}-${chapter.book}-${chapter.chapter}-${mode}-${initialSearchQuery}`}
@@ -425,30 +417,6 @@ export function BibleReader({
         </aside>
       </div>
     </article>
-  );
-}
-
-function StudyPanelTabButton({
-  isActive,
-  label,
-  onClick,
-}: {
-  isActive: boolean;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      aria-pressed={isActive}
-      className={cn(
-        "rounded px-3 py-2 text-sm font-semibold transition-colors",
-        isActive ? "bg-zinc-950 text-white" : "text-zinc-600 hover:bg-zinc-100",
-      )}
-      onClick={onClick}
-      type="button"
-    >
-      {label}
-    </button>
   );
 }
 
