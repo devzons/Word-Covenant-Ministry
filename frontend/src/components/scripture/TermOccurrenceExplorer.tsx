@@ -14,6 +14,7 @@ type TermOccurrenceExplorerProps = {
   locale?: string;
   termId: number;
   onBack: () => void;
+  onOpenDistribution?: () => void;
 };
 
 type ParsedReference = {
@@ -40,6 +41,7 @@ const termOccurrenceExplorerCopy = {
     morphology: "Morphology",
     source: "Source",
     openReference: "Open passage",
+    viewDistribution: "View Distribution",
   },
   ko: {
     title: "전체 출현",
@@ -55,6 +57,7 @@ const termOccurrenceExplorerCopy = {
     morphology: "형태",
     source: "자료",
     openReference: "본문 열기",
+    viewDistribution: "분포 보기",
   },
 };
 
@@ -62,6 +65,7 @@ export function TermOccurrenceExplorer({
   locale = "en",
   termId,
   onBack,
+  onOpenDistribution,
 }: TermOccurrenceExplorerProps) {
   const activeLocale = locale === "ko" ? "ko" : "en";
   const copy = termOccurrenceExplorerCopy[activeLocale];
@@ -123,6 +127,16 @@ export function TermOccurrenceExplorer({
           {copy.back}
         </button>
       </div>
+
+      {onOpenDistribution ? (
+        <button
+          className="mt-5 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+          onClick={onOpenDistribution}
+          type="button"
+        >
+          {copy.viewDistribution}
+        </button>
+      ) : null}
 
       <div className="mt-5">
         {renderOccurrenceExplorerState({
