@@ -183,27 +183,72 @@ function renderSearchState({
   }
 
   return (
-    <ol className="flex flex-col gap-4">
+    <ol className="flex flex-col gap-1.5">
       {search.results.map((result) => (
         <li
-          className="rounded-md border border-zinc-200 p-4 transition-colors hover:bg-zinc-50"
+          className="py-1"
           key={`${result.translation}-${result.book}-${result.chapter}-${result.verse}`}
         >
           <Link
-            className="flex flex-col gap-2"
+            className="block hover:text-zinc-950"
             href={`/${locale}/bible/${result.translation}/${result.book}/${result.chapter}#v${result.verse}`}
           >
-            <span className="text-sm font-semibold text-zinc-950">
-              {result.reference}
-            </span>
-            <span className="text-base leading-7 text-zinc-800">{result.text}</span>
-            <span className="text-xs font-medium uppercase tracking-[0.08em] text-zinc-500">
-              {result.translation}
+            <span className="text-base leading-6 text-zinc-800">
+              <HighlightedText text={result.text} query={q} />
+              <span className="ml-1 text-sm text-zinc-500">
+                ({result.reference} · {result.translation})
+              </span>
             </span>
           </Link>
         </li>
       ))}
     </ol>
+  );
+}
+
+function HighlightedText({ text, query }: { text: string; query: string }) {
+  const trimmedQuery = query.trim();
+
+  if (!trimmedQuery) {
+    return text;
+  }
+
+  const lowerText = text.toLocaleLowerCase();
+  const lowerQuery = trimmedQuery.toLocaleLowerCase();
+  const parts: Array<{ isMatch: boolean; value: string }> = [];
+  let cursor = 0;
+
+  while (cursor < text.length) {
+    const matchIndex = lowerText.indexOf(lowerQuery, cursor);
+
+    if (matchIndex === -1) {
+      parts.push({ isMatch: false, value: text.slice(cursor) });
+      break;
+    }
+
+    if (matchIndex > cursor) {
+      parts.push({ isMatch: false, value: text.slice(cursor, matchIndex) });
+    }
+
+    parts.push({
+      isMatch: true,
+      value: text.slice(matchIndex, matchIndex + trimmedQuery.length),
+    });
+    cursor = matchIndex + trimmedQuery.length;
+  }
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        part.isMatch ? (
+          <strong className="font-bold text-zinc-950" key={`${part.value}-${index}`}>
+            {part.value}
+          </strong>
+        ) : (
+          <span key={`${part.value}-${index}`}>{part.value}</span>
+        ),
+      )}
+    </>
   );
 }
 
