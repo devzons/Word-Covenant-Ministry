@@ -19,14 +19,28 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 1. Document deployment/version-control strategy and production release runbook.
 2. After explicit approval, implement seed migration tracking and release automation support.
 3. After explicit approval, implement Word Study Term panel.
-4. Later: occurrence distribution UI.
-5. Later: Strong detail pages.
-6. Later: dedicated Word Study pages.
-7. Later: advanced search.
-8. Later: morphology explorer.
-9. Later: Cross References.
-10. Later: Commentary Layer.
-11. Future, after Phase 8 original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+4. After current UX cleanup and separate approval, Phase 9 planning: English Bible support / WEB import planning.
+5. Gospel Harmony frontend foundation and future harmony-unit planning.
+6. Later: occurrence distribution UI.
+7. Later: Strong detail pages.
+8. Later: dedicated Word Study pages.
+9. Later: advanced search.
+10. Later: morphology explorer.
+11. Later: Cross References.
+12. Later: Commentary Layer.
+13. Future, after Phase 8 original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+
+Phase 9 English Bible support planning is documented in:
+
+```txt
+docs/ROADMAP/ENGLISH_BIBLE_SUPPORT_PLAN.md
+```
+
+Gospel Harmony planning is documented in:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_PLAN.md
+```
 
 Future Hebrew-Greek bridge planning is documented in:
 

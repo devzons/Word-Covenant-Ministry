@@ -241,6 +241,18 @@ Deployment and seed migration tracking implementation, only after explicit appro
 
 OSHB, SBLGNT, WEB import, write/import endpoints, occurrence distribution UI, Strong detail pages, dedicated Word Study pages, advanced search, morphology explorer, morphology schema/API changes, production deployment automation, and seed migration tracking table implementation remain out of scope until explicitly approved.
 
+Phase 9 English Bible support and WEB import planning is documented in:
+
+```txt
+docs/ROADMAP/ENGLISH_BIBLE_SUPPORT_PLAN.md
+```
+
+Gospel Harmony planning is documented in:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_PLAN.md
+```
+
 ### Phase 6A - Original Language Read API
 
 Status:
@@ -1313,7 +1325,8 @@ Current and future milestones:
 - Dedicated Word Study pages.
 - Advanced search.
 - Morphology explorer.
-- Phase 9 English Bible support and WEB import, after separate approval.
+- Gospel Harmony frontend foundation and future event-unit planning. Planning: `docs/ROADMAP/GOSPEL_HARMONY_PLAN.md`.
+- Phase 9 English Bible support and WEB import, after separate approval. Planning: `docs/ROADMAP/ENGLISH_BIBLE_SUPPORT_PLAN.md`.
 - Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation, after Phase 8 original-language MVP stabilization and separate approval.
 - Later: Cross References.
 - Later: Commentary Layer.
