@@ -157,6 +157,11 @@ export function BibleReader({
     selectedInterlinearVerse ?? (isInterlinearMode ? (chapter.verses[0]?.verse ?? null) : null);
   const visibleOriginalVerse =
     selectedOriginalVerse ?? (isOriginalMode ? (chapter.verses[0]?.verse ?? null) : null);
+  const activeVerseNumber = activeVerseId.match(/^v(\d+)$/)?.[1]
+    ? Number(activeVerseId.replace(/^v/, ""))
+    : null;
+  const crossReferenceVerse =
+    activeVerseNumber ?? visibleInterlinearVerse ?? visibleOriginalVerse ?? null;
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -409,7 +414,13 @@ export function BibleReader({
               translation={chapter.translation}
             />
           ) : (
-            <CrossReferencePanel locale={locale} />
+            <CrossReferencePanel
+              book={chapter.book}
+              chapter={chapter.chapter}
+              locale={locale}
+              translation={chapter.translation}
+              verse={crossReferenceVerse}
+            />
           )}
         </aside>
       </div>
