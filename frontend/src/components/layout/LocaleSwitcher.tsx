@@ -26,7 +26,6 @@ const defaultBibleVersions: Record<Locale, string> = {
 export function LocaleSwitcher({ className, currentLocale }: LocaleSwitcherProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const hash = typeof window === "undefined" ? "" : window.location.hash;
 
   return (
     <nav aria-label="Language selector" className={cn("flex items-center gap-1", className)}>
@@ -42,7 +41,7 @@ export function LocaleSwitcher({ className, currentLocale }: LocaleSwitcherProps
                 ? "bg-zinc-950 text-white"
                 : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950",
             )}
-            href={switchLocaleHref(pathname, locale, searchParams.toString(), hash)}
+            href={switchLocaleHref(pathname, locale, searchParams.toString())}
             key={locale}
           >
             {localeLabels[locale]}
@@ -57,26 +56,23 @@ function switchLocaleHref(
   pathname: string,
   nextLocale: Locale,
   queryString: string,
-  hash: string,
 ): string {
   const segments = pathname.split("/").filter(Boolean);
   const firstSegment = segments[0];
 
   if (isSupportedLocale(firstSegment)) {
     return createLocalizedHref([nextLocale, ...localizedSegments(segments.slice(1), nextLocale)], {
-      hash,
       queryString,
     });
   }
 
   if (segments.length > 0) {
     return createLocalizedHref([nextLocale, ...localizedSegments(segments, nextLocale)], {
-      hash,
       queryString,
     });
   }
 
-  return createLocalizedHref([nextLocale], { hash, queryString });
+  return createLocalizedHref([nextLocale], { queryString });
 }
 
 function isSupportedLocale(locale: string | undefined): locale is Locale {
@@ -98,10 +94,8 @@ function isBibleChapterRoute(segments: string[]): boolean {
 function createLocalizedHref(
   segments: string[],
   {
-    hash,
     queryString,
   }: {
-    hash: string;
     queryString: string;
   },
 ): string {
@@ -123,5 +117,5 @@ function createLocalizedHref(
   const nextQueryString = nextParams.toString();
   const querySuffix = nextQueryString ? `?${nextQueryString}` : "";
 
-  return `/${segments.join("/")}${querySuffix}${hash}`;
+  return `/${segments.join("/")}${querySuffix}`;
 }

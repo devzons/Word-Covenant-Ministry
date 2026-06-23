@@ -10,10 +10,12 @@ import { InterlinearVerse } from "@/components/scripture/InterlinearVerse";
 import { PassageInsightPanel } from "@/components/scripture/PassageInsightPanel";
 import { ReaderModeControl } from "@/components/scripture/ReaderModeControl";
 import { ReaderSearchPanel } from "@/components/scripture/ReaderSearchPanel";
+import { ResearchPanelNavigation } from "@/components/scripture/ResearchPanelNavigation";
 import {
-  ResearchPanelNavigation,
-  type ResearchPanelSection,
-} from "@/components/scripture/ResearchPanelNavigation";
+  ScriptureResearchWorkspaceProvider,
+  useScriptureResearchWorkspace,
+  type ScriptureResearchReferenceRange,
+} from "@/components/scripture/ScriptureResearchWorkspaceContext";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
 import { cn } from "@/lib/utils/cn";
 import type { BibleBookMetadata, BibleChapterResponse } from "@/types/bible";
@@ -137,8 +139,6 @@ export function BibleReader({
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderCopy[activeLocale];
   const [activeVerseId, setActiveVerseId] = useState("");
-  const [activeResearchSection, setActiveResearchSection] =
-    useState<ResearchPanelSection>("search");
   const [selectedOriginalVerse, setSelectedOriginalVerse] = useState<number | null>(null);
   const [selectedInterlinearVerse, setSelectedInterlinearVerse] = useState<number | null>(null);
   const chapterNumber = chapter.chapter;
@@ -163,6 +163,13 @@ export function BibleReader({
   const crossReferenceVerse =
     activeVerseNumber ?? visibleInterlinearVerse ?? visibleOriginalVerse ?? null;
   const activeStudyVerse = crossReferenceVerse;
+  const selectedReferenceRange: ScriptureResearchReferenceRange | undefined = crossReferenceVerse
+    ? {
+        book: chapter.book,
+        startChapter: chapter.chapter,
+        startVerse: crossReferenceVerse,
+      }
+    : undefined;
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -214,7 +221,18 @@ export function BibleReader({
   }, []);
 
   return (
-    <article className="flex w-full min-w-0 flex-col gap-8 overflow-x-hidden py-8 sm:py-12">
+    <ScriptureResearchWorkspaceProvider
+      book={chapter.book}
+      chapter={chapter.chapter}
+      key={`${chapter.translation}-${chapter.book}-${chapter.chapter}`}
+      locale={locale}
+      mode={mode}
+      selectedReferenceRange={selectedReferenceRange}
+      sourceSurface="reader"
+      verse={crossReferenceVerse ?? undefined}
+      version={chapter.translation}
+    >
+      <article className="flex w-full min-w-0 flex-col gap-8 overflow-x-hidden py-8 sm:py-12">
       <header className="flex min-w-0 max-w-full flex-col gap-5 border-b border-zinc-200 pb-6">
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
@@ -391,51 +409,90 @@ export function BibleReader({
           </nav>
         </div>
 
-        <aside
-          aria-label={copy.studyPanel}
-          className="min-w-0 w-full rounded-md border border-zinc-200 bg-zinc-50 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto"
-        >
-          <ResearchPanelNavigation
-            activeSection={activeResearchSection}
-            locale={locale}
-            onSectionChange={setActiveResearchSection}
-          />
-
-          {activeResearchSection === "search" ? (
-            <ReaderSearchPanel
-              initialSearchQuery={initialSearchQuery}
-              key={`${chapter.translation}-${chapter.book}-${chapter.chapter}-${mode}-${initialSearchQuery}`}
-              locale={locale}
-              mode={mode}
-              translation={chapter.translation}
-            />
-          ) : null}
-
-          {activeResearchSection === "insight" ? (
-            <PassageInsightPanel
-              book={chapter.book}
-              bookLabel={currentBook?.label[activeLocale] ?? bookMetadata.name}
-              chapter={chapter.chapter}
-              locale={locale}
-              mode={mode}
-              selectedVerse={activeStudyVerse}
-              translation={chapter.translation}
-              verseCount={chapter.verses.length}
-            />
-          ) : null}
-
-          {activeResearchSection === "cross-reference" ? (
-            <CrossReferencePanel
-              book={chapter.book}
-              chapter={chapter.chapter}
-              locale={locale}
-              translation={chapter.translation}
-              verse={crossReferenceVerse}
-            />
-          ) : null}
-        </aside>
+        <BibleReaderResearchPanel
+          bookLabel={currentBook?.label[activeLocale] ?? bookMetadata.name}
+          initialSearchQuery={initialSearchQuery}
+          selectedVerse={activeStudyVerse}
+          studyPanelLabel={copy.studyPanel}
+          verseCount={chapter.verses.length}
+        />
       </div>
-    </article>
+      </article>
+    </ScriptureResearchWorkspaceProvider>
+  );
+}
+
+type BibleReaderResearchPanelProps = {
+  bookLabel: string;
+  initialSearchQuery: string;
+  selectedVerse: number | null;
+  studyPanelLabel: string;
+  verseCount: number;
+};
+
+function BibleReaderResearchPanel({
+  bookLabel,
+  initialSearchQuery,
+  selectedVerse,
+  studyPanelLabel,
+  verseCount,
+}: BibleReaderResearchPanelProps) {
+  const {
+    activeResearchSection,
+    book,
+    chapter,
+    locale,
+    mode,
+    setActiveResearchSection,
+    version,
+    verse,
+  } = useScriptureResearchWorkspace();
+  const searchPanelKey = `${version}-${book}-${chapter}-${mode}-${initialSearchQuery}`;
+
+  return (
+    <aside
+      aria-label={studyPanelLabel}
+      className="min-w-0 w-full rounded-md border border-zinc-200 bg-zinc-50 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto"
+    >
+      <ResearchPanelNavigation
+        activeSection={activeResearchSection}
+        locale={locale}
+        onSectionChange={setActiveResearchSection}
+      />
+
+      {activeResearchSection === "search" ? (
+        <ReaderSearchPanel
+          initialSearchQuery={initialSearchQuery}
+          key={searchPanelKey}
+          locale={locale}
+          mode={mode}
+          translation={version}
+        />
+      ) : null}
+
+      {activeResearchSection === "insight" ? (
+        <PassageInsightPanel
+          book={book}
+          bookLabel={bookLabel}
+          chapter={chapter}
+          locale={locale}
+          mode={mode}
+          selectedVerse={selectedVerse}
+          translation={version}
+          verseCount={verseCount}
+        />
+      ) : null}
+
+      {activeResearchSection === "cross-reference" ? (
+        <CrossReferencePanel
+          book={book}
+          chapter={chapter}
+          locale={locale}
+          translation={version}
+          verse={verse ?? null}
+        />
+      ) : null}
+    </aside>
   );
 }
 
