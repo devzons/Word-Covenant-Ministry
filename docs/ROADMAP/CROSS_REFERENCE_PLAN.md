@@ -65,14 +65,15 @@ This is a future concept only. It does not authorize schema work.
 
 ## Cross Reference UI
 
-Future Bible Reader UI may show a cross-reference panel for the selected verse or passage.
+The Bible Reader now includes an API-backed Related Passages panel for the selected verse in the Bible Study Workspace.
 
-Initial UI direction:
+Implemented local MVP direction:
 
 - Keep the main Bible text primary.
-- Show compact related references beside or below the passage.
-- Use relationship labels such as "Quotation," "Fulfillment," or "Parallel Event."
-- Let users open related passages without losing their current reading context.
+- Show compact related references in the right-side research panel.
+- Use conservative imported labels only. OpenBible imported rows are shown as `theme` / Related Theme and `unreviewed`.
+- Let users preview related passages without leaving the current reading context.
+- Let users open the target reference in the Bible Reader when they want the full context.
 - Avoid overwhelming normal reading mode with dense study data.
 
 Mobile UI should keep cross references below the passage or in a drawer-style panel. Desktop UI may use the existing Bible Study Workspace right panel pattern.
@@ -119,6 +120,12 @@ GET /wcm/v1/cross-references/range/{version}/{book}/{start_chapter}/{start_verse
 GET /wcm/v1/cross-references/types
 ```
 
+Implemented local MVP API route:
+
+```txt
+GET /wp-json/wcm/v1/cross-references/{book}/{chapter}/{verse}
+```
+
 Response design should:
 
 - Return references and relationship metadata.
@@ -127,13 +134,15 @@ Response design should:
 - Never return large unbounded datasets.
 - Preserve source and review metadata where appropriate.
 
-No API implementation is authorized by this plan.
+Current API implementation is read-only, bounded, reference-only by default, and includes OpenBible attribution metadata. It does not expose write, review, import, raw-source export, or full-package export routes.
 
 ## Phase Roadmap
 
 ### Phase CR-1 - Planning
 
 Document purpose, relationship types, UI direction, and integration points.
+
+Status: complete.
 
 ### Phase CR-2 - Source And License Review
 
@@ -146,13 +155,17 @@ Requirements:
 - Data shape inspection.
 - Import risk report.
 
+Status: complete. OpenBible.info Cross References was selected as the first source, with TSK/CrossWire as a validation/reference source.
+
 ### Phase CR-3 - Data Model Design
 
 Design tables or content model for reference-only relationships.
 
 No schema changes without explicit approval.
 
-### Phase CR-4 - Dry-Run Import Tooling
+Status: complete through CR-15/CR-18 design documents and CR-21 local schema implementation.
+
+### Phase CR-4 - Dry-Run Import Tooling And Package Validation
 
 Prepare dry-run-only validation for reviewed cross-reference data.
 
@@ -164,19 +177,27 @@ Validation should check:
 - Source/provenance metadata.
 - Expected counts.
 
+Status: complete. Package creation and dry run passed with `341,176` generated relationships and zero duplicate relationships or invalid references.
+
 ### Phase CR-5 - Local Import After Approval
 
 Run local-only import after explicit approval.
 
 No production writes without separate deployment approval.
 
-### Phase CR-6 - Reader UI Integration
+Status: complete locally. `341,176` OpenBible relationships were imported into `wp_wcm_cross_references` with `relationship_type=theme` and `review_status=unreviewed`.
+
+### Phase CR-6 - Reader API And UI Integration
 
 Add cross-reference display to the Bible Study Workspace.
+
+Status: complete locally through CR-36. Reader API, Related Passages UI, verse preview modal, unsupported range fallback, Open in Reader navigation, and focus return validation passed.
 
 ### Phase CR-7 - Word Study And Gospel Harmony Integration
 
 Expose curated cross-reference relationships inside Word Study and Gospel Harmony surfaces.
+
+Status: next. CR-37 begins Word Study Cross Reference Integration Design.
 
 ## Out Of Scope
 

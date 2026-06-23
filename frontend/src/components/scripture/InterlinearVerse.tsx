@@ -251,8 +251,9 @@ function textDirection(languageType: OriginalLanguageType): "ltr" | "rtl" {
 
 function originalSurfaceClassName(languageType: OriginalLanguageType): string {
   return [
-    "text-xl font-semibold leading-8 text-zinc-950",
-    languageType === "hebrew" ? "font-hebrew" : "",
+    languageType === "hebrew"
+      ? "font-hebrew text-2xl font-semibold leading-9 text-zinc-950 sm:text-[1.625rem]"
+      : "font-greek text-xl font-semibold leading-8 text-zinc-950",
   ]
     .filter(Boolean)
     .join(" ");
@@ -298,7 +299,7 @@ function getLocalizedGloss(
 
 function transliterationClassName(isFallback: boolean): string {
   return [
-    "mt-0.5 max-w-28 break-words text-xs leading-4",
+    "mt-0.5 max-w-28 break-words text-[13px] leading-5",
     isFallback ? "text-zinc-500 italic" : "text-zinc-600",
   ].join(" ");
 }

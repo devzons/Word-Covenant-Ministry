@@ -178,14 +178,29 @@ export function CrossReferencePanel({
     }
   }
 
-  function handleOpenPreview(target: PassagePreviewTarget) {
-    previewReturnFocusRef.current =
-      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  function handleOpenPreview(target: PassagePreviewTarget, triggerElement: HTMLElement) {
+    previewReturnFocusRef.current = triggerElement;
     setPreviewTarget(target);
+  }
+
+  function restorePreviewFocus() {
+    const returnElement = previewReturnFocusRef.current;
+    previewReturnFocusRef.current = null;
+
+    window.requestAnimationFrame(() => {
+      if (
+        returnElement &&
+        document.contains(returnElement) &&
+        typeof returnElement.focus === "function"
+      ) {
+        returnElement.focus();
+      }
+    });
   }
 
   function handleClosePreview() {
     setPreviewTarget(null);
+    restorePreviewFocus();
   }
 
   return (
@@ -265,7 +280,7 @@ function CrossReferenceItemView({
   copy: (typeof crossReferencePanelCopy)["en"];
   item: CrossReferenceItem;
   locale: "en" | "ko";
-  onPreview: (target: PassagePreviewTarget) => void;
+  onPreview: (target: PassagePreviewTarget, triggerElement: HTMLElement) => void;
   translation: string;
 }) {
   const label = item.relationship_type === "theme" ? copy.relatedTheme : item.relationship_label;
@@ -292,12 +307,12 @@ function CrossReferenceItemView({
       <div className="mt-3 flex flex-wrap gap-2">
         <button
           className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100"
-          onClick={() =>
+          onClick={(event) =>
             onPreview({
               href,
               reference: item.target_reference,
               referenceLabel,
-            })
+            }, event.currentTarget)
           }
           type="button"
         >
@@ -358,8 +373,6 @@ function PassagePreviewModal({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = previousOverflow;
-      returnFocusRef.current?.focus();
-      returnFocusRef.current = null;
     };
   }, [onClose, returnFocusRef]);
 

@@ -28,3 +28,7 @@ body {
 .font-hebrew {
   font-family: "Noto Serif Hebrew", "SBL Hebrew", "Ezra SIL", serif;
 }
+
+.font-greek {
+  font-family: "Gentium Plus", "Noto Serif", "New Athena Unicode", serif;
+}
