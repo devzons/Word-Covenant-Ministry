@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-import type { PassagePreviewTarget } from "@/components/scripture/CrossReferenceItemCard";
+import {
+  CrossReferenceItemCard,
+  crossReferenceItemKey,
+  type PassagePreviewTarget,
+} from "@/components/scripture/CrossReferenceItemCard";
 import {
   CrossReferencePassagePreviewModal,
   type PassagePreviewCacheEntry,
@@ -12,9 +16,12 @@ import {
   gospelHarmonyUnits,
   type GospelHarmonyBook,
   type GospelHarmonyPassage,
+  type GospelHarmonyUnit,
 } from "@/data/gospelHarmonyUnits";
 import { getBibleChapter } from "@/lib/api/bible";
+import { getCrossReferences } from "@/lib/api/cross-references";
 import type { BibleVerse } from "@/types/bible";
+import type { CrossReferenceAttribution, CrossReferenceItem } from "@/types/cross-reference";
 
 type GospelHarmonyWorkspaceProps = {
   locale: "en" | "ko";
@@ -43,10 +50,21 @@ const gospelHarmonyCopy = {
     error: "Passage could not be loaded.",
     noText: "No passage text returned.",
     johnNote: "John references are retained for future expansion.",
+    relatedPassages: "Related Passages",
+    relatedPassagesDescription:
+      "Source-backed related passages for each Gospel account. OpenBible links are unreviewed discovery data.",
+    loadRelatedPassages: "Load related passages",
+    loadingRelatedPassages: "Loading related passages...",
+    relatedPassagesEmpty: "No related passages were found for these Gospel accounts.",
+    relatedPassagesError: "Some related passages could not be loaded.",
+    relatedPassagesMvpNote: "MVP note: related passages use each account's start verse only.",
+    relatedTheme: "Theme",
+    unreviewed: "Unreviewed",
     columns: {
       matthew: "Matthew",
       mark: "Mark",
       luke: "Luke",
+      john: "John",
     },
   },
   ko: {
@@ -71,15 +89,28 @@ const gospelHarmonyCopy = {
     error: "본문을 불러올 수 없습니다.",
     noText: "본문이 없습니다.",
     johnNote: "요한복음 참조는 향후 확장을 위해 보존합니다.",
+    relatedPassages: "관련 구절",
+    relatedPassagesDescription:
+      "각 복음서 본문과 연결된 출처 기반 관련 구절입니다. OpenBible 링크는 검토 전 탐색 데이터입니다.",
+    loadRelatedPassages: "관련 구절 불러오기",
+    loadingRelatedPassages: "관련 구절을 불러오는 중입니다...",
+    relatedPassagesEmpty: "이 복음서 본문에 대한 관련 구절이 없습니다.",
+    relatedPassagesError: "일부 관련 구절을 불러오지 못했습니다.",
+    relatedPassagesMvpNote: "MVP 참고: 관련 구절은 각 본문의 시작 절 기준으로 조회합니다.",
+    relatedTheme: "주제",
+    unreviewed: "검토 전",
     columns: {
       matthew: "마태복음",
       mark: "마가복음",
       luke: "누가복음",
+      john: "요한복음",
     },
   },
 };
 
 const gospelColumns = ["matthew", "mark", "luke"] as const;
+const relatedGospelColumns: GospelHarmonyBook[] = ["matthew", "mark", "luke", "john"];
+const RELATED_PASSAGES_PER_ACCOUNT = 3;
 const gospelHarmonyUnitAliases: Record<string, string> = {
   "baptism-of-jesus": "jesus-baptism",
   "feeding-5000": "feeding-five-thousand",
@@ -219,6 +250,15 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
           {selectedUnit.passages.john ? (
             <p className="text-sm text-zinc-500">{copy.johnNote}</p>
           ) : null}
+
+          <HarmonyRelatedPassages
+            copy={copy}
+            key={selectedUnit.id}
+            locale={locale}
+            onPreview={handleOpenPreview}
+            translation={translation}
+            unit={selectedUnit}
+          />
         </div>
       </div>
 
@@ -232,6 +272,173 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
           target={previewTarget}
           translation={translation}
         />
+      ) : null}
+    </section>
+  );
+}
+
+type HarmonyRelatedPassageGroup = {
+  attribution: CrossReferenceAttribution | null;
+  column: GospelHarmonyBook;
+  items: CrossReferenceItem[];
+  passage: GospelHarmonyPassage;
+};
+
+type HarmonyRelatedPassageResult =
+  | { group: HarmonyRelatedPassageGroup; ok: true }
+  | { column: GospelHarmonyBook; ok: false };
+
+function HarmonyRelatedPassages({
+  copy,
+  locale,
+  onPreview,
+  translation,
+  unit,
+}: {
+  copy: (typeof gospelHarmonyCopy)["en"];
+  locale: "en" | "ko";
+  onPreview: (target: PassagePreviewTarget, triggerElement: HTMLElement) => void;
+  translation: string;
+  unit: GospelHarmonyUnit;
+}) {
+  const [groups, setGroups] = useState<HarmonyRelatedPassageGroup[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasPartialError, setHasPartialError] = useState(false);
+  const passages = relatedGospelColumns
+    .map((column) => ({ column, passage: unit.passages[column] }))
+    .filter(
+      (entry): entry is { column: GospelHarmonyBook; passage: GospelHarmonyPassage } =>
+        Boolean(entry.passage),
+    );
+  const visibleGroups = groups?.filter((group) => group.items.length > 0) ?? [];
+
+  async function handleLoadRelatedPassages() {
+    if (passages.length === 0) {
+      setGroups([]);
+      setHasPartialError(false);
+      return;
+    }
+
+    setIsLoading(true);
+    setHasPartialError(false);
+    setGroups(null);
+
+    const results: HarmonyRelatedPassageResult[] = await Promise.all(
+      passages.map(async ({ column, passage }) => {
+        try {
+          const response = await getCrossReferences({
+            book: passage.book,
+            chapter: passage.startChapter,
+            page: 1,
+            perPage: RELATED_PASSAGES_PER_ACCOUNT,
+            verse: passage.startVerse,
+          });
+
+          return {
+            group: {
+              attribution: response.attribution,
+              column,
+              items: response.items.slice(0, RELATED_PASSAGES_PER_ACCOUNT),
+              passage,
+            },
+            ok: true,
+          };
+        } catch {
+          return { column, ok: false };
+        }
+      }),
+    );
+
+    setGroups(
+      results
+        .filter(
+          (
+            result,
+          ): result is {
+            group: HarmonyRelatedPassageGroup;
+            ok: true;
+          } => result.ok,
+        )
+        .map((result) => result.group),
+    );
+    setHasPartialError(results.some((result) => !result.ok));
+    setIsLoading(false);
+  }
+
+  return (
+    <section className="rounded-md border border-zinc-200 bg-zinc-50 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {copy.relatedPassages}
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">
+            {copy.relatedPassagesDescription}
+          </p>
+          <p className="mt-1 text-xs leading-5 text-zinc-500">
+            {copy.relatedPassagesMvpNote}
+          </p>
+        </div>
+        <button
+          className="shrink-0 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:text-zinc-400"
+          disabled={isLoading}
+          onClick={handleLoadRelatedPassages}
+          type="button"
+        >
+          {isLoading ? copy.loadingRelatedPassages : copy.loadRelatedPassages}
+        </button>
+      </div>
+
+      {hasPartialError ? (
+        <p className="mt-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+          {copy.relatedPassagesError}
+        </p>
+      ) : null}
+
+      {groups && visibleGroups.length === 0 ? (
+        <p className="mt-3 text-sm text-zinc-600">{copy.relatedPassagesEmpty}</p>
+      ) : null}
+
+      {visibleGroups.length > 0 ? (
+        <div className="mt-4 flex flex-col gap-4">
+          {visibleGroups.map((group) => (
+            <section
+              className="rounded-md border border-zinc-200 bg-white p-3"
+              key={`${unit.id}-${group.column}`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold text-zinc-950">
+                  {copy.columns[group.column]}
+                </h4>
+                <span className="text-xs text-zinc-500">
+                  {formatPassage(group.passage, locale)}
+                </span>
+              </div>
+              <ul className="mt-3 flex flex-col gap-2">
+                {group.items.map((item, index) => (
+                  <CrossReferenceItemCard
+                    copy={copy}
+                    item={item}
+                    key={crossReferenceItemKey(item, index)}
+                    locale={locale}
+                    onPreview={onPreview}
+                    translation={translation}
+                  />
+                ))}
+              </ul>
+              {group.attribution ? (
+                <p className="mt-3 text-xs leading-5 text-zinc-500">
+                  <a
+                    className="underline-offset-2 hover:underline"
+                    href={group.attribution.source_url}
+                  >
+                    {group.attribution.attribution}
+                  </a>
+                </p>
+              ) : null}
+            </section>
+          ))}
+        </div>
       ) : null}
     </section>
   );

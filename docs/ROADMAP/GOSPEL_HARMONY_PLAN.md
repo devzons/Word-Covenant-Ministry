@@ -82,6 +82,24 @@ docs/ROADMAP/GOSPEL_HARMONY_FRONTEND_MVP_IMPLEMENTATION_REPORT.md
 docs/ROADMAP/GOSPEL_HARMONY_FRONTEND_MVP_VALIDATION_REPORT.md
 ```
 
+Gospel Harmony Cross Reference integration planning is documented in:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_CROSS_REFERENCE_INTEGRATION_PLAN.md
+```
+
+Gospel Harmony Cross Reference frontend MVP implementation is documented in:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_CROSS_REFERENCE_FRONTEND_MVP_IMPLEMENTATION_REPORT.md
+```
+
+Gospel Harmony Cross Reference frontend MVP browser validation is documented in:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_CROSS_REFERENCE_FRONTEND_MVP_VALIDATION_REPORT.md
+```
+
 Current data-backed version:
 
 ```txt
@@ -155,6 +173,26 @@ Must avoid:
 ### Phase GH-5 - Parallel Study UX
 
 Add user-facing event navigation, selected-unit state, passage links, and responsive layout behavior.
+
+Status: complete locally through the frontend MVP and CR-60 browser validation.
+
+### Phase GH-6 - Cross Reference Integration Planning
+
+Design how Gospel Harmony can show bounded related passages for each Gospel account without confusing curated Harmony units with OpenBible thematic discovery data.
+
+Status: complete as a design phase.
+
+### Phase GH-7 - Cross Reference Frontend MVP
+
+Add a frontend-only, lazy-loaded Related Passages section to the Gospel Harmony workspace using the existing Cross Reference API and shared preview/card components.
+
+Status: complete locally through CR-64 browser validation.
+
+Next gate:
+
+```txt
+Next Gospel Harmony / Scripture Research milestone after separate approval
+```
 
 ## Relationship To Phase 9
 

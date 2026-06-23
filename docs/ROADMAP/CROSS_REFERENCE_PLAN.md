@@ -110,6 +110,45 @@ Cross References can point to:
 
 Future Gospel Harmony units may generate or expose `parallel_event` relationships, but harmony-unit data should still store references only and avoid copied Bible text.
 
+CR-61 planning defines the first safe Gospel Harmony Cross Reference integration direction:
+
+- frontend-only MVP
+- existing Cross Reference API only
+- lazy-loaded after user intent
+- grouped by Gospel account
+- maximum `3` related passages per Gospel account
+- OpenBible `theme/unreviewed` rows clearly labeled as discovery data
+- no automatic `parallel_event` generation
+- no public visibility behavior change
+
+Design document:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_CROSS_REFERENCE_INTEGRATION_PLAN.md
+```
+
+CR-63 implemented the frontend MVP:
+
+- adds Related Passages inside Gospel Harmony
+- lazy-loads after user intent
+- groups results by Gospel account
+- uses start-verse-only lookup
+- limits to `3` related passages per account
+- reuses compact cards and shared preview modal
+- makes no backend/API/schema/import changes
+
+Implementation report:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_CROSS_REFERENCE_FRONTEND_MVP_IMPLEMENTATION_REPORT.md
+```
+
+Validation report:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_CROSS_REFERENCE_FRONTEND_MVP_VALIDATION_REPORT.md
+```
+
 ## Future API Concepts
 
 Possible future read-only API routes:
@@ -197,7 +236,7 @@ Status: complete locally through CR-36. Reader API, Related Passages UI, verse p
 
 Expose curated cross-reference relationships inside Word Study and Gospel Harmony surfaces.
 
-Status: in progress. CR-39 Word Study Cross Reference frontend MVP is complete locally.
+Status: complete locally for Reader, Word Study, and Gospel Harmony frontend MVP surfaces. CR-39 Word Study Cross Reference frontend MVP is complete locally. CR-61 Gospel Harmony Cross Reference integration planning is complete as a design phase. CR-63 Gospel Harmony Cross Reference frontend MVP implementation/static validation and CR-64 browser validation are complete.
 
 Completed Word Study MVP:
 
@@ -227,6 +266,26 @@ Completed CR-40 follow-up:
 - Review post-MVP usability.
 - Identify and validate a strict unsupported-range fixture.
 - Plan next Scripture Research integration step without changing data behavior.
+
+Completed CR-61 design:
+
+- Plan Gospel Harmony Related Passages as a frontend-only MVP.
+- Use existing Cross Reference API with bounded per-account lookups.
+- Preserve curated Harmony unit boundaries.
+- Keep OpenBible `theme/unreviewed` rows visible only as conservative discovery links.
+- Defer range aggregation, `parallel_event` generation, and reviewed-only public filtering.
+
+Completed CR-63 implementation:
+
+- Added frontend-only Gospel Harmony Related Passages section.
+- Used existing Cross Reference API only.
+- Preserved OpenBible `theme` / `unreviewed` labeling.
+- Reused compact cards and shared preview modal behavior.
+
+Completed CR-64 validation:
+
+- Recovered local frontend runtime from a stale Node listener.
+- Validated lazy loading, per-account grouping, limits, conservative labels, preview modal, unsupported fallback, Open in Reader links, mobile layout, and Reader/Word Study regression smoke checks.
 
 ### Phase CR-8 - Review Workflow
 
