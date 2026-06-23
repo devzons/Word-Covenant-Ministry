@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { TermDistributionPanel } from "@/components/scripture/TermDistributionPanel";
 import { TermOccurrenceExplorer } from "@/components/scripture/TermOccurrenceExplorer";
+import { TermStudyRelatedPassages } from "@/components/scripture/TermStudyRelatedPassages";
 import {
   getWordStudyTerm,
   getWordStudyTermDistribution,
@@ -21,6 +22,7 @@ type TermStudyPanelProps = {
   locale?: string;
   termId: number;
   onBack: () => void;
+  translation?: string;
 };
 
 const termStudyPanelCopy = {
@@ -81,6 +83,7 @@ export function TermStudyPanel({
   locale = "en",
   termId,
   onBack,
+  translation = "KRV",
 }: TermStudyPanelProps) {
   const [panelView, setPanelView] = useState<"summary" | "distribution" | "occurrences">(
     "summary",
@@ -202,6 +205,7 @@ export function TermStudyPanel({
           locale: activeLocale,
           onOpenDistribution: () => setPanelView("distribution"),
           onOpenOccurrences: () => setPanelView("occurrences"),
+          translation,
         })}
       </div>
     </div>
@@ -217,6 +221,7 @@ function renderTermStudyState({
   locale,
   onOpenDistribution,
   onOpenOccurrences,
+  translation,
 }: {
   copy: (typeof termStudyPanelCopy)["en"];
   data: WordStudyTermResponse | null;
@@ -226,6 +231,7 @@ function renderTermStudyState({
   locale: "en" | "ko";
   onOpenDistribution: () => void;
   onOpenOccurrences: () => void;
+  translation: string;
 }) {
   if (isLoading) {
     return <p className="text-sm text-zinc-600">{copy.loading}</p>;
@@ -272,6 +278,12 @@ function renderTermStudyState({
           onOpenOccurrences={onOpenOccurrences}
         />
       ) : null}
+
+      <TermStudyRelatedPassages
+        locale={locale}
+        occurrences={data.sample_occurrences}
+        translation={translation}
+      />
 
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">

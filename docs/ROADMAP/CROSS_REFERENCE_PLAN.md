@@ -197,21 +197,36 @@ Status: complete locally through CR-36. Reader API, Related Passages UI, verse p
 
 Expose curated cross-reference relationships inside Word Study and Gospel Harmony surfaces.
 
-Status: in progress. CR-37 Word Study Cross Reference Integration Design is complete.
+Status: in progress. CR-39 Word Study Cross Reference frontend MVP is complete locally.
 
-Current recommendation:
+Completed Word Study MVP:
 
-- Start with a frontend-only Word Study MVP using existing APIs.
-- Use bounded `sample_occurrences` from Term Study.
-- Look up Cross References for a small number of sampled occurrence verses.
-- Reuse CR-36 preview modal behavior.
-- Defer term-wide aggregation and new backend APIs until after frontend MVP validation.
+- Frontend-only implementation using existing APIs.
+- Uses bounded `sample_occurrences` from Term Study.
+- Loads Cross References only after user intent.
+- Limits to `3` occurrence groups and `3` related passages per occurrence.
+- Reuses compact Related Passages cards and shared preview modal behavior.
+- Preserves OpenBible / `theme` / `unreviewed` labeling.
+- Preserves KRV/WEB preview behavior and locale/version-aware Open in Reader links.
+- Does not add backend API, schema, import, migration, or data behavior.
 
 Design document:
 
 ```txt
 docs/ROADMAP/WORD_STUDY_CROSS_REFERENCE_INTEGRATION_DESIGN.md
 ```
+
+Implementation and QA report:
+
+```txt
+docs/ROADMAP/WORD_STUDY_CROSS_REFERENCE_FRONTEND_MVP_REPORT.md
+```
+
+Remaining CR-40 follow-up:
+
+- Review post-MVP usability.
+- Add or identify a strict unsupported-range fixture for validation.
+- Plan next Scripture Research integration step without changing data behavior.
 
 ## Out Of Scope
 

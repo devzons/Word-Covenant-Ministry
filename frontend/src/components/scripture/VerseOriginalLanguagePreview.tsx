@@ -21,6 +21,7 @@ type VerseOriginalLanguagePreviewProps = {
   verse: number;
   locale: string;
   autoLoad?: boolean;
+  translation?: string;
 };
 
 const originalPreviewCopy = {
@@ -49,6 +50,7 @@ export function VerseOriginalLanguagePreview({
   verse,
   locale,
   autoLoad = false,
+  translation = "KRV",
 }: VerseOriginalLanguagePreviewProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = originalPreviewCopy[activeLocale];
@@ -154,6 +156,7 @@ export function VerseOriginalLanguagePreview({
 
       <OriginalWordPanel
         locale={locale}
+        translation={translation}
         word={selectedWord}
         onClose={() => setSelectedWord(null)}
       />

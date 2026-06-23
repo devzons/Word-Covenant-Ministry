@@ -61,6 +61,8 @@ The integration should answer:
 
 ## MVP Scope
 
+Status: implemented and locally validated in CR-39.
+
 The first Word Study Cross Reference MVP should remain frontend-only if possible and use existing APIs:
 
 1. Add a compact "Related Passages" section inside `TermStudyPanel`.
@@ -78,10 +80,10 @@ The first Word Study Cross Reference MVP should remain frontend-only if possible
    - unsupported range fallback
    - Open in Reader link
 
-MVP limits:
+Implemented MVP limits:
 
-- Maximum occurrence seeds: `3` to `5` sample occurrences.
-- Maximum related items per occurrence: `3` to `5`.
+- Maximum occurrence seeds: `3` sample occurrences.
+- Maximum related items per occurrence: `3`.
 - No automatic term-wide aggregation.
 - No new backend API.
 - No schema change.
@@ -390,7 +392,7 @@ Smallest safe implementation plan:
 4. Keep all button/link handlers unchanged.
 5. Re-run CR-36 focus-return browser checks.
 
-This compact card change is not implemented by this design document.
+This compact card change was implemented and reused in CR-39 through a shared card component.
 
 ## Accessibility Considerations
 
@@ -452,6 +454,8 @@ Review the frontend-only Option A plan:
 - existing modal behavior reused
 - no backend/API/schema/data changes
 
+Status: complete.
+
 ### CR-39 - Word Study Cross Reference Frontend MVP
 
 Implement a bounded Term Study section:
@@ -460,6 +464,21 @@ Implement a bounded Term Study section:
 - display up to `3` related targets per occurrence
 - reuse preview modal behavior or extract shared preview UI only if required
 - preserve CR-36 focus return
+
+Status: complete.
+
+Implementation summary:
+
+- Added Term Study Related Passages section.
+- Extracted shared compact card and passage preview modal components.
+- Reused existing Cross Reference API and Bible chapter API.
+- Threaded current Reader translation into Word Study flow so KRV and WEB previews use the current version.
+- Fixed Escape handling so closing the preview modal does not close the parent Word Study drawer.
+- Browser QA passed for lazy loading, KRV/WEB previews, focus return, body scroll cleanup, Open in Reader links, and compact labels.
+
+Known limitation:
+
+- Strict unsupported-range fallback was not encountered in sampled Term Study QA. Reader Related Passages QA confirmed supported same-chapter ranges, but a dedicated strict unsupported-range fixture remains a CR-40 follow-up.
 
 ### CR-40 - Word Study Cross Reference Validation
 
@@ -473,6 +492,14 @@ Validate:
 - focus return
 - no console errors
 - no excessive API calls
+
+Status: next.
+
+Recommended CR-40 focus:
+
+- Post-MVP UX review.
+- Dedicated unsupported-range fixture validation.
+- Scripture Research integration planning for the next approved surface.
 
 ### Future - Aggregation API Design
 
@@ -516,19 +543,16 @@ Future browser QA:
 
 ## Final Recommendation
 
-Proceed with CR-38 Word Study Cross Reference Frontend MVP Approval Review.
+CR-39 Word Study Cross Reference Frontend MVP has passed local validation.
 
-Recommended MVP:
+Implemented MVP:
 
 - Frontend-only.
 - Existing APIs only.
 - Bounded sample occurrence lookup.
-- Existing preview modal behavior reused.
+- Shared preview modal behavior reused.
 - No backend/API/schema/import/data changes.
 
-Recommended compact card change:
+Current next recommendation:
 
-- Safe as a small frontend-only patch after approval.
-- Target file: `frontend/src/components/scripture/CrossReferencePanel.tsx`.
-- Target function: `CrossReferenceItemView`.
-- Scope: reference/action row layout only.
+- Proceed to CR-40 post-MVP review, unsupported-range fixture validation, and Scripture Research integration planning.

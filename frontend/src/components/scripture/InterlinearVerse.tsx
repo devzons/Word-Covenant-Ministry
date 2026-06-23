@@ -23,6 +23,7 @@ type InterlinearVerseProps = {
   chapter: number;
   verse: number | null;
   locale: string;
+  translation?: string;
 };
 
 type InterlinearCache = Record<number, HighLevelInterlinearResponse>;
@@ -69,6 +70,7 @@ export function InterlinearVerse({
   chapter,
   verse,
   locale,
+  translation = "KRV",
 }: InterlinearVerseProps) {
   const [cache, setCache] = useState<InterlinearCache>({});
   const [loadingVerse, setLoadingVerse] = useState<number | null>(null);
@@ -224,6 +226,7 @@ export function InterlinearVerse({
 
       <OriginalWordPanel
         locale={activeLocale}
+        translation={translation}
         word={selectedWord}
         onClose={() => setSelectedWord(null)}
       />

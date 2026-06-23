@@ -20,6 +20,7 @@ export type OriginalWordPanelWord = {
 
 type OriginalWordPanelProps = {
   locale?: string;
+  translation?: string;
   word: OriginalWordPanelWord | null;
   onClose: () => void;
 };
@@ -61,7 +62,12 @@ const originalWordPanelCopy = {
   },
 };
 
-export function OriginalWordPanel({ locale = "en", word, onClose }: OriginalWordPanelProps) {
+export function OriginalWordPanel({
+  locale = "en",
+  translation = "KRV",
+  word,
+  onClose,
+}: OriginalWordPanelProps) {
   const [panelView, setPanelView] = useState<"word" | "strong">("word");
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -120,6 +126,7 @@ export function OriginalWordPanel({ locale = "en", word, onClose }: OriginalWord
             locale={activeLocale}
             onBack={() => setPanelView("word")}
             strongsNumber={word.strongs_number}
+            translation={translation}
           />
         ) : (
           <OriginalWordDetails

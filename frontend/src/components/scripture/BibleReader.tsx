@@ -335,6 +335,7 @@ export function BibleReader({
                             chapter={chapter.chapter}
                             locale={locale}
                             source={originalLanguageSource}
+                            translation={chapter.translation}
                             verse={verse.verse}
                           />
                         ) : null}
@@ -348,6 +349,7 @@ export function BibleReader({
                           chapter={chapter.chapter}
                           locale={locale}
                           source={originalLanguageSource}
+                          translation={chapter.translation}
                           verse={visibleInterlinearVerse}
                         />
                       </div>

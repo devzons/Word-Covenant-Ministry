@@ -81,43 +81,43 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-CR-37 Word Study Cross Reference Integration Design
+CR-39 Word Study Cross Reference Frontend MVP
 ```
 
 Status:
 
 ```txt
-Phase 8A through later Phase 8 original-language UX, morphology presentation, beta cleanup, transliteration coverage, and gloss coverage expansion work have been completed through local development. Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration, Cross Reference verse preview modal validation, CR-37 Word Study Cross Reference integration design, and Gospel Harmony frontend foundation have passed local validation/documentation review.
+Phase 8A through later Phase 8 original-language UX, morphology presentation, beta cleanup, transliteration coverage, and gloss coverage expansion work have been completed through local development. Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration, Cross Reference verse preview modal validation, CR-37 Word Study Cross Reference integration design, CR-39 Word Study Cross Reference frontend MVP, and Gospel Harmony frontend foundation have passed local validation/documentation review.
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E original-language import completion, Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A Original Language Reader UI Planning, Phase 7B through Phase 7H Original Language Reader MVP, Phase 8A frontend/menu/navigation and interlinear UX cleanup, Phase 8B Korean transliteration presentation data, Phase 8C Korean gloss presentation data, Phase 8D morphology Korean presentation, Phase 8E/8F Korean original-language coverage expansion, Phase 8G through Phase 8K original-language UX audit and beta cleanup, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, and Gospel Harmony frontend foundation
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E original-language import completion, Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A Original Language Reader UI Planning, Phase 7B through Phase 7H Original Language Reader MVP, Phase 8A frontend/menu/navigation and interlinear UX cleanup, Phase 8B Korean transliteration presentation data, Phase 8C Korean gloss presentation data, Phase 8D morphology Korean presentation, Phase 8E/8F Korean original-language coverage expansion, Phase 8G through Phase 8K original-language UX audit and beta cleanup, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, and Gospel Harmony frontend foundation
 ```
 
 Active objective:
 
 ```txt
-Maintain Scripture Research UX stabilization while keeping staging/production English Bible promotion, Word Study Cross Reference implementation, Gospel Harmony Cross Reference integration, and production data changes behind separate approval. WEB local apply has passed in the local development database after source/license review, dry-run, approved empty-verse policy, backup, and local apply approval. Cross Reference source acquisition, package creation, schema, local import, API, Reader integration, verse preview modal validation, and Word Study integration design are complete locally.
+Maintain Scripture Research UX stabilization while keeping staging/production English Bible promotion, Gospel Harmony Cross Reference integration, and production data changes behind separate approval. WEB local apply has passed in the local development database after source/license review, dry-run, approved empty-verse policy, backup, and local apply approval. Cross Reference source acquisition, package creation, schema, local import, API, Reader integration, verse preview modal validation, and Word Study Cross Reference frontend MVP are complete locally.
 ```
 
 Next task:
 
 ```txt
-Commit the completed frontend UX/documentation work when approved, then continue with CR-38 Word Study Cross Reference Frontend MVP Approval Review. WEB staging apply and production apply are not approved.
+Commit the completed frontend UX/documentation work when approved, then continue with CR-40 post-MVP review, unsupported-range fixture validation, and Scripture Research integration planning. WEB staging apply and production apply are not approved.
 ```
 
 Blocked items:
 
 ```txt
-Full TAGNT NT and full TAHOT OT persistence imports are complete. Phase 6A read-only API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A planning, Phase 7B through Phase 7H frontend implementation, Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, Phase 8C Korean gloss data, Phase 8D morphology presentation, Phase 8E/8F reviewed Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow through Scripture Insight, Distribution, and Occurrence Explorer, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-37 Word Study Cross Reference integration design, Gospel Harmony frontend foundation, and WEB local apply are complete through local development. Write/import endpoints, additional source imports, advanced search, morphology explorer, WEB staging/production promotion, Word Study Cross Reference implementation, Gospel Harmony Cross Reference integration, morphology schema/API changes, production deployment automation, and seed migration tracking tables require separate approval.
+Full TAGNT NT and full TAHOT OT persistence imports are complete. Phase 6A read-only API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A planning, Phase 7B through Phase 7H frontend implementation, Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, Phase 8C Korean gloss data, Phase 8D morphology presentation, Phase 8E/8F reviewed Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow through Scripture Insight, Distribution, Occurrence Explorer, and sample-occurrence Related Passages, Cross Reference data layer/API/Reader integration/verse preview modal validation, Gospel Harmony frontend foundation, and WEB local apply are complete through local development. Write/import endpoints, additional source imports, advanced search, morphology explorer, WEB staging/production promotion, Gospel Harmony Cross Reference integration, morphology schema/API changes, production deployment automation, and seed migration tracking tables require separate approval.
 ```
 
 Current phase boundary:
 
 ```txt
-Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend reader implementation, Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, Phase 8C Korean gloss data, Phase 8D morphology presentation, Phase 8E/8F reviewed Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-37 Word Study Cross Reference integration design, Gospel Harmony frontend foundation, and WEB local apply are complete through local development. This does not authorize OSHB, SBLGNT, additional Bible imports, staging WEB apply, production WEB apply, or other dataset import. It also does not authorize write/import endpoints, raw source export, variant UI, advanced search, morphology explorer, morphology DB columns, morphology API fields, Word Study Cross Reference implementation, Gospel Harmony Cross Reference integration, interpretation/pictographic/gematria APIs, production deployment automation, or seed migration tracking table implementation.
+Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend reader implementation, Phase 8A frontend/navigation cleanup, Phase 8B Korean transliteration data, Phase 8C Korean gloss data, Phase 8D morphology presentation, Phase 8E/8F reviewed Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, Gospel Harmony frontend foundation, and WEB local apply are complete through local development. This does not authorize OSHB, SBLGNT, additional Bible imports, staging WEB apply, production WEB apply, or other dataset import. It also does not authorize write/import endpoints, raw source export, variant UI, advanced search, morphology explorer, morphology DB columns, morphology API fields, Gospel Harmony Cross Reference integration, interpretation/pictographic/gematria APIs, production deployment automation, or seed migration tracking table implementation.
 ```
 
 Phase 5A source recommendation:

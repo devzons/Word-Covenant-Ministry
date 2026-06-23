@@ -11,6 +11,7 @@ type StrongStudyPanelProps = {
   locale?: string;
   strongsNumber: string;
   onBack: () => void;
+  translation?: string;
 };
 
 const strongStudyPanelCopy = {
@@ -55,6 +56,7 @@ export function StrongStudyPanel({
   locale = "en",
   strongsNumber,
   onBack,
+  translation = "KRV",
 }: StrongStudyPanelProps) {
   const [data, setData] = useState<WordStudyStrongsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -104,6 +106,7 @@ export function StrongStudyPanel({
         locale={activeLocale}
         onBack={() => setSelectedTerm(null)}
         termId={selectedTerm.termId}
+        translation={translation}
       />
     );
   }

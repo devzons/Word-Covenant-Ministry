@@ -17,7 +17,7 @@ type TermOccurrenceExplorerProps = {
   onOpenDistribution?: () => void;
 };
 
-type ParsedReference = {
+export type ParsedReference = {
   bookCode: string;
   bookSlug: string | null;
   chapter: number;
@@ -267,7 +267,7 @@ function OccurrenceListItem({
   );
 }
 
-function parseSourceReference(sourceRef: string): ParsedReference | null {
+export function parseSourceReference(sourceRef: string): ParsedReference | null {
   const match = sourceRef.match(/(?:^|:)([1-3]?[A-Za-z]+)\.(\d+)\.(\d+)/);
 
   if (!match) {
@@ -290,7 +290,7 @@ function parseSourceReference(sourceRef: string): ParsedReference | null {
   };
 }
 
-function formatReferenceLabel(
+export function formatReferenceLabel(
   reference: ParsedReference | null,
   sourceRef: string,
   locale: "en" | "ko",
