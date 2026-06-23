@@ -197,7 +197,21 @@ Status: complete locally through CR-36. Reader API, Related Passages UI, verse p
 
 Expose curated cross-reference relationships inside Word Study and Gospel Harmony surfaces.
 
-Status: next. CR-37 begins Word Study Cross Reference Integration Design.
+Status: in progress. CR-37 Word Study Cross Reference Integration Design is complete.
+
+Current recommendation:
+
+- Start with a frontend-only Word Study MVP using existing APIs.
+- Use bounded `sample_occurrences` from Term Study.
+- Look up Cross References for a small number of sampled occurrence verses.
+- Reuse CR-36 preview modal behavior.
+- Defer term-wide aggregation and new backend APIs until after frontend MVP validation.
+
+Design document:
+
+```txt
+docs/ROADMAP/WORD_STUDY_CROSS_REFERENCE_INTEGRATION_DESIGN.md
+```
 
 ## Out Of Scope
 
