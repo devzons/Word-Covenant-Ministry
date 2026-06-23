@@ -232,7 +232,7 @@ Completed CR-40 follow-up:
 
 Design and later implement a review workflow for imported cross-reference relationships before deeper integrations.
 
-Status: schema metadata implemented locally through CR-47; review API/admin design in progress through CR-49.
+Status: admin-only review API and minimal WordPress admin UI implemented locally through CR-54. Public Reader and Word Study visibility behavior is unchanged.
 
 CR-41 design direction:
 
@@ -277,6 +277,39 @@ Review tool API/admin design:
 ```txt
 docs/ROADMAP/CROSS_REFERENCE_REVIEW_TOOL_API_ADMIN_DESIGN.md
 ```
+
+Review tool API/admin implementation report:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_REVIEW_TOOL_API_ADMIN_IMPLEMENTATION_REPORT.md
+```
+
+Review tool admin UI implementation report:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_REVIEW_TOOL_ADMIN_UI_IMPLEMENTATION_REPORT.md
+```
+
+Implemented CR-51 MVP:
+
+- Admin-only review queue endpoint.
+- Admin-only review detail endpoint.
+- Admin-only review status PATCH endpoint with REST nonce requirement.
+- Server-owned audit fields: `reviewed_by`, `reviewed_at`, `previous_review_status`, and `review_source`.
+- Controlled status writes for `approved`, `rejected`, and `suppressed`.
+- Controlled review reasons; `rejected` and `suppressed` require `review_reason`, and `other` requires internal `review_notes`.
+- Public Cross Reference API remains reference-only and does not expose audit fields or internal notes.
+- No relationship-type editing, bulk actions, review history table, public visibility filtering, import rerun, schema change, or frontend behavior change.
+
+Implemented CR-54 MVP:
+
+- WordPress Tools submenu page: `WCM Cross References`.
+- Admin-only review queue.
+- Review detail panel.
+- Single-record approve, reject, and suppress actions.
+- Controlled reason selection and optional internal notes.
+- REST nonce-backed PATCH requests to the CR-51 admin endpoint.
+- No bulk actions, relationship-type editing, source/provenance editing, review history viewer, role management, custom capability, or public visibility management.
 
 ## Out Of Scope
 

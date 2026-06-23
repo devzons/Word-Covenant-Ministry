@@ -8,7 +8,7 @@
 
 Phase 6A-3 completed the read-only Original Language REST API in commit `d8947cc` (`feat(scripture): add original language read API`). Phase 6B completed the read-only Word Study API in commit `510fc63` (`feat(scripture): add word study API`). Phase 6C completed the high-level Interlinear API. Phase 7A documented the Original Language Reader UI planning direction. Phase 7B through Phase 7H implemented the limited frontend Original Language Reader MVP. Phase 8A completed frontend/menu/navigation foundation and interlinear UX cleanup. Phase 8B completed Korean transliteration presentation data. Phase 8C completed Korean gloss presentation data. Later Phase 8 morphology presentation, UX cleanup, reviewed transliteration/gloss coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, and Gospel Harmony frontend foundation work has been completed through local development.
 
-Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend MVP implementation, Phase 8A through later Phase 8 beta cleanup and Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, CR-40 post-MVP unsupported-range validation/research architecture review, CR-41 review workflow design, CR-42 approval review, CR-43 review tool MVP design/readiness review, CR-44 audit metadata design, CR-45 approval review, CR-47 audit metadata schema implementation, and Gospel Harmony frontend foundation are complete through local development. Current work is CR-49 Cross Reference Review Tool API/Admin Design.
+Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend MVP implementation, Phase 8A through later Phase 8 beta cleanup and Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, CR-40 post-MVP unsupported-range validation/research architecture review, CR-41 review workflow design, CR-42 approval review, CR-43 review tool MVP design/readiness review, CR-44 audit metadata design, CR-45 approval review, CR-47 audit metadata schema implementation, CR-49 review tool API/admin design, CR-50 approval review, CR-51 admin-only review API implementation, CR-52 validation/readiness review, CR-53 admin UI approval review, CR-54 admin UI MVP implementation, CR-55 browser validation, CR-56/CR-57/CR-58 Gospel Harmony design and approval reviews, CR-59 Gospel Harmony frontend MVP implementation/static validation, CR-60 browser validation, and Gospel Harmony frontend foundation are complete through local development. Current work is Gospel Harmony Cross Reference integration planning after separate approval.
 
 ```txt
 docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
@@ -16,8 +16,8 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-50 Cross Reference Review Tool API/Admin Implementation Approval Review.
-2. CR-51 Cross Reference Review Tool API/Admin Implementation after approval.
+1. Gospel Harmony Cross Reference integration planning after separate approval.
+2. Phase 9 English Bible staging/production readiness remains separate and unapproved.
 3. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
 4. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
 5. Gospel Harmony Cross Reference integration planning after separate approval.
@@ -45,6 +45,9 @@ Gospel Harmony planning is documented in:
 
 ```txt
 docs/ROADMAP/GOSPEL_HARMONY_PLAN.md
+docs/ROADMAP/GOSPEL_HARMONY_ARCHITECTURE_DESIGN.md
+docs/ROADMAP/GOSPEL_HARMONY_FRONTEND_MVP_IMPLEMENTATION_REPORT.md
+docs/ROADMAP/GOSPEL_HARMONY_FRONTEND_MVP_VALIDATION_REPORT.md
 ```
 
 Future Hebrew-Greek bridge planning is documented in:

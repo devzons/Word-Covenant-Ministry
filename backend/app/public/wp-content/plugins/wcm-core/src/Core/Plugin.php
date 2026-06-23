@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WCM\Core;
 
+use WCM\Admin\CrossReferenceReviewPage;
 use WCM\Api\ApiRegistrar;
 use WCM\Database\BibleBooksSeeder;
 use WCM\Database\BibleVersionSeeder;
@@ -27,6 +28,8 @@ final class Plugin
         add_action('init', [self::class, 'registerPostTypes']);
         add_action('rest_api_init', [self::class, 'registerApi']);
         add_action('admin_init', [self::class, 'registerSettings']);
+        add_action('admin_menu', [self::class, 'registerAdminPages']);
+        add_action('admin_enqueue_scripts', [self::class, 'enqueueAdminAssets']);
         add_action('admin_notices', [self::class, 'renderDatabaseHealthNotice']);
     }
 
@@ -63,6 +66,20 @@ final class Plugin
     {
         if (class_exists(SettingsRegistrar::class)) {
             (new SettingsRegistrar())->register();
+        }
+    }
+
+    public static function registerAdminPages(): void
+    {
+        if (class_exists(CrossReferenceReviewPage::class)) {
+            (new CrossReferenceReviewPage())->register();
+        }
+    }
+
+    public static function enqueueAdminAssets(string $hookSuffix): void
+    {
+        if (class_exists(CrossReferenceReviewPage::class)) {
+            (new CrossReferenceReviewPage())->enqueue($hookSuffix);
         }
     }
 

@@ -69,6 +69,19 @@ type GospelHarmonyPassage = {
 
 Bible text should be loaded from the selected Bible version API at runtime.
 
+Detailed architecture design is documented in:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_ARCHITECTURE_DESIGN.md
+```
+
+Frontend MVP implementation and browser validation are documented in:
+
+```txt
+docs/ROADMAP/GOSPEL_HARMONY_FRONTEND_MVP_IMPLEMENTATION_REPORT.md
+docs/ROADMAP/GOSPEL_HARMONY_FRONTEND_MVP_VALIDATION_REPORT.md
+```
+
 Current data-backed version:
 
 ```txt
