@@ -10,7 +10,7 @@ use WCM\Scripture\Repositories\OriginalTermRepository;
 final class SchemaInstaller
 {
     public const DB_VERSION_OPTION = 'wcm_core_db_version';
-    public const DB_VERSION = '1.5.0';
+    public const DB_VERSION = '1.6.0';
 
     public function install(): void
     {
@@ -26,6 +26,7 @@ final class SchemaInstaller
         $this->migrateOriginalTermIdentityHash($wpdb->prefix . 'wcm_original_terms');
         $this->migrateOriginalTermKoreanTransliteration($wpdb->prefix . 'wcm_original_terms');
         $this->migrateOriginalTermKoreanGloss($wpdb->prefix . 'wcm_original_terms');
+        $this->migrateCrossReferenceAuditMetadata($wpdb->prefix . 'wcm_cross_references');
 
         update_option(self::DB_VERSION_OPTION, self::DB_VERSION);
     }
@@ -154,6 +155,12 @@ final class SchemaInstaller
                 source_score INT NULL,
                 confidence VARCHAR(50) NOT NULL DEFAULT 'source_backed',
                 review_status VARCHAR(50) NOT NULL DEFAULT 'unreviewed',
+                reviewed_by BIGINT UNSIGNED NULL,
+                reviewed_at DATETIME NULL,
+                previous_review_status VARCHAR(50) NULL,
+                review_source VARCHAR(50) NULL,
+                review_reason VARCHAR(191) NULL,
+                review_notes TEXT NULL,
                 package_id VARCHAR(191) NOT NULL,
                 source_checksum CHAR(64) NOT NULL,
                 relationship_identity_hash CHAR(64) NOT NULL,
@@ -298,6 +305,35 @@ final class SchemaInstaller
         $added = $wpdb->query("ALTER TABLE {$tableName} ADD gloss_ko TEXT NULL AFTER gloss");
         if ($added === false) {
             throw new RuntimeException('Failed to add original term Korean gloss column.');
+        }
+    }
+
+    private function migrateCrossReferenceAuditMetadata(string $tableName): void
+    {
+        global $wpdb;
+
+        if (! $this->tableExists($tableName)) {
+            return;
+        }
+
+        $columns = [
+            'reviewed_by' => 'ADD reviewed_by BIGINT UNSIGNED NULL AFTER review_status',
+            'reviewed_at' => 'ADD reviewed_at DATETIME NULL AFTER reviewed_by',
+            'previous_review_status' => 'ADD previous_review_status VARCHAR(50) NULL AFTER reviewed_at',
+            'review_source' => 'ADD review_source VARCHAR(50) NULL AFTER previous_review_status',
+            'review_reason' => 'ADD review_reason VARCHAR(191) NULL AFTER review_source',
+            'review_notes' => 'ADD review_notes TEXT NULL AFTER review_reason',
+        ];
+
+        foreach ($columns as $columnName => $alterSql) {
+            if ($this->columnExists($tableName, $columnName)) {
+                continue;
+            }
+
+            $added = $wpdb->query("ALTER TABLE {$tableName} {$alterSql}");
+            if ($added === false) {
+                throw new RuntimeException('Failed to add cross reference audit metadata column: ' . $columnName . '.');
+            }
         }
     }
 

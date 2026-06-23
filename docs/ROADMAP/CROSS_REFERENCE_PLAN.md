@@ -222,11 +222,61 @@ Implementation and QA report:
 docs/ROADMAP/WORD_STUDY_CROSS_REFERENCE_FRONTEND_MVP_REPORT.md
 ```
 
-Remaining CR-40 follow-up:
+Completed CR-40 follow-up:
 
 - Review post-MVP usability.
-- Add or identify a strict unsupported-range fixture for validation.
+- Identify and validate a strict unsupported-range fixture.
 - Plan next Scripture Research integration step without changing data behavior.
+
+### Phase CR-8 - Review Workflow
+
+Design and later implement a review workflow for imported cross-reference relationships before deeper integrations.
+
+Status: schema metadata implemented locally through CR-47; review API/admin design in progress through CR-49.
+
+CR-41 design direction:
+
+- Keep imported OpenBible rows as source-backed discovery data, not WCM editorial conclusions.
+- Preserve `theme` / `unreviewed` labeling until review decisions exist.
+- Define review statuses such as `unreviewed`, `needs_review`, `approved`, `rejected`, `suppressed`, and `promoted`.
+- Define conservative relationship-type rules before any automatic use in Gospel Harmony, Timeline, People/Event pages, or Thematic Exploration.
+- Do not implement admin tools, write APIs, schema changes, or public visibility changes without separate approval.
+
+Design document:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_REVIEW_WORKFLOW_DESIGN.md
+```
+
+MVP review tool design:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_REVIEW_TOOL_MVP_DESIGN.md
+```
+
+Audit metadata design:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_AUDIT_METADATA_DESIGN.md
+```
+
+Audit metadata approval report:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_AUDIT_METADATA_APPROVAL_REPORT.md
+```
+
+Audit metadata schema implementation report:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_AUDIT_METADATA_SCHEMA_IMPLEMENTATION_REPORT.md
+```
+
+Review tool API/admin design:
+
+```txt
+docs/ROADMAP/CROSS_REFERENCE_REVIEW_TOOL_API_ADMIN_DESIGN.md
+```
 
 ## Out Of Scope
 

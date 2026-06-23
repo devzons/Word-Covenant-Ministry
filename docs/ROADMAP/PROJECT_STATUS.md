@@ -81,31 +81,31 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-CR-39 Word Study Cross Reference Frontend MVP
+CR-49 Cross Reference Review Tool API/Admin Design
 ```
 
 Status:
 
 ```txt
-Phase 8A through later Phase 8 original-language UX, morphology presentation, beta cleanup, transliteration coverage, and gloss coverage expansion work have been completed through local development. Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration, Cross Reference verse preview modal validation, CR-37 Word Study Cross Reference integration design, CR-39 Word Study Cross Reference frontend MVP, and Gospel Harmony frontend foundation have passed local validation/documentation review.
+Phase 8A through later Phase 8 original-language UX, morphology presentation, beta cleanup, transliteration coverage, and gloss coverage expansion work have been completed through local development. Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration, Cross Reference verse preview modal validation, CR-37 Word Study Cross Reference integration design, CR-39 Word Study Cross Reference frontend MVP, CR-40 post-MVP unsupported-range validation/research architecture review, CR-41 review workflow design, CR-42 approval review, CR-43 review tool MVP design/readiness review, CR-44 audit metadata design, CR-45 approval review, CR-47 audit metadata schema implementation, and Gospel Harmony frontend foundation have passed local validation/documentation review. Current work is CR-49 Cross Reference review tool API/admin design.
 ```
 
 Completed phase:
 
 ```txt
-Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E original-language import completion, Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A Original Language Reader UI Planning, Phase 7B through Phase 7H Original Language Reader MVP, Phase 8A frontend/menu/navigation and interlinear UX cleanup, Phase 8B Korean transliteration presentation data, Phase 8C Korean gloss presentation data, Phase 8D morphology Korean presentation, Phase 8E/8F Korean original-language coverage expansion, Phase 8G through Phase 8K original-language UX audit and beta cleanup, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, and Gospel Harmony frontend foundation
+Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Original Language Data Layer, Phase 5C Source Gate / Normalizer Foundation, Phase 5D Dry-run Pipeline, Phase 5E original-language import completion, Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7A Original Language Reader UI Planning, Phase 7B through Phase 7H Original Language Reader MVP, Phase 8A frontend/menu/navigation and interlinear UX cleanup, Phase 8B Korean transliteration presentation data, Phase 8C Korean gloss presentation data, Phase 8D morphology Korean presentation, Phase 8E/8F Korean original-language coverage expansion, Phase 8G through Phase 8K original-language UX audit and beta cleanup, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, CR-40 post-MVP unsupported-range validation/research architecture review, CR-41 review workflow design, CR-42 approval review, CR-43 review tool MVP design/readiness review, CR-44 audit metadata design, CR-45 approval review, CR-47 audit metadata schema implementation, and Gospel Harmony frontend foundation
 ```
 
 Active objective:
 
 ```txt
-Maintain Scripture Research UX stabilization while keeping staging/production English Bible promotion, Gospel Harmony Cross Reference integration, and production data changes behind separate approval. WEB local apply has passed in the local development database after source/license review, dry-run, approved empty-verse policy, backup, and local apply approval. Cross Reference source acquisition, package creation, schema, local import, API, Reader integration, verse preview modal validation, and Word Study Cross Reference frontend MVP are complete locally.
+Design the future authenticated Cross Reference review API/admin contract while keeping staging/production English Bible promotion, Gospel Harmony Cross Reference integration, admin review implementation, API writes, public visibility changes, and production data changes behind separate approval. WEB local apply has passed in the local development database after source/license review, dry-run, approved empty-verse policy, backup, and local apply approval. Cross Reference source acquisition, package creation, schema, local import, API, Reader integration, verse preview modal validation, Word Study Cross Reference frontend MVP, CR-40 unsupported-range validation, CR-41 design, CR-42 approval review, CR-43 review tool MVP design, CR-44 audit metadata design, CR-45 approval review, and CR-47 schema metadata implementation are complete locally.
 ```
 
 Next task:
 
 ```txt
-Commit the completed frontend UX/documentation work when approved, then continue with CR-40 post-MVP review, unsupported-range fixture validation, and Scripture Research integration planning. WEB staging apply and production apply are not approved.
+Proceed to CR-50 Cross Reference Review Tool API/Admin Implementation Approval Review after CR-49 design. WEB staging apply and production apply are not approved.
 ```
 
 Blocked items:
