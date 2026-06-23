@@ -12,7 +12,7 @@ type ResearchPanelNavigationProps = {
 
 const researchPanelNavigationCopy = {
   en: {
-    title: "Study",
+    title: "Research tools",
     sections: {
       search: "Search",
       insight: "Insight",
@@ -20,7 +20,7 @@ const researchPanelNavigationCopy = {
     },
   },
   ko: {
-    title: "연구",
+    title: "연구 도구",
     sections: {
       search: "검색",
       insight: "통찰",
@@ -50,16 +50,17 @@ export function ResearchPanelNavigation({
       </h2>
       <nav
         aria-label={copy.title}
-        className="flex flex-wrap gap-1 rounded-md border border-zinc-200 bg-white p-1"
+        className="grid gap-1 rounded-md border border-zinc-200 bg-white p-1 sm:grid-cols-3"
       >
         {visibleResearchSections.map((section) => (
           <button
             aria-pressed={activeSection === section}
+            aria-current={activeSection === section ? "true" : undefined}
             className={cn(
-              "min-w-max flex-1 rounded px-3 py-2 text-sm font-semibold transition-colors",
+              "min-w-0 rounded-md px-3 py-2.5 text-sm font-semibold transition-colors",
               activeSection === section
-                ? "bg-zinc-950 text-white"
-                : "text-zinc-600 hover:bg-zinc-100",
+                ? "border border-zinc-950 bg-zinc-950 text-white shadow-sm"
+                : "border border-transparent bg-zinc-50 text-zinc-600 hover:border-zinc-200 hover:bg-zinc-100",
             )}
             key={section}
             onClick={() => onSectionChange(section)}

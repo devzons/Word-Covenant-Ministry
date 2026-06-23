@@ -103,8 +103,10 @@ const bookOptions = [
 
 const bibleReaderCopy = {
   en: {
+    version: "Version",
     book: "Book",
     chapter: "Chapter",
+    chapterSuffix: "Ch.",
     go: "Go",
     noVerses: "No verses were returned for this chapter.",
     chapterNav: "Bible chapter navigation",
@@ -113,10 +115,24 @@ const bibleReaderCopy = {
     selectOriginalVerse: "Select verse for original-language preview",
     selectInterlinearVerse: "Select verse for interlinear view",
     studyPanel: "Study panel",
+    workspaceTitle: "Scripture Research Workspace",
+    workspaceDescription: "Reader-centered research tools stay aligned to the current passage.",
+    workspaceMode: {
+      reader: "Reader",
+      original: "Original Language",
+      interlinear: "Interlinear",
+    },
+    workspaceSections: {
+      search: "Search",
+      insight: "Insight",
+      "cross-reference": "Related Passages",
+    },
   },
   ko: {
+    version: "버전",
     book: "성경",
     chapter: "장",
+    chapterSuffix: "장",
     go: "이동",
     noVerses: "이 장의 본문이 없습니다.",
     chapterNav: "성경 장 이동",
@@ -125,6 +141,18 @@ const bibleReaderCopy = {
     selectOriginalVerse: "원어 미리보기 절 선택",
     selectInterlinearVerse: "행간 보기 절 선택",
     studyPanel: "연구 패널",
+    workspaceTitle: "성경 연구 작업공간",
+    workspaceDescription: "현재 본문에 맞춰 연구 도구를 함께 살펴봅니다.",
+    workspaceMode: {
+      reader: "본문",
+      original: "원어",
+      interlinear: "행간",
+    },
+    workspaceSections: {
+      search: "검색",
+      insight: "통찰",
+      "cross-reference": "관련 구절",
+    },
   },
 };
 
@@ -243,49 +271,72 @@ export function BibleReader({
           </h1>
         </div>
 
-        <form
-          className="grid min-w-0 max-w-full gap-3 rounded-md border border-zinc-200 bg-zinc-50 p-3 sm:grid-cols-[minmax(0,1fr)_120px_auto]"
-          onSubmit={handleReferenceChange}
-        >
-          <label className="flex min-w-0 flex-col gap-1 text-sm font-medium text-zinc-700">
-            {copy.book}
-            <select
-              className="h-11 min-w-0 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
-              defaultValue={chapter.book}
-              name="book"
-            >
-              {bookOptions.map((book) => (
-                <option key={book.slug} value={book.slug}>
-                  {book.label[activeLocale]}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-sm font-medium text-zinc-700">
-            {copy.chapter}
-            <input
-              className="h-11 min-w-0 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
-              defaultValue={chapter.chapter}
-              min={1}
-              name="chapter"
-              type="number"
-            />
-          </label>
-          <button
-            className="h-11 self-end rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-            type="submit"
-          >
-            {copy.go}
-          </button>
-        </form>
+        <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
+          <div className="flex min-w-0 flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+            <div className="flex min-w-0 flex-wrap items-center gap-2">
+              <div className="flex min-w-0 shrink-0 items-center gap-2 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm">
+              <span className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                {copy.version}
+              </span>
+              <span className="font-semibold text-zinc-950">{chapter.translation}</span>
+              </div>
+              <form
+                className="flex min-w-0 flex-1 flex-wrap items-end gap-2"
+                onSubmit={handleReferenceChange}
+              >
+                <label className="sr-only" htmlFor="reader-book-select">
+                  {copy.book}
+                </label>
+                <select
+                  aria-label={copy.book}
+                  className="h-11 min-w-[10rem] rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950 sm:min-w-[12rem]"
+                  defaultValue={chapter.book}
+                  id="reader-book-select"
+                  name="book"
+                >
+                  {bookOptions.map((book) => (
+                    <option key={book.slug} value={book.slug}>
+                      {book.label[activeLocale]}
+                    </option>
+                  ))}
+                </select>
+                <div className="flex min-w-0 items-end gap-1">
+                  <label className="sr-only" htmlFor="reader-chapter-input">
+                    {copy.chapter}
+                  </label>
+                  <input
+                    aria-label={copy.chapter}
+                    className="h-11 w-20 rounded-md border border-zinc-300 bg-white px-3 text-base text-zinc-950"
+                    defaultValue={chapter.chapter}
+                    id="reader-chapter-input"
+                    min={1}
+                    name="chapter"
+                    type="number"
+                  />
+                  <span className="pb-2 text-sm font-medium text-zinc-700">
+                    {copy.chapterSuffix}
+                  </span>
+                </div>
+                <button
+                  className="h-11 rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                  type="submit"
+                >
+                  {copy.go}
+                </button>
+              </form>
+            </div>
 
-        <ReaderModeControl
-          book={chapter.book}
-          chapter={chapter.chapter}
-          locale={locale}
-          mode={mode}
-          version={chapter.translation}
-        />
+            <div className="shrink-0 lg:border-l lg:border-zinc-200 lg:pl-4">
+              <ReaderModeControl
+                book={chapter.book}
+                chapter={chapter.chapter}
+                locale={locale}
+                mode={mode}
+                version={chapter.translation}
+              />
+            </div>
+          </div>
+        </div>
       </header>
 
       <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.75fr)] lg:items-start xl:grid-cols-[minmax(0,55fr)_minmax(420px,45fr)] xl:gap-10">
@@ -447,13 +498,36 @@ function BibleReaderResearchPanel({
     version,
     verse,
   } = useScriptureResearchWorkspace();
+  const activeLocale = locale === "en" ? "en" : "ko";
+  const copy = bibleReaderCopy[activeLocale];
   const searchPanelKey = `${version}-${book}-${chapter}-${mode}-${initialSearchQuery}`;
+  const activeModeLabel = copy.workspaceMode[mode];
+  const activeSectionLabel = copy.workspaceSections[activeResearchSection];
+  const activeReferenceLabel =
+    activeLocale === "ko" ? `${bookLabel} ${chapter}장` : `${bookLabel} ${chapter}`;
 
   return (
     <aside
       aria-label={studyPanelLabel}
       className="min-w-0 w-full rounded-md border border-zinc-200 bg-zinc-50 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto"
     >
+      <div className="mb-4 rounded-md border border-zinc-200 bg-white px-3 py-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0 space-y-1">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              {copy.workspaceTitle}
+            </h2>
+            <p className="text-sm leading-6 text-zinc-700">{copy.workspaceDescription}</p>
+          </div>
+          <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-600">
+            <span className="rounded-full bg-zinc-100 px-2.5 py-1">{version}</span>
+            <span className="rounded-full bg-zinc-100 px-2.5 py-1">{activeReferenceLabel}</span>
+            <span className="rounded-full bg-zinc-100 px-2.5 py-1">{activeModeLabel}</span>
+            <span className="rounded-full bg-zinc-100 px-2.5 py-1">{activeSectionLabel}</span>
+          </div>
+        </div>
+      </div>
+
       <ResearchPanelNavigation
         activeSection={activeResearchSection}
         locale={locale}
