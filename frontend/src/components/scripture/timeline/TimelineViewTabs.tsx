@@ -39,7 +39,8 @@ export function TimelineViewTabs({
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
               active
                 ? "border-zinc-950 bg-zinc-950 text-white"
-                : "border-zinc-300 bg-white text-zinc-700",
+                : "border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50",
+              !tab.future ? "cursor-pointer" : "",
               tab.future && !active ? "cursor-not-allowed opacity-60" : "",
             )}
             disabled={tab.future}

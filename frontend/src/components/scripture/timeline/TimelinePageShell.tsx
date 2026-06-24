@@ -260,6 +260,19 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
     };
   }, [visibleEvents]);
 
+  const visiblePeriodSummaries = useMemo(
+    () =>
+      timelinePeriods
+        .filter((period) => visibleEvents.some((event) => event.periodId === period.id))
+        .sort((left, right) => left.order - right.order)
+        .map((period) => ({
+          count: visibleEvents.filter((event) => event.periodId === period.id).length,
+          id: period.id,
+          label: getTimelineText(period.label, activeLocale),
+        })),
+    [activeLocale, visibleEvents],
+  );
+
   return (
     <Container className="max-w-[96rem] py-12 sm:py-16">
       <section className="flex flex-col gap-6 sm:gap-8">
@@ -356,6 +369,25 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
               visibleCount={previewCounts.visibleCount}
             />
 
+            {activeView === "overview" ? (
+              <OverviewPreviewPanel
+                locale={activeLocale}
+                overviewHeading={copy.overviewHeading}
+                overviewNote={copy.overviewNote}
+                previewCounts={previewCounts}
+                periods={visiblePeriodSummaries}
+              />
+            ) : null}
+
+            {activeView === "events" ? (
+              <EventsPreviewPanel
+                eventsHeading={copy.eventsHeading}
+                eventsNote={copy.eventsNote}
+                locale={activeLocale}
+                previewCounts={previewCounts}
+              />
+            ) : null}
+
             {activeView === "kingdoms" ? (
               <KingsKingdomsPreviewPanel
                 locale={activeLocale}
@@ -382,14 +414,16 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
               />
             ) : null}
 
-            <ScriptureTimelineList
-              activePeriodId={filters.periodId}
-              events={visibleEvents}
-              locale={activeLocale}
-              searchTerm={filters.searchTerm}
-              onSelect={setSelectedEventId}
-              selectedEventId={selectedEvent?.id ?? ""}
-            />
+            {activeView !== "overview" ? (
+              <ScriptureTimelineList
+                activePeriodId={filters.periodId}
+                events={visibleEvents}
+                locale={activeLocale}
+                searchTerm={filters.searchTerm}
+                onSelect={setSelectedEventId}
+                selectedEventId={selectedEvent?.id ?? ""}
+              />
+            ) : null}
           </div>
 
           <TimelineEventDetailPanel
@@ -457,6 +491,130 @@ function CompactStatusRow({
         {locale === "ko" ? `/ 전체 ${totalCount}개` : `/ ${totalCount} total`}
       </span>
     </div>
+  );
+}
+
+type OverviewPreviewPanelProps = {
+  locale: TimelineLocale;
+  overviewHeading: string;
+  overviewNote: string;
+  periods: Array<{
+    count: number;
+    id: string;
+    label: string;
+  }>;
+  previewCounts: {
+    bookCount: number;
+    periodCount: number;
+    placeCount: number;
+    totalCount: number;
+    visibleCount: number;
+  };
+};
+
+function OverviewPreviewPanel({
+  locale,
+  overviewHeading,
+  overviewNote,
+  periods,
+  previewCounts,
+}: OverviewPreviewPanelProps) {
+  return (
+    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+      <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {overviewHeading}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-zinc-600">{overviewNote}</p>
+        </div>
+        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+          {locale === "ko" ? "개요" : "Overview"}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <OverviewMetric
+          label={locale === "ko" ? "표시 사건" : "Visible events"}
+          value={`${previewCounts.visibleCount}`}
+        />
+        <OverviewMetric
+          label={locale === "ko" ? "전체 사건" : "Total events"}
+          value={`${previewCounts.totalCount}`}
+        />
+        <OverviewMetric
+          label={locale === "ko" ? "표시 기간" : "Visible periods"}
+          value={`${previewCounts.periodCount}`}
+        />
+        <OverviewMetric
+          label={locale === "ko" ? "표시 책 / 지명" : "Visible books / places"}
+          value={`${previewCounts.bookCount} / ${previewCounts.placeCount}`}
+        />
+      </div>
+
+      <div className="mt-4 space-y-2">
+        {periods.map((period) => (
+          <div
+            className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2"
+            key={period.id}
+          >
+            <span className="text-sm font-medium text-zinc-900">{period.label}</span>
+            <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+              {locale === "ko" ? `${period.count}개 사건` : `${period.count} events`}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+type OverviewMetricProps = {
+  label: string;
+  value: string;
+};
+
+function OverviewMetric({ label, value }: OverviewMetricProps) {
+  return (
+    <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-zinc-950">{value}</p>
+    </div>
+  );
+}
+
+type EventsPreviewPanelProps = {
+  eventsHeading: string;
+  eventsNote: string;
+  locale: TimelineLocale;
+  previewCounts: {
+    totalCount: number;
+    visibleCount: number;
+  };
+};
+
+function EventsPreviewPanel({
+  eventsHeading,
+  eventsNote,
+  locale,
+  previewCounts,
+}: EventsPreviewPanelProps) {
+  return (
+    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {eventsHeading}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-zinc-600">{eventsNote}</p>
+        </div>
+        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+          {locale === "ko"
+            ? `${previewCounts.visibleCount} / ${previewCounts.totalCount}개`
+            : `${previewCounts.visibleCount} / ${previewCounts.totalCount}`}
+        </span>
+      </div>
+    </section>
   );
 }
 
