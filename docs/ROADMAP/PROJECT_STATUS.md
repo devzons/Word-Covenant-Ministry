@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-06-23
+2026-06-24
 
 ## Purpose
 
@@ -83,7 +83,7 @@ backend/app/public/wp-content/plugins/wcm-core/
 Current phase:
 
 ```txt
-CR-90 Timeline Content Expansion Preview
+CR-90A-3 Scripture-First Timeline Workspace Design and Data Source Documentation
 ```
 
 Status:
@@ -101,13 +101,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Review the roadmap and choose the next approved phase after Timeline MVP completion.
+Document the consolidated Scripture-first Timeline workspace design and source-data strategy.
 ```
 
 Next task:
 
 ```txt
-Decide whether to proceed with Timeline UX polish, Scripture Research Workspace continuation, deployment readiness, or another documented roadmap item.
+Timeline Workspace Layout Expansion.
 ```
 
 Blocked items:
