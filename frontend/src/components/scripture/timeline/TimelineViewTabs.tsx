@@ -12,13 +12,22 @@ type TimelineViewTab = {
 
 type TimelineViewTabsProps = {
   activeTab: string;
+  onTabChange: (tabId: string) => void;
   locale: TimelineLocale;
   tabs: readonly TimelineViewTab[];
 };
 
-export function TimelineViewTabs({ activeTab, locale, tabs }: TimelineViewTabsProps) {
+export function TimelineViewTabs({
+  activeTab,
+  locale,
+  onTabChange,
+  tabs,
+}: TimelineViewTabsProps) {
   return (
-    <div aria-label={locale === "ko" ? "타임라인 보기" : "Timeline views"} className="flex flex-wrap gap-2">
+    <nav
+      aria-label={locale === "ko" ? "타임라인 보기" : "Timeline views"}
+      className="flex flex-wrap gap-2"
+    >
       {tabs.map((tab) => {
         const active = tab.id === activeTab;
 
@@ -33,7 +42,12 @@ export function TimelineViewTabs({ activeTab, locale, tabs }: TimelineViewTabsPr
                 : "border-zinc-300 bg-white text-zinc-700",
               tab.future && !active ? "cursor-not-allowed opacity-60" : "",
             )}
-            disabled={!active}
+            disabled={tab.future}
+            onClick={() => {
+              if (!tab.future) {
+                onTabChange(tab.id);
+              }
+            }}
             key={tab.id}
             title={tab.future && !active ? (locale === "ko" ? "미래 전용" : "Future only") : undefined}
             type="button"
@@ -47,6 +61,6 @@ export function TimelineViewTabs({ activeTab, locale, tabs }: TimelineViewTabsPr
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 }

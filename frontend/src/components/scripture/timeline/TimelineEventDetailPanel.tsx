@@ -60,6 +60,33 @@ export function TimelineEventDetailPanel({
 
       {event ? (
         <div className="space-y-4">
+          {(() => {
+            const primaryBook = getTimelineBook(event.primaryBookId);
+
+            return (
+              <DetailSection label={locale === "ko" ? "성경 문맥" : "Scripture Context"}>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <ContextRow
+                    label={locale === "ko" ? "정경 위치" : "Canonical Location"}
+                    value={getTimelinePeriodLabel(event.periodId, locale)}
+                  />
+                  <ContextRow
+                    label={locale === "ko" ? "역사/배경" : "Historical / Background"}
+                    value={getTimelineText(event.sequenceLabel, locale)}
+                  />
+                  <ContextRow
+                    label={locale === "ko" ? "책 문맥" : "Book Context"}
+                    value={primaryBook ? getTimelineText(primaryBook.label, locale) : ""}
+                  />
+                  <ContextRow
+                    label={locale === "ko" ? "사건 유형" : "Event Type"}
+                    value={getTimelineText(event.eventType, locale)}
+                  />
+                </div>
+              </DetailSection>
+            );
+          })()}
+
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold text-zinc-950">
               {getTimelineText(event.title, locale)}
@@ -149,6 +176,23 @@ export function TimelineEventDetailPanel({
             />
           </div>
 
+          <DetailSection label={locale === "ko" ? "지도 미리보기" : "Map Preview"}>
+            <div className="space-y-2">
+              <div className="rounded-md border border-dashed border-zinc-200 bg-zinc-50 p-4 text-sm leading-6 text-zinc-600">
+                {locale === "ko"
+                  ? "지도는 이후 승인 단계에서 확장됩니다. 현재는 지명 칩과 배경 설명이 위치 감각을 보여줍니다."
+                  : "Maps expand in a later approved phase. For now, place chips and context notes provide location sense."}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {event.placeIds.map((placeId) => {
+                  const place = getTimelinePlace(placeId);
+
+                  return place ? <Tag key={`map-${place.id}`}>{getTimelineText(place.label, locale)}</Tag> : null;
+                })}
+              </div>
+            </div>
+          </DetailSection>
+
           <div className="flex flex-col gap-3">
             <p className="text-sm font-semibold text-zinc-950">
               {locale === "ko" ? "읽기에서 열기" : "Open in Reader"}
@@ -167,6 +211,16 @@ export function TimelineEventDetailPanel({
             >
               {openInReaderLabel} ↗
             </Link>
+            <div className="rounded-md border border-dashed border-zinc-200 bg-white p-3 text-sm leading-6 text-zinc-600">
+              <p className="font-medium text-zinc-700">
+                {locale === "ko" ? "미래 레이어" : "Future layers"}
+              </p>
+              <p className="mt-1">
+                {locale === "ko"
+                  ? "저자 / 책 배경, 언약, 왕국, 열강, 주제, 이름 변형은 다음 단계에서 더 세분화됩니다."
+                  : "Authorship / book context, covenant, kingdom, empire, themes, and name variants expand in later phases."}
+              </p>
+            </div>
             <p className="text-sm leading-6 text-zinc-600">{relatedStudy}</p>
           </div>
         </div>
@@ -209,4 +263,18 @@ function getTimelinePeriodLabel(periodId: string, locale: TimelineLocale) {
   const period = getTimelinePeriod(periodId);
 
   return period ? getTimelineText(period.label, locale) : "";
+}
+
+type ContextRowProps = {
+  label: string;
+  value: string;
+};
+
+function ContextRow({ label, value }: ContextRowProps) {
+  return (
+    <div className="rounded-md border border-zinc-200 bg-white p-3">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
+      <p className="mt-1 text-sm font-medium text-zinc-800">{value}</p>
+    </div>
+  );
 }

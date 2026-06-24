@@ -54,24 +54,30 @@ export function TimelineEventCard({
         type="button"
       >
         <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
+              {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
+            </span>
+            <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-medium leading-none text-zinc-700">
+              {getTimelineText(event.scriptureAnchors[0]?.label ?? event.summary, locale)}
+            </span>
+            {selected ? (
+              <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
+                {locale === "ko" ? "선택됨" : "Selected"}
+              </span>
+            ) : null}
+          </div>
+
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
               <h3 className="text-base font-semibold text-zinc-950">
                 {getTimelineText(event.title, locale)}
               </h3>
-              <p className="mt-1 text-sm font-medium text-zinc-700">
-                {getTimelineText(event.scriptureAnchors[0]?.label ?? event.summary, locale)}
-              </p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">
+              <p className="mt-1 text-sm leading-6 text-zinc-600">
                 {getTimelineText(event.summary, locale)}
               </p>
             </div>
             <div className="flex flex-col items-end gap-2">
-              {selected ? (
-                <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
-                  {locale === "ko" ? "선택됨" : "Selected"}
-                </span>
-              ) : null}
               <TimelineConfidenceBadge
                 label={getTimelineText(event.confidenceLevel, locale)}
                 locale={locale}
@@ -93,6 +99,9 @@ export function TimelineEventCard({
                 {placeLabel}
               </span>
             ))}
+            <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+              {getTimelineText(event.eventType, locale)}
+            </span>
             <span className="rounded-full bg-zinc-100 px-2.5 py-1">
               {getTimelineText(event.sequenceLabel, locale)}
             </span>
