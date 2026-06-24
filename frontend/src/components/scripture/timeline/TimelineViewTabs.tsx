@@ -35,13 +35,13 @@ export function TimelineViewTabs({ activeTab, locale, tabs }: TimelineViewTabsPr
             )}
             disabled={!active}
             key={tab.id}
-            title={tab.future && !active ? (locale === "ko" ? "미래 단계" : "Future phase") : undefined}
+            title={tab.future && !active ? (locale === "ko" ? "미래 전용" : "Future only") : undefined}
             type="button"
           >
             <span>{tab.label}</span>
             {tab.future && !active ? (
               <span className="ml-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-400">
-                {locale === "ko" ? "미래" : "Future"}
+                {locale === "ko" ? "미래 전용" : "Future only"}
               </span>
             ) : null}
           </button>

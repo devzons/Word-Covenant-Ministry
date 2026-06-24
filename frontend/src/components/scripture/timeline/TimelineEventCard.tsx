@@ -30,10 +30,10 @@ export function TimelineEventCard({
       />
       <button
         className={cn(
-          "w-full rounded-md border bg-white p-4 text-left transition-colors",
+          "w-full rounded-md border bg-white p-4 text-left transition-colors sm:p-5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
           selected
-            ? "border-zinc-950 shadow-sm ring-1 ring-zinc-950"
+            ? "border-zinc-950 bg-zinc-50 shadow-sm ring-1 ring-zinc-950"
             : "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50",
         )}
         aria-pressed={selected}
@@ -50,7 +50,17 @@ export function TimelineEventCard({
                 {getTimelineText(event.scriptureAnchor, locale)}
               </p>
             </div>
-            <TimelineConfidenceBadge label={getTimelineText(event.confidenceLabel, locale)} locale={locale} />
+            <div className="flex flex-col items-end gap-2">
+              {selected ? (
+                <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
+                  {locale === "ko" ? "선택됨" : "Selected"}
+                </span>
+              ) : null}
+              <TimelineConfidenceBadge
+                label={getTimelineText(event.confidenceLabel, locale)}
+                locale={locale}
+              />
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-600">

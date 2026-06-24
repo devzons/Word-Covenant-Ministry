@@ -94,8 +94,8 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
 
   return (
     <Container className="py-12 sm:py-16">
-      <section className="flex flex-col gap-8">
-        <header className="flex max-w-4xl flex-col gap-3">
+      <section className="flex flex-col gap-6 sm:gap-8">
+        <header className="flex max-w-4xl flex-col gap-2 sm:gap-3">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
             Word Covenant Ministry
           </p>
@@ -103,7 +103,7 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
           <p className="text-base leading-7 text-zinc-600">{copy.subtitle}</p>
         </header>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <TimelineViewTabs
             activeTab="scripture"
             locale={activeLocale}
@@ -115,12 +115,12 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
 
         <div
           className={cn(
-            "grid gap-6",
+            "grid gap-4 sm:gap-6",
             "lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]",
             "xl:gap-8",
           )}
         >
-          <Card className="flex min-w-0 flex-col gap-5">
+          <Card className="flex min-w-0 flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="flex flex-col gap-2">
                 <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">

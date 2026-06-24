@@ -31,7 +31,7 @@ export function TimelineEventDetailPanel({
   relatedStudy,
 }: TimelineEventDetailPanelProps) {
   return (
-    <Card className="flex min-w-0 flex-col gap-5">
+    <Card className="flex min-w-0 flex-col gap-4 sm:gap-5">
       <div className="flex flex-col gap-2">
         <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
           {locale === "ko" ? "선택한 사건의 성경 문맥" : "Selected Event Scripture Context"}
@@ -54,6 +54,11 @@ export function TimelineEventDetailPanel({
             </h2>
             <p className="text-sm text-zinc-600">{getTimelineText(event.period, locale)}</p>
           </div>
+          <p className="text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "성경 근거를 먼저 보고, 그 다음 순서와 연대 메모를 확인하세요."
+              : "Read the Scripture anchor first, then review sequence and dating notes."}
+          </p>
           <DetailSection
             label={locale === "ko" ? "사건 요약" : "Event Summary"}
             value={getTimelineText(event.title, locale)}
@@ -90,7 +95,7 @@ export function TimelineEventDetailPanel({
               )}
               href={readerHref}
             >
-              {openInReaderLabel}
+              {openInReaderLabel} ↗
             </Link>
           </div>
         </>
