@@ -6,7 +6,7 @@
 
 ## Immediate Next Task
 
-CR-90C-4 Exodus / Wilderness Scripture-Derived Timeline Preview is complete through available validation. The Scripture Timeline now moves toward a left sidebar navigator, a main workspace area, and a right detail panel while remaining Scripture-first and page-stay oriented. Staging and release work remain paused until the next Timeline preview branch is chosen.
+CR-90C-5 Conquest / Judges Scripture-First Timeline Preview is complete through available validation. The Scripture Timeline now moves toward a left sidebar navigator, a main workspace area, and a right detail panel while remaining Scripture-first and page-stay oriented. Staging and release work remain paused until the next Timeline preview branch is chosen.
 
 Documentation Gate Proportionality applies to this narrow frontend investigation: the lighter workflow is acceptable because the work is route-accessibility and runtime-investigation focused, not architecture, API, database, schema, import, migration, Data Package, or production-impacting work.
 
@@ -18,7 +18,7 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-90C-5 Conquest / Judges Scripture-First Timeline Preview.
+1. CR-90C-6 Samuel / United Kingdom Scripture-First Timeline Preview.
 2. Timeline content fixture refinement for representative Scripture-first people, books, kingdoms, and places.
 3. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
 4. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
