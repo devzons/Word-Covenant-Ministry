@@ -16,6 +16,8 @@ import {
   getTimelineText,
   passionWeekTimelineEvents,
   timelineBookContextRows,
+  timelineGenealogyComparisonRows,
+  timelineGenealogySegments,
   timelineKingdomComparisonRows,
   timelineBooks,
   timelinePeriods,
@@ -52,7 +54,7 @@ const pageCopy = {
     eventsHeading: "Events View",
     eventsNote: "The flow stays Scripture-first and preserves the selected item in the right panel.",
     futureViewNote:
-      "Genealogy, places / map, and themes remain future views until later approved phases add their own content layers.",
+      "Places / map and themes remain future views until later approved phases add their own content layers.",
     openInReader: "Open in Reader",
     overviewHeading: "Scripture Flow",
     overviewNote:
@@ -83,7 +85,7 @@ const pageCopy = {
       { id: "events", label: "Events", future: false },
       { id: "books", label: "Books / Psalms", future: false },
       { id: "kingdoms", label: "Kings & Kingdoms", future: false },
-      { id: "genealogy", label: "Genealogy", future: true },
+      { id: "genealogy", label: "Genealogy", future: false },
       { id: "places", label: "Places / Map", future: true },
       { id: "themes", label: "Themes", future: true },
     ],
@@ -92,7 +94,7 @@ const pageCopy = {
     detailHeading: "선택한 사건의 성경 문맥",
     eventsHeading: "사건 보기",
     eventsNote: "본문 흐름은 성경 우선을 유지하며, 선택 항목은 오른쪽 패널에 계속 남아 있습니다.",
-    futureViewNote: "족보, 지명 / 지도, 주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
+    futureViewNote: "지명 / 지도와 주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
     openInReader: "읽기에서 열기",
     overviewHeading: "성경 흐름",
     overviewNote:
@@ -123,7 +125,7 @@ const pageCopy = {
       { id: "events", label: "사건", future: false },
       { id: "books", label: "책 / 시편", future: false },
       { id: "kingdoms", label: "왕국 / 제국", future: false },
-      { id: "genealogy", label: "족보", future: true },
+      { id: "genealogy", label: "족보 / 마태복음", future: false },
       { id: "places", label: "지명 / 지도", future: true },
       { id: "themes", label: "주제", future: true },
     ],
@@ -342,6 +344,10 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
                     ? activeLocale === "ko"
                       ? "왕국 / 제국"
                       : "Kings & Kingdoms"
+                    : activeView === "genealogy"
+                      ? activeLocale === "ko"
+                        ? "족보 / 마태복음"
+                        : "Genealogy"
                   : activeLocale === "ko"
                     ? "사건 흐름"
                     : "Event Stream"
@@ -360,6 +366,15 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
             {activeView === "books" ? (
               <BooksContextPreviewPanel
                 activeBookId={filters.bookId}
+                activePeriodId={filters.periodId}
+                locale={activeLocale}
+                searchTerm={filters.searchTerm}
+                selectedEventId={selectedEvent?.id ?? ""}
+              />
+            ) : null}
+
+            {activeView === "genealogy" ? (
+              <GenealogyComparisonPreviewPanel
                 activePeriodId={filters.periodId}
                 locale={activeLocale}
                 searchTerm={filters.searchTerm}
@@ -731,6 +746,189 @@ function BooksContextPreviewPanel({
   );
 }
 
+type GenealogyComparisonPreviewPanelProps = {
+  activePeriodId: string;
+  locale: TimelineLocale;
+  searchTerm: string;
+  selectedEventId: string;
+};
+
+function GenealogyComparisonPreviewPanel({
+  activePeriodId,
+  locale,
+  searchTerm,
+  selectedEventId,
+}: GenealogyComparisonPreviewPanelProps) {
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const visibleRows = timelineGenealogyComparisonRows.filter((row) => {
+    const matchesPeriod = activePeriodId === "all" || row.periodId === activePeriodId;
+    const matchesSearch = matchesGenealogySearch(row, normalizedSearch);
+
+    return matchesPeriod && matchesSearch;
+  });
+
+  const groupedSegments = timelineGenealogySegments
+    .map((segment) => ({
+      rows: visibleRows.filter((row) => row.segmentId === segment.id),
+      segment,
+    }))
+    .filter(({ rows }) => rows.length > 0);
+
+  return (
+    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+      <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {locale === "ko" ? "마태복음 족보 비교" : "Matthew Genealogy Comparison"}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "14 / 14 / 14 구조와 구약 족보 비교를 간단히 보여 주는 미리보기입니다."
+              : "A compact preview of Matthew's 14 / 14 / 14 structure compared with the Old Testament genealogy."}
+          </p>
+        </div>
+        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+          {locale === "ko" ? "미리보기" : "Preview"}
+        </span>
+      </div>
+
+      <div className="mt-4 space-y-4">
+        {groupedSegments.map(({ rows, segment }) => (
+          <section className="rounded-md border border-zinc-200 bg-zinc-50 p-3" key={segment.id}>
+            <div className="flex flex-col gap-2 border-b border-zinc-200 pb-3">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-sm font-semibold text-zinc-950">{getTimelineText(segment.title, locale)}</h3>
+                  <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                    {getTimelineText(segment.rangeLabel, locale)}
+                  </span>
+                  <p className="text-xs leading-5 text-zinc-500">{getTimelineText(segment.structureLabel, locale)}</p>
+                  <p className="text-xs leading-5 text-zinc-500">{getTimelineText(segment.basisLabel, locale)}</p>
+                </div>
+                <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                  {locale === "ko" ? `${rows.length}개` : `${rows.length}`}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-1.5">
+                {segment.scriptureAnchors.map((anchor) => (
+                  <Link
+                    className={cn(
+                      "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                    )}
+                    href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                    key={`${segment.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                  >
+                    {getTimelineText(anchor.label, locale)}
+                  </Link>
+                ))}
+              </div>
+
+              <p className="text-sm leading-6 text-zinc-600">{getTimelineText(segment.note, locale)}</p>
+            </div>
+
+            <div className="mt-3 overflow-x-auto">
+              <table className="min-w-[80rem] w-full border-separate border-spacing-0">
+                <thead>
+                  <tr className="text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                    <th className="border-b border-zinc-200 px-3 py-2">
+                      {locale === "ko" ? "마태복음" : "Matthew"}
+                    </th>
+                    <th className="border-b border-zinc-200 px-3 py-2">
+                      {locale === "ko" ? "구약 비교" : "Old Testament Comparison"}
+                    </th>
+                    <th className="border-b border-zinc-200 px-3 py-2">
+                      {locale === "ko" ? "관찰" : "Observation"}
+                    </th>
+                    <th className="border-b border-zinc-200 px-3 py-2">
+                      {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
+                    </th>
+                    <th className="border-b border-zinc-200 px-3 py-2">
+                      {locale === "ko" ? "메모" : "Notes"}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row) => {
+                    const isSelected = Boolean(row.relatedEventIds?.includes(selectedEventId));
+
+                    return (
+                      <tr
+                        className={cn("align-top", isSelected ? "bg-white shadow-sm" : "bg-zinc-50")}
+                        key={row.id}
+                      >
+                        <td className="border-b border-zinc-200 px-3 py-3">
+                          <ComparisonCellValue locale={locale} value={row.matthewName} />
+                        </td>
+                        <td className="border-b border-zinc-200 px-3 py-3">
+                          <ComparisonCellValue locale={locale} value={row.oldTestamentName} />
+                        </td>
+                        <td className="border-b border-zinc-200 px-3 py-3">
+                          <div className="flex flex-col gap-1.5">
+                            <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                              {getTimelineText(row.comparisonLabel, locale)}
+                            </span>
+                            {row.kingdomTags?.length || row.rulerTags?.length ? (
+                              <ComparisonTagList
+                                locale={locale}
+                                tags={[...(row.kingdomTags ?? []), ...(row.rulerTags ?? [])]}
+                              />
+                            ) : null}
+                          </div>
+                        </td>
+                        <td className="border-b border-zinc-200 px-3 py-3">
+                          <div className="flex flex-wrap gap-1.5">
+                            {row.scriptureAnchors.map((anchor) => (
+                              <Link
+                                className={cn(
+                                  "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
+                                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                                )}
+                                href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                                key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                              >
+                                {getTimelineText(anchor.label, locale)}
+                              </Link>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="border-b border-zinc-200 px-3 py-3">
+                          <div className="flex flex-col gap-1.5">
+                            <p className="text-xs font-semibold leading-5 text-zinc-500">
+                              {getTimelineText(row.basisLabel, locale)}
+                            </p>
+                            {row.nameVariantNote ? (
+                              <p className="text-sm leading-6 text-zinc-600">
+                                {getTimelineText(row.nameVariantNote, locale)}
+                              </p>
+                            ) : null}
+                            {row.omissionNote ? (
+                              <p className="text-sm leading-6 text-zinc-600">
+                                {getTimelineText(row.omissionNote, locale)}
+                              </p>
+                            ) : null}
+                            {row.note ? (
+                              <p className="text-sm leading-6 text-zinc-600">
+                                {getTimelineText(row.note, locale)}
+                              </p>
+                            ) : null}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 type ComparisonCellValueProps = {
   locale: TimelineLocale;
   value?: { en: string; ko: string };
@@ -802,6 +1000,39 @@ function matchesBookContextSearch(
     ...(row.relatedKingdoms?.flatMap((kingdom) => [kingdom.en, kingdom.ko]) ?? []),
     ...(row.relatedEmpires?.flatMap((empire) => [empire.en, empire.ko]) ?? []),
     ...(row.relatedPlaces ?? []),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return rowTokens.includes(query);
+}
+
+function matchesGenealogySearch(
+  row: (typeof timelineGenealogyComparisonRows)[number],
+  query: string,
+) {
+  if (!query) {
+    return true;
+  }
+
+  const rowTokens = [
+    row.matthewName.en,
+    row.matthewName.ko,
+    row.oldTestamentName?.en ?? "",
+    row.oldTestamentName?.ko ?? "",
+    row.comparisonLabel.en,
+    row.comparisonLabel.ko,
+    row.basisLabel.en,
+    row.basisLabel.ko,
+    row.nameVariantNote?.en ?? "",
+    row.nameVariantNote?.ko ?? "",
+    row.omissionNote?.en ?? "",
+    row.omissionNote?.ko ?? "",
+    row.note?.en ?? "",
+    row.note?.ko ?? "",
+    ...row.scriptureAnchors.flatMap((anchor) => [anchor.label.en, anchor.label.ko]),
+    ...(row.kingdomTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
+    ...(row.rulerTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
   ]
     .join(" ")
     .toLowerCase();

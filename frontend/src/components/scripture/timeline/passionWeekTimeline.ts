@@ -21,6 +21,8 @@ export {
   getTimelineText,
   passionWeekTimelineEvents,
   timelineBookContextRows,
+  timelineGenealogyComparisonRows,
+  timelineGenealogySegments,
   timelineKingdomComparisonRows,
   timelineBooks,
   timelinePeriods,

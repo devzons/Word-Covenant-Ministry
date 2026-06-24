@@ -116,6 +116,35 @@ export type TimelineBookContextRow = {
   note: TimelineText;
 };
 
+export type TimelineGenealogySegment = {
+  id: string;
+  title: TimelineText;
+  rangeLabel: TimelineText;
+  scriptureAnchors: TimelineScriptureAnchor[];
+  structureLabel: TimelineText;
+  basisLabel: TimelineText;
+  note: TimelineText;
+};
+
+export type TimelineGenealogyComparisonRow = {
+  id: string;
+  segmentId: string;
+  matthewName: TimelineText;
+  oldTestamentName?: TimelineText;
+  comparisonLabel: TimelineText;
+  scriptureAnchors: TimelineScriptureAnchor[];
+  relatedBookIds?: string[];
+  relatedEventIds?: string[];
+  periodId?: string;
+  kingdomTags?: TimelineText[];
+  empireTags?: TimelineText[];
+  rulerTags?: TimelineText[];
+  nameVariantNote?: TimelineText;
+  omissionNote?: TimelineText;
+  basisLabel: TimelineText;
+  note?: TimelineText;
+};
+
 export const timelinePeriods: TimelinePeriod[] = [
   { id: "primeval", order: 1, label: { en: "Creation / Primeval History", ko: "창조 / 태고 역사" } },
   { id: "patriarchs", order: 2, label: { en: "Patriarchs", ko: "족장 시대" } },
@@ -3159,6 +3188,403 @@ export const timelineBookContextRows: TimelineBookContextRow[] = [
       ),
     ],
     title: { en: "Daniel", ko: "다니엘" },
+  },
+];
+
+export const timelineGenealogySegments: TimelineGenealogySegment[] = [
+  {
+    basisLabel: { en: "Matthew's textual structure", ko: "마태복음 본문 구조" },
+    id: "matthew-genealogy-abraham-to-david",
+    note: {
+      en: "Matthew presents Christ's genealogy with Abraham and David as major textual markers.",
+      ko: "마태복음은 아브라함과 다윗을 중심 표지로 삼아 그리스도의 족보를 제시합니다.",
+    },
+    rangeLabel: { en: "First fourteen generations", ko: "첫 번째 14대" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:1-6", ko: "마태복음 1:1-6" },
+        { book: "matthew", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Ruth 4:18-22", ko: "룻기 4:18-22" },
+        { book: "ruth", chapter: 4, verse: 18, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    structureLabel: {
+      en: "Matthew 1:17 fourteen-generation structure",
+      ko: "마태복음 1:17의 14대 구조",
+    },
+    title: { en: "From Abraham to David", ko: "아브라함에서 다윗까지" },
+  },
+  {
+    basisLabel: { en: "Matthew compared with Old Testament royal genealogy", ko: "마태복음과 구약 왕계보 비교" },
+    id: "matthew-genealogy-david-to-exile",
+    note: {
+      en: "This section follows the Davidic royal line toward the Babylonian deportation. Matthew uses a selective genealogical arrangement.",
+      ko: "이 구간은 다윗 왕계보와 바벨론 포로를 향한 흐름을 보여 줍니다. 마태복음은 선택적으로 배열된 족보 구조를 사용합니다.",
+    },
+    rangeLabel: { en: "Second fourteen generations", ko: "두 번째 14대" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:6-11", ko: "마태복음 1:6-11" },
+        { book: "matthew", chapter: 1, verse: 6, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Chronicles 3:10-16", ko: "역대상 3:10-16" },
+        { book: "1-chronicles", chapter: 3, verse: 10, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 24:1-17", ko: "열왕기하 24:1-17" },
+        { book: "2-kings", chapter: 24, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    structureLabel: {
+      en: "Matthew 1:17 fourteen-generation structure",
+      ko: "마태복음 1:17의 14대 구조",
+    },
+    title: { en: "From David to the Deportation", ko: "다윗에서 바벨론 포로까지" },
+  },
+  {
+    basisLabel: { en: "Matthew's textual structure", ko: "마태복음 본문 구조" },
+    id: "matthew-genealogy-exile-to-christ",
+    note: {
+      en: "Matthew gathers the post-deportation line toward Christ.",
+      ko: "마태복음은 바벨론 포로 이후의 흐름을 그리스도에게로 모읍니다.",
+    },
+    rangeLabel: { en: "Third fourteen generations", ko: "세 번째 14대" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:12-17", ko: "마태복음 1:12-17" },
+        { book: "matthew", chapter: 1, verse: 12, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    structureLabel: {
+      en: "Matthew 1:17 fourteen-generation structure",
+      ko: "마태복음 1:17의 14대 구조",
+    },
+    title: { en: "From the Deportation to Christ", ko: "바벨론 포로부터 그리스도까지" },
+  },
+];
+
+export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] = [
+  {
+    basisLabel: { en: "Matthew / Genesis textual connection", ko: "마태복음 / 창세기 본문 연결" },
+    comparisonLabel: { en: "Aligned", ko: "일치" },
+    id: "genealogy-abraham",
+    matthewName: { en: "Abraham", ko: "아브라함" },
+    oldTestamentName: { en: "Abraham", ko: "아브라함" },
+    periodId: "patriarchs",
+    relatedEventIds: ["call-of-abraham"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:2", ko: "마태복음 1:2" },
+        { book: "matthew", chapter: 1, verse: 2, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Genesis 12:1-9", ko: "창세기 12:1-9" },
+        { book: "genesis", chapter: 12, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-abraham-to-david",
+    note: {
+      en: "Matthew presents Christ's genealogy with Abraham and David as major textual markers.",
+      ko: "마태복음은 아브라함과 다윗을 중심 표지로 삼아 그리스도의 족보를 제시합니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Genesis textual connection", ko: "마태복음 / 창세기 본문 연결" },
+    comparisonLabel: { en: "Aligned", ko: "일치" },
+    id: "genealogy-isaac",
+    matthewName: { en: "Isaac", ko: "이삭" },
+    oldTestamentName: { en: "Isaac", ko: "이삭" },
+    periodId: "patriarchs",
+    relatedEventIds: ["isaac-born"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:2", ko: "마태복음 1:2" },
+        { book: "matthew", chapter: 1, verse: 2, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Genesis 21:1-7", ko: "창세기 21:1-7" },
+        { book: "genesis", chapter: 21, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-abraham-to-david",
+  },
+  {
+    basisLabel: { en: "Matthew / Genesis name connection", ko: "마태복음 / 창세기 이름 연결" },
+    comparisonLabel: { en: "Name connection", ko: "이름 연결" },
+    id: "genealogy-jacob",
+    matthewName: { en: "Jacob", ko: "야곱" },
+    oldTestamentName: { en: "Jacob / Israel", ko: "야곱 / 이스라엘" },
+    periodId: "patriarchs",
+    relatedEventIds: ["jacob-israel"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:2", ko: "마태복음 1:2" },
+        { book: "matthew", chapter: 1, verse: 2, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Genesis 32:22-32", ko: "창세기 32:22-32" },
+        { book: "genesis", chapter: 32, verse: 22, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-abraham-to-david",
+    nameVariantNote: {
+      en: "Jacob receives the name Israel in Genesis 32.",
+      ko: "야곱은 창세기 32장에서 이스라엘이라는 이름을 받습니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Genesis textual connection", ko: "마태복음 / 창세기 본문 연결" },
+    comparisonLabel: { en: "Line transition", ko: "족보 전환" },
+    id: "genealogy-judah",
+    matthewName: { en: "Judah", ko: "유다" },
+    oldTestamentName: { en: "Judah", ko: "유다" },
+    periodId: "patriarchs",
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:2-3", ko: "마태복음 1:2-3" },
+        { book: "matthew", chapter: 1, verse: 2, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Genesis 49:8-12", ko: "창세기 49:8-12" },
+        { book: "genesis", chapter: 49, verse: 8, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-abraham-to-david",
+    note: {
+      en: "Matthew's genealogy continues through Judah among Jacob's sons.",
+      ko: "마태복음 족보는 야곱의 아들들 중 유다 계통으로 이어집니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Ruth textual connection", ko: "마태복음 / 룻기 본문 연결" },
+    comparisonLabel: { en: "Ruth connection", ko: "룻기 연결" },
+    id: "genealogy-boaz-ruth",
+    matthewName: { en: "Boaz", ko: "보아스" },
+    oldTestamentName: { en: "Boaz / Ruth", ko: "보아스 / 룻" },
+    periodId: "conquest",
+    relatedEventIds: ["ruth-boaz"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:5", ko: "마태복음 1:5" },
+        { book: "matthew", chapter: 1, verse: 5, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Ruth 4:13-22", ko: "룻기 4:13-22" },
+        { book: "ruth", chapter: 4, verse: 13, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-abraham-to-david",
+    note: {
+      en: "Matthew's genealogy gathers Ruth and Boaz into the Davidic line.",
+      ko: "마태복음 족보는 보아스와 룻을 다윗 계통 안에 모읍니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Davidic covenant connection", ko: "마태복음 / 다윗 언약 연결" },
+    comparisonLabel: { en: "Kingship marker", ko: "왕권 표지" },
+    id: "genealogy-david",
+    kingdomTags: [{ en: "United Kingdom", ko: "통일 왕국" }],
+    matthewName: { en: "David", ko: "다윗" },
+    oldTestamentName: { en: "David", ko: "다윗" },
+    periodId: "united-kingdom",
+    relatedEventIds: ["davidic-covenant"],
+    rulerTags: [{ en: "David", ko: "다윗" }],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:6", ko: "마태복음 1:6" },
+        { book: "matthew", chapter: 1, verse: 6, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Samuel 7:1-17", ko: "사무엘하 7:1-17" },
+        { book: "2-samuel", chapter: 7, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-abraham-to-david",
+    note: {
+      en: "The Davidic covenant connects the kingdom flow to the messianic promise.",
+      ko: "다윗 언약은 왕국 흐름을 메시아 약속과 연결합니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Chronicles / Kings comparison", ko: "마태복음 / 역대상 / 열왕기 비교" },
+    comparisonLabel: {
+      en: "Omissions observed when compared with OT royal line",
+      ko: "구약 왕계보와 비교 시 생략 관찰",
+    },
+    id: "genealogy-joram-uzziah",
+    kingdomTags: [{ en: "Judah", ko: "유다" }],
+    matthewName: { en: "Joram → Uzziah", ko: "요람 → 웃시야" },
+    oldTestamentName: {
+      en: "Joram → Ahaziah → Joash → Amaziah → Uzziah",
+      ko: "요람 → 아하시야 → 요아스 → 아마샤 → 웃시야",
+    },
+    periodId: "divided-kingdom",
+    rulerTags: [
+      { en: "Joram", ko: "요람" },
+      { en: "Uzziah", ko: "웃시야" },
+    ],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:8", ko: "마태복음 1:8" },
+        { book: "matthew", chapter: 1, verse: 8, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Chronicles 3:11-12", ko: "역대상 3:11-12" },
+        { book: "1-chronicles", chapter: 3, verse: 11, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 8:24-25", ko: "열왕기하 8:24-25" },
+        { book: "2-kings", chapter: 8, verse: 24, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 11:2", ko: "열왕기하 11:2" },
+        { book: "2-kings", chapter: 11, verse: 2, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 14:1", ko: "열왕기하 14:1" },
+        { book: "2-kings", chapter: 14, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 15:1-2", ko: "열왕기하 15:1-2" },
+        { book: "2-kings", chapter: 15, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-david-to-exile",
+    omissionNote: {
+      en: "Matthew 1:8 moves from Joram to Uzziah, while Chronicles and Kings show Ahaziah, Joash, and Amaziah between them. This preview marks the difference as a selective genealogical arrangement.",
+      ko: "마태복음 1:8은 요람에서 웃시야로 이어지지만, 역대상과 열왕기 계보를 함께 보면 아하시야, 요아스, 아마샤가 그 사이에 나타납니다. 이 미리보기는 이를 선택적 족보 배열로 표시합니다.",
+    },
+    nameVariantNote: {
+      en: "Uzziah is also associated with the name Azariah in the Old Testament royal accounts.",
+      ko: "웃시야는 구약 왕계보에서 아사랴라는 이름과도 연결됩니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Kings / Chronicles name comparison", ko: "마태복음 / 열왕기 / 역대기 이름 비교" },
+    comparisonLabel: { en: "Name variant", ko: "이름 차이" },
+    id: "genealogy-uzziah-azariah",
+    kingdomTags: [{ en: "Judah", ko: "유다" }],
+    matthewName: { en: "Uzziah", ko: "웃시야" },
+    oldTestamentName: { en: "Uzziah / Azariah", ko: "웃시야 / 아사랴" },
+    periodId: "divided-kingdom",
+    rulerTags: [{ en: "Uzziah / Azariah", ko: "웃시야 / 아사랴" }],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:8-9", ko: "마태복음 1:8-9" },
+        { book: "matthew", chapter: 1, verse: 8, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 15:1-7", ko: "열왕기하 15:1-7" },
+        { book: "2-kings", chapter: 15, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 26:1-23", ko: "역대하 26:1-23" },
+        { book: "2-chronicles", chapter: 26, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-david-to-exile",
+    nameVariantNote: {
+      en: "2 Kings 15 uses the name Azariah, while 2 Chronicles 26 uses Uzziah.",
+      ko: "열왕기하 15장은 아사랴라는 이름을 사용하고, 역대하 26장은 웃시야라는 이름을 사용합니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Chronicles / Kings comparison", ko: "마태복음 / 역대상 / 열왕기 비교" },
+    comparisonLabel: {
+      en: "Omission observed when compared with OT royal line",
+      ko: "구약 왕계보와 비교 시 생략 관찰",
+    },
+    id: "genealogy-josiah-jeconiah",
+    kingdomTags: [{ en: "Judah", ko: "유다" }],
+    matthewName: { en: "Josiah → Jeconiah", ko: "요시야 → 여고냐" },
+    oldTestamentName: { en: "Josiah → Jehoiakim → Jehoiachin / Jeconiah", ko: "요시야 → 여호야김 → 여호야긴 / 여고냐" },
+    periodId: "exile",
+    rulerTags: [
+      { en: "Josiah", ko: "요시야" },
+      { en: "Jeconiah", ko: "여고냐" },
+    ],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:11", ko: "마태복음 1:11" },
+        { book: "matthew", chapter: 1, verse: 11, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Chronicles 3:15-16", ko: "역대상 3:15-16" },
+        { book: "1-chronicles", chapter: 3, verse: 15, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 23:34-37", ko: "열왕기하 23:34-37" },
+        { book: "2-kings", chapter: 23, verse: 34, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 24:6-17", ko: "열왕기하 24:6-17" },
+        { book: "2-kings", chapter: 24, verse: 6, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-david-to-exile",
+    omissionNote: {
+      en: "Matthew 1:11 presents the royal line around the deportation in compressed form. Chronicles and Kings show Jehoiakim between Josiah and Jeconiah.",
+      ko: "마태복음 1:11은 포로기 전후의 왕계보를 압축해서 제시합니다. 역대상과 열왕기를 함께 보면 여호야김이 요시야와 여고냐 사이에 나타납니다.",
+    },
+    nameVariantNote: {
+      en: "Jeconiah is associated with the names Jehoiachin and Coniah.",
+      ko: "여고냐는 여호야긴, 고니야와 연결되는 이름입니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew / Kings / Jeremiah name comparison", ko: "마태복음 / 열왕기 / 예레미야 이름 비교" },
+    comparisonLabel: { en: "Deportation marker", ko: "포로기 표지" },
+    id: "genealogy-jeconiah-exile",
+    empireTags: [{ en: "Babylon", ko: "바벨론" }],
+    kingdomTags: [{ en: "Judah", ko: "유다" }],
+    matthewName: { en: "Jeconiah", ko: "여고냐" },
+    oldTestamentName: { en: "Jehoiachin / Jeconiah", ko: "여호야긴 / 여고냐" },
+    periodId: "exile",
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:11-12", ko: "마태복음 1:11-12" },
+        { book: "matthew", chapter: 1, verse: 11, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 24:8-17", ko: "열왕기하 24:8-17" },
+        { book: "2-kings", chapter: 24, verse: 8, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Jeremiah 22:24-30", ko: "예레미야 22:24-30" },
+        { book: "jeremiah", chapter: 22, verse: 24, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-exile-to-christ",
+    nameVariantNote: {
+      en: "Jeconiah is associated with Jehoiachin and Coniah.",
+      ko: "여고냐는 여호야긴과 고니야라는 이름과 연결됩니다.",
+    },
+  },
+  {
+    basisLabel: { en: "Matthew's textual structure", ko: "마태복음 본문 구조" },
+    comparisonLabel: { en: "Gathered to Christ", ko: "그리스도께로 모임" },
+    id: "genealogy-joseph-mary-christ",
+    matthewName: { en: "Joseph / Mary / Christ", ko: "요셉 / 마리아 / 그리스도" },
+    oldTestamentName: { en: "Fulfillment of the Davidic line", ko: "다윗 계보의 성취" },
+    periodId: "gospel",
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Matthew 1:16-17", ko: "마태복음 1:16-17" },
+        { book: "matthew", chapter: 1, verse: 16, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Matthew 1:18-25", ko: "마태복음 1:18-25" },
+        { book: "matthew", chapter: 1, verse: 18, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    segmentId: "matthew-genealogy-exile-to-christ",
+    note: {
+      en: "Matthew gathers the genealogy to Christ. This preview is limited to showing Matthew 1's structure.",
+      ko: "마태복음은 족보를 그리스도께로 모읍니다. 이 미리보기는 마태복음 1장의 구조를 보여 주는 데 제한됩니다.",
+    },
   },
 ];
 
