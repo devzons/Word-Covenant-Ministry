@@ -94,6 +94,28 @@ export type TimelineKingdomComparisonRow = {
   relatedEventIds?: string[];
 };
 
+export type TimelineBookContextRow = {
+  id: string;
+  bookId: string;
+  periodId: string;
+  title: TimelineText;
+  canonicalLocation: TimelineText;
+  historicalSettingLabel?: TimelineText;
+  authorshipLabel?: TimelineText;
+  authorshipBasisLabel?: TimelineText;
+  backgroundBasisLabel: TimelineText;
+  scriptureAnchors: TimelineScriptureAnchor[];
+  relatedEventIds?: string[];
+  relatedPeople?: TimelineText[];
+  relatedPlaces?: string[];
+  relatedKingdoms?: TimelineText[];
+  relatedEmpires?: TimelineText[];
+  dateLabel?: TimelineText;
+  dateBasisLabel?: TimelineText;
+  dateConfidenceLabel?: TimelineText;
+  note: TimelineText;
+};
+
 export const timelinePeriods: TimelinePeriod[] = [
   { id: "primeval", order: 1, label: { en: "Creation / Primeval History", ko: "창조 / 태고 역사" } },
   { id: "patriarchs", order: 2, label: { en: "Patriarchs", ko: "족장 시대" } },
@@ -148,6 +170,8 @@ export const timelineBooks: TimelineBook[] = [
   { id: "malachi", label: { en: "Malachi", ko: "말라기" } },
   { id: "lamentations", label: { en: "Lamentations", ko: "예레미야애가" } },
   { id: "2-chronicles", label: { en: "2 Chronicles", ko: "역대하" } },
+  { id: "job", label: { en: "Job", ko: "욥기" } },
+  { id: "daniel", label: { en: "Daniel", ko: "다니엘" } },
   { id: "revelation", label: { en: "Revelation", ko: "요한계시록" } },
 ];
 
@@ -164,6 +188,7 @@ export const timelinePlaces: TimelinePlace[] = [
   { id: "jordan", label: { en: "Jordan", ko: "요단" } },
   { id: "jericho", label: { en: "Jericho", ko: "여리고" } },
   { id: "shiloh", label: { en: "Shiloh", ko: "실로" } },
+  { id: "uz", label: { en: "Uz", ko: "우스" } },
   { id: "bethlehem", label: { en: "Bethlehem", ko: "베들레헴" } },
   { id: "jerusalem", label: { en: "Jerusalem", ko: "예루살렘" } },
   { id: "hebron", label: { en: "Hebron", ko: "헤브론" } },
@@ -2908,6 +2933,232 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
       ),
     ],
     sequenceLabel: { en: "Cyrus's decree", ko: "고레스 칙령" },
+  },
+];
+
+export const timelineBookContextRows: TimelineBookContextRow[] = [
+  {
+    authorshipBasisLabel: { en: "The biblical text does not explicitly name the author", ko: "성경 본문이 저자를 명시하지 않음" },
+    authorshipLabel: { en: "Authorship uncertain", ko: "저자 미상" },
+    backgroundBasisLabel: { en: "Inferred background / debated", ko: "본문 배경 추정 / 논의 중" },
+    canonicalLocation: { en: "Wisdom / Writings", ko: "지혜서 / 성문서" },
+    dateConfidenceLabel: { en: "Scripture event high; setting inferred", ko: "본문 사건은 높음, 배경 시기는 추정" },
+    dateLabel: { en: "Date not asserted", ko: "연대 단정 없음" },
+    id: "book-context-job",
+    historicalSettingLabel: { en: "Possible patriarchal-era setting", ko: "족장 시대 배경 가능성" },
+    note: {
+      en: "Job belongs canonically among the wisdom writings, while its setting has elements often connected with the patriarchal world. This preview shows that only as a background connection, not as a fixed chronology.",
+      ko: "욥기는 정경상 지혜서에 있으나, 배경은 족장 시대와 연결해 볼 수 있는 요소가 있습니다. 이 미리보기는 그것을 확정 연대가 아니라 배경 연결로만 표시합니다.",
+    },
+    periodId: "patriarchs",
+    bookId: "job",
+    relatedPeople: [{ en: "Job", ko: "욥" }],
+    relatedPlaces: ["uz"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Job 1:1-5", ko: "욥기 1:1-5" },
+        { book: "job", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Job", ko: "욥기" },
+  },
+  {
+    authorshipBasisLabel: { en: "Superscription-based", ko: "시편 표제 근거" },
+    authorshipLabel: { en: "David", ko: "다윗" },
+    backgroundBasisLabel: { en: "Superscription-based / connected to 2 Samuel 15-18", ko: "표제 근거 / 사무엘하 15-18장 연결" },
+    canonicalLocation: { en: "Psalms", ko: "시편" },
+    dateConfidenceLabel: {
+      en: "Superscription and textual connection high; exact date not asserted",
+      ko: "표제와 본문 연결은 높음, 정확한 연대는 단정하지 않음",
+    },
+    dateLabel: { en: "Davidic period", ko: "다윗 시대" },
+    id: "psalm-context-psalm-3",
+    historicalSettingLabel: { en: "David fleeing from Absalom", ko: "다윗이 압살롬을 피할 때" },
+    note: {
+      en: "Psalm 3's superscription identifies it with David fleeing from Absalom. The Timeline connects it to the Davidic period on that basis.",
+      ko: "시편 3편은 표제에서 다윗이 아들 압살롬을 피할 때의 시라고 밝힙니다. 타임라인에서는 표제 근거로 다윗 시대 사건과 연결합니다.",
+    },
+    periodId: "united-kingdom",
+    bookId: "psalms",
+    relatedEventIds: ["davidic-covenant"],
+    relatedPeople: [
+      { en: "David", ko: "다윗" },
+      { en: "Absalom", ko: "압살롬" },
+    ],
+    relatedPlaces: ["jerusalem"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Psalm 3:1", ko: "시편 3:1" },
+        { book: "psalms", chapter: 3, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Samuel 15:13-37", ko: "사무엘하 15:13-37" },
+        { book: "2-samuel", chapter: 15, verse: 13, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Psalm 3", ko: "시편 3편" },
+  },
+  {
+    authorshipBasisLabel: { en: "Superscription-based", ko: "시편 표제 근거" },
+    authorshipLabel: { en: "David", ko: "다윗" },
+    backgroundBasisLabel: { en: "Superscription-based / connected to 2 Samuel 11-12", ko: "표제 근거 / 사무엘하 11-12장 연결" },
+    canonicalLocation: { en: "Psalms", ko: "시편" },
+    dateConfidenceLabel: {
+      en: "Superscription and textual connection high; exact date not asserted",
+      ko: "표제와 본문 연결은 높음, 정확한 연대는 단정하지 않음",
+    },
+    dateLabel: { en: "Davidic period", ko: "다윗 시대" },
+    id: "psalm-context-psalm-51",
+    historicalSettingLabel: { en: "After Nathan came to David", ko: "나단이 다윗에게 온 후" },
+    note: {
+      en: "Psalm 51's superscription gives the setting after Nathan came to David. The Timeline connects that superscription with 2 Samuel 12.",
+      ko: "시편 51편은 표제에서 나단이 다윗에게 온 후의 배경을 제시합니다. 타임라인에서는 이 표제를 사무엘하 12장과 연결합니다.",
+    },
+    periodId: "united-kingdom",
+    bookId: "psalms",
+    relatedPeople: [
+      { en: "David", ko: "다윗" },
+      { en: "Nathan", ko: "나단" },
+    ],
+    relatedPlaces: ["jerusalem"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Psalm 51:1", ko: "시편 51:1" },
+        { book: "psalms", chapter: 51, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Samuel 12:1-14", ko: "사무엘하 12:1-14" },
+        { book: "2-samuel", chapter: 12, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Psalm 51", ko: "시편 51편" },
+  },
+  {
+    authorshipBasisLabel: { en: "Superscription-based", ko: "시편 표제 근거" },
+    authorshipLabel: { en: "Moses", ko: "모세" },
+    backgroundBasisLabel: { en: "Superscription-based / wilderness-period connection", ko: "표제 근거 / 광야 시대 연결" },
+    canonicalLocation: { en: "Psalms", ko: "시편" },
+    dateConfidenceLabel: { en: "Superscription clear; exact composition date not asserted", ko: "표제 근거는 명확, 정확한 작성 연대는 단정하지 않음" },
+    dateLabel: { en: "Wilderness-period connection", ko: "광야 시대 연결" },
+    id: "psalm-context-psalm-90",
+    historicalSettingLabel: { en: "Moses / wilderness setting", ko: "모세 / 광야 배경" },
+    note: {
+      en: "Psalm 90's superscription presents it as a prayer of Moses. The Timeline connects it with the wilderness period without asserting an exact composition date.",
+      ko: "시편 90편은 표제에서 모세의 기도로 제시됩니다. 타임라인에서는 광야 시대와 연결하되, 정확한 작성 연대는 단정하지 않습니다.",
+    },
+    periodId: "exodus",
+    bookId: "psalms",
+    relatedEventIds: ["wilderness-forty-years"],
+    relatedPeople: [{ en: "Moses", ko: "모세" }],
+    relatedPlaces: ["sinai", "kadesh-barnea"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Psalm 90:1", ko: "시편 90:1" },
+        { book: "psalms", chapter: 90, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Deuteronomy 29:5", ko: "신명기 29:5" },
+        { book: "deuteronomy", chapter: 29, verse: 5, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Psalm 90", ko: "시편 90편" },
+  },
+  {
+    authorshipBasisLabel: { en: "The text does not name the author", ko: "본문이 저자를 명시하지 않음" },
+    authorshipLabel: { en: "Authorship not named", ko: "저자 미상" },
+    backgroundBasisLabel: { en: "Textual background / Babylonian exile connection", ko: "본문 배경 / 바벨론 포로 연결" },
+    canonicalLocation: { en: "Psalms", ko: "시편" },
+    dateConfidenceLabel: { en: "Textual setting high; author not named", ko: "본문 배경은 높음, 저자는 명시되지 않음" },
+    dateLabel: { en: "Exile-period connection", ko: "포로기 연결" },
+    id: "psalm-context-psalm-137",
+    historicalSettingLabel: { en: "Babylonian exile setting", ko: "바벨론 포로 배경" },
+    note: {
+      en: "Psalm 137 shows an exile setting through the rivers of Babylon and the memory of Zion. The author is not named in the text.",
+      ko: "시편 137편은 바벨론 강가와 시온 기억을 통해 포로기 배경을 보여 줍니다. 저자는 본문에서 명시하지 않습니다.",
+    },
+    periodId: "exile",
+    bookId: "psalms",
+    relatedEventIds: ["fall-of-jerusalem"],
+    relatedPeople: [{ en: "The exiles", ko: "포로 된 자들" }],
+    relatedPlaces: ["babylon", "jerusalem"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Psalm 137:1-9", ko: "시편 137:1-9" },
+        { book: "psalms", chapter: 137, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 25:1-21", ko: "열왕기하 25:1-21" },
+        { book: "2-kings", chapter: 25, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Psalm 137", ko: "시편 137편" },
+  },
+  {
+    authorshipBasisLabel: { en: "Traditional view", ko: "전통적 견해" },
+    authorshipLabel: { en: "Traditionally associated with Jeremiah", ko: "전통적으로 예레미야와 연결" },
+    backgroundBasisLabel: { en: "Fall of Jerusalem background", ko: "예루살렘 함락 배경" },
+    canonicalLocation: { en: "Prophetic/Writings context / Lament", ko: "예언서 / 애가" },
+    dateConfidenceLabel: { en: "Textual background high; authorship tradition separately labeled", ko: "본문 배경은 높음, 저자 전통은 구분 표시" },
+    dateLabel: { en: "Exile-period connection", ko: "포로기 연결" },
+    id: "book-context-lamentations",
+    historicalSettingLabel: { en: "Lament after Jerusalem's fall", ko: "예루살렘 함락 이후 애가" },
+    note: {
+      en: "Lamentations laments the desolation of Jerusalem and connects to the exile setting. Authorship tradition is displayed separately from the textual background.",
+      ko: "예레미야애가는 예루살렘의 황폐함을 애통하는 책으로 포로기 배경과 연결됩니다. 저자 전통은 본문 배경과 구분해서 표시합니다.",
+    },
+    periodId: "exile",
+    bookId: "lamentations",
+    relatedEventIds: ["fall-of-jerusalem"],
+    relatedPeople: [{ en: "Jeremiah", ko: "예레미야" }],
+    relatedPlaces: ["jerusalem", "babylon"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Lamentations 1:1-5", ko: "예레미야애가 1:1-5" },
+        { book: "lamentations", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 25:1-21", ko: "열왕기하 25:1-21" },
+        { book: "2-kings", chapter: 25, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Lamentations", ko: "예레미야애가" },
+  },
+  {
+    authorshipBasisLabel: { en: "Internal figure and traditional association", ko: "책 내부 인물 및 전통 연결" },
+    authorshipLabel: { en: "Daniel", ko: "다니엘" },
+    backgroundBasisLabel: { en: "Textual setting / exile court context", ko: "본문 배경 / 포로기 왕궁 배경" },
+    canonicalLocation: { en: "Prophetic / Exile context", ko: "예언서 / 포로기" },
+    dateConfidenceLabel: { en: "Textual setting high; detailed dating discussion separate", ko: "본문 배경은 높음, 세부 연대 논의는 별도" },
+    dateLabel: { en: "Exile / Persian connection", ko: "포로기 / 바사 연결" },
+    id: "book-context-daniel",
+    historicalSettingLabel: { en: "Babylonian and Persian setting", ko: "바벨론과 바사 배경" },
+    note: {
+      en: "Daniel is read within Babylonian and Persian court settings. This preview shows the textual setting while leaving detailed dating discussion for another phase.",
+      ko: "다니엘은 바벨론과 바사 궁정 배경 속에서 읽힙니다. 이 미리보기는 본문 배경을 표시하되, 세부 연대 논의는 별도 단계로 둡니다.",
+    },
+    periodId: "exile",
+    bookId: "daniel",
+    relatedEmpires: [
+      { en: "Babylon", ko: "바벨론" },
+      { en: "Persia", ko: "바사" },
+    ],
+    relatedPeople: [
+      { en: "Daniel", ko: "다니엘" },
+      { en: "Nebuchadnezzar", ko: "느부갓네살" },
+      { en: "Darius", ko: "다리오" },
+    ],
+    relatedPlaces: ["babylon", "persia"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Daniel 1:1-7", ko: "다니엘 1:1-7" },
+        { book: "daniel", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Daniel 6:1-28", ko: "다니엘 6:1-28" },
+        { book: "daniel", chapter: 6, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Daniel", ko: "다니엘" },
   },
 ];
 

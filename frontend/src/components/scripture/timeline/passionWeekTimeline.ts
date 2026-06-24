@@ -20,6 +20,7 @@ export {
   getTimelineDatePreview,
   getTimelineText,
   passionWeekTimelineEvents,
+  timelineBookContextRows,
   timelineKingdomComparisonRows,
   timelineBooks,
   timelinePeriods,

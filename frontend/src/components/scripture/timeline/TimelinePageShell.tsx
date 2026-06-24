@@ -15,6 +15,7 @@ import {
   getTimelineReaderHrefFromReader,
   getTimelineText,
   passionWeekTimelineEvents,
+  timelineBookContextRows,
   timelineKingdomComparisonRows,
   timelineBooks,
   timelinePeriods,
@@ -51,7 +52,7 @@ const pageCopy = {
     eventsHeading: "Events View",
     eventsNote: "The flow stays Scripture-first and preserves the selected item in the right panel.",
     futureViewNote:
-      "Books, genealogy, places / map, and themes remain future views until later approved phases add their own content layers.",
+      "Genealogy, places / map, and themes remain future views until later approved phases add their own content layers.",
     openInReader: "Open in Reader",
     overviewHeading: "Scripture Flow",
     overviewNote:
@@ -80,7 +81,7 @@ const pageCopy = {
     viewTabs: [
       { id: "overview", label: "Overview", future: false },
       { id: "events", label: "Events", future: false },
-      { id: "books", label: "Books", future: true },
+      { id: "books", label: "Books / Psalms", future: false },
       { id: "kingdoms", label: "Kings & Kingdoms", future: false },
       { id: "genealogy", label: "Genealogy", future: true },
       { id: "places", label: "Places / Map", future: true },
@@ -91,7 +92,7 @@ const pageCopy = {
     detailHeading: "선택한 사건의 성경 문맥",
     eventsHeading: "사건 보기",
     eventsNote: "본문 흐름은 성경 우선을 유지하며, 선택 항목은 오른쪽 패널에 계속 남아 있습니다.",
-    futureViewNote: "책, 족보, 지명 / 지도, 주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
+    futureViewNote: "족보, 지명 / 지도, 주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
     openInReader: "읽기에서 열기",
     overviewHeading: "성경 흐름",
     overviewNote:
@@ -120,7 +121,7 @@ const pageCopy = {
     viewTabs: [
       { id: "overview", label: "개요", future: false },
       { id: "events", label: "사건", future: false },
-      { id: "books", label: "책", future: true },
+      { id: "books", label: "책 / 시편", future: false },
       { id: "kingdoms", label: "왕국 / 제국", future: false },
       { id: "genealogy", label: "족보", future: true },
       { id: "places", label: "지명 / 지도", future: true },
@@ -356,6 +357,16 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
               />
             ) : null}
 
+            {activeView === "books" ? (
+              <BooksContextPreviewPanel
+                activeBookId={filters.bookId}
+                activePeriodId={filters.periodId}
+                locale={activeLocale}
+                searchTerm={filters.searchTerm}
+                selectedEventId={selectedEvent?.id ?? ""}
+              />
+            ) : null}
+
             <ScriptureTimelineList
               activePeriodId={filters.periodId}
               events={visibleEvents}
@@ -584,6 +595,142 @@ function KingsKingdomsPreviewPanel({ locale, selectedEventId }: KingsKingdomsPre
   );
 }
 
+type BooksContextPreviewPanelProps = {
+  activeBookId: string;
+  activePeriodId: string;
+  locale: TimelineLocale;
+  searchTerm: string;
+  selectedEventId: string;
+};
+
+function BooksContextPreviewPanel({
+  activeBookId,
+  activePeriodId,
+  locale,
+  searchTerm,
+  selectedEventId,
+}: BooksContextPreviewPanelProps) {
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const visibleRows = timelineBookContextRows.filter((row) => {
+    const matchesBook = activeBookId === "all" || row.bookId === activeBookId;
+    const matchesPeriod = activePeriodId === "all" || row.periodId === activePeriodId;
+    const matchesSearch = matchesBookContextSearch(row, normalizedSearch);
+
+    return matchesBook && matchesPeriod && matchesSearch;
+  });
+
+  const groupedRows = timelinePeriods
+    .filter((period) => visibleRows.some((row) => row.periodId === period.id))
+    .sort((left, right) => left.order - right.order)
+    .map((period) => ({
+      period,
+      rows: visibleRows.filter((row) => row.periodId === period.id),
+    }));
+
+  return (
+    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+      <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {locale === "ko" ? "책 / 시편 문맥" : "Books / Psalms Context"}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "정경 위치와 배경 연결을 분리해 보여 주는 간단한 미리보기입니다."
+              : "A compact preview that separates canonical location from background connection."}
+          </p>
+        </div>
+        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+          {locale === "ko" ? "미리보기" : "Preview"}
+        </span>
+      </div>
+
+      <div className="mt-4 space-y-4">
+        {groupedRows.map(({ period, rows }) => (
+          <section className="rounded-md border border-zinc-200 bg-zinc-50 p-3" key={period.id}>
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-semibold text-zinc-950">{getTimelineText(period.label, locale)}</h3>
+                <p className="mt-1 text-xs leading-5 text-zinc-500">
+                  {locale === "ko" ? "정경 위치 / 배경 연결" : "Canonical location / background connection"}
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                {locale === "ko" ? `${rows.length}개` : `${rows.length}`}
+              </span>
+            </div>
+
+            <div className="mt-3 space-y-2">
+              {rows.map((row) => {
+                const selected = Boolean(row.relatedEventIds?.includes(selectedEventId));
+
+                return (
+                  <div
+                    className={cn(
+                      "rounded-md border px-3 py-3",
+                      selected ? "border-zinc-950 bg-white shadow-sm" : "border-zinc-200 bg-white",
+                    )}
+                    key={row.id}
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                        {getTimelineText(row.title, locale)}
+                      </span>
+                      <span className="text-sm font-semibold text-zinc-950">
+                        {getTimelineText(row.canonicalLocation, locale)}
+                      </span>
+                      {row.historicalSettingLabel ? (
+                        <span className="text-sm text-zinc-600">
+                          {getTimelineText(row.historicalSettingLabel, locale)}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-medium text-zinc-600">
+                      {row.authorshipLabel ? (
+                        <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                          {getTimelineText(row.authorshipLabel, locale)}
+                          {row.authorshipBasisLabel ? ` · ${getTimelineText(row.authorshipBasisLabel, locale)}` : ""}
+                        </span>
+                      ) : null}
+                      <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                        {getTimelineText(row.backgroundBasisLabel, locale)}
+                      </span>
+                      {row.dateLabel ? (
+                        <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                          {getTimelineText(row.dateLabel, locale)}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {row.scriptureAnchors.map((anchor) => (
+                        <Link
+                          className={cn(
+                            "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                          )}
+                          href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                          key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                        >
+                          {getTimelineText(anchor.label, locale)}
+                        </Link>
+                      ))}
+                    </div>
+
+                    <p className="mt-2 text-sm leading-6 text-zinc-600">{getTimelineText(row.note, locale)}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 type ComparisonCellValueProps = {
   locale: TimelineLocale;
   value?: { en: string; ko: string };
@@ -619,6 +766,47 @@ function ComparisonTagList({ locale, tags }: ComparisonTagListProps) {
       ))}
     </div>
   );
+}
+
+function matchesBookContextSearch(
+  row: (typeof timelineBookContextRows)[number],
+  query: string,
+) {
+  if (!query) {
+    return true;
+  }
+
+  const rowTokens = [
+    row.title.en,
+    row.title.ko,
+    row.canonicalLocation.en,
+    row.canonicalLocation.ko,
+    row.historicalSettingLabel?.en ?? "",
+    row.historicalSettingLabel?.ko ?? "",
+    row.authorshipLabel?.en ?? "",
+    row.authorshipLabel?.ko ?? "",
+    row.authorshipBasisLabel?.en ?? "",
+    row.authorshipBasisLabel?.ko ?? "",
+    row.backgroundBasisLabel.en,
+    row.backgroundBasisLabel.ko,
+    row.dateLabel?.en ?? "",
+    row.dateLabel?.ko ?? "",
+    row.dateBasisLabel?.en ?? "",
+    row.dateBasisLabel?.ko ?? "",
+    row.dateConfidenceLabel?.en ?? "",
+    row.dateConfidenceLabel?.ko ?? "",
+    row.note.en,
+    row.note.ko,
+    ...row.scriptureAnchors.flatMap((anchor) => [anchor.label.en, anchor.label.ko]),
+    ...(row.relatedPeople?.flatMap((person) => [person.en, person.ko]) ?? []),
+    ...(row.relatedKingdoms?.flatMap((kingdom) => [kingdom.en, kingdom.ko]) ?? []),
+    ...(row.relatedEmpires?.flatMap((empire) => [empire.en, empire.ko]) ?? []),
+    ...(row.relatedPlaces ?? []),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return rowTokens.includes(query);
 }
 
 function periodLabelForStatus(periodId: string, periodOptions: TimelineOption[], locale: TimelineLocale) {
