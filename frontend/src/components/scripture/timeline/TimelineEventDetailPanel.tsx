@@ -16,6 +16,7 @@ import {
   getTimelineText,
   type PassionWeekTimelineEvent,
   type TimelineLocale,
+  type TimelineText,
 } from "./passionWeekTimeline";
 import { TimelineConfidenceBadge } from "./TimelineConfidenceBadge";
 import { TimelineDatingNote } from "./TimelineDatingNote";
@@ -135,6 +136,68 @@ export function TimelineEventDetailPanel({
               })}
             </div>
           </DetailSection>
+
+          {event.kingdomTags?.length ||
+          event.empireTags?.length ||
+          event.rulerTags?.length ||
+          event.prophetTags?.length ||
+          event.surroundingNationTags?.length ||
+          event.synchronismNote ||
+          event.worldContextNote ||
+          event.worldContextBasisLabel ||
+          event.worldContextConfidenceLabel ||
+          event.nameVariantNote ? (
+            <DetailSection label={locale === "ko" ? "왕국 / 열강 문맥" : "Kingdom / Empire Context"}>
+              <div className="space-y-3">
+                <p className="text-xs leading-5 text-zinc-500">
+                  {locale === "ko"
+                    ? "이 항목들은 성경 근거를 돕는 보조 문맥이며, 본문 자체를 대신하지 않습니다."
+                    : "These items support Scripture reading and do not replace the biblical text itself."}
+                </p>
+                <ContextTagGroup label={locale === "ko" ? "왕국" : "Kingdom"} locale={locale} tags={event.kingdomTags} />
+                <ContextTagGroup label={locale === "ko" ? "열강" : "Empire"} locale={locale} tags={event.empireTags} />
+                <ContextTagGroup label={locale === "ko" ? "통치자" : "Rulers"} locale={locale} tags={event.rulerTags} />
+                <ContextTagGroup label={locale === "ko" ? "선지자" : "Prophets"} locale={locale} tags={event.prophetTags} />
+                <ContextTagGroup
+                  label={locale === "ko" ? "주변 민족" : "Surrounding Nations"}
+                  locale={locale}
+                  tags={event.surroundingNationTags}
+                />
+                {event.synchronismNote ? (
+                  <ContextTextRow
+                    label={locale === "ko" ? "동기화 메모" : "Synchronism Note"}
+                    value={getTimelineText(event.synchronismNote, locale)}
+                  />
+                ) : null}
+                {event.worldContextNote ? (
+                  <ContextTextRow
+                    label={locale === "ko" ? "세계 문맥" : "World Context Note"}
+                    value={getTimelineText(event.worldContextNote, locale)}
+                  />
+                ) : null}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {event.worldContextBasisLabel ? (
+                    <ContextTextRow
+                      label={locale === "ko" ? "문맥 근거" : "Context Basis"}
+                      value={getTimelineText(event.worldContextBasisLabel, locale)}
+                    />
+                  ) : null}
+                  {event.worldContextConfidenceLabel ? (
+                    <ContextTextRow
+                      label={locale === "ko" ? "문맥 신뢰도" : "Context Confidence"}
+                      value={getTimelineText(event.worldContextConfidenceLabel, locale)}
+                    />
+                  ) : null}
+                </div>
+                {event.nameVariantNote ? (
+                  <ContextTextRow
+                    label={locale === "ko" ? "이름 변형 메모" : "Name Variant Note"}
+                    value={getTimelineText(event.nameVariantNote, locale)}
+                  />
+                ) : null}
+              </div>
+            </DetailSection>
+          ) : null}
 
           <DetailSection label={locale === "ko" ? "지명 / 인물" : "Place / People"}>
             <div className="space-y-3">
@@ -284,6 +347,43 @@ function Tag({ children }: TagProps) {
     <span className="inline-flex rounded-full bg-zinc-100 px-3 py-1 text-sm font-medium text-zinc-700">
       {children}
     </span>
+  );
+}
+
+type ContextTagGroupProps = {
+  label: string;
+  locale: TimelineLocale;
+  tags?: TimelineText[];
+};
+
+function ContextTagGroup({ label, locale, tags }: ContextTagGroupProps) {
+  if (!tags?.length) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
+      <div className="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <Tag key={`${label}-${tag.en}-${tag.ko}`}>{getTimelineText(tag, locale)}</Tag>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type ContextTextRowProps = {
+  label: string;
+  value: string;
+};
+
+function ContextTextRow({ label, value }: ContextTextRowProps) {
+  return (
+    <div className="space-y-1.5">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
+      <p className="text-sm leading-6 text-zinc-600">{value}</p>
+    </div>
   );
 }
 

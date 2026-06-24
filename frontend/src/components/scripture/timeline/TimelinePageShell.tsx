@@ -15,6 +15,7 @@ import {
   timelineBooks,
   timelinePeriods,
   timelinePlaces,
+  type TimelineText,
   type TimelineLocale,
 } from "./passionWeekTimeline";
 import { ScriptureTimelineList } from "./ScriptureTimelineList";
@@ -46,7 +47,7 @@ const pageCopy = {
     eventsHeading: "Events View",
     eventsNote: "The flow stays Scripture-first and preserves the selected item in the right panel.",
     futureViewNote:
-      "Future workspace views remain visible but disabled until later approved phases add their own content layers.",
+      "Books, genealogy, places / map, and themes remain future views until later approved phases add their own content layers.",
     openInReader: "Open in Reader",
     overviewHeading: "Scripture Flow",
     overviewNote:
@@ -76,7 +77,7 @@ const pageCopy = {
       { id: "overview", label: "Overview", future: false },
       { id: "events", label: "Events", future: false },
       { id: "books", label: "Books", future: true },
-      { id: "kingdoms", label: "Kings & Kingdoms", future: true },
+      { id: "kingdoms", label: "Kings & Kingdoms", future: false },
       { id: "genealogy", label: "Genealogy", future: true },
       { id: "places", label: "Places / Map", future: true },
       { id: "themes", label: "Themes", future: true },
@@ -86,7 +87,7 @@ const pageCopy = {
     detailHeading: "선택한 사건의 성경 문맥",
     eventsHeading: "사건 보기",
     eventsNote: "본문 흐름은 성경 우선을 유지하며, 선택 항목은 오른쪽 패널에 계속 남아 있습니다.",
-    futureViewNote: "이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용 보기는 비활성 상태로 보입니다.",
+    futureViewNote: "책, 족보, 지명 / 지도, 주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
     openInReader: "읽기에서 열기",
     overviewHeading: "성경 흐름",
     overviewNote:
@@ -116,7 +117,7 @@ const pageCopy = {
       { id: "overview", label: "개요", future: false },
       { id: "events", label: "사건", future: false },
       { id: "books", label: "책", future: true },
-      { id: "kingdoms", label: "왕국 / 제국", future: true },
+      { id: "kingdoms", label: "왕국 / 제국", future: false },
       { id: "genealogy", label: "족보", future: true },
       { id: "places", label: "지명 / 지도", future: true },
       { id: "themes", label: "주제", future: true },
@@ -313,8 +314,8 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
             placeOptions={placeOptions}
             previewNote={
               activeLocale === "ko"
-                ? "기간, 책, 지명은 현재 미리보기에서 실제로 작동합니다. 나머지 섹션은 다음 단계에서 확장됩니다."
-                : "Period, book, and place filters are active in the preview. The remaining sections expand in later phases."
+                ? "기간, 책, 지명, 왕국 미리보기는 현재 레이아웃에서 실제로 작동합니다. 나머지 섹션은 다음 단계에서 확장됩니다."
+                : "Period, book, place, and kingdom preview are active in the current layout. The remaining sections expand in later phases."
             }
             searchTerm={filters.searchTerm}
             totalCount={previewCounts.totalCount}
@@ -332,6 +333,10 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
                   ? activeLocale === "ko"
                     ? "성경 흐름"
                     : "Scripture Flow"
+                  : activeView === "kingdoms"
+                    ? activeLocale === "ko"
+                      ? "왕국 / 제국"
+                      : "Kings & Kingdoms"
                   : activeLocale === "ko"
                     ? "사건 흐름"
                     : "Event Stream"
@@ -339,6 +344,14 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
               totalCount={previewCounts.totalCount}
               visibleCount={previewCounts.visibleCount}
             />
+
+            {activeView === "kingdoms" ? (
+              <KingsKingdomsPreviewPanel
+                events={visibleEvents}
+                locale={activeLocale}
+                onSelect={setSelectedEventId}
+              />
+            ) : null}
 
             <ScriptureTimelineList
               activePeriodId={filters.periodId}
@@ -418,6 +431,135 @@ function CompactStatusRow({
   );
 }
 
+type KingsKingdomsPreviewPanelProps = {
+  events: typeof passionWeekTimelineEvents;
+  locale: TimelineLocale;
+  onSelect: (eventId: string) => void;
+};
+
+function KingsKingdomsPreviewPanel({ events, locale, onSelect }: KingsKingdomsPreviewPanelProps) {
+  const unitedKingdomEvents = events.filter(
+    (event) => event.id === "samuel-transition" || hasTag(event.kingdomTags, "United Kingdom"),
+  );
+  const dividedKingdomEvents = events.filter(
+    (event) => hasTag(event.kingdomTags, "Judah") || hasTag(event.kingdomTags, "Northern Israel"),
+  );
+  const surroundingContextEvents = events.filter(
+    (event) => Boolean(event.empireTags?.length || event.surroundingNationTags?.length),
+  );
+
+  const groups = [
+    {
+      events: unitedKingdomEvents,
+      key: "united",
+      note:
+        locale === "ko"
+          ? "사무엘, 사울, 다윗, 솔로몬을 중심으로 본 왕정 미리보기"
+          : "Samuel, Saul, David, and Solomon in a compact monarchy preview",
+      title: locale === "ko" ? "통일 왕국" : "United Kingdom",
+    },
+    {
+      events: dividedKingdomEvents,
+      key: "divided",
+      note:
+        locale === "ko"
+          ? "유다와 북이스라엘이 갈라진 뒤의 선지자 및 왕정 흐름"
+          : "Judah and Northern Israel after the split, with prophet and king context",
+      title: locale === "ko" ? "분열 왕국" : "Divided Kingdom",
+    },
+    {
+      events: surroundingContextEvents,
+      key: "surrounding",
+      note:
+        locale === "ko"
+          ? "앗수르, 바벨론, 바사 같은 지원 역사 문맥"
+          : "Supporting historical context for Assyria, Babylon, and Persia",
+      title: locale === "ko" ? "주변 열강 / 민족" : "Surrounding Empires / Nations",
+    },
+  ];
+
+  return (
+    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+      <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {locale === "ko" ? "왕국 / 제국 미리보기" : "Kings / Kingdoms Preview"}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "이 보기는 성경 본문 근거를 따라 왕국과 열강 문맥을 미리 보여 줍니다."
+              : "This view previews kingdom and empire context while remaining anchored to Scripture."}
+          </p>
+        </div>
+        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+          {locale === "ko" ? "미리보기" : "Preview"}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 lg:grid-cols-3">
+        {groups.map((group) => (
+          <section className="rounded-md border border-zinc-200 bg-zinc-50 p-3" key={group.key}>
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold text-zinc-950">{group.title}</h3>
+                <p className="mt-1 text-xs leading-5 text-zinc-500">{group.note}</p>
+              </div>
+              <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                {locale === "ko" ? `${group.events.length}개` : `${group.events.length}`}
+              </span>
+            </div>
+
+            <div className="mt-3 flex flex-col gap-2">
+              {group.events.length ? (
+                group.events.map((event) => (
+                  <button
+                    className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2"
+                    key={event.id}
+                    onClick={() => onSelect(event.id)}
+                    type="button"
+                  >
+                    <p className="text-sm font-semibold text-zinc-950">
+                      {getTimelineText(event.title, locale)}
+                    </p>
+                    <p className="mt-1 flex flex-wrap gap-1.5 text-[11px] font-medium text-zinc-600">
+                      {event.kingdomTags?.slice(0, 1).map((tag) => (
+                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`kg-${event.id}-${tag.en}`}>
+                          {getTimelineText(tag, locale)}
+                        </span>
+                      ))}
+                      {event.empireTags?.slice(0, 1).map((tag) => (
+                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`em-${event.id}-${tag.en}`}>
+                          {getTimelineText(tag, locale)}
+                        </span>
+                      ))}
+                      {event.rulerTags?.slice(0, 1).map((tag) => (
+                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`ru-${event.id}-${tag.en}`}>
+                          {getTimelineText(tag, locale)}
+                        </span>
+                      ))}
+                      {event.prophetTags?.slice(0, 1).map((tag) => (
+                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`pr-${event.id}-${tag.en}`}>
+                          {getTimelineText(tag, locale)}
+                        </span>
+                      ))}
+                    </p>
+                  </button>
+                ))
+              ) : (
+                <p className="rounded-md border border-dashed border-zinc-200 bg-white px-3 py-4 text-sm leading-6 text-zinc-500">
+                  {locale === "ko"
+                    ? "현재 필터에 맞는 미리보기 항목이 없습니다."
+                    : "No preview items match the current filters."}
+                </p>
+              )}
+            </div>
+          </section>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function periodLabelForStatus(periodId: string, periodOptions: TimelineOption[], locale: TimelineLocale) {
   if (periodId === "all") {
     return locale === "ko" ? "전체 기간" : "All periods";
@@ -440,6 +582,10 @@ function placeLabelForStatus(placeId: string, placeOptions: TimelineOption[], lo
   }
 
   return placeOptions.find((option) => option.id === placeId)?.label ?? "";
+}
+
+function hasTag(tags: TimelineText[] | undefined, needleEn: string) {
+  return Boolean(tags?.some((tag) => tag.en === needleEn));
 }
 
 function matchesTimelineSearch(event: (typeof passionWeekTimelineEvents)[number], query: string) {
@@ -469,6 +615,21 @@ function matchesTimelineSearch(event: (typeof passionWeekTimelineEvents)[number]
     event.eventType.ko,
     event.confidenceLevel.en,
     event.confidenceLevel.ko,
+    ...(event.kingdomTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
+    ...(event.empireTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
+    ...(event.rulerTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
+    ...(event.prophetTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
+    ...(event.surroundingNationTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
+    event.synchronismNote?.en ?? "",
+    event.synchronismNote?.ko ?? "",
+    event.worldContextNote?.en ?? "",
+    event.worldContextNote?.ko ?? "",
+    event.worldContextBasisLabel?.en ?? "",
+    event.worldContextBasisLabel?.ko ?? "",
+    event.worldContextConfidenceLabel?.en ?? "",
+    event.worldContextConfidenceLabel?.ko ?? "",
+    event.nameVariantNote?.en ?? "",
+    event.nameVariantNote?.ko ?? "",
     primaryBook?.label.en ?? "",
     primaryBook?.label.ko ?? "",
     period?.label.en ?? "",

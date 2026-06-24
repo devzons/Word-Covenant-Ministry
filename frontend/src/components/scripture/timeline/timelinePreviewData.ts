@@ -56,6 +56,16 @@ export type TimelineEvent = {
   relativeYearBasisLabel?: TimelineText;
   relativeYearCalculationNote?: TimelineText;
   durationLabel?: TimelineText;
+  kingdomTags?: TimelineText[];
+  empireTags?: TimelineText[];
+  rulerTags?: TimelineText[];
+  prophetTags?: TimelineText[];
+  surroundingNationTags?: TimelineText[];
+  synchronismNote?: TimelineText;
+  worldContextNote?: TimelineText;
+  worldContextBasisLabel?: TimelineText;
+  worldContextConfidenceLabel?: TimelineText;
+  nameVariantNote?: TimelineText;
   reader: TimelineReader;
 };
 
@@ -175,6 +185,32 @@ const approximateSequence = {
   en: "Dating: Approximate biblical sequence",
   ko: "연대: 성경 순서에 따른 대략적 배치",
 } satisfies TimelineText;
+
+const israelKingdomTag = { en: "Israel", ko: "이스라엘" } satisfies TimelineText;
+const unitedKingdomTag = { en: "United Kingdom", ko: "통일 왕국" } satisfies TimelineText;
+const judahKingdomTag = { en: "Judah", ko: "유다" } satisfies TimelineText;
+const northernIsraelKingdomTag = { en: "Northern Israel", ko: "북이스라엘" } satisfies TimelineText;
+const assyriaEmpireTag = { en: "Assyria", ko: "앗수르" } satisfies TimelineText;
+const babylonEmpireTag = { en: "Babylon", ko: "바벨론" } satisfies TimelineText;
+const persiaEmpireTag = { en: "Persia", ko: "바사" } satisfies TimelineText;
+const samuelProphetTag = { en: "Samuel", ko: "사무엘" } satisfies TimelineText;
+const saulRulerTag = { en: "Saul", ko: "사울" } satisfies TimelineText;
+const davidRulerTag = { en: "David", ko: "다윗" } satisfies TimelineText;
+const solomonRulerTag = { en: "Solomon", ko: "솔로몬" } satisfies TimelineText;
+const rehoboamRulerTag = { en: "Rehoboam", ko: "르호보암" } satisfies TimelineText;
+const jeroboamRulerTag = { en: "Jeroboam", ko: "여로보암" } satisfies TimelineText;
+const ahabRulerTag = { en: "Ahab", ko: "아합" } satisfies TimelineText;
+const hezekiahRulerTag = { en: "Hezekiah", ko: "히스기야" } satisfies TimelineText;
+const sennacheribRulerTag = { en: "Sennacherib", ko: "산헤립" } satisfies TimelineText;
+const hosheaRulerTag = { en: "Hoshea", ko: "호세아" } satisfies TimelineText;
+const nathanProphetTag = { en: "Nathan", ko: "나단" } satisfies TimelineText;
+const elijahProphetTag = { en: "Elijah", ko: "엘리야" } satisfies TimelineText;
+const isaiahProphetTag = { en: "Isaiah", ko: "이사야" } satisfies TimelineText;
+const jeremiahProphetTag = { en: "Jeremiah", ko: "예레미야" } satisfies TimelineText;
+const hoseaProphetTag = { en: "Hosea", ko: "호세아" } satisfies TimelineText;
+const amosProphetTag = { en: "Amos", ko: "아모스" } satisfies TimelineText;
+const baalProphetsTag = { en: "Prophets of Baal", ko: "바알 선지자들" } satisfies TimelineText;
+const cyrusRulerTag = { en: "Cyrus", ko: "고레스" } satisfies TimelineText;
 
 const periodById = new Map(timelinePeriods.map((period) => [period.id, period]));
 const bookById = new Map(timelineBooks.map((book) => [book.id, book]));
@@ -1765,6 +1801,86 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     reader: { book: "ruth", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
+    id: "samuel-transition",
+    title: { en: "Samuel and the Monarchy Transition", ko: "사무엘과 왕정 전환" },
+    summary: {
+      en: "Samuel's prophetic calling leads into Israel's request for a king.",
+      ko: "사무엘의 선지자적 부르심이 이스라엘의 왕 요구로 이어집니다.",
+    },
+    periodId: "united-kingdom",
+    primaryBookId: "1-samuel",
+    relatedBookIds: ["judges"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 3:1-21", ko: "사무엘상 3:1-21" },
+        { book: "1-samuel", chapter: 3, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Samuel 8:1-22", ko: "사무엘상 8:1-22" },
+        { book: "1-samuel", chapter: 8, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [{ en: "Samuel", ko: "사무엘" }, { en: "Israel's elders", ko: "이스라엘 장로들" }],
+    placeIds: ["shiloh"],
+    locationNote: {
+      en: "Shiloh remains the covenant-memory setting for the transition.",
+      ko: "실로는 이 전환의 언약 기억 배경으로 남습니다.",
+    },
+    datingNote: biblicalSequencePreview.dateLabel,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "Judges to monarchy", ko: "사사에서 왕정으로" },
+    eventType: { en: "Judges to monarchy", ko: "사사에서 왕정으로" },
+    kingdomTags: [israelKingdomTag],
+    prophetTags: [samuelProphetTag],
+    dateLabel: biblicalSequencePreview.dateLabel,
+    relativeYearBasisLabel: { en: "1 Samuel 3 and 8 textual connection", ko: "사무엘상 3장과 8장 본문 연결" },
+    relativeYearCalculationNote: {
+      en: "1 Samuel 3 records Samuel's prophetic calling, and 1 Samuel 8 records Israel's request for a king.",
+      ko: "사무엘상 3장은 사무엘의 선지자적 부르심을, 사무엘상 8장은 이스라엘이 왕을 요구하는 전환점을 기록합니다.",
+    },
+    reader: { book: "1-samuel", chapter: 3, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
+    id: "saul-chosen-king",
+    title: { en: "Saul Chosen as King", ko: "사울이 왕으로 세워짐" },
+    summary: {
+      en: "Israel receives its first king in the textual flow of 1 Samuel.",
+      ko: "이스라엘이 사무엘상 본문 흐름 속에서 첫 왕을 받습니다.",
+    },
+    periodId: "united-kingdom",
+    primaryBookId: "1-samuel",
+    relatedBookIds: ["judges"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 10:17-27", ko: "사무엘상 10:17-27" },
+        { book: "1-samuel", chapter: 10, verse: 17, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Samuel 12:1-25", ko: "사무엘상 12:1-25" },
+        { book: "1-samuel", chapter: 12, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [{ en: "Saul", ko: "사울" }, { en: "Samuel", ko: "사무엘" }, { en: "Israel's children", ko: "이스라엘 자손" }],
+    placeIds: ["canaan"],
+    locationNote: {
+      en: "The monarchy begins within Israel's covenant story, not outside it.",
+      ko: "왕정은 이스라엘 언약 이야기 안에서 시작됩니다.",
+    },
+    datingNote: biblicalSequencePreview.dateLabel,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "Beginning of monarchy", ko: "왕정 시작" },
+    eventType: { en: "Beginning of monarchy", ko: "왕정 시작" },
+    kingdomTags: [unitedKingdomTag],
+    rulerTags: [saulRulerTag],
+    prophetTags: [samuelProphetTag],
+    dateLabel: biblicalSequencePreview.dateLabel,
+    worldContextConfidenceLabel: {
+      en: "Scripture anchor first; external chronology not asserted",
+      ko: "본문 근거 우선, 외부 연대 단정 없음",
+    },
+    reader: { book: "1-samuel", chapter: 10, verse: 17, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
     id: "david-anointed",
     title: { en: "David Anointed", ko: "다윗의 기름부음" },
     summary: { en: "The shepherd boy is set apart for kingship.", ko: "목동 소년이 왕권을 위해 구별됩니다." },
@@ -1787,6 +1903,15 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "Before the monarchy settles", ko: "왕정이 안정되기 전" },
     eventType: { en: "Kingship", ko: "왕권" },
+    kingdomTags: [unitedKingdomTag],
+    rulerTags: [davidRulerTag],
+    prophetTags: [samuelProphetTag],
+    synchronismNote: {
+      en: "David is anointed within the textual flow of Saul's monarchy.",
+      ko: "사울 왕정 중 다윗이 기름부음을 받는 본문 흐름입니다.",
+    },
+    worldContextBasisLabel: { en: "1 Samuel 16 textual sequence", ko: "사무엘상 16장 본문 순서" },
+    worldContextConfidenceLabel: { en: "Based on textual sequence", ko: "본문 순서 기반" },
     reader: { book: "1-samuel", chapter: 16, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
@@ -1811,7 +1936,10 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     datingNote: narrativeSequence,
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "During the united monarchy", ko: "통일 왕국 시기" },
-    eventType: { en: "Covenant", ko: "언약" },
+    eventType: { en: "Covenant / kingship", ko: "언약 / 왕권" },
+    kingdomTags: [unitedKingdomTag],
+    rulerTags: [davidRulerTag],
+    prophetTags: [nathanProphetTag],
     reader: { book: "2-samuel", chapter: 7, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
@@ -1837,6 +1965,18 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "After the kingdom is established", ko: "왕국이 세워진 뒤" },
     eventType: { en: "Temple / kingship", ko: "성전 / 왕권" },
+    kingdomTags: [unitedKingdomTag],
+    rulerTags: [solomonRulerTag],
+    relativeYearLabel: { en: "Solomon's fourth year", ko: "솔로몬 제4년" },
+    relativeYearBasisLabel: { en: "1 Kings 6:1 reign-year notice", ko: "열왕기상 6:1의 통치 연수 기록" },
+    relativeYearCalculationNote: {
+      en: "1 Kings 6:1 records that temple construction began in Solomon's fourth year. The same verse's 480-years-after-Exodus notice is displayed as a biblical textual marker without asserting an external chronology.",
+      ko: "열왕기상 6:1은 솔로몬 왕 제4년에 성전 건축이 시작되었다고 기록합니다. 같은 구절의 출애굽 후 480년 표지는 본문 기록으로 표시하되, 외부 연대 계산은 단정하지 않습니다.",
+    },
+    worldContextConfidenceLabel: {
+      en: "Biblical reign-year stated; external chronology supporting only",
+      ko: "본문 통치 연수 기록은 명시, 외부 연대는 보조",
+    },
     reader: { book: "1-kings", chapter: 8, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
@@ -1861,7 +2001,16 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     datingNote: narrativeSequence,
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "After Solomon", ko: "솔로몬 이후" },
-    eventType: { en: "Political fracture", ko: "정치적 분열" },
+    eventType: { en: "Kingdom division", ko: "왕국 분열" },
+    kingdomTags: [judahKingdomTag, northernIsraelKingdomTag],
+    rulerTags: [rehoboamRulerTag, jeroboamRulerTag],
+    relativeYearBasisLabel: { en: "1 Kings 12 textual sequence", ko: "열왕기상 12장 본문 순서" },
+    synchronismNote: {
+      en: "After Solomon, the kingdom divides into Judah and Northern Israel in the biblical narrative.",
+      ko: "솔로몬 이후 왕국이 유다와 북이스라엘로 갈라지는 본문 흐름입니다.",
+    },
+    worldContextBasisLabel: { en: "1 Kings 12 textual sequence", ko: "열왕기상 12장 본문 순서" },
+    worldContextConfidenceLabel: { en: "Based on textual sequence", ko: "본문 순서 기반" },
     reader: { book: "1-kings", chapter: 12, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
@@ -1887,6 +2036,16 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "During the divided kingdom", ko: "분열 왕국 시기" },
     eventType: { en: "Prophetic confrontation", ko: "선지자 대결" },
+    kingdomTags: [northernIsraelKingdomTag],
+    rulerTags: [ahabRulerTag],
+    prophetTags: [elijahProphetTag],
+    surroundingNationTags: [baalProphetsTag],
+    synchronismNote: {
+      en: "Elijah's Mount Carmel event belongs to the Northern Israel context in the days of Ahab.",
+      ko: "엘리야의 갈멜산 사건은 아합 시대 북이스라엘 배경 속에 있습니다.",
+    },
+    worldContextBasisLabel: { en: "1 Kings 18 textual sequence", ko: "열왕기상 18장 본문 순서" },
+    worldContextConfidenceLabel: { en: "Based on textual sequence", ko: "본문 순서 기반" },
     reader: { book: "1-kings", chapter: 18, verse: 16, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
@@ -1912,12 +2071,102 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "Before Judah's fall", ko: "유다 멸망 이전" },
     eventType: { en: "Exile", ko: "포로" },
+    kingdomTags: [northernIsraelKingdomTag],
+    empireTags: [assyriaEmpireTag],
+    rulerTags: [hosheaRulerTag, { en: "King of Assyria", ko: "앗수르 왕" }],
+    prophetTags: [hoseaProphetTag, amosProphetTag],
+    dateLabel: { en: "Supporting date: c. 722 BC", ko: "보조 연대: 약 주전 722년" },
+    dateBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    dateConfidenceLabel: {
+      en: "Scripture event high; external date supporting",
+      ko: "본문 사건은 높음, 외부 연대는 보조",
+    },
+    worldContextBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    worldContextNote: {
+      en: "The fall of Samaria is shown within the Assyrian conquest context of Northern Israel.",
+      ko: "사마리아 함락은 앗수르 제국의 북이스라엘 정복 배경 속에 표시됩니다.",
+    },
+    worldContextConfidenceLabel: {
+      en: "Scripture event high; external date supporting",
+      ko: "본문 사건은 높음, 외부 연대는 보조",
+    },
     reader: { book: "2-kings", chapter: 17, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
+    id: "hezekiah-assyria",
+    title: { en: "Hezekiah and the Assyrian Crisis", ko: "히스기야와 앗수르 위기" },
+    summary: {
+      en: "Jerusalem stands under Assyrian pressure while Hezekiah seeks the Lord.",
+      ko: "히스기야가 여호와를 구할 때 예루살렘은 앗수르 압박 아래 서 있습니다.",
+    },
+    periodId: "divided-kingdom",
+    primaryBookId: "2-kings",
+    relatedBookIds: ["isaiah"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 18:13-37", ko: "열왕기하 18:13-37" },
+        { book: "2-kings", chapter: 18, verse: 13, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 19:1-37", ko: "열왕기하 19:1-37" },
+        { book: "2-kings", chapter: 19, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 36:1-22", ko: "이사야 36:1-22" },
+        { book: "isaiah", chapter: 36, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 37:1-38", ko: "이사야 37:1-38" },
+        { book: "isaiah", chapter: 37, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [{ en: "Hezekiah", ko: "히스기야" }, { en: "Isaiah", ko: "이사야" }, { en: "Sennacherib", ko: "산헤립" }],
+    placeIds: ["jerusalem", "assyria"],
+    locationNote: {
+      en: "Jerusalem is the visible center of the crisis in Judah.",
+      ko: "예루살렘이 유다 위기의 눈에 보이는 중심입니다.",
+    },
+    datingNote: approximateSequence,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "Assyrian pressure on Judah", ko: "유다에 대한 앗수르 압박" },
+    eventType: { en: "Judah / Assyria crisis", ko: "유다 / 앗수르 위기" },
+    kingdomTags: [judahKingdomTag],
+    empireTags: [assyriaEmpireTag],
+    rulerTags: [hezekiahRulerTag, sennacheribRulerTag],
+    prophetTags: [isaiahProphetTag],
+    dateLabel: { en: "Supporting date: c. 701 BC", ko: "보조 연대: 약 주전 701년" },
+    dateBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    dateConfidenceLabel: {
+      en: "Scripture event high; external date supporting",
+      ko: "본문 사건은 높음, 외부 연대는 보조",
+    },
+    worldContextBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    worldContextNote: {
+      en: "The Jerusalem crisis in Hezekiah's days is shown within the Assyrian pressure on Judah.",
+      ko: "히스기야 시대 예루살렘 위기는 앗수르의 유다 압박 배경 속에 표시됩니다.",
+    },
+    worldContextConfidenceLabel: {
+      en: "Scripture anchor high; external chronology supporting only",
+      ko: "본문 근거는 높음, 외부 연대는 보조",
+    },
+    reader: { book: "2-kings", chapter: 18, verse: 13, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
     id: "fall-of-jerusalem",
-    title: { en: "Fall of Jerusalem", ko: "예루살렘 함락" },
-    summary: { en: "The city falls and the temple burns.", ko: "도성이 함락되고 성전이 불탑니다." },
+    title: { en: "Jerusalem Falls and the Babylonian Exile", ko: "예루살렘 함락과 바벨론 포로" },
+    summary: { en: "The city falls and the Babylonian exile begins.", ko: "도성이 함락되고 바벨론 포로가 시작됩니다." },
     periodId: "exile",
     primaryBookId: "2-kings",
     relatedBookIds: ["jeremiah", "lamentations"],
@@ -1931,7 +2180,11 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
         { book: "jeremiah", chapter: 52, verse: 1, translation: { en: "WEB", ko: "KRV" } },
       ),
     ],
-    people: [{ en: "Jeremiah", ko: "예레미야" }],
+    people: [
+      { en: "Zedekiah", ko: "시드기야" },
+      { en: "Nebuchadnezzar", ko: "느부갓네살" },
+      { en: "Jeremiah", ko: "예레미야" },
+    ],
     placeIds: ["jerusalem", "babylon"],
     locationNote: {
       en: "Jerusalem is the site of loss before Babylon becomes the backdrop of exile.",
@@ -1940,12 +2193,37 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     datingNote: approximateSequence,
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "The exile begins", ko: "포로기가 시작됨" },
-    eventType: { en: "Judgment / exile", ko: "심판 / 포로" },
+    eventType: { en: "Fall of Judah / exile", ko: "유다 멸망 / 포로" },
+    kingdomTags: [judahKingdomTag],
+    empireTags: [babylonEmpireTag],
+    rulerTags: [ { en: "Zedekiah", ko: "시드기야" }, { en: "Nebuchadnezzar", ko: "느부갓네살" } ],
+    prophetTags: [jeremiahProphetTag],
+    dateLabel: { en: "Supporting date: c. 586 BC", ko: "보조 연대: 약 주전 586년" },
+    dateBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    dateConfidenceLabel: {
+      en: "Scripture event high; external date supporting",
+      ko: "본문 사건은 높음, 외부 연대는 보조",
+    },
+    worldContextBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    worldContextNote: {
+      en: "The fall of Jerusalem is shown within Babylon's conquest of Judah and exile context.",
+      ko: "예루살렘 함락은 바벨론 제국의 유다 정복과 포로 배경 속에 표시됩니다.",
+    },
+    worldContextConfidenceLabel: {
+      en: "Scripture event high; external date supporting",
+      ko: "본문 사건은 높음, 외부 연대는 보조",
+    },
     reader: { book: "2-kings", chapter: 25, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
     id: "return-decree",
-    title: { en: "Return Decree", ko: "귀환 칙령" },
+    title: { en: "Cyrus's Decree and the Return", ko: "고레스 칙령과 귀환" },
     summary: { en: "Persia authorizes the people to go home.", ko: "바사가 백성의 귀환을 허락합니다." },
     periodId: "return",
     primaryBookId: "ezra",
@@ -1956,7 +2234,7 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
         { book: "ezra", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
       ),
     ],
-    people: [{ en: "Cyrus", ko: "고레스" }],
+    people: [{ en: "Cyrus", ko: "고레스" }, { en: "The returned exiles", ko: "귀환한 포로들" }],
     placeIds: ["babylon", "persia"],
     locationNote: {
       en: "The decree is issued from imperial power centers.",
@@ -1966,6 +2244,29 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     confidenceLevel: highConfidence,
     sequenceLabel: { en: "After the exile", ko: "포로기 이후" },
     eventType: { en: "Return", ko: "귀환" },
+    empireTags: [persiaEmpireTag],
+    rulerTags: [cyrusRulerTag],
+    dateLabel: { en: "Supporting date: c. 538 BC", ko: "보조 연대: 약 주전 538년" },
+    dateBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    dateConfidenceLabel: {
+      en: "Scripture event high; external date supporting",
+      ko: "본문 사건은 높음, 외부 연대는 보조",
+    },
+    worldContextBasisLabel: {
+      en: "Scripture text with supporting historical chronology",
+      ko: "성경 본문과 보조 역사 연대 연결",
+    },
+    worldContextNote: {
+      en: "The return is shown within the Persian Empire and Cyrus decree context.",
+      ko: "귀환은 바사 제국과 고레스 칙령 배경 속에 표시됩니다.",
+    },
+    worldContextConfidenceLabel: {
+      en: "Scripture event high; external date supporting",
+      ko: "본문 사건은 높음, 외부 연대는 보조",
+    },
     reader: { book: "ezra", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({

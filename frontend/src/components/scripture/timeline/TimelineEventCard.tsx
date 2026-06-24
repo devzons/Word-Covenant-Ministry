@@ -30,6 +30,10 @@ export function TimelineEventCard({
     .map((placeId) => getTimelinePlace(placeId))
     .filter((place): place is NonNullable<typeof place> => Boolean(place))
     .map((place) => getTimelineText(place.label, locale));
+  const kingdomLabels = event.kingdomTags?.map((tag) => getTimelineText(tag, locale)) ?? [];
+  const empireLabels = event.empireTags?.map((tag) => getTimelineText(tag, locale)) ?? [];
+  const rulerLabels = event.rulerTags?.map((tag) => getTimelineText(tag, locale)) ?? [];
+  const prophetLabels = event.prophetTags?.map((tag) => getTimelineText(tag, locale)) ?? [];
 
   return (
     <li className="relative">
@@ -114,6 +118,31 @@ export function TimelineEventCard({
                   {getTimelineText(event.eventType, locale)}
                 </span>
               </div>
+
+              {kingdomLabels.length || empireLabels.length || rulerLabels.length || prophetLabels.length ? (
+                <div className="flex flex-wrap gap-2 text-[11px] font-medium text-zinc-600">
+                  {kingdomLabels.map((label) => (
+                    <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1" key={`kingdom-${event.id}-${label}`}>
+                      {label}
+                    </span>
+                  ))}
+                  {empireLabels.map((label) => (
+                    <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1" key={`empire-${event.id}-${label}`}>
+                      {label}
+                    </span>
+                  ))}
+                  {rulerLabels.map((label) => (
+                    <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1" key={`ruler-${event.id}-${label}`}>
+                      {label}
+                    </span>
+                  ))}
+                  {prophetLabels.map((label) => (
+                    <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1" key={`prophet-${event.id}-${label}`}>
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
