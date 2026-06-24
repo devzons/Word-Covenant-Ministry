@@ -8,6 +8,7 @@ export type {
   TimelineScriptureAnchor,
   TimelineText,
   TimelineEvent as PassionWeekTimelineEvent,
+  TimelineDatePreview,
 } from "./timelinePreviewData";
 
 export {
@@ -16,6 +17,7 @@ export {
   getTimelinePeriod,
   getTimelineReaderHref,
   getTimelineReaderHrefFromReader,
+  getTimelineDatePreview,
   getTimelineText,
   passionWeekTimelineEvents,
   timelineBooks,

@@ -48,8 +48,21 @@ export type TimelineEvent = {
   confidenceLevel: TimelineText;
   sequenceLabel: TimelineText;
   eventType: TimelineText;
+  dateLabel?: TimelineText;
+  dateBasisLabel?: TimelineText;
+  dateConfidenceLabel?: TimelineText;
+  relativeYearLabel?: TimelineText;
+  relativeYearValue?: number;
+  relativeYearBasisLabel?: TimelineText;
+  relativeYearCalculationNote?: TimelineText;
   durationLabel?: TimelineText;
   reader: TimelineReader;
+};
+
+export type TimelineDatePreview = {
+  dateLabel: TimelineText;
+  dateBasisLabel: TimelineText;
+  dateConfidenceLabel: TimelineText;
 };
 
 export const timelinePeriods: TimelinePeriod[] = [
@@ -166,6 +179,77 @@ const periodById = new Map(timelinePeriods.map((period) => [period.id, period]))
 const bookById = new Map(timelineBooks.map((book) => [book.id, book]));
 const placeById = new Map(timelinePlaces.map((place) => [place.id, place]));
 
+const noDatePreview: TimelineDatePreview = {
+  dateBasisLabel: { en: "Not dated in this preview", ko: "이 미리보기에서는 연대 미표기" },
+  dateConfidenceLabel: { en: "Scripture anchor high; chronology not asserted", ko: "본문 근거는 높음, 연대는 단정하지 않음" },
+  dateLabel: { en: "Undated", ko: "연대 미표기" },
+};
+
+const biblicalSequencePreview: TimelineDatePreview = {
+  dateBasisLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+  dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+  dateLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+};
+
+const approximateYearPreviewByPeriod: Record<string, TimelineDatePreview> = {
+  primeval: noDatePreview,
+  patriarchs: {
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
+    dateLabel: { en: "c. 2000 BC", ko: "약 주전 2000년" },
+  },
+  exodus: {
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
+    dateLabel: { en: "c. 1400 BC", ko: "약 주전 1400년" },
+  },
+  conquest: {
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
+    dateLabel: { en: "c. 1400 BC", ko: "약 주전 1400년" },
+  },
+  "united-kingdom": {
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
+    dateLabel: { en: "c. 1000 BC", ko: "약 주전 1000년" },
+  },
+  "divided-kingdom": {
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
+    dateLabel: { en: "c. 900-700 BC", ko: "약 주전 900-700년" },
+  },
+  exile: {
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
+    dateLabel: { en: "c. 586 BC", ko: "약 주전 586년" },
+  },
+  return: {
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
+    dateLabel: { en: "c. 538 BC", ko: "약 주전 538년" },
+  },
+  gospel: {
+    dateBasisLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+    dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+    dateLabel: { en: "c. AD 30", ko: "약 주후 30년" },
+  },
+  acts: {
+    dateBasisLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+    dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+    dateLabel: { en: "c. AD 30-60", ko: "약 주후 30-60년" },
+  },
+};
+
+export function getTimelineDatePreview(event: TimelineEvent): TimelineDatePreview {
+  const fallback = approximateYearPreviewByPeriod[event.periodId] ?? biblicalSequencePreview;
+
+  return {
+    dateBasisLabel: event.dateBasisLabel ?? fallback.dateBasisLabel,
+    dateConfidenceLabel: event.dateConfidenceLabel ?? fallback.dateConfidenceLabel,
+    dateLabel: event.dateLabel ?? fallback.dateLabel,
+  };
+}
+
 function createAnchor(label: TimelineText, reader: TimelineReader): TimelineScriptureAnchor {
   return { label, reader };
 }
@@ -202,9 +286,54 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     reader: { book: "genesis", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
+    id: "adam-first-humanity",
+    title: { en: "Adam and First Humanity", ko: "아담과 첫 사람" },
+    summary: {
+      en: "The first human pair and humanity's starting point are shown in Scripture.",
+      ko: "첫 인간 부부와 인류의 시작점이 성경에서 보입니다.",
+    },
+    periodId: "primeval",
+    primaryBookId: "genesis",
+    relatedBookIds: ["psalms", "romans"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 1:26-28", ko: "창세기 1:26-28" },
+        { book: "genesis", chapter: 1, verse: 26, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Genesis 2:7", ko: "창세기 2:7" },
+        { book: "genesis", chapter: 2, verse: 7, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [{ en: "Adam", ko: "아담" }, { en: "Eve", ko: "하와" }],
+    placeIds: ["eden"],
+    locationNote: {
+      en: "Eden remains the setting for the human starting point.",
+      ko: "에덴은 인류 시작점의 배경으로 남습니다.",
+    },
+    datingNote: noChronology,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "After creation", ko: "창조 뒤" },
+    eventType: { en: "Creation order", ko: "창조 질서" },
+    dateLabel: { en: "Undated", ko: "연대 미표기" },
+    relativeYearLabel: { en: "AM 0", ko: "아담 기준 0년" },
+    relativeYearValue: 0,
+    relativeYearBasisLabel: { en: "Genesis 1-2 textual sequence", ko: "창세기 1-2장 본문 순서" },
+    relativeYearCalculationNote: {
+      en: "Adam is shown as the reference point from the creation-of-humanity text, not as a calculated birth year.",
+      ko: "아담의 출생 연도는 계산식이 아니라 창세기 인간 창조 본문을 기준점으로 둔 표시입니다.",
+    },
+    dateBasisLabel: { en: "Scripture sequence", ko: "성경 내부 순서" },
+    dateConfidenceLabel: {
+      en: "Scripture anchor high; chronology not asserted",
+      ko: "본문 근거는 높음, 연대는 단정하지 않음",
+    },
+    reader: { book: "genesis", chapter: 1, verse: 26, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
     id: "fall",
     title: { en: "Fall", ko: "타락" },
-    summary: { en: "Human disobedience enters the story.", ko: "인간의 불순종이 이야기 속으로 들어옵니다." },
+    summary: { en: "Human disobedience enters the biblical flow.", ko: "인간의 불순종이 성경 흐름에 들어옵니다." },
     periodId: "primeval",
     primaryBookId: "genesis",
     relatedBookIds: ["romans", "psalms"],
@@ -225,6 +354,97 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     sequenceLabel: { en: "After creation", ko: "창조 후" },
     eventType: { en: "Primeval event", ko: "태고 사건" },
     reader: { book: "genesis", chapter: 3, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
+    id: "adam-cain-abel-seth",
+    title: { en: "Adam's House: Cain, Abel, and Seth", ko: "아담의 집: 가인, 아벨, 셋" },
+    summary: {
+      en: "Adam's household and the opening family lines are traced in Scripture.",
+      ko: "아담의 집과 초기 가계가 성경에서 추적됩니다.",
+    },
+    periodId: "primeval",
+    primaryBookId: "genesis",
+    relatedBookIds: ["romans", "hebrews", "psalms"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 4:1-26", ko: "창세기 4:1-26" },
+        { book: "genesis", chapter: 4, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Genesis 5:1-5", ko: "창세기 5:1-5" },
+        { book: "genesis", chapter: 5, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [
+      { en: "Adam", ko: "아담" },
+      { en: "Cain", ko: "가인" },
+      { en: "Abel", ko: "아벨" },
+      { en: "Seth", ko: "셋" },
+    ],
+    placeIds: ["eden"],
+    locationNote: {
+      en: "The bridge keeps the household connected to Eden without overclaiming chronology.",
+      ko: "이 연결은 연대 단정을 피하면서도 가계를 에덴과 연결합니다.",
+    },
+    datingNote: noChronology,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "Before the flood", ko: "홍수 이전" },
+    eventType: { en: "Genealogy bridge", ko: "계보 연결" },
+    dateLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+    relativeYearLabel: { en: "AM 130", ko: "아담 기준 130년" },
+    relativeYearValue: 130,
+    relativeYearBasisLabel: { en: "Genesis 5 age calculation", ko: "창세기 5장 연수 계산" },
+    relativeYearCalculationNote: {
+      en: "Genesis 5:3 records that Adam was 130 years old when Seth was born. Cain and Abel appear earlier in the Genesis 4 event flow.",
+      ko: "창세기 5:3은 아담이 130세에 셋을 낳았다고 기록합니다. 가인과 아벨은 창세기 4장의 사건 흐름 안에 먼저 등장합니다.",
+    },
+    dateBasisLabel: { en: "Genealogy passage connection", ko: "계보 본문 연결" },
+    dateConfidenceLabel: {
+      en: "Scripture anchor high; external date not asserted",
+      ko: "본문 근거는 높음, 외부 연대는 단정하지 않음",
+    },
+    reader: { book: "genesis", chapter: 4, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
+    id: "noah-born",
+    title: { en: "Noah Born", ko: "노아 출생" },
+    summary: {
+      en: "The last pre-flood patriarch enters the family line before the flood narrative.",
+      ko: "홍수 서사 전에 마지막 족장 계보 인물이 등장합니다.",
+    },
+    periodId: "primeval",
+    primaryBookId: "genesis",
+    relatedBookIds: ["hebrews", "1-peter"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 5:28-32", ko: "창세기 5:28-32" },
+        { book: "genesis", chapter: 5, verse: 28, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [{ en: "Lamech", ko: "라멕" }, { en: "Noah", ko: "노아" }],
+    placeIds: ["eden"],
+    locationNote: {
+      en: "This relative-year marker belongs to the Genesis 5 genealogy flow.",
+      ko: "이 상대 연수 표시는 창세기 5장의 계보 흐름에 속합니다.",
+    },
+    datingNote: noChronology,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "Before the flood", ko: "홍수 이전" },
+    eventType: { en: "Genealogy year marker", ko: "계보 연수" },
+    dateLabel: { en: "Biblical relative year", ko: "성경 내부 연수" },
+    relativeYearLabel: { en: "AM 1056", ko: "아담 기준 1056년" },
+    relativeYearValue: 1056,
+    relativeYearBasisLabel: { en: "Genesis 5 cumulative age calculation", ko: "창세기 5장 누적 연수 계산" },
+    relativeYearCalculationNote: {
+      en: "Adding the Genesis 5 begetting ages from Adam to Lamech places Noah's birth at AM 1056.",
+      ko: "아담에서 라멕까지의 출생 연수를 누적하면 노아 출생은 아담 기준 1056년입니다.",
+    },
+    dateBasisLabel: { en: "Genesis 5 age calculation", ko: "창세기 5장 연수 계산" },
+    dateConfidenceLabel: {
+      en: "Scripture anchor high; chronology not asserted",
+      ko: "본문 근거는 높음, 연대는 단정하지 않음",
+    },
+    reader: { book: "genesis", chapter: 5, verse: 28, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
     id: "flood",
@@ -253,7 +473,61 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     confidenceLevel: { en: "Scripture anchor: High", ko: "본문 근거: 높음" },
     sequenceLabel: { en: "After the spread of evil", ko: "악이 퍼진 뒤" },
     eventType: { en: "Judgment / rescue", ko: "심판 / 구원" },
+    dateLabel: { en: "c. 2500 BC", ko: "약 주전 2500년" },
+    relativeYearLabel: { en: "AM 1656", ko: "아담 기준 1656년" },
+    relativeYearValue: 1656,
+    relativeYearBasisLabel: { en: "Genesis 5 cumulative ages and Genesis 7:6", ko: "창세기 5장 누적 연수와 창세기 7:6" },
+    relativeYearCalculationNote: {
+      en: "The Genesis 5 begetting ages place Noah's birth at AM 1056, and Genesis 7:6 records that the flood came when Noah was 600 years old. Therefore the flood is displayed as AM 1656.",
+      ko: "창세기 5장의 출생 연수를 누적하면 노아 출생은 아담 기준 1056년이고, 창세기 7:6은 홍수가 노아 600세에 있었다고 기록합니다. 따라서 홍수는 아담 기준 1656년으로 표시됩니다.",
+    },
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
     reader: { book: "genesis", chapter: 6, verse: 5, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
+    id: "noah-sons-nations",
+    title: { en: "Noah's Sons: Shem, Ham, and Japheth", ko: "노아의 아들들: 셈, 함, 야벳" },
+    summary: {
+      en: "The family lines and the nations are connected after the flood.",
+      ko: "홍수 후 가족 계보와 민족의 흐름이 연결됩니다.",
+    },
+    periodId: "primeval",
+    primaryBookId: "genesis",
+    relatedBookIds: ["acts", "psalms"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 9:18-19", ko: "창세기 9:18-19" },
+        { book: "genesis", chapter: 9, verse: 18, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Genesis 10:1-32", ko: "창세기 10:1-32" },
+        { book: "genesis", chapter: 10, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [
+      { en: "Noah", ko: "노아" },
+      { en: "Shem", ko: "셈" },
+      { en: "Ham", ko: "함" },
+      { en: "Japheth", ko: "야벳" },
+      { en: "The nations", ko: "민족들" },
+    ],
+    placeIds: ["ararat"],
+    locationNote: {
+      en: "Genesis 10 presents the spread of nations from Noah's sons, while Genesis 11 explains the Babel background of scattering.",
+      ko: "창세기 10장은 노아의 아들들로부터 민족들이 퍼지는 흐름을 보여 주고, 창세기 11장은 바벨 사건을 통해 흩어짐의 배경을 설명합니다.",
+    },
+    datingNote: noChronology,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "After the flood and before Babel", ko: "홍수 이후 바벨 이전" },
+    eventType: { en: "Genealogy / nations bridge", ko: "계보 / 민족 연결" },
+    dateLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+    dateBasisLabel: { en: "Textual bridge after the flood and before Babel", ko: "홍수 이후와 바벨 이전의 본문 연결" },
+    dateConfidenceLabel: {
+      en: "Textual connection high; external date not asserted",
+      ko: "본문 연결은 높음, 외부 연대는 단정하지 않음",
+    },
+    reader: { book: "genesis", chapter: 9, verse: 18, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
     id: "babel",
@@ -271,7 +545,7 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     people: [{ en: "The nations", ko: "민족들" }],
     placeIds: ["shinar"],
     locationNote: {
-      en: "Shinar is the narrative anchor for the tower story.",
+      en: "Shinar anchors the tower narrative in Scripture.",
       ko: "시날은 탑 사건의 서사적 배경입니다.",
     },
     datingNote: approximateSequence,
@@ -279,6 +553,104 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     sequenceLabel: { en: "Before the patriarchs", ko: "족장들 이전" },
     eventType: { en: "Primeval event", ko: "태고 사건" },
     reader: { book: "genesis", chapter: 11, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
+    id: "shem-line-after-flood",
+    title: { en: "The Line of Shem", ko: "셈의 계보" },
+    summary: {
+      en: "Genesis 11 traces the line from Shem toward Terah before Abraham is called.",
+      ko: "창세기 11장은 셈에서 데라에 이르는 계보를 추적한 뒤 아브라함의 부르심으로 이어집니다.",
+    },
+    periodId: "patriarchs",
+    primaryBookId: "genesis",
+    relatedBookIds: ["acts", "psalms"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 11:10-26", ko: "창세기 11:10-26" },
+        { book: "genesis", chapter: 11, verse: 10, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [
+      { en: "Shem", ko: "셈" },
+      { en: "Arphaxad", ko: "아르박삿" },
+      { en: "Shelah", ko: "셀라" },
+      { en: "Eber", ko: "에벨" },
+      { en: "Peleg", ko: "벨렉" },
+      { en: "Reu", ko: "르우" },
+      { en: "Serug", ko: "스룩" },
+      { en: "Nahor", ko: "나홀" },
+      { en: "Terah", ko: "데라" },
+    ],
+    placeIds: [],
+    locationNote: {
+      en: "Genesis 11 emphasizes the family line rather than a single geographic center.",
+      ko: "창세기 11장은 한 지리 중심보다 가계의 흐름을 강조합니다.",
+    },
+    datingNote: noChronology,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "After Babel and before Abraham", ko: "바벨 뒤 아브라함 이전" },
+    eventType: { en: "Genealogy year marker", ko: "계보 연수" },
+    dateLabel: { en: "Biblical relative years", ko: "성경 내부 연수" },
+    relativeYearLabel: { en: "AM 1658-1878", ko: "아담 기준 1658-1878년" },
+    relativeYearValue: 1658,
+    relativeYearBasisLabel: { en: "Genesis 11 age calculation", ko: "창세기 11장 연수 계산" },
+    relativeYearCalculationNote: {
+      en: "Genesis 11:10 records that Shem was 100 and fathered Arphaxad two years after the flood. Adding the Genesis 11 begetting ages places Terah's birth at AM 1878.",
+      ko: "창세기 11:10은 홍수 후 2년에 셈이 100세였고 아르박삿을 낳았다고 기록합니다. 이후 창세기 11장의 출생 연수를 누적하면 데라 출생은 아담 기준 1878년으로 표시됩니다.",
+    },
+    dateBasisLabel: { en: "Biblical relative years", ko: "성경 내부 연수" },
+    dateConfidenceLabel: {
+      en: "Scripture anchor high; chronology not asserted",
+      ko: "본문 근거는 높음, 연대는 단정하지 않음",
+    },
+    reader: { book: "genesis", chapter: 11, verse: 10, translation: { en: "WEB", ko: "KRV" } },
+  }),
+  createEvent({
+    id: "terah-house",
+    title: { en: "Terah's House: Abram, Nahor, and Haran", ko: "데라의 집: 아브람, 나홀, 하란" },
+    summary: {
+      en: "Terah's household marks the transition toward the patriarchal call.",
+      ko: "데라의 가문은 족장 시대 부르심으로 넘어가는 전환점을 이룹니다.",
+    },
+    periodId: "patriarchs",
+    primaryBookId: "genesis",
+    relatedBookIds: ["acts", "hebrews"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 11:26-32", ko: "창세기 11:26-32" },
+        { book: "genesis", chapter: 11, verse: 26, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    people: [
+      { en: "Terah", ko: "데라" },
+      { en: "Abram", ko: "아브람" },
+      { en: "Nahor", ko: "나홀" },
+      { en: "Haran", ko: "하란" },
+      { en: "Sarai", ko: "사래" },
+      { en: "Lot", ko: "롯" },
+    ],
+    placeIds: ["ur", "canaan"],
+    locationNote: {
+      en: "The household begins in Ur and moves toward Canaan without settling Abraham's exact birth year here.",
+      ko: "가문은 우르에서 시작해 가나안으로 향하지만, 여기서는 아브라함의 정확한 출생 연도를 단정하지 않습니다.",
+    },
+    datingNote: noChronology,
+    confidenceLevel: highConfidence,
+    sequenceLabel: { en: "Before the call of Abraham", ko: "아브라함의 부르심 이전" },
+    eventType: { en: "Patriarchal bridge", ko: "족장 시대 연결" },
+    dateLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+    relativeYearLabel: { en: "After Terah's line", ko: "데라 계보 이후" },
+    relativeYearBasisLabel: { en: "Genesis 11 textual connection", ko: "창세기 11장 본문 연결" },
+    relativeYearCalculationNote: {
+      en: "Genesis 11:26 lists Abram, Nahor, and Haran in relation to Terah at age 70, but Abraham's exact birth-year calculation requires additional textual review, including Acts 7:4. This preview does not assert it as a settled AM date.",
+      ko: "창세기 11:26은 데라가 70세에 아브람과 나홀과 하란을 낳았다고 기록하지만, 아브라함의 정확한 출생 연도 계산은 사도행전 7:4 등을 포함한 추가 본문 검토가 필요하므로 이 미리보기에서는 단정하지 않습니다.",
+    },
+    dateBasisLabel: { en: "Biblical sequence", ko: "성경 내부 순서" },
+    dateConfidenceLabel: {
+      en: "Scripture anchor high; chronology not asserted",
+      ko: "본문 근거는 높음, 연대는 단정하지 않음",
+    },
+    reader: { book: "genesis", chapter: 11, verse: 26, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
     id: "call-of-abraham",
@@ -304,6 +676,8 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     sequenceLabel: { en: "Before the covenant formalization", ko: "언약 공식화 이전" },
     eventType: { en: "Patriarchal call", ko: "족장 부르심" },
     durationLabel: { en: "Journey sequence", ko: "여정 순서" },
+    dateBasisLabel: { en: "Approximate traditional placement", ko: "전통적 근사 배치" },
+    dateConfidenceLabel: { en: "Approximate support layer", ko: "보조 근사 연대" },
     reader: { book: "genesis", chapter: 12, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
   createEvent({
@@ -409,8 +783,8 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     people: [{ en: "Joseph", ko: "요셉" }, { en: "Jacob", ko: "야곱" }],
     placeIds: ["canaan", "egypt"],
     locationNote: {
-      en: "The story moves from Canaan into Egypt.",
-      ko: "이야기는 가나안에서 애굽으로 이동합니다.",
+      en: "The flow moves from Canaan into Egypt.",
+      ko: "본문 흐름은 가나안에서 애굽으로 이동합니다.",
     },
     datingNote: narrativeSequence,
     confidenceLevel: highConfidence,
@@ -459,8 +833,8 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     people: [{ en: "Moses", ko: "모세" }],
     placeIds: ["egypt", "jordan"],
     locationNote: {
-      en: "The story moves from Egypt toward the wilderness.",
-      ko: "이야기는 애굽에서 광야로 이동합니다.",
+      en: "The flow moves from Egypt toward the wilderness.",
+      ko: "본문 흐름은 애굽에서 광야로 이동합니다.",
     },
     datingNote: narrativeSequence,
     confidenceLevel: highConfidence,
@@ -484,8 +858,8 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     people: [{ en: "Moses", ko: "모세" }, { en: "Israel", ko: "이스라엘" }],
     placeIds: ["sinai"],
     locationNote: {
-      en: "Sinai becomes a covenant landmark in the story.",
-      ko: "시내산은 이야기 속 언약의 이정표가 됩니다.",
+      en: "Sinai becomes a covenant landmark in the flow.",
+      ko: "시내산은 흐름 속 언약의 이정표가 됩니다.",
     },
     datingNote: narrativeSequence,
     confidenceLevel: highConfidence,
@@ -613,7 +987,7 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     people: [{ en: "David", ko: "다윗" }, { en: "Samuel", ko: "사무엘" }],
     placeIds: ["bethlehem"],
     locationNote: {
-      en: "Bethlehem appears as a royal beginning, not only a birth-place later in the story.",
+      en: "Bethlehem appears as a royal beginning, not only a birth-place later in the flow.",
       ko: "베들레헴은 후일의 탄생지일 뿐 아니라 왕권의 시작점으로도 등장합니다.",
     },
     datingNote: narrativeSequence,
@@ -638,8 +1012,8 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     people: [{ en: "David", ko: "다윗" }, { en: "Nathan", ko: "나단" }],
     placeIds: ["jerusalem"],
     locationNote: {
-      en: "Jerusalem becomes the throne-city of the storyline.",
-      ko: "예루살렘이 이야기 속 왕좌의 도시가 됩니다.",
+      en: "Jerusalem becomes the throne-city of the flow.",
+      ko: "예루살렘이 흐름 속 왕좌의 도시가 됩니다.",
     },
     datingNote: narrativeSequence,
     confidenceLevel: highConfidence,
@@ -937,7 +1311,7 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
   createEvent({
     id: "kingdom-parables",
     title: { en: "Kingdom Parables", ko: "천국 비유" },
-    summary: { en: "Parables make the kingdom visible in stories.", ko: "비유가 이야기를 통해 하나님 나라를 보이게 합니다." },
+    summary: { en: "Parables make the kingdom visible through Scripture's flow.", ko: "비유가 성경 흐름을 따라 하나님 나라를 더 분명히 보이게 합니다." },
     periodId: "gospel",
     primaryBookId: "matthew",
     relatedBookIds: ["mark", "luke"],
@@ -1062,7 +1436,7 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
   createEvent({
     id: "resurrection",
     title: { en: "Resurrection", ko: "부활" },
-    summary: { en: "The tomb is empty and the story turns outward.", ko: "무덤이 비고 이야기가 밖으로 펼쳐집니다." },
+    summary: { en: "The tomb is empty and the flow turns outward.", ko: "무덤이 비고 흐름이 밖으로 펼쳐집니다." },
     periodId: "gospel",
     primaryBookId: "matthew",
     relatedBookIds: ["mark", "luke", "john"],

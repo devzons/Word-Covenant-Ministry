@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils/cn";
 
 import { TimelineConfidenceBadge } from "./TimelineConfidenceBadge";
 import {
-  getTimelineBook,
-  getTimelinePeriod,
+  getTimelineDatePreview,
   getTimelinePlace,
   getTimelineText,
 } from "./passionWeekTimeline";
@@ -24,9 +23,9 @@ export function TimelineEventCard({
   onSelect,
   selected,
 }: TimelineEventCardProps) {
-  const primaryBook = getTimelineBook(event.primaryBookId);
-  const period = getTimelinePeriod(event.periodId);
-  const periodLabel = period ? getTimelineText(period.label, locale) : "";
+  const datePreview = getTimelineDatePreview(event);
+  const relativeYearLabel = event.relativeYearLabel ? getTimelineText(event.relativeYearLabel, locale) : "";
+  const peopleLabels = event.people.map((person) => getTimelineText(person, locale));
   const placeLabels = event.placeIds
     .map((placeId) => getTimelinePlace(placeId))
     .filter((place): place is NonNullable<typeof place> => Boolean(place))
@@ -43,7 +42,7 @@ export function TimelineEventCard({
       />
       <button
         className={cn(
-          "w-full rounded-md border bg-white px-4 py-3 text-left transition-colors sm:px-4 sm:py-3.5",
+          "w-full rounded-md border bg-white px-3.5 py-3 text-left transition-colors sm:px-4 sm:py-3.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
           selected
             ? "border-zinc-950 bg-zinc-50 shadow-sm ring-1 ring-zinc-950"
@@ -54,67 +53,69 @@ export function TimelineEventCard({
         type="button"
       >
         <div className="flex flex-col gap-2.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
-              {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
-            </span>
-            <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-medium leading-none text-zinc-700">
-              {getTimelineText(event.scriptureAnchors[0]?.label ?? event.summary, locale)}
-            </span>
-            {selected ? (
-              <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
-                {locale === "ko" ? "선택됨" : "Selected"}
+          <div className="flex flex-wrap items-start gap-3">
+            <div className="flex min-w-[6.25rem] flex-col gap-1">
+              <span className="inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
+                {getTimelineText(datePreview.dateLabel, locale)}
               </span>
-            ) : null}
-          </div>
-
-          <div className="flex flex-wrap items-start justify-between gap-2.5">
-            <div className="min-w-0">
-              <h3 className="text-sm font-semibold text-zinc-950 sm:text-[15px]">
-                {getTimelineText(event.title, locale)}
-              </h3>
-              <p className="mt-1 text-sm leading-5 text-zinc-600">
-                {getTimelineText(event.summary, locale)}
-              </p>
+              {relativeYearLabel ? (
+                <span className="text-[11px] font-medium leading-4 text-zinc-500">
+                  {relativeYearLabel}
+                </span>
+              ) : null}
             </div>
-            <div className="flex flex-col items-end gap-1.5">
-              <TimelineConfidenceBadge
-                label={getTimelineText(event.confidenceLevel, locale)}
-                locale={locale}
-              />
+
+            <div className="min-w-0 flex-1 space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
+                  {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
+                </span>
+                {event.scriptureAnchors.map((anchor) => (
+                  <span
+                    className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-medium leading-none text-zinc-700"
+                    key={`${event.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                  >
+                    {getTimelineText(anchor.label, locale)}
+                  </span>
+                ))}
+                {selected ? (
+                  <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
+                    {locale === "ko" ? "선택됨" : "Selected"}
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="flex flex-wrap items-start justify-between gap-2.5">
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-zinc-950 sm:text-[15px]">
+                    {getTimelineText(event.title, locale)}
+                  </h3>
+                </div>
+                <div className="flex flex-col items-end gap-1.5">
+                  <TimelineConfidenceBadge
+                    label={getTimelineText(event.confidenceLevel, locale)}
+                    locale={locale}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-600">
+                {peopleLabels.slice(0, 3).map((peopleLabel) => (
+                  <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={peopleLabel}>
+                    {peopleLabel}
+                  </span>
+                ))}
+                {placeLabels.slice(0, 2).map((placeLabel) => (
+                  <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={placeLabel}>
+                    {placeLabel}
+                  </span>
+                ))}
+                <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                  {getTimelineText(event.eventType, locale)}
+                </span>
+              </div>
             </div>
           </div>
-
-          <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-600">
-            {periodLabel ? (
-              <span className="rounded-full bg-zinc-100 px-2.5 py-1">{periodLabel}</span>
-            ) : null}
-            {primaryBook ? (
-              <span className="rounded-full bg-zinc-100 px-2.5 py-1">
-                {getTimelineText(primaryBook.label, locale)}
-              </span>
-            ) : null}
-            {placeLabels.slice(0, 2).map((placeLabel) => (
-              <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={placeLabel}>
-                {placeLabel}
-              </span>
-            ))}
-            <span className="rounded-full bg-zinc-100 px-2.5 py-1">
-              {getTimelineText(event.eventType, locale)}
-            </span>
-            <span className="rounded-full bg-zinc-100 px-2.5 py-1">
-              {getTimelineText(event.sequenceLabel, locale)}
-            </span>
-            {event.durationLabel ? (
-              <span className="rounded-full bg-zinc-100 px-2.5 py-1">
-                {getTimelineText(event.durationLabel, locale)}
-              </span>
-            ) : null}
-          </div>
-
-          <p className="text-xs leading-5 text-zinc-500">
-            {getTimelineText(event.locationNote, locale)}
-          </p>
         </div>
       </button>
     </li>

@@ -39,7 +39,7 @@ export function ScriptureTimelineList({
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       {groupedEvents.map(({ events: periodEvents, period }) => {
         const periodLabel = getTimelineText(period.label, locale);
 
@@ -58,7 +58,7 @@ export function ScriptureTimelineList({
               </div>
             </div>
 
-            <ol className="flex flex-col gap-3 border-l border-zinc-200 pl-5">
+            <ol className="flex flex-col gap-2.5 border-l-2 border-zinc-200 pl-6">
               {periodEvents.map((event) => (
                 <TimelineEventCard
                   event={event}

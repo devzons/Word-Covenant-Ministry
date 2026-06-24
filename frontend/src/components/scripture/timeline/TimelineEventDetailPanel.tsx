@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/utils/cn";
 
 import {
+  getTimelineDatePreview,
   getTimelineBook,
   getTimelinePlace,
   getTimelinePeriod,
@@ -38,6 +39,8 @@ export function TimelineEventDetailPanel({
   relatedStudy,
   selectedLabel,
 }: TimelineEventDetailPanelProps) {
+  const datePreview = event ? getTimelineDatePreview(event) : null;
+
   return (
     <Card className="flex min-w-0 flex-col gap-4 sm:gap-5">
       <div className="flex flex-col gap-2">
@@ -159,22 +162,51 @@ export function TimelineEventDetailPanel({
             </div>
           </DetailSection>
 
-          <div className="flex flex-col gap-3 rounded-md border border-zinc-200 bg-zinc-50 p-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <TimelineConfidenceBadge
-                label={getTimelineText(event.confidenceLevel, locale)}
+          <DetailSection label={locale === "ko" ? "보조 연대 / 신뢰도" : "Supporting Date / Confidence"}>
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-2">
+                <Tag>{getTimelineText(datePreview?.dateLabel ?? event.datingNote, locale)}</Tag>
+                <Tag>{getTimelineText(datePreview?.dateBasisLabel ?? event.datingNote, locale)}</Tag>
+                <Tag>
+                  {getTimelineText(datePreview?.dateConfidenceLabel ?? event.confidenceLevel, locale)}
+                </Tag>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <TimelineConfidenceBadge
+                  label={getTimelineText(event.confidenceLevel, locale)}
+                  locale={locale}
+                />
+                <span className="rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
+                  {getTimelineText(event.datingNote, locale)}
+                </span>
+              </div>
+              <TimelineDatingNote
+                label={locale === "ko" ? "연대 메모" : "Dating Note"}
                 locale={locale}
+                note={getTimelineText(event.datingNote, locale)}
               />
-              <span className="rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
-                {getTimelineText(event.datingNote, locale)}
-              </span>
             </div>
-            <TimelineDatingNote
-              label={locale === "ko" ? "연대 메모" : "Dating Note"}
-              locale={locale}
-              note={getTimelineText(event.datingNote, locale)}
-            />
-          </div>
+          </DetailSection>
+
+          {event.relativeYearLabel ? (
+            <DetailSection
+              label={locale === "ko" ? "성경 내부 연수" : "Scripture-Derived Relative Year"}
+            >
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  <Tag>{getTimelineText(event.relativeYearLabel, locale)}</Tag>
+                  {event.relativeYearBasisLabel ? (
+                    <Tag>{getTimelineText(event.relativeYearBasisLabel, locale)}</Tag>
+                  ) : null}
+                </div>
+                {event.relativeYearCalculationNote ? (
+                  <p className="text-sm leading-6 text-zinc-600">
+                    {getTimelineText(event.relativeYearCalculationNote, locale)}
+                  </p>
+                ) : null}
+              </div>
+            </DetailSection>
+          ) : null}
 
           <DetailSection label={locale === "ko" ? "지도 미리보기" : "Map Preview"}>
             <div className="space-y-2">

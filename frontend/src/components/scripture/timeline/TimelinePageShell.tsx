@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 
-import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils/cn";
 
@@ -45,13 +44,13 @@ const pageCopy = {
   en: {
     detailHeading: "Selected Event Scripture Context",
     eventsHeading: "Events View",
-    eventsNote: "The event stream stays Scripture-first and preserves the selected item in the right panel.",
+    eventsNote: "The flow stays Scripture-first and preserves the selected item in the right panel.",
     futureViewNote:
       "Future workspace views remain visible but disabled until later approved phases add their own content layers.",
     openInReader: "Open in Reader",
-    overviewHeading: "Scripture Timeline Overview",
+    overviewHeading: "Scripture Flow",
     overviewNote:
-      "This overview stays top-down and Scripture-first. The cards summarize broad biblical flow using the current preview content.",
+      "This flow stays top-down and Scripture-first. The rows summarize broad biblical flow using the current preview content.",
     relatedStudy:
       "Related passages, Gospel Harmony links, authorship detail, and map layers deepen in later phases.",
     selectedLabel: "Selected",
@@ -86,12 +85,12 @@ const pageCopy = {
   ko: {
     detailHeading: "선택한 사건의 성경 문맥",
     eventsHeading: "사건 보기",
-    eventsNote: "사건 흐름은 성경 우선을 유지하며, 선택 항목은 오른쪽 패널에 계속 남아 있습니다.",
+    eventsNote: "본문 흐름은 성경 우선을 유지하며, 선택 항목은 오른쪽 패널에 계속 남아 있습니다.",
     futureViewNote: "이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용 보기는 비활성 상태로 보입니다.",
     openInReader: "읽기에서 열기",
-    overviewHeading: "성경 Timeline 개요",
+    overviewHeading: "성경 흐름",
     overviewNote:
-      "이 개요는 위에서 아래로, 성경 우선으로 진행됩니다. 현재 미리보기 내용으로 큰 흐름을 요약합니다.",
+      "이 흐름은 위에서 아래로, 성경 우선으로 진행됩니다. 현재 미리보기 내용으로 큰 흐름을 요약합니다.",
     relatedStudy:
       "관련 구절, 복음서 링크, 저자 세부 정보, 지도 층은 이후 단계에서 더 깊어집니다.",
     selectedLabel: "선택됨",
@@ -253,28 +252,6 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
     };
   }, [visibleEvents]);
 
-  const overviewGroups = useMemo(
-    () =>
-      timelinePeriods
-        .map((period) => ({
-          events: visibleEvents.filter((event) => event.periodId === period.id),
-          period,
-        }))
-        .filter((group) => group.events.length > 0),
-    [visibleEvents],
-  );
-
-  const tabTitles = {
-    events:
-      activeLocale === "ko"
-        ? "사건 흐름"
-        : "Event stream",
-    overview:
-      activeLocale === "ko"
-        ? "성경 이야기 개요"
-        : "Scripture-first overview",
-  };
-
   return (
     <Container className="max-w-[96rem] py-12 sm:py-16">
       <section className="flex flex-col gap-6 sm:gap-8">
@@ -298,8 +275,8 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
         <div
           className={cn(
             "grid gap-6",
-            "xl:grid-cols-[minmax(20rem,22rem)_minmax(0,1fr)_minmax(22rem,24rem)]",
-            "2xl:grid-cols-[minmax(21rem,24rem)_minmax(0,1fr)_minmax(23rem,25rem)]",
+            "xl:grid-cols-[19rem_minmax(0,1fr)_21rem]",
+            "2xl:grid-cols-[20rem_minmax(0,1fr)_22rem]",
             "xl:items-start",
           )}
         >
@@ -345,74 +322,30 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
           />
 
           <div className="flex min-w-0 flex-col gap-4">
-            <Card className="flex flex-col gap-4 border-zinc-200 bg-white p-4 sm:p-5">
-              <div className="space-y-2">
-                <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-                  {activeView === "overview" ? copy.overviewHeading : copy.eventsHeading}
-                </p>
-                <h2 className="text-xl font-semibold text-zinc-950">
-                  {activeView === "overview" ? tabTitles.overview : tabTitles.events}
-                </h2>
-                <p className="text-sm leading-6 text-zinc-600">
-                  {activeView === "overview" ? copy.overviewNote : copy.eventsNote}
-                </p>
-              </div>
+            <CompactStatusRow
+              activeBookLabel={bookLabelForStatus(filters.bookId, bookOptions, activeLocale)}
+              activePeriodLabel={periodLabelForStatus(filters.periodId, periodOptions, activeLocale)}
+              activePlaceLabel={placeLabelForStatus(filters.placeId, placeOptions, activeLocale)}
+              locale={activeLocale}
+              modeLabel={
+                activeView === "overview"
+                  ? activeLocale === "ko"
+                    ? "성경 흐름"
+                    : "Scripture Flow"
+                  : activeLocale === "ko"
+                    ? "사건 흐름"
+                    : "Event Stream"
+              }
+              totalCount={previewCounts.totalCount}
+              visibleCount={previewCounts.visibleCount}
+            />
 
-              <div className="flex flex-wrap gap-2 text-xs font-semibold text-zinc-600">
-                <span className="rounded-full bg-zinc-100 px-3 py-1.5">
-                  {activeLocale === "ko"
-                    ? `사건 ${previewCounts.visibleCount} / ${previewCounts.totalCount}`
-                    : `Events ${previewCounts.visibleCount} / ${previewCounts.totalCount}`}
-                </span>
-                <span className="rounded-full bg-zinc-100 px-3 py-1.5">
-                  {activeLocale === "ko"
-                    ? `기간 ${previewCounts.periodCount}`
-                    : `Periods ${previewCounts.periodCount}`}
-                </span>
-                <span className="rounded-full bg-zinc-100 px-3 py-1.5">
-                  {activeLocale === "ko"
-                    ? `책 ${previewCounts.bookCount}`
-                    : `Books ${previewCounts.bookCount}`}
-                </span>
-                <span className="rounded-full bg-zinc-100 px-3 py-1.5">
-                  {activeLocale === "ko"
-                    ? `지명 ${previewCounts.placeCount}`
-                    : `Places ${previewCounts.placeCount}`}
-                </span>
-              </div>
-            </Card>
-
-            {activeView === "overview" ? (
-              <OverviewPanel
-                groups={overviewGroups}
-                locale={activeLocale}
-                onFocusPeriod={(periodId) => {
-                  setFilters((current) => ({ ...current, periodId }));
-                  setActiveView("events");
-                }}
-                searchTerm={filters.searchTerm}
-              />
-            ) : null}
-
-            <Card className="flex min-w-0 flex-col gap-4 border-zinc-200 bg-white p-4 sm:p-5">
-              <div className="space-y-2">
-                <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-                  {activeLocale === "ko" ? "사건 흐름" : "Event Stream"}
-                </p>
-                <p className="text-sm leading-6 text-zinc-600">
-                  {activeLocale === "ko"
-                    ? "사건을 선택하면 오른쪽 문맥 패널이 갱신됩니다. 기간과 책 필터는 같은 페이지에서 계속 작동합니다."
-                    : "Select an event to update the right-side context panel. Period and book filters keep working on the same page."}
-                </p>
-              </div>
-
-              <ScriptureTimelineList
-                events={visibleEvents}
-                locale={activeLocale}
-                onSelect={setSelectedEventId}
-                selectedEventId={selectedEvent?.id ?? ""}
-              />
-            </Card>
+            <ScriptureTimelineList
+              events={visibleEvents}
+              locale={activeLocale}
+              onSelect={setSelectedEventId}
+              selectedEventId={selectedEvent?.id ?? ""}
+            />
           </div>
 
           <TimelineEventDetailPanel
@@ -434,94 +367,77 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
   );
 }
 
-type OverviewPanelProps = {
-  groups: Array<{
-    events: typeof passionWeekTimelineEvents;
-    period: (typeof timelinePeriods)[number];
-  }>;
+type CompactStatusRowProps = {
+  activeBookLabel: string;
+  activePeriodLabel: string;
+  activePlaceLabel: string;
   locale: TimelineLocale;
-  onFocusPeriod: (periodId: string) => void;
-  searchTerm: string;
+  modeLabel: string;
+  totalCount: number;
+  visibleCount: number;
 };
 
-function OverviewPanel({ groups, locale, onFocusPeriod, searchTerm }: OverviewPanelProps) {
+function CompactStatusRow({
+  activeBookLabel,
+  activePeriodLabel,
+  activePlaceLabel,
+  locale,
+  modeLabel,
+  totalCount,
+  visibleCount,
+}: CompactStatusRowProps) {
   return (
-    <Card className="flex min-w-0 flex-col gap-4 border-zinc-200 bg-zinc-50 p-4 sm:p-5">
-      <div className="space-y-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-          {locale === "ko" ? "성경 스토리라인 개요" : "Biblical storyline overview"}
-        </p>
-        <p className="text-sm leading-6 text-zinc-600">
-          {locale === "ko"
-            ? "개요는 고정된 연대표가 아니라 성경 흐름을 한눈에 보여 주는 작업 공간입니다."
-            : "The overview is a workspace view for seeing Scripture flow at a glance, not a fixed chronology chart."}
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-3">
-        {groups.map(({ events, period }) => {
-          const firstEvent = events[0];
-
-          return (
-            <button
-              className={cn(
-                "flex min-h-0 w-full flex-col gap-3 rounded-md border border-zinc-200 bg-white p-4 text-left text-sm transition-colors",
-                "hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-              )}
-              key={period.id}
-              onClick={() => onFocusPeriod(period.id)}
-              type="button"
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-                  {getTimelineText(period.label, locale)}
-                </span>
-                <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
-                  {locale === "ko" ? `${events.length}개 사건` : `${events.length} events`}
-                </span>
-              </div>
-
-              {firstEvent ? (
-                <div className="space-y-2">
-                  <p className="text-base font-semibold text-zinc-950">
-                    {getTimelineText(firstEvent.title, locale)}
-                  </p>
-                  <p className="text-sm leading-6 text-zinc-600">
-                    {getTimelineText(firstEvent.summary, locale)}
-                  </p>
-                </div>
-              ) : null}
-
-              <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-600">
-                {firstEvent?.placeIds.slice(0, 2).map((placeId) => {
-                  const place = getTimelinePlace(placeId);
-
-                  return place ? (
-                    <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={place.id}>
-                      {getTimelineText(place.label, locale)}
-                    </span>
-                  ) : null;
-                })}
-                {firstEvent?.people.slice(0, 2).map((person) => (
-                  <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={person.en}>
-                    {getTimelineText(person, locale)}
-                  </span>
-                ))}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-
-      {searchTerm.trim() ? (
-        <p className="text-xs leading-5 text-zinc-500">
-          {locale === "ko"
-            ? "검색어가 적용된 개요입니다."
-            : "The overview reflects the current search term."}
-        </p>
-      ) : null}
-    </Card>
+    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-600">
+      <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+        {modeLabel}
+      </span>
+      <span className="text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>{activePeriodLabel}</span>
+      <span className="text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>{activeBookLabel}</span>
+      <span className="text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>{activePlaceLabel}</span>
+      <span className="text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span className="font-medium text-zinc-950">
+        {locale === "ko" ? `${visibleCount}개 사건` : `${visibleCount} events`}
+      </span>
+      <span className="text-zinc-500">
+        {locale === "ko" ? `/ 전체 ${totalCount}개` : `/ ${totalCount} total`}
+      </span>
+    </div>
   );
+}
+
+function periodLabelForStatus(periodId: string, periodOptions: TimelineOption[], locale: TimelineLocale) {
+  if (periodId === "all") {
+    return locale === "ko" ? "전체 기간" : "All periods";
+  }
+
+  return periodOptions.find((option) => option.id === periodId)?.label ?? "";
+}
+
+function bookLabelForStatus(bookId: string, bookOptions: TimelineOption[], locale: TimelineLocale) {
+  if (bookId === "all") {
+    return locale === "ko" ? "전체 책" : "All books";
+  }
+
+  return bookOptions.find((option) => option.id === bookId)?.label ?? "";
+}
+
+function placeLabelForStatus(placeId: string, placeOptions: TimelineOption[], locale: TimelineLocale) {
+  if (placeId === "all") {
+    return locale === "ko" ? "전체 지명" : "All places";
+  }
+
+  return placeOptions.find((option) => option.id === placeId)?.label ?? "";
 }
 
 function matchesTimelineSearch(event: (typeof passionWeekTimelineEvents)[number], query: string) {
