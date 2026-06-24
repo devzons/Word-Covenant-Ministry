@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Link from "next/link";
 
@@ -31,6 +31,8 @@ import { TimelineFilterBar } from "./TimelineFilterBar";
 import { TimelineViewTabs } from "./TimelineViewTabs";
 
 type TimelinePageShellProps = {
+  initialFilters: TimelineFilterState;
+  initialView: TimelineView;
   locale: TimelineLocale;
 };
 
@@ -132,17 +134,19 @@ const pageCopy = {
   },
 } as const;
 
-export function TimelinePageShell({ locale }: TimelinePageShellProps) {
+export function TimelinePageShell({ initialFilters, initialView, locale }: TimelinePageShellProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = pageCopy[activeLocale];
-  const [activeView, setActiveView] = useState<TimelineView>("overview");
-  const [filters, setFilters] = useState<TimelineFilterState>({
-    bookId: "all",
-    placeId: "all",
-    periodId: "all",
-    searchTerm: "",
-  });
+  const [activeView, setActiveView] = useState<TimelineView>(initialView);
+  const [filters, setFilters] = useState<TimelineFilterState>(initialFilters);
   const [selectedEventId, setSelectedEventId] = useState(passionWeekTimelineEvents[0]?.id ?? "");
+  const [clientMounted, setClientMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setClientMounted(true), 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const periodCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -353,6 +357,15 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
               modeLabel={activeViewLabel}
               totalCount={previewCounts.totalCount}
               visibleCount={previewCounts.visibleCount}
+            />
+
+            <RuntimeMarker
+              activeBookId={filters.bookId}
+              activePeriodId={filters.periodId}
+              activePlaceId={filters.placeId}
+              activeView={activeView}
+              clientMounted={clientMounted}
+              locale={activeLocale}
             />
 
             <div key={activeView} className="min-w-0">
@@ -575,6 +588,55 @@ function OverviewPreviewPanel({
         ))}
       </div>
     </section>
+  );
+}
+
+type RuntimeMarkerProps = {
+  activeBookId: string;
+  activePeriodId: string;
+  activePlaceId: string;
+  activeView: TimelineView;
+  clientMounted: boolean;
+  locale: TimelineLocale;
+};
+
+function RuntimeMarker({
+  activeBookId,
+  activePeriodId,
+  activePlaceId,
+  activeView,
+  clientMounted,
+  locale,
+}: RuntimeMarkerProps) {
+  return (
+    <div
+      data-testid="timeline-runtime-marker"
+      className="rounded-md border border-dashed border-zinc-200 bg-white px-3 py-2 text-[11px] leading-5 text-zinc-500"
+    >
+      <span className="font-semibold text-zinc-700">
+        {locale === "ko" ? "Timeline runtime check: CR-90X-5" : "Timeline runtime check: CR-90X-5"}
+      </span>
+      <span className="mx-2 text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>{locale === "ko" ? "client mounted" : "client mounted"}: {clientMounted ? "yes" : "no"}</span>
+      <span className="mx-2 text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>activeView: {activeView}</span>
+      <span className="mx-2 text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>period: {activePeriodId || "all"}</span>
+      <span className="mx-2 text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>book: {activeBookId || "all"}</span>
+      <span className="mx-2 text-zinc-300" aria-hidden="true">
+        ·
+      </span>
+      <span>place: {activePlaceId || "all"}</span>
+    </div>
   );
 }
 
