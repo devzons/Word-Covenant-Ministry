@@ -46,7 +46,7 @@ export function TimelineEventCard({
       />
       <button
         className={cn(
-          "w-full rounded-md border bg-white px-3.5 py-3 text-left transition-colors sm:px-4 sm:py-3.5",
+          "w-full cursor-pointer rounded-md border bg-white px-3.5 py-3 text-left transition-colors sm:px-4 sm:py-3.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
           selected
             ? "border-zinc-950 bg-zinc-50 shadow-sm ring-1 ring-zinc-950"

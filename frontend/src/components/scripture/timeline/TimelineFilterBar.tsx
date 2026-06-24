@@ -135,7 +135,7 @@ export function TimelineFilterBar({
           <p className="text-xs leading-5 text-zinc-500">{confidenceNote}</p>
         </div>
         <button
-          className="inline-flex min-h-10 items-center rounded-md border border-zinc-200 px-3 text-xs font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2"
+          className="inline-flex min-h-10 cursor-pointer items-center rounded-md border border-zinc-200 px-3 text-xs font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2"
           onClick={onClearFilters}
           type="button"
         >
@@ -293,7 +293,7 @@ function FilterChip({ active, label, locale, onClick }: FilterChipProps) {
     <button
       aria-pressed={active}
       className={cn(
-        "inline-flex min-h-10 items-center rounded-md border px-3 text-sm font-medium transition-colors",
+        "inline-flex min-h-10 cursor-pointer items-center rounded-md border px-3 text-sm font-medium transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
         active
           ? "border-zinc-950 bg-zinc-950 text-white"
