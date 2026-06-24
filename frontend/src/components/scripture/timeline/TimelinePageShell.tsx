@@ -341,8 +341,10 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
             />
 
             <ScriptureTimelineList
+              activePeriodId={filters.periodId}
               events={visibleEvents}
               locale={activeLocale}
+              searchTerm={filters.searchTerm}
               onSelect={setSelectedEventId}
               selectedEventId={selectedEvent?.id ?? ""}
             />
