@@ -146,6 +146,39 @@ export type TimelineGenealogyComparisonRow = {
   note?: TimelineText;
 };
 
+export type TimelineSchematicPlaceRow = {
+  id: string;
+  placeId: string;
+  title: TimelineText;
+  modernReferenceLabel?: TimelineText;
+  modernReferenceStatusLabel?: TimelineText;
+  conceptRegionLabel: TimelineText;
+  conceptZoneId:
+    | "mesopotamia"
+    | "persia"
+    | "aram-assyria"
+    | "babylon"
+    | "canaan"
+    | "philistia"
+    | "judah"
+    | "wilderness"
+    | "east-jordan"
+    | "egypt"
+    | "unknown";
+  conceptFlowGroup?: "patriarchs" | "exodus" | "david-flight" | "kingdoms" | "exile-return" | "psalms";
+  placeTypeLabel?: TimelineText;
+  locationBasisLabel: TimelineText;
+  locationConfidenceLabel: TimelineText;
+  scriptureAnchors: TimelineScriptureAnchor[];
+  relatedEventIds?: string[];
+  relatedBookContextIds?: string[];
+  relatedPeople?: TimelineText[];
+  relatedKingdoms?: TimelineText[];
+  relatedEmpires?: TimelineText[];
+  cautionNote?: TimelineText;
+  note: TimelineText;
+};
+
 export const timelinePeriods: TimelinePeriod[] = [
   { id: "primeval", order: 1, label: { en: "Creation / Primeval History", ko: "창조 / 태고 역사" } },
   { id: "patriarchs", order: 2, label: { en: "Patriarchs", ko: "족장 시대" } },
@@ -244,6 +277,7 @@ export const timelinePlaces: TimelinePlace[] = [
   { id: "caesarea", label: { en: "Caesarea", ko: "가이사랴" } },
   { id: "antioch", label: { en: "Antioch", ko: "안디옥" } },
   { id: "shechem", label: { en: "Shechem", ko: "세겜" } },
+  { id: "aram", label: { en: "Aram", ko: "아람" } },
   { id: "assyria", label: { en: "Assyria", ko: "앗수르" } },
   { id: "judean-wilderness", label: { en: "Judean Wilderness", ko: "유대 광야" } },
   { id: "sea-of-galilee", label: { en: "Sea of Galilee", ko: "갈릴리 호수" } },
@@ -295,6 +329,17 @@ const hoseaProphetTag = { en: "Hosea", ko: "호세아" } satisfies TimelineText;
 const amosProphetTag = { en: "Amos", ko: "아모스" } satisfies TimelineText;
 const baalProphetsTag = { en: "Prophets of Baal", ko: "바알 선지자들" } satisfies TimelineText;
 const cyrusRulerTag = { en: "Cyrus", ko: "고레스" } satisfies TimelineText;
+const modernReferenceConnected = { en: "Modern-name connection", ko: "현대 지명 연결" } satisfies TimelineText;
+const modernReferenceApproximate = { en: "Broad modern region", ko: "대략적 현대 지역" } satisfies TimelineText;
+const modernReferenceCandidate = { en: "Candidate identification, not asserted", ko: "후보지, 단정하지 않음" } satisfies TimelineText;
+const modernReferenceTraditional = { en: "Traditional identification / debated", ko: "전통 위치 / 논의 가능" } satisfies TimelineText;
+const locationBasisRepeated = { en: "Repeated biblical textual location", ko: "성경 본문 반복 등장" } satisfies TimelineText;
+const locationBasisTextual = { en: "Textual setting", ko: "본문 배경" } satisfies TimelineText;
+const locationConfidenceMajor = { en: "Major biblical location", ko: "성경 본문 중심 장소" } satisfies TimelineText;
+const locationConfidenceBroad = { en: "Broad biblical region", ko: "대략적 성경 지역" } satisfies TimelineText;
+const locationConfidenceCandidate = { en: "Candidate identification, not asserted", ko: "현대 지점 단정하지 않음" } satisfies TimelineText;
+const locationConfidenceNotAsserted = { en: "Exact location not asserted", ko: "정확한 위치 단정 안 함" } satisfies TimelineText;
+const noCoordinatesNote = { en: "No coordinates in this preview.", ko: "이 미리보기에는 좌표가 없습니다." } satisfies TimelineText;
 
 const periodById = new Map(timelinePeriods.map((period) => [period.id, period]));
 const bookById = new Map(timelineBooks.map((book) => [book.id, book]));
@@ -4040,6 +4085,679 @@ export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] =
     note: {
       en: "Matthew gathers the genealogy to Christ. This preview is limited to showing Matthew 1's structure.",
       ko: "마태복음은 족보를 그리스도께로 모읍니다. 이 미리보기는 마태복음 1장의 구조를 보여 주는 데 제한됩니다.",
+    },
+  },
+];
+
+export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
+  {
+    id: "schematic-place-ur",
+    placeId: "ur",
+    title: { en: "Ur", ko: "우르" },
+    modernReferenceLabel: { en: "Today: southern Iraq region", ko: "오늘날: 이라크 남부 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "Mesopotamia / patriarchal route", ko: "메소포타미아 / 족장 여정" },
+    conceptZoneId: "mesopotamia",
+    conceptFlowGroup: "patriarchs",
+    placeTypeLabel: { en: "City / departure point", ko: "도시 / 출발 지점" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 11:31-12:4", ko: "창세기 11:31-12:4" },
+        { book: "genesis", chapter: 11, verse: 31, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Acts 7:2-4", ko: "사도행전 7:2-4" },
+        { book: "acts", chapter: 7, verse: 2, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["terah-house", "call-of-abraham"],
+    relatedPeople: [{ en: "Abram", ko: "아브람" }],
+    note: {
+      en: "Ur marks the starting point of Abraham's movement before the call is traced into Canaan.",
+      ko: "우르는 아브라함의 이동 시작점으로, 부르심이 가나안으로 이어지기 전의 출발점입니다.",
+    },
+  },
+  {
+    id: "schematic-place-shinar",
+    placeId: "shinar",
+    title: { en: "Shinar", ko: "시날" },
+    modernReferenceLabel: { en: "Today: Iraq / Mesopotamia region", ko: "오늘날: 이라크 / 메소포타미아 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "Mesopotamia / tower setting", ko: "메소포타미아 / 탑 사건 배경" },
+    conceptZoneId: "mesopotamia",
+    conceptFlowGroup: "patriarchs",
+    placeTypeLabel: { en: "Region / narrative setting", ko: "지역 / 서사 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceBroad,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 11:1-9", ko: "창세기 11:1-9" },
+        { book: "genesis", chapter: 11, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["babel"],
+    relatedPeople: [{ en: "The nations", ko: "민족들" }],
+    note: {
+      en: "Shinar marks the Babel narrative setting in Scripture.",
+      ko: "시날은 성경의 바벨 사건 배경으로 표시됩니다.",
+    },
+    cautionNote: noCoordinatesNote,
+  },
+  {
+    id: "schematic-place-babylon",
+    placeId: "babylon",
+    title: { en: "Babylon", ko: "바벨론" },
+    modernReferenceLabel: { en: "Today: Iraq region", ko: "오늘날: 이라크 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "Mesopotamia / exile setting", ko: "메소포타미아 / 포로기 배경" },
+    conceptZoneId: "babylon",
+    conceptFlowGroup: "exile-return",
+    placeTypeLabel: { en: "Imperial center / exile setting", ko: "제국 중심 / 포로기 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 24:8-17", ko: "열왕기하 24:8-17" },
+        { book: "2-kings", chapter: 24, verse: 8, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Daniel 1:1-7", ko: "다니엘 1:1-7" },
+        { book: "daniel", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Psalm 137:1-9", ko: "시편 137:1-9" },
+        { book: "psalms", chapter: 137, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["book-context-daniel", "psalm-context-psalm-137", "book-context-lamentations"],
+    relatedEmpires: [babylonEmpireTag],
+    relatedPeople: [
+      { en: "Nebuchadnezzar", ko: "느부갓네살" },
+      { en: "The exiles", ko: "포로 된 자들" },
+    ],
+    note: {
+      en: "Babylon is connected with Judah's exile, Daniel, and Psalm 137.",
+      ko: "바벨론은 유다 포로기와 다니엘, 시편 137편의 배경과 연결됩니다.",
+    },
+  },
+  {
+    id: "schematic-place-susa",
+    placeId: "susa",
+    title: { en: "Susa", ko: "수산" },
+    modernReferenceLabel: { en: "Today: Iran region", ko: "오늘날: 이란 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "Persian imperial setting", ko: "바사 제국 궁정 배경" },
+    conceptZoneId: "persia",
+    conceptFlowGroup: "exile-return",
+    placeTypeLabel: { en: "Imperial court / setting", ko: "궁정 / 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Esther 1:1-3", ko: "에스더 1:1-3" },
+        { book: "esther", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Nehemiah 1:1", ko: "느헤미야 1:1" },
+        { book: "nehemiah", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["book-context-esther", "book-context-nehemiah"],
+    relatedEmpires: [persiaEmpireTag],
+    note: {
+      en: "Susa is shown as a textual setting for Esther and Nehemiah.",
+      ko: "수산은 에스더와 느헤미야의 본문 배경으로 표시됩니다.",
+    },
+  },
+  {
+    id: "schematic-place-aram",
+    placeId: "aram",
+    title: { en: "Aram", ko: "아람" },
+    modernReferenceLabel: { en: "Today: Syria region", ko: "오늘날: 시리아 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "Aram / regional setting", ko: "아람 / 지역 배경" },
+    conceptZoneId: "aram-assyria",
+    conceptFlowGroup: "kingdoms",
+    placeTypeLabel: { en: "Regional setting", ko: "지역 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceBroad,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 16:5-9", ko: "열왕기하 16:5-9" },
+        { book: "2-kings", chapter: 16, verse: 5, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 7:1-9", ko: "이사야 7:1-9" },
+        { book: "isaiah", chapter: 7, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedKingdoms: [northernIsraelKingdomTag, judahKingdomTag],
+    relatedEmpires: [assyriaEmpireTag],
+    note: {
+      en: "Aram appears as a regional setting in the kings and prophets context.",
+      ko: "아람은 열왕기와 선지서 문맥 속 지역 배경으로 나타납니다.",
+    },
+  },
+  {
+    id: "schematic-place-assyria",
+    placeId: "assyria",
+    title: { en: "Assyria", ko: "앗수르" },
+    modernReferenceLabel: { en: "Today: Iraq / northern Mesopotamia region", ko: "오늘날: 이라크 / 메소포타미아 북부 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "Aram / Assyria imperial flow", ko: "아람 / 앗수르 제국 흐름" },
+    conceptZoneId: "aram-assyria",
+    conceptFlowGroup: "kingdoms",
+    placeTypeLabel: { en: "Empire / imperial center", ko: "제국 / 제국 중심" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 17:1-23", ko: "열왕기하 17:1-23" },
+        { book: "2-kings", chapter: 17, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 18:13-37", ko: "열왕기하 18:13-37" },
+        { book: "2-kings", chapter: 18, verse: 13, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 36:1-22", ko: "이사야 36:1-22" },
+        { book: "isaiah", chapter: 36, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["northern-exile", "hezekiah-assyria"],
+    relatedKingdoms: [northernIsraelKingdomTag, judahKingdomTag],
+    relatedEmpires: [assyriaEmpireTag],
+    relatedPeople: [
+      { en: "Hoshea", ko: "호세아" },
+      { en: "Hezekiah", ko: "히스기야" },
+      { en: "Sennacherib", ko: "산헤립" },
+    ],
+    note: {
+      en: "Assyria functions as a major imperial setting in the divided kingdom period.",
+      ko: "앗수르는 분열 왕국 시기의 중요한 제국 배경으로 기능합니다.",
+    },
+  },
+  {
+    id: "schematic-place-jerusalem",
+    placeId: "jerusalem",
+    title: { en: "Jerusalem", ko: "예루살렘" },
+    modernReferenceLabel: { en: "Today: Jerusalem", ko: "오늘날: 예루살렘" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "Judah highlands / kingdom center", ko: "유다 산지 / 왕국 중심" },
+    conceptZoneId: "judah",
+    conceptFlowGroup: "kingdoms",
+    placeTypeLabel: { en: "City / temple / kingdom center", ko: "도시 / 성전 / 왕국 중심" },
+    locationBasisLabel: locationBasisRepeated,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Samuel 5:6-10", ko: "사무엘하 5:6-10" },
+        { book: "2-samuel", chapter: 5, verse: 6, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Kings 8:1-11", ko: "열왕기상 8:1-11" },
+        { book: "1-kings", chapter: 8, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 25:1-21", ko: "열왕기하 25:1-21" },
+        { book: "2-kings", chapter: 25, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["davidic-covenant", "solomon-temple", "fall-of-jerusalem"],
+    relatedBookContextIds: ["psalm-context-psalm-3", "psalm-context-psalm-51"],
+    relatedKingdoms: [unitedKingdomTag, judahKingdomTag],
+    relatedPeople: [
+      { en: "David", ko: "다윗" },
+      { en: "Solomon", ko: "솔로몬" },
+      { en: "Jeremiah", ko: "예레미야" },
+    ],
+    note: {
+      en: "Jerusalem is a key biblical place connected with David's kingdom, the temple, and exile events.",
+      ko: "예루살렘은 다윗 왕국, 성전, 포로기 사건과 연결되는 핵심 성경 장소입니다.",
+    },
+  },
+  {
+    id: "schematic-place-gath",
+    placeId: "gath",
+    title: { en: "Gath", ko: "가드" },
+    modernReferenceLabel: { en: "Today: candidate / traditional identification area", ko: "오늘날: 후보지 / 전통 연결 지역" },
+    modernReferenceStatusLabel: modernReferenceCandidate,
+    conceptRegionLabel: { en: "Philistine city region", ko: "블레셋 도시권" },
+    conceptZoneId: "philistia",
+    conceptFlowGroup: "david-flight",
+    placeTypeLabel: { en: "City / Philistine region", ko: "도시 / 블레셋 지역" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceCandidate,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 21:10-15", ko: "사무엘상 21:10-15" },
+        { book: "1-samuel", chapter: 21, verse: 10, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Psalm 34:1", ko: "시편 34:1" },
+        { book: "psalms", chapter: 34, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Psalm 56:1", ko: "시편 56:1" },
+        { book: "psalms", chapter: 56, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["psalm-context-psalm-34", "psalm-context-psalm-56"],
+    relatedPeople: [
+      { en: "David", ko: "다윗" },
+      { en: "Abimelech", ko: "아비멜렉" },
+      { en: "Achish", ko: "아기스" },
+    ],
+    note: {
+      en: "Gath connects with David's flight narrative and the superscription settings of Psalms 34 and 56.",
+      ko: "가드는 다윗의 도피 이야기와 시편 34편, 56편 표제 배경과 연결됩니다.",
+    },
+    cautionNote: {
+      en: "The exact modern site is not asserted in this phase.",
+      ko: "현대의 정확한 대응 지점은 이 단계에서 단정하지 않습니다.",
+    },
+  },
+  {
+    id: "schematic-place-nob",
+    placeId: "nob",
+    title: { en: "Nob", ko: "놉" },
+    modernReferenceLabel: { en: "Today: candidate / approximate region", ko: "오늘날: 후보지 / 대략적 지역" },
+    modernReferenceStatusLabel: modernReferenceCandidate,
+    conceptRegionLabel: { en: "Judah / Benjamin-area flow", ko: "유다 / 베냐민 인근 흐름" },
+    conceptZoneId: "judah",
+    conceptFlowGroup: "david-flight",
+    placeTypeLabel: { en: "Settlement / priestly setting", ko: "거주지 / 제사장 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceCandidate,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 21:1-9", ko: "사무엘상 21:1-9" },
+        { book: "1-samuel", chapter: 21, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Samuel 22:6-23", ko: "사무엘상 22:6-23" },
+        { book: "1-samuel", chapter: 22, verse: 6, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Psalm 52:1", ko: "시편 52:1" },
+        { book: "psalms", chapter: 52, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["psalm-context-psalm-52"],
+    relatedPeople: [
+      { en: "Ahimelech", ko: "아히멜렉" },
+      { en: "Doeg", ko: "도엑" },
+      { en: "David", ko: "다윗" },
+    ],
+    note: {
+      en: "Nob connects with Ahimelech, Doeg, and the superscription setting of Psalm 52.",
+      ko: "놉은 아히멜렉과 도엑 사건, 시편 52편 표제 배경과 연결됩니다.",
+    },
+  },
+  {
+    id: "schematic-place-adullam",
+    placeId: "adullam",
+    title: { en: "Adullam", ko: "아둘람" },
+    modernReferenceLabel: { en: "Today: candidate / approximate region", ko: "오늘날: 후보지 / 대략적 지역" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "Judah flight-flow region", ko: "유다 도피 흐름" },
+    conceptZoneId: "judah",
+    conceptFlowGroup: "david-flight",
+    placeTypeLabel: { en: "Cave / refuge setting", ko: "굴 / 피난처 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceNotAsserted,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 22:1-2", ko: "사무엘상 22:1-2" },
+        { book: "1-samuel", chapter: 22, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Psalm 57:1", ko: "시편 57:1" },
+        { book: "psalms", chapter: 57, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["psalm-context-psalm-57"],
+    relatedPeople: [{ en: "David", ko: "다윗" }],
+    note: {
+      en: "Adullam is connected with David's flight narrative.",
+      ko: "아둘람은 다윗의 도피 흐름과 연결되는 장소입니다.",
+    },
+    cautionNote: {
+      en: "Connected with the cave setting of Psalm 57, but the exact location is not asserted.",
+      ko: "시편 57편의 굴 배경과 연결되지만 정확한 장소를 단정하지 않습니다.",
+    },
+  },
+  {
+    id: "schematic-place-en-gedi",
+    placeId: "en-gedi",
+    title: { en: "En-gedi", ko: "엔게디" },
+    modernReferenceLabel: { en: "Today: En-gedi region", ko: "오늘날: 엔게디 지역" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "Wilderness of Judah / Dead Sea area flow", ko: "유다 광야 / 사해 인근 흐름" },
+    conceptZoneId: "wilderness",
+    conceptFlowGroup: "david-flight",
+    placeTypeLabel: { en: "Wilderness refuge setting", ko: "광야 피난 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceBroad,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 24:1-7", ko: "사무엘상 24:1-7" },
+        { book: "1-samuel", chapter: 24, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Psalm 57:1", ko: "시편 57:1" },
+        { book: "psalms", chapter: 57, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["psalm-context-psalm-57"],
+    relatedPeople: [
+      { en: "David", ko: "다윗" },
+      { en: "Saul", ko: "사울" },
+    ],
+    note: {
+      en: "En-gedi connects with David and Saul's flight narrative.",
+      ko: "엔게디는 다윗과 사울의 도피 이야기와 연결됩니다.",
+    },
+    cautionNote: {
+      en: "The exact cave location for Psalm 57 is not asserted.",
+      ko: "시편 57편의 정확한 굴 위치는 단정하지 않습니다.",
+    },
+  },
+  {
+    id: "schematic-place-wilderness-of-judah",
+    placeId: "wilderness-of-judah",
+    title: { en: "Wilderness of Judah", ko: "유다 광야" },
+    modernReferenceLabel: { en: "Today: Wilderness of Judah region", ko: "오늘날: 유다 광야 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "Wilderness / flight-flow", ko: "광야 / 도피 흐름" },
+    conceptZoneId: "wilderness",
+    conceptFlowGroup: "david-flight",
+    placeTypeLabel: { en: "Wilderness region", ko: "광야 지역" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceBroad,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Psalm 63:1", ko: "시편 63:1" },
+        { book: "psalms", chapter: 63, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Samuel 23:14-15", ko: "사무엘상 23:14-15" },
+        { book: "1-samuel", chapter: 23, verse: 14, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Samuel 15:23-30", ko: "사무엘하 15:23-30" },
+        { book: "2-samuel", chapter: 15, verse: 23, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["psalm-context-psalm-63"],
+    relatedPeople: [{ en: "David", ko: "다윗" }],
+    note: {
+      en: "The Wilderness of Judah connects with David's flight setting and Psalm 63's superscription.",
+      ko: "유다 광야는 다윗의 도피 배경과 시편 63편 표제에 연결됩니다.",
+    },
+    cautionNote: {
+      en: "The exact flight episode is not asserted.",
+      ko: "정확히 어느 도피 사건인지는 단정하지 않습니다.",
+    },
+  },
+  {
+    id: "schematic-place-sinai",
+    placeId: "sinai",
+    title: { en: "Sinai", ko: "시내산" },
+    modernReferenceLabel: { en: "Today: Sinai-region candidate / traditional identification", ko: "오늘날: 시내 지역 후보 / 전통 위치" },
+    modernReferenceStatusLabel: modernReferenceTraditional,
+    conceptRegionLabel: { en: "Exodus / wilderness covenant flow", ko: "출애굽 / 광야 언약 흐름" },
+    conceptZoneId: "wilderness",
+    conceptFlowGroup: "exodus",
+    placeTypeLabel: { en: "Covenant mountain / wilderness setting", ko: "언약 산 / 광야 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceCandidate,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Exodus 19:1-25", ko: "출애굽기 19:1-25" },
+        { book: "exodus", chapter: 19, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Exodus 24:1-18", ko: "출애굽기 24:1-18" },
+        { book: "exodus", chapter: 24, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Psalm 90:1", ko: "시편 90:1" },
+        { book: "psalms", chapter: 90, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedBookContextIds: ["psalm-context-psalm-90"],
+    relatedPeople: [
+      { en: "Moses", ko: "모세" },
+      { en: "Israel's children", ko: "이스라엘 자손" },
+    ],
+    note: {
+      en: "Sinai connects with covenant, the wilderness flow, and the Mosaic setting of Psalm 90.",
+      ko: "시내산은 언약과 광야 시대 흐름, 시편 90편의 모세 배경과 연결됩니다.",
+    },
+    cautionNote: {
+      en: "Modern coordinates or exact mountain identification are not asserted in this phase.",
+      ko: "현대 좌표나 정확한 산 위치는 이 단계에서 단정하지 않습니다.",
+    },
+  },
+  {
+    id: "schematic-place-jericho",
+    placeId: "jericho",
+    title: { en: "Jericho", ko: "여리고" },
+    modernReferenceLabel: { en: "Today: Jericho region", ko: "오늘날: 여리고 지역" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "West of Jordan / conquest flow", ko: "요단 서편 / 정복 흐름" },
+    conceptZoneId: "canaan",
+    placeTypeLabel: { en: "City / conquest setting", ko: "도시 / 정복 배경" },
+    locationBasisLabel: locationBasisRepeated,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Joshua 6:1-27", ko: "여호수아 6:1-27" },
+        { book: "joshua", chapter: 6, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["jericho"],
+    relatedPeople: [
+      { en: "Joshua", ko: "여호수아" },
+      { en: "Rahab", ko: "라합" },
+      { en: "Israel's children", ko: "이스라엘 자손" },
+    ],
+    note: {
+      en: "Jericho is a key textual location in the conquest sequence after crossing the Jordan.",
+      ko: "여리고는 요단 도하 이후 정복 사건의 중요한 본문 장소입니다.",
+    },
+  },
+  {
+    id: "schematic-place-moab",
+    placeId: "moab",
+    title: { en: "Moab", ko: "모압" },
+    modernReferenceLabel: { en: "Today: east-of-Jordan region", ko: "오늘날: 요단 동편 지역" },
+    modernReferenceStatusLabel: modernReferenceApproximate,
+    conceptRegionLabel: { en: "East of Jordan / Ruth setting", ko: "요단 동편 / 룻기 배경" },
+    conceptZoneId: "east-jordan",
+    placeTypeLabel: { en: "Region / narrative setting", ko: "지역 / 서사 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceBroad,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Ruth 1:1-22", ko: "룻기 1:1-22" },
+        { book: "ruth", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["ruth-boaz"],
+    relatedPeople: [
+      { en: "Ruth", ko: "룻" },
+      { en: "Naomi", ko: "나오미" },
+      { en: "Boaz", ko: "보아스" },
+    ],
+    note: {
+      en: "Moab is shown as the opening setting of Ruth and part of the Davidic genealogy connection.",
+      ko: "모압은 룻기의 시작 배경과 다윗 계보 연결에 표시됩니다.",
+    },
+  },
+  {
+    id: "schematic-place-egypt",
+    placeId: "egypt",
+    title: { en: "Egypt", ko: "애굽" },
+    modernReferenceLabel: { en: "Today: Egypt", ko: "오늘날: 이집트" },
+    modernReferenceStatusLabel: { en: "Modern country-name connection", ko: "현대 국가명 연결" },
+    conceptRegionLabel: { en: "Exodus starting setting", ko: "출애굽 시작 배경" },
+    conceptZoneId: "egypt",
+    conceptFlowGroup: "exodus",
+    placeTypeLabel: { en: "Kingdom / slavery / exodus setting", ko: "왕국 / 종살이 / 출애굽 배경" },
+    locationBasisLabel: locationBasisTextual,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Exodus 1:1-14", ko: "출애굽기 1:1-14" },
+        { book: "exodus", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Exodus 12:29-42", ko: "출애굽기 12:29-42" },
+        { book: "exodus", chapter: 12, verse: 29, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["israel-multiplies-egypt", "moses-born", "moses-called-burning-bush", "exodus-passover-night"],
+    relatedPeople: [
+      { en: "Moses", ko: "모세" },
+      { en: "Pharaoh", ko: "바로" },
+      { en: "Israel's children", ko: "이스라엘 자손" },
+    ],
+    note: {
+      en: "Egypt is shown as the starting setting of the Exodus.",
+      ko: "애굽은 출애굽 사건의 시작 배경으로 표시됩니다.",
+    },
+  },
+  {
+    id: "schematic-place-jerusalem-judah",
+    placeId: "jerusalem",
+    title: { en: "Jerusalem", ko: "예루살렘" },
+    modernReferenceLabel: { en: "Today: Jerusalem", ko: "오늘날: 예루살렘" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "Canaan / Judah / kingdom center", ko: "가나안 / 유다 / 왕국 중심" },
+    conceptZoneId: "judah",
+    conceptFlowGroup: "kingdoms",
+    placeTypeLabel: { en: "City / temple / kingdom center", ko: "도시 / 성전 / 왕국 중심" },
+    locationBasisLabel: locationBasisRepeated,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Samuel 5:6-10", ko: "사무엘하 5:6-10" },
+        { book: "2-samuel", chapter: 5, verse: 6, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Kings 8:1-11", ko: "열왕기상 8:1-11" },
+        { book: "1-kings", chapter: 8, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 25:1-21", ko: "열왕기하 25:1-21" },
+        { book: "2-kings", chapter: 25, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["davidic-covenant", "solomon-temple", "fall-of-jerusalem"],
+    relatedBookContextIds: ["psalm-context-psalm-3", "psalm-context-psalm-51"],
+    relatedKingdoms: [unitedKingdomTag, judahKingdomTag],
+    relatedPeople: [
+      { en: "David", ko: "다윗" },
+      { en: "Solomon", ko: "솔로몬" },
+      { en: "Jeremiah", ko: "예레미야" },
+    ],
+    note: {
+      en: "Jerusalem is a key biblical place connected with David's kingdom, the temple, and exile events.",
+      ko: "예루살렘은 다윗 왕국, 성전, 포로기 사건과 연결되는 핵심 성경 장소입니다.",
+    },
+  },
+  {
+    id: "schematic-place-hebron",
+    placeId: "hebron",
+    title: { en: "Hebron", ko: "헤브론" },
+    modernReferenceLabel: { en: "Today: Hebron region", ko: "오늘날: 헤브론 지역" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "Judah hill country / patriarchal setting", ko: "유다 산지 / 족장 배경" },
+    conceptZoneId: "judah",
+    conceptFlowGroup: "patriarchs",
+    placeTypeLabel: { en: "City / covenant settlement", ko: "도시 / 언약 거주지" },
+    locationBasisLabel: locationBasisRepeated,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 13:18", ko: "창세기 13:18" },
+        { book: "genesis", chapter: 13, verse: 18, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Samuel 2:1-4", ko: "사무엘하 2:1-4" },
+        { book: "2-samuel", chapter: 2, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedPeople: [
+      { en: "Abraham", ko: "아브라함" },
+      { en: "David", ko: "다윗" },
+    ],
+    note: {
+      en: "Hebron ties the patriarchal and Davidic narratives together.",
+      ko: "헤브론은 족장 서사와 다윗 서사를 연결합니다.",
+    },
+  },
+  {
+    id: "schematic-place-shechem",
+    placeId: "shechem",
+    title: { en: "Shechem", ko: "세겜" },
+    modernReferenceLabel: { en: "Today: Shechem area", ko: "오늘날: 세겜 지역" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "Canaan / covenant land", ko: "가나안 / 언약 땅" },
+    conceptZoneId: "canaan",
+    conceptFlowGroup: "patriarchs",
+    placeTypeLabel: { en: "City / covenant waypoint", ko: "도시 / 언약 경유지" },
+    locationBasisLabel: locationBasisRepeated,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Genesis 12:6-7", ko: "창세기 12:6-7" },
+        { book: "genesis", chapter: 12, verse: 6, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Joshua 24:1-28", ko: "여호수아 24:1-28" },
+        { book: "joshua", chapter: 24, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedEventIds: ["call-of-abraham", "covenant-renewal-shechem"],
+    relatedPeople: [
+      { en: "Abraham", ko: "아브라함" },
+      { en: "Joshua", ko: "여호수아" },
+    ],
+    note: {
+      en: "Shechem links the patriarchal promise with Joshua's covenant renewal.",
+      ko: "세겜은 족장 약속과 여호수아의 언약 갱신을 연결합니다.",
+    },
+  },
+  {
+    id: "schematic-place-bethlehem",
+    placeId: "bethlehem",
+    title: { en: "Bethlehem", ko: "베들레헴" },
+    modernReferenceLabel: { en: "Today: Bethlehem region", ko: "오늘날: 베들레헴 지역" },
+    modernReferenceStatusLabel: modernReferenceConnected,
+    conceptRegionLabel: { en: "Judah / Davidic genealogy", ko: "유다 / 다윗 계보" },
+    conceptZoneId: "judah",
+    placeTypeLabel: { en: "Town / genealogy setting", ko: "마을 / 족보 배경" },
+    locationBasisLabel: locationBasisRepeated,
+    locationConfidenceLabel: locationConfidenceMajor,
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Ruth 4:13-22", ko: "룻기 4:13-22" },
+        { book: "ruth", chapter: 4, verse: 13, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    relatedPeople: [
+      { en: "Ruth", ko: "룻" },
+      { en: "Boaz", ko: "보아스" },
+      { en: "David", ko: "다윗" },
+    ],
+    note: {
+      en: "Bethlehem marks the Davidic line in Ruth's genealogy.",
+      ko: "베들레헴은 룻기의 족보에서 다윗 계보를 표시합니다.",
     },
   },
 ];

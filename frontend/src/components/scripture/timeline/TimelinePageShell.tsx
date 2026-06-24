@@ -19,6 +19,7 @@ import {
   timelineGenealogyComparisonRows,
   timelineGenealogySegments,
   timelineKingdomComparisonRows,
+  timelineSchematicPlaceRows,
   timelineBooks,
   timelinePeriods,
   timelinePlaces,
@@ -56,7 +57,7 @@ const pageCopy = {
     eventsHeading: "Events View",
     eventsNote: "The flow stays Scripture-first and preserves the selected item in the right panel.",
     futureViewNote:
-      "Places / map and themes remain future views until later approved phases add their own content layers.",
+      "Themes remain future views until later approved phases add their own content layers.",
     openInReader: "Open in Reader",
     overviewHeading: "Scripture Flow",
     overviewNote:
@@ -88,7 +89,7 @@ const pageCopy = {
       { id: "books", label: "Books / Psalms", future: false },
       { id: "kingdoms", label: "Kings & Kingdoms", future: false },
       { id: "genealogy", label: "Genealogy", future: false },
-      { id: "places", label: "Places / Map", future: true },
+      { id: "places", label: "Places / Schematic Map", future: false },
       { id: "themes", label: "Themes", future: true },
     ],
   },
@@ -96,7 +97,7 @@ const pageCopy = {
     detailHeading: "선택한 사건의 성경 문맥",
     eventsHeading: "사건 보기",
     eventsNote: "본문 흐름은 성경 우선을 유지하며, 선택 항목은 오른쪽 패널에 계속 남아 있습니다.",
-    futureViewNote: "지명 / 지도와 주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
+    futureViewNote: "주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
     openInReader: "읽기에서 열기",
     overviewHeading: "성경 흐름",
     overviewNote:
@@ -128,7 +129,7 @@ const pageCopy = {
       { id: "books", label: "책 / 시편", future: false },
       { id: "kingdoms", label: "왕국 / 제국", future: false },
       { id: "genealogy", label: "족보 / 마태복음", future: false },
-      { id: "places", label: "지명 / 지도", future: true },
+      { id: "places", label: "장소 / 개념지도", future: false },
       { id: "themes", label: "주제", future: true },
     ],
   },
@@ -340,8 +341,8 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
             placeOptions={placeOptions}
             previewNote={
               activeLocale === "ko"
-                ? "기간, 책, 지명, 왕국 미리보기는 현재 레이아웃에서 실제로 작동합니다. 나머지 섹션은 다음 단계에서 확장됩니다."
-                : "Period, book, place, and kingdom preview are active in the current layout. The remaining sections expand in later phases."
+                ? "기간, 책, 지명, 왕국, 족보, 그리고 개념지도 미리보기는 현재 레이아웃에서 실제로 작동합니다. 나머지 섹션은 다음 단계에서 확장됩니다."
+                : "Period, book, place, kingdom, genealogy, and schematic map previews are active in the current layout. The remaining sections expand in later phases."
             }
             searchTerm={filters.searchTerm}
             totalCount={previewCounts.totalCount}
@@ -412,6 +413,10 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
                   searchTerm={filters.searchTerm}
                   selectedEventId={selectedEvent?.id ?? ""}
                 />
+              ) : null}
+
+              {activeView === "places" ? (
+                <PlacesSchematicMapPreviewPanel locale={activeLocale} searchTerm={filters.searchTerm} />
               ) : null}
 
               {activeView === "events" ? (
@@ -510,7 +515,7 @@ function getTimelineViewLabel(view: TimelineView, locale: TimelineLocale) {
     case "genealogy":
       return locale === "ko" ? "족보 / 마태복음" : "Matthew Genealogy";
     case "places":
-      return locale === "ko" ? "지명 / 지도" : "Places / Map";
+      return locale === "ko" ? "장소 / 개념지도" : "Places / Schematic Map";
     case "themes":
       return locale === "ko" ? "주제" : "Themes";
   }
@@ -687,6 +692,290 @@ function EventsPreviewPanel({
       </div>
     </section>
   );
+}
+
+type PlacesSchematicMapPreviewPanelProps = {
+  locale: TimelineLocale;
+  searchTerm: string;
+};
+
+type SchematicRegion = {
+  id: string;
+  label: TimelineText;
+  note: TimelineText;
+  zoneIds: Array<(typeof timelineSchematicPlaceRows)[number]["conceptZoneId"]>;
+};
+
+const schematicPlaceRegions: SchematicRegion[] = [
+  {
+    id: "mesopotamia",
+    label: { en: "Mesopotamia / Babylon", ko: "메소포타미아 / 바벨론" },
+    note: { en: "Patriarchal departure and exile background", ko: "족장 이동과 포로기 배경" },
+    zoneIds: ["mesopotamia", "babylon"],
+  },
+  {
+    id: "persia",
+    label: { en: "Persia", ko: "바사" },
+    note: { en: "Return-period imperial setting", ko: "귀환기 제국 배경" },
+    zoneIds: ["persia"],
+  },
+  {
+    id: "aram-assyria",
+    label: { en: "Aram / Assyria", ko: "아람 / 앗수르" },
+    note: { en: "Prophetic and royal pressure setting", ko: "선지서와 왕정 압박 배경" },
+    zoneIds: ["aram-assyria"],
+  },
+  {
+    id: "canaan-judah",
+    label: { en: "Canaan / Israel / Judah", ko: "가나안 / 이스라엘 / 유다" },
+    note: { en: "Covenant land and kingdom center", ko: "언약 땅과 왕국 중심" },
+    zoneIds: ["canaan", "judah"],
+  },
+  {
+    id: "philistia",
+    label: { en: "Philistia", ko: "블레셋" },
+    note: { en: "David flight and conflict settings", ko: "다윗 도피와 충돌 배경" },
+    zoneIds: ["philistia"],
+  },
+  {
+    id: "wilderness",
+    label: { en: "Wilderness / Sinai", ko: "광야 / 시내" },
+    note: { en: "Exodus and wilderness covenant flow", ko: "출애굽과 광야 언약 흐름" },
+    zoneIds: ["wilderness"],
+  },
+  {
+    id: "east-jordan",
+    label: { en: "East of Jordan / Moab", ko: "요단 동편 / 모압" },
+    note: { en: "Ruth and related east-of-Jordan settings", ko: "룻기와 요단 동편 배경" },
+    zoneIds: ["east-jordan"],
+  },
+  {
+    id: "egypt",
+    label: { en: "Egypt", ko: "애굽" },
+    note: { en: "Exodus starting setting", ko: "출애굽 시작 배경" },
+    zoneIds: ["egypt"],
+  },
+];
+
+const noCoordinatesNote = {
+  en: "No coordinates in this preview.",
+  ko: "이 미리보기에는 좌표가 없습니다.",
+} satisfies TimelineText;
+
+function PlacesSchematicMapPreviewPanel({ locale, searchTerm }: PlacesSchematicMapPreviewPanelProps) {
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const visibleRows = timelineSchematicPlaceRows.filter((row) => matchesSchematicPlaceSearch(row, normalizedSearch));
+
+  const groupedRegions = schematicPlaceRegions
+    .map((region) => ({
+      region,
+      rows: visibleRows.filter((row) => region.zoneIds.includes(row.conceptZoneId)),
+    }))
+    .filter(({ rows }) => rows.length > 0);
+
+  return (
+    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+      <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {locale === "ko" ? "장소 / 개념지도" : "Places / Schematic Map"}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "이 지도는 성경 본문 흐름을 돕는 개념지도입니다. 정확한 좌표 지도가 아니며, 오늘날 지명은 보조 표기로만 표시됩니다. 장소 세부 패널은 다음 단계에서 확장됩니다."
+              : "This map is a schematic aid for following the biblical textual flow. It is not a coordinate map, and modern place labels are shown only as supporting references. A dedicated place detail panel comes later."}
+          </p>
+        </div>
+        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+          {locale === "ko" ? "미리보기" : "Preview"}
+        </span>
+      </div>
+
+      <div className="mt-4 rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+          {locale === "ko" ? "개념 권역" : "Concept Regions"}
+        </p>
+        {visibleRows.length === 0 ? (
+          <div className="mt-3 rounded-md border border-zinc-200 bg-white px-3 py-4 text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "검색과 일치하는 장소가 없습니다."
+              : "No places match the current search."}
+          </div>
+        ) : (
+          <div className="mt-3 grid gap-3 xl:grid-cols-2">
+            {groupedRegions.map(({ region, rows }) => (
+              <section className="rounded-md border border-zinc-200 bg-white p-3" key={region.id}>
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-zinc-950">{getTimelineText(region.label, locale)}</h3>
+                    <p className="mt-1 text-xs leading-5 text-zinc-500">{getTimelineText(region.note, locale)}</p>
+                  </div>
+                  <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                    {locale === "ko" ? `${rows.length}개` : `${rows.length}`}
+                  </span>
+                </div>
+
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  {rows.map((row) => (
+                    <article className="rounded-md border border-zinc-200 bg-zinc-50 p-2.5" key={row.id}>
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</p>
+                          {row.modernReferenceLabel ? (
+                            <p className="mt-1 text-xs leading-5 text-zinc-500">
+                              {getTimelineText(row.modernReferenceLabel, locale)}
+                            </p>
+                          ) : null}
+                        </div>
+                        {row.modernReferenceStatusLabel ? (
+                          <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                            {getTimelineText(row.modernReferenceStatusLabel, locale)}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <p className="mt-2 text-xs font-medium leading-5 text-zinc-600">
+                        {getTimelineText(row.conceptRegionLabel, locale)}
+                      </p>
+
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {row.conceptFlowGroup ? (
+                          <span className="inline-flex rounded-full border border-dashed border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-600">
+                            {getSchematicFlowGroupLabel(row.conceptFlowGroup, locale)}
+                          </span>
+                        ) : null}
+                        {row.placeTypeLabel ? (
+                          <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                            {getTimelineText(row.placeTypeLabel, locale)}
+                          </span>
+                        ) : null}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-4 overflow-x-auto">
+        <table className="min-w-[84rem] w-full border-separate border-spacing-0">
+          <thead>
+            <tr className="text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              <th className="border-b border-zinc-200 px-3 py-2">{locale === "ko" ? "장소" : "Place"}</th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "오늘날 보조 표기" : "Modern reference"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "개념 권역" : "Concept region"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "위치 근거" : "Location basis"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "성경 근거" : "Scripture anchor"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">{locale === "ko" ? "주의" : "Caution"}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visibleRows.map((row) => (
+              <tr className="align-top" key={row.id}>
+                <td className="border-b border-zinc-200 px-3 py-3">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</span>
+                    <p className="text-xs leading-5 text-zinc-600">{getTimelineText(row.note, locale)}</p>
+                  </div>
+                </td>
+                <td className="border-b border-zinc-200 px-3 py-3">
+                  <div className="flex flex-col gap-1.5">
+                    {row.modernReferenceLabel ? (
+                      <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                        {getTimelineText(row.modernReferenceLabel, locale)}
+                      </span>
+                    ) : null}
+                    {row.modernReferenceStatusLabel ? (
+                      <span className="text-xs leading-5 text-zinc-500">
+                        {getTimelineText(row.modernReferenceStatusLabel, locale)}
+                      </span>
+                    ) : null}
+                  </div>
+                </td>
+                <td className="border-b border-zinc-200 px-3 py-3">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                      {getTimelineText(row.conceptRegionLabel, locale)}
+                    </span>
+                    {row.placeTypeLabel ? (
+                      <span className="text-xs leading-5 text-zinc-500">
+                        {getTimelineText(row.placeTypeLabel, locale)}
+                      </span>
+                    ) : null}
+                  </div>
+                </td>
+                <td className="border-b border-zinc-200 px-3 py-3">
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-xs font-medium leading-5 text-zinc-500">
+                      {getTimelineText(row.locationBasisLabel, locale)}
+                    </p>
+                    <p className="text-xs leading-5 text-zinc-500">
+                      {getTimelineText(row.locationConfidenceLabel, locale)}
+                    </p>
+                  </div>
+                </td>
+                <td className="border-b border-zinc-200 px-3 py-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    {row.scriptureAnchors.map((anchor) => (
+                      <Link
+                        className={cn(
+                          "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                        )}
+                        href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                        key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                      >
+                        {getTimelineText(anchor.label, locale)}
+                      </Link>
+                    ))}
+                  </div>
+                </td>
+                <td className="border-b border-zinc-200 px-3 py-3">
+                  <div className="space-y-1.5 text-xs leading-5 text-zinc-500">
+                    {row.cautionNote ? <p>{getTimelineText(row.cautionNote, locale)}</p> : null}
+                    <p>{getTimelineText(noCoordinatesNote, locale)}</p>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function getSchematicFlowGroupLabel(
+  flowGroup: NonNullable<(typeof timelineSchematicPlaceRows)[number]["conceptFlowGroup"]>,
+  locale: TimelineLocale,
+) {
+  switch (flowGroup) {
+    case "david-flight":
+      return locale === "ko" ? "다윗 도피" : "David flight";
+    case "exile-return":
+      return locale === "ko" ? "포로 / 귀환" : "Exile / return";
+    case "exodus":
+      return locale === "ko" ? "출애굽" : "Exodus";
+    case "kingdoms":
+      return locale === "ko" ? "왕국 흐름" : "Kingdoms";
+    case "patriarchs":
+      return locale === "ko" ? "족장 시대" : "Patriarchs";
+    case "psalms":
+      return locale === "ko" ? "시편 배경" : "Psalm setting";
+  }
+
+  return locale === "ko" ? "기타" : "Other";
 }
 
 type KingsKingdomsPreviewPanelProps = {
@@ -1262,6 +1551,48 @@ function matchesGenealogySearch(
     ...row.scriptureAnchors.flatMap((anchor) => [anchor.label.en, anchor.label.ko]),
     ...(row.kingdomTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
     ...(row.rulerTags?.flatMap((tag) => [tag.en, tag.ko]) ?? []),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return rowTokens.includes(query);
+}
+
+function matchesSchematicPlaceSearch(
+  row: (typeof timelineSchematicPlaceRows)[number],
+  query: string,
+) {
+  if (!query) {
+    return true;
+  }
+
+  const rowTokens = [
+    row.title.en,
+    row.title.ko,
+    row.modernReferenceLabel?.en ?? "",
+    row.modernReferenceLabel?.ko ?? "",
+    row.modernReferenceStatusLabel?.en ?? "",
+    row.modernReferenceStatusLabel?.ko ?? "",
+    row.conceptRegionLabel.en,
+    row.conceptRegionLabel.ko,
+    row.placeTypeLabel?.en ?? "",
+    row.placeTypeLabel?.ko ?? "",
+    row.locationBasisLabel.en,
+    row.locationBasisLabel.ko,
+    row.locationConfidenceLabel.en,
+    row.locationConfidenceLabel.ko,
+    row.cautionNote?.en ?? "",
+    row.cautionNote?.ko ?? "",
+    row.note.en,
+    row.note.ko,
+    row.conceptFlowGroup ?? "",
+    ...row.scriptureAnchors.flatMap((anchor) => [anchor.label.en, anchor.label.ko]),
+    ...(row.relatedPeople?.flatMap((person) => [person.en, person.ko]) ?? []),
+    ...(row.relatedKingdoms?.flatMap((kingdom) => [kingdom.en, kingdom.ko]) ?? []),
+    ...(row.relatedEmpires?.flatMap((empire) => [empire.en, empire.ko]) ?? []),
+    ...(row.relatedBookContextIds ?? []),
+    ...(row.relatedEventIds ?? []),
+    row.placeId,
   ]
     .join(" ")
     .toLowerCase();

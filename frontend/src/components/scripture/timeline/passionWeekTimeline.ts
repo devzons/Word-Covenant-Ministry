@@ -24,6 +24,7 @@ export {
   timelineGenealogyComparisonRows,
   timelineGenealogySegments,
   timelineKingdomComparisonRows,
+  timelineSchematicPlaceRows,
   timelineBooks,
   timelinePeriods,
   timelinePlaces,

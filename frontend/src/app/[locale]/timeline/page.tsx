@@ -16,7 +16,7 @@ type TimelinePageProps = {
   }>;
 };
 
-const timelineViews = ["overview", "events", "books", "kingdoms", "genealogy"] as const;
+const timelineViews = ["overview", "events", "books", "kingdoms", "genealogy", "places"] as const;
 
 export default async function TimelinePage({ params, searchParams }: TimelinePageProps) {
   const { locale } = await params;
