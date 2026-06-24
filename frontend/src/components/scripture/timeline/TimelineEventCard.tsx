@@ -3,8 +3,13 @@
 import { cn } from "@/lib/utils/cn";
 
 import { TimelineConfidenceBadge } from "./TimelineConfidenceBadge";
-import { TimelineDatingNote } from "./TimelineDatingNote";
-import { getTimelineText, type PassionWeekTimelineEvent, type TimelineLocale } from "./passionWeekTimeline";
+import {
+  getTimelineBook,
+  getTimelinePeriod,
+  getTimelinePlace,
+  getTimelineText,
+} from "./passionWeekTimeline";
+import type { PassionWeekTimelineEvent, TimelineLocale } from "./passionWeekTimeline";
 
 type TimelineEventCardProps = {
   event: PassionWeekTimelineEvent;
@@ -19,6 +24,14 @@ export function TimelineEventCard({
   onSelect,
   selected,
 }: TimelineEventCardProps) {
+  const primaryBook = getTimelineBook(event.primaryBookId);
+  const period = getTimelinePeriod(event.periodId);
+  const periodLabel = period ? getTimelineText(period.label, locale) : "";
+  const placeLabels = event.placeIds
+    .map((placeId) => getTimelinePlace(placeId))
+    .filter((place): place is NonNullable<typeof place> => Boolean(place))
+    .map((place) => getTimelineText(place.label, locale));
+
   return (
     <li className="relative">
       <span
@@ -46,8 +59,11 @@ export function TimelineEventCard({
               <h3 className="text-base font-semibold text-zinc-950">
                 {getTimelineText(event.title, locale)}
               </h3>
-              <p className="mt-1 text-sm text-zinc-600">
-                {getTimelineText(event.scriptureAnchor, locale)}
+              <p className="mt-1 text-sm font-medium text-zinc-700">
+                {getTimelineText(event.scriptureAnchors[0]?.label ?? event.summary, locale)}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">
+                {getTimelineText(event.summary, locale)}
               </p>
             </div>
             <div className="flex flex-col items-end gap-2">
@@ -57,23 +73,39 @@ export function TimelineEventCard({
                 </span>
               ) : null}
               <TimelineConfidenceBadge
-                label={getTimelineText(event.confidenceLabel, locale)}
+                label={getTimelineText(event.confidenceLevel, locale)}
                 locale={locale}
               />
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-600">
-            <span className="rounded-full bg-zinc-100 px-2.5 py-1">{getTimelineText(event.period, locale)}</span>
-            <span className="rounded-full bg-zinc-100 px-2.5 py-1">{getTimelineText(event.eventType, locale)}</span>
-            <span className="rounded-full bg-zinc-100 px-2.5 py-1">{getTimelineText(event.sequenceLabel, locale)}</span>
+            {periodLabel ? (
+              <span className="rounded-full bg-zinc-100 px-2.5 py-1">{periodLabel}</span>
+            ) : null}
+            {primaryBook ? (
+              <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                {getTimelineText(primaryBook.label, locale)}
+              </span>
+            ) : null}
+            {placeLabels.slice(0, 2).map((placeLabel) => (
+              <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={placeLabel}>
+                {placeLabel}
+              </span>
+            ))}
+            <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+              {getTimelineText(event.sequenceLabel, locale)}
+            </span>
+            {event.durationLabel ? (
+              <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                {getTimelineText(event.durationLabel, locale)}
+              </span>
+            ) : null}
           </div>
 
-          <TimelineDatingNote
-            label={getTimelineText(event.datingMode, locale)}
-            locale={locale}
-            note={getTimelineText(event.datingNote, locale)}
-          />
+          <p className="text-xs leading-5 text-zinc-500">
+            {getTimelineText(event.locationNote, locale)}
+          </p>
         </div>
       </button>
     </li>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
@@ -10,11 +10,11 @@ import {
   getTimelineReaderHref,
   getTimelineText,
   passionWeekTimelineEvents,
-  type PassionWeekTimelineEvent,
+  timelineBooks,
+  timelinePeriods,
+  timelinePlaces,
   type TimelineLocale,
 } from "./passionWeekTimeline";
-import { TimelineConfidenceBadge } from "./TimelineConfidenceBadge";
-import { TimelineDatingNote } from "./TimelineDatingNote";
 import { TimelineEventDetailPanel } from "./TimelineEventDetailPanel";
 import { TimelineFilterBar } from "./TimelineFilterBar";
 import { ScriptureTimelineList } from "./ScriptureTimelineList";
@@ -24,10 +24,23 @@ type TimelinePageShellProps = {
   locale: TimelineLocale;
 };
 
+type TimelineOption = {
+  id: string;
+  label: string;
+};
+
+type TimelineFilterState = {
+  bookId: string;
+  placeId: string;
+  periodId: string;
+};
+
 const pageCopy = {
   en: {
     title: "Scripture Timeline",
     subtitle: "A Scripture-first timeline for following events, sequence, and passage anchors.",
+    previewNote:
+      "Period, book, and place filters are preview-active. Confidence remains visible on cards and in the detail panel.",
     overlayNote: "World-history overlay is deferred to a later approved phase.",
     viewTabs: [
       { id: "scripture", label: "Scripture Timeline", future: false },
@@ -39,22 +52,28 @@ const pageCopy = {
     filters: {
       period: "Period",
       book: "Book",
-      eventType: "Event Type",
+      place: "Place",
       confidence: "Confidence",
+      clear: "Clear filters",
+      showing: "Showing",
+      of: "of",
     },
-    timelineHeading: "Passion Week",
+    confidenceSummary: "High-confidence preview",
+    timelineHeading: "Biblical storyline preview",
+    timelineSubheading: "Creation through Acts",
     detailsHeading: "Selected Event Scripture Context",
-    noSelection: "Select an event to inspect the Scripture anchor, sequence, and dating note.",
+    noSelection:
+      "Select an event or widen the filters to inspect the Scripture anchor, sequence, and dating note.",
     openInReader: "Open in Reader",
     relatedStudy:
       "Related passages and Gospel Harmony links are deferred to later approved phases.",
-    confidenceLabel: "Scripture anchor: High",
-    datingLabel: "Dating: Internal biblical sequence",
-    datingNote: "External chronology is not shown in this MVP.",
+    selectedLabel: "Selected",
   },
   ko: {
     title: "성경 Timeline",
     subtitle: "성경 본문을 중심으로 사건, 순서, 근거 구절을 따라가는 연구 연표",
+    previewNote:
+      "기간, 책, 지명 필터는 미리보기에서 실제로 작동합니다. 신뢰도는 카드와 상세 패널에 계속 표시됩니다.",
     overlayNote: "세계사 Overlay는 이후 승인 단계에서 다룹니다.",
     viewTabs: [
       { id: "scripture", label: "성경 Timeline", future: false },
@@ -66,31 +85,137 @@ const pageCopy = {
     filters: {
       period: "기간",
       book: "책",
-      eventType: "사건 유형",
+      place: "지명",
       confidence: "신뢰도",
+      clear: "필터 초기화",
+      showing: "표시 중",
+      of: "중",
     },
-    timelineHeading: "수난 주간",
+    confidenceSummary: "높은 신뢰도 미리보기",
+    timelineHeading: "성경 스토리라인 미리보기",
+    timelineSubheading: "창조부터 사도행전까지",
     detailsHeading: "선택한 사건의 성경 문맥",
-    noSelection: "성경 근거, 순서, 연대 메모를 보려면 사건을 선택하세요.",
-    openInReader: "성경 본문으로 이동",
+    noSelection: "사건을 선택하거나 필터를 넓혀 성경 근거, 순서, 연대 메모를 확인하세요.",
+    openInReader: "읽기에서 열기",
     relatedStudy: "관련 구절과 복음서 링크는 이후 승인 단계에서 다룹니다.",
-    confidenceLabel: "본문 근거: 높음",
-    datingLabel: "연대: 성경 내부 순서",
-    datingNote: "외부 연대는 이 MVP에서 표시하지 않습니다.",
+    selectedLabel: "선택됨",
   },
 } as const;
 
 export function TimelinePageShell({ locale }: TimelinePageShellProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = pageCopy[activeLocale];
-  const [selectedEventId, setSelectedEventId] = useState(passionWeekTimelineEvents[0]?.id ?? "");
+  const [filters, setFilters] = useState<TimelineFilterState>({
+    bookId: "all",
+    placeId: "all",
+    periodId: "all",
+  });
+  const [selectedEventId, setSelectedEventId] = useState(
+    passionWeekTimelineEvents[0]?.id ?? "",
+  );
+
+  const periodOptions = useMemo<TimelineOption[]>(() => {
+    const periodCounts = new Map<string, number>();
+
+    for (const event of passionWeekTimelineEvents) {
+      periodCounts.set(event.periodId, (periodCounts.get(event.periodId) ?? 0) + 1);
+    }
+
+    return [
+      { id: "all", label: activeLocale === "ko" ? "모든 기간" : "All periods" },
+      ...timelinePeriods
+        .filter((period) => periodCounts.has(period.id))
+        .sort((left, right) => left.order - right.order)
+        .map((period) => ({
+          id: period.id,
+          label: `${getTimelineText(period.label, activeLocale)} (${periodCounts.get(period.id) ?? 0})`,
+        })),
+    ];
+  }, [activeLocale]);
+
+  const bookOptions = useMemo<TimelineOption[]>(() => {
+    const bookCounts = new Map<string, number>();
+    const usedBookIds = new Set<string>();
+
+    for (const event of passionWeekTimelineEvents) {
+      usedBookIds.add(event.primaryBookId);
+      bookCounts.set(event.primaryBookId, (bookCounts.get(event.primaryBookId) ?? 0) + 1);
+
+      for (const relatedBookId of event.relatedBookIds) {
+        usedBookIds.add(relatedBookId);
+        bookCounts.set(relatedBookId, (bookCounts.get(relatedBookId) ?? 0) + 1);
+      }
+    }
+
+    return [
+      { id: "all", label: activeLocale === "ko" ? "모든 책" : "All books" },
+      ...timelineBooks
+        .filter((book) => usedBookIds.has(book.id))
+        .map((book) => ({
+          id: book.id,
+          label: `${getTimelineText(book.label, activeLocale)} (${bookCounts.get(book.id) ?? 0})`,
+        })),
+    ];
+  }, [activeLocale]);
+
+  const placeOptions = useMemo<TimelineOption[]>(() => {
+    const placeCounts = new Map<string, number>();
+    const usedPlaceIds = new Set<string>();
+
+    for (const event of passionWeekTimelineEvents) {
+      for (const placeId of event.placeIds) {
+        usedPlaceIds.add(placeId);
+        placeCounts.set(placeId, (placeCounts.get(placeId) ?? 0) + 1);
+      }
+    }
+
+    return [
+      { id: "all", label: activeLocale === "ko" ? "모든 지명" : "All places" },
+      ...timelinePlaces
+        .filter((place) => usedPlaceIds.has(place.id))
+        .map((place) => ({
+          id: place.id,
+          label: `${getTimelineText(place.label, activeLocale)} (${placeCounts.get(place.id) ?? 0})`,
+        })),
+    ];
+  }, [activeLocale]);
+
+  const visibleEvents = useMemo(
+    () =>
+      passionWeekTimelineEvents.filter((event) => {
+        const matchesPeriod = filters.periodId === "all" || event.periodId === filters.periodId;
+        const matchesBook =
+          filters.bookId === "all" ||
+          event.primaryBookId === filters.bookId ||
+          event.relatedBookIds.includes(filters.bookId);
+        const matchesPlace = filters.placeId === "all" || event.placeIds.includes(filters.placeId);
+
+        return matchesPeriod && matchesBook && matchesPlace;
+      }),
+    [filters],
+  );
 
   const selectedEvent =
-    passionWeekTimelineEvents.find((event) => event.id === selectedEventId) ??
-    passionWeekTimelineEvents[0];
+    visibleEvents.find((event) => event.id === selectedEventId) ?? visibleEvents[0];
   const selectedReaderHref = selectedEvent
     ? getTimelineReaderHref(selectedEvent, activeLocale)
     : "";
+
+  const previewCounts = useMemo(() => {
+    const periodCount = new Set(visibleEvents.map((event) => event.periodId)).size;
+    const bookCount = new Set(
+      visibleEvents.flatMap((event) => [event.primaryBookId, ...event.relatedBookIds]),
+    ).size;
+    const placeCount = new Set(visibleEvents.flatMap((event) => event.placeIds)).size;
+
+    return {
+      bookCount,
+      periodCount,
+      placeCount,
+      totalCount: passionWeekTimelineEvents.length,
+      visibleCount: visibleEvents.length,
+    };
+  }, [visibleEvents]);
 
   return (
     <Container className="py-12 sm:py-16">
@@ -109,7 +234,59 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
             locale={activeLocale}
             tabs={copy.viewTabs}
           />
-          <TimelineFilterBar locale={activeLocale} labels={copy.filters} />
+          <TimelineFilterBar
+            activeBookId={filters.bookId}
+            activePeriodId={filters.periodId}
+            activePlaceId={filters.placeId}
+            bookOptions={bookOptions}
+            confidenceLabel={copy.confidenceSummary}
+            confidenceNote={
+              activeLocale === "ko"
+                ? "신뢰도는 카드와 상세 패널에 계속 표시됩니다."
+                : "Confidence remains visible on cards and in the detail panel."
+            }
+            labels={copy.filters}
+            locale={activeLocale}
+            onBookChange={(bookId) => setFilters((current) => ({ ...current, bookId }))}
+            onClearFilters={() =>
+              setFilters({
+                bookId: "all",
+                placeId: "all",
+                periodId: "all",
+              })
+            }
+            onPeriodChange={(periodId) => setFilters((current) => ({ ...current, periodId }))}
+            onPlaceChange={(placeId) => setFilters((current) => ({ ...current, placeId }))}
+            periodOptions={periodOptions}
+            placeOptions={placeOptions}
+            previewNote={copy.previewNote}
+            showingLabel={copy.filters.showing}
+            totalLabel={copy.filters.of}
+            visibleCount={previewCounts.visibleCount}
+            totalCount={previewCounts.totalCount}
+          />
+          <div className="flex flex-wrap gap-2 text-xs font-semibold text-zinc-600">
+            <span className="rounded-full bg-zinc-100 px-3 py-1.5">
+              {activeLocale === "ko"
+                ? `사건 ${previewCounts.visibleCount} / ${previewCounts.totalCount}`
+                : `Events ${previewCounts.visibleCount} / ${previewCounts.totalCount}`}
+            </span>
+            <span className="rounded-full bg-zinc-100 px-3 py-1.5">
+              {activeLocale === "ko"
+                ? `기간 ${previewCounts.periodCount}`
+                : `Periods ${previewCounts.periodCount}`}
+            </span>
+            <span className="rounded-full bg-zinc-100 px-3 py-1.5">
+              {activeLocale === "ko"
+                ? `책 ${previewCounts.bookCount}`
+                : `Books ${previewCounts.bookCount}`}
+            </span>
+            <span className="rounded-full bg-zinc-100 px-3 py-1.5">
+              {activeLocale === "ko"
+                ? `지명 ${previewCounts.placeCount}`
+                : `Places ${previewCounts.placeCount}`}
+            </span>
+          </div>
           <p className="text-sm text-zinc-500">{copy.overlayNote}</p>
         </div>
 
@@ -126,75 +303,34 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
                 <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
                   {copy.timelineHeading}
                 </p>
-                <h2 className="text-xl font-semibold text-zinc-950">
-                  {activeLocale === "ko" ? "마태복음 수난 주간" : "Matthew Passion Week"}
-                </h2>
-              </div>
-              <div className="text-right text-xs leading-5 text-zinc-500">
-                <TimelineConfidenceBadge locale={activeLocale} label={copy.confidenceLabel} />
-                <TimelineDatingNote
-                  locale={activeLocale}
-                  label={copy.datingLabel}
-                  note={copy.datingNote}
-                />
+                <h2 className="text-xl font-semibold text-zinc-950">{copy.timelineSubheading}</h2>
+                <p className="text-sm leading-6 text-zinc-600">
+                  {activeLocale === "ko"
+                    ? "이 미리보기는 창조에서 사도행전까지 이어지며, 기간·책·지명 구조를 함께 보여줍니다."
+                    : "This preview runs from Creation through Acts so period, book, and place behavior stay visible."}
+                </p>
               </div>
             </div>
 
-            <TimelineEntryMeta
-              locale={activeLocale}
-              event={selectedEvent}
-            />
-
             <ScriptureTimelineList
+              events={visibleEvents}
               locale={activeLocale}
               onSelect={setSelectedEventId}
               selectedEventId={selectedEvent?.id ?? ""}
-              events={passionWeekTimelineEvents}
             />
           </Card>
 
           <TimelineEventDetailPanel
             event={selectedEvent}
             locale={activeLocale}
-            openInReaderLabel={copy.openInReader}
             noSelection={copy.noSelection}
+            openInReaderLabel={copy.openInReader}
             readerHref={selectedReaderHref}
             relatedStudy={copy.relatedStudy}
+            selectedLabel={copy.selectedLabel}
           />
         </div>
       </section>
     </Container>
-  );
-}
-
-type TimelineEntryMetaProps = {
-  event?: PassionWeekTimelineEvent;
-  locale: TimelineLocale;
-};
-
-function TimelineEntryMeta({ event, locale }: TimelineEntryMetaProps) {
-  if (!event) {
-    return null;
-  }
-
-  return (
-    <div className="grid gap-2 rounded-md border border-zinc-200 bg-zinc-50 p-4 sm:grid-cols-2">
-      <div className="space-y-1">
-        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
-          {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
-        </p>
-        <p className="text-sm font-semibold text-zinc-950">
-          {getTimelineText(event.scriptureAnchor, locale)}
-        </p>
-      </div>
-      <div className="space-y-1">
-        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
-          {locale === "ko" ? "사건 유형" : "Event Type"}
-        </p>
-        <p className="text-sm font-semibold text-zinc-950">
-          {getTimelineText(event.eventType, locale)}
-        </p>
-      </div>
-    </div>
   );
 }
