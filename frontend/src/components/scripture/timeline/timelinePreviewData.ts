@@ -75,6 +75,25 @@ export type TimelineDatePreview = {
   dateConfidenceLabel: TimelineText;
 };
 
+export type TimelineKingdomComparisonRow = {
+  id: string;
+  periodId: string;
+  eraLabel: TimelineText;
+  sequenceLabel: TimelineText;
+  scriptureAnchors: TimelineScriptureAnchor[];
+  unitedKing?: TimelineText;
+  judahKing?: TimelineText;
+  northernKing?: TimelineText;
+  prophetTags?: TimelineText[];
+  empireTags?: TimelineText[];
+  surroundingNationTags?: TimelineText[];
+  dateLabel?: TimelineText;
+  dateBasisLabel?: TimelineText;
+  dateConfidenceLabel?: TimelineText;
+  note?: TimelineText;
+  relatedEventIds?: string[];
+};
+
 export const timelinePeriods: TimelinePeriod[] = [
   { id: "primeval", order: 1, label: { en: "Creation / Primeval History", ko: "창조 / 태고 역사" } },
   { id: "patriarchs", order: 2, label: { en: "Patriarchs", ko: "족장 시대" } },
@@ -2652,6 +2671,244 @@ export const passionWeekTimelineEvents: TimelineEvent[] = [
     eventType: { en: "Mission movement", ko: "선교 여정" },
     reader: { book: "acts", chapter: 13, verse: 1, translation: { en: "WEB", ko: "KRV" } },
   }),
+];
+
+export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
+  {
+    dateLabel: biblicalSequencePreview.dateLabel,
+    dateBasisLabel: { en: "1 Samuel 3 and 8 textual connection", ko: "사무엘상 3장과 8장 본문 연결" },
+    dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+    eraLabel: { en: "Judges to Monarchy", ko: "사사에서 왕정으로" },
+    id: "comparison-samuel-monarchy",
+    note: { en: "Samuel stands at the transition from the judges period to the monarchy.", ko: "사무엘은 사사 시대에서 왕정 시대로 넘어가는 전환점에 서 있습니다." },
+    periodId: "united-kingdom",
+    prophetTags: [samuelProphetTag],
+    relatedEventIds: ["samuel-transition"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 3:1-21", ko: "사무엘상 3:1-21" },
+        { book: "1-samuel", chapter: 3, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Samuel 8:1-22", ko: "사무엘상 8:1-22" },
+        { book: "1-samuel", chapter: 8, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "1 Samuel 3 / 8", ko: "사무엘상 3장 / 8장" },
+    unitedKing: { en: "Before monarchy", ko: "왕정 전환 전" },
+  },
+  {
+    dateLabel: biblicalSequencePreview.dateLabel,
+    dateBasisLabel: { en: "1 Samuel textual sequence", ko: "사무엘상 본문 순서" },
+    dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+    eraLabel: { en: "United Kingdom", ko: "통일 왕국" },
+    id: "comparison-saul",
+    note: { en: "Saul marks the beginning of Israel's monarchy.", ko: "사울은 이스라엘 왕정의 시작을 보여 줍니다." },
+    periodId: "united-kingdom",
+    prophetTags: [samuelProphetTag],
+    relatedEventIds: ["saul-chosen-king"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 10:17-27", ko: "사무엘상 10:17-27" },
+        { book: "1-samuel", chapter: 10, verse: 17, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Samuel 12:1-25", ko: "사무엘상 12:1-25" },
+        { book: "1-samuel", chapter: 12, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Saul", ko: "사울" },
+    unitedKing: { en: "Saul", ko: "사울" },
+  },
+  {
+    dateLabel: biblicalSequencePreview.dateLabel,
+    dateBasisLabel: { en: "2 Samuel textual sequence", ko: "사무엘하 본문 순서" },
+    dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+    eraLabel: { en: "United Kingdom", ko: "통일 왕국" },
+    id: "comparison-david",
+    note: { en: "The Davidic covenant connects the kingdom flow to the messianic promise.", ko: "다윗 언약은 왕국 흐름을 메시아 약속과 연결합니다." },
+    periodId: "united-kingdom",
+    prophetTags: [samuelProphetTag, nathanProphetTag],
+    relatedEventIds: ["david-anointed", "davidic-covenant"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Samuel 16:1-13", ko: "사무엘상 16:1-13" },
+        { book: "1-samuel", chapter: 16, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Samuel 7:1-17", ko: "사무엘하 7:1-17" },
+        { book: "2-samuel", chapter: 7, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "David", ko: "다윗" },
+    unitedKing: { en: "David", ko: "다윗" },
+  },
+  {
+    dateLabel: { en: "Solomon's fourth year", ko: "솔로몬 제4년" },
+    dateBasisLabel: { en: "1 Kings 6:1 reign-year notice", ko: "열왕기상 6:1의 통치 연수 기록" },
+    dateConfidenceLabel: {
+      en: "Biblical reign-year stated; external chronology supporting only",
+      ko: "본문 통치 연수 기록은 명시, 외부 연대는 보조",
+    },
+    eraLabel: { en: "United Kingdom", ko: "통일 왕국" },
+    id: "comparison-solomon-temple",
+    note: { en: "The temple construction is a major textual marker in the united kingdom.", ko: "성전 건축은 통일 왕국의 중요한 본문 표지입니다." },
+    periodId: "united-kingdom",
+    relatedEventIds: ["solomon-temple"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Kings 6:1", ko: "열왕기상 6:1" },
+        { book: "1-kings", chapter: 6, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Kings 8:1-66", ko: "열왕기상 8:1-66" },
+        { book: "1-kings", chapter: 8, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Solomon / Temple", ko: "솔로몬 / 성전" },
+    unitedKing: { en: "Solomon", ko: "솔로몬" },
+  },
+  {
+    dateLabel: biblicalSequencePreview.dateLabel,
+    dateBasisLabel: { en: "1 Kings 12 textual sequence", ko: "열왕기상 12장 본문 순서" },
+    dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    id: "comparison-kingdom-divided",
+    note: { en: "After Solomon, the kingdom divides into Judah and Northern Israel.", ko: "솔로몬 이후 왕국은 유다와 북이스라엘로 갈라집니다." },
+    periodId: "divided-kingdom",
+    relatedEventIds: ["kingdom-divided"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Kings 12:1-24", ko: "열왕기상 12:1-24" },
+        { book: "1-kings", chapter: 12, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Kingdom divided", ko: "왕국 분열" },
+    judahKing: { en: "Rehoboam", ko: "르호보암" },
+    northernKing: { en: "Jeroboam", ko: "여로보암" },
+  },
+  {
+    dateLabel: biblicalSequencePreview.dateLabel,
+    dateBasisLabel: { en: "1 Kings 18 textual sequence", ko: "열왕기상 18장 본문 순서" },
+    dateConfidenceLabel: { en: "Scripture sequence high; date approximate", ko: "본문 사건은 높음, 연대는 근사치" },
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    id: "comparison-ahab-elijah",
+    note: { en: "The Mount Carmel event is shown in the Northern Israel context of Ahab.", ko: "갈멜산 사건은 아합 시대 북이스라엘 배경 속에 표시됩니다." },
+    periodId: "divided-kingdom",
+    prophetTags: [elijahProphetTag],
+    relatedEventIds: ["elijah-carmel"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Kings 18:16-40", ko: "열왕기상 18:16-40" },
+        { book: "1-kings", chapter: 18, verse: 16, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Ahab / Elijah", ko: "아합 / 엘리야" },
+    northernKing: { en: "Ahab", ko: "아합" },
+    surroundingNationTags: [baalProphetsTag],
+  },
+  {
+    dateLabel: { en: "Supporting date: c. 722 BC", ko: "보조 연대: 약 주전 722년" },
+    dateBasisLabel: { en: "Scripture text with supporting historical chronology", ko: "성경 본문과 보조 역사 연대 연결" },
+    dateConfidenceLabel: { en: "Scripture event high; external date supporting", ko: "본문 사건은 높음, 외부 연대는 보조" },
+    eraLabel: { en: "Fall of Northern Kingdom", ko: "북이스라엘 멸망" },
+    id: "comparison-northern-exile-assyria",
+    note: { en: "The fall of Samaria is shown with Assyria as supporting context.", ko: "사마리아 함락은 앗수르 배경 속에 보조적으로 표시됩니다." },
+    periodId: "divided-kingdom",
+    empireTags: [assyriaEmpireTag],
+    prophetTags: [hoseaProphetTag, amosProphetTag],
+    relatedEventIds: ["northern-exile"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 17:1-23", ko: "열왕기하 17:1-23" },
+        { book: "2-kings", chapter: 17, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Samaria / Assyria", ko: "사마리아 / 앗수르" },
+    northernKing: { en: "Hoshea", ko: "호세아" },
+  },
+  {
+    dateLabel: { en: "Supporting date: c. 701 BC", ko: "보조 연대: 약 주전 701년" },
+    dateBasisLabel: { en: "Scripture text with supporting historical chronology", ko: "성경 본문과 보조 역사 연대 연결" },
+    dateConfidenceLabel: { en: "Scripture event high; external date supporting", ko: "본문 사건은 높음, 외부 연대는 보조" },
+    eraLabel: { en: "Judah / Assyrian Crisis", ko: "유다 / 앗수르 위기" },
+    id: "comparison-hezekiah-assyria",
+    note: { en: "The Jerusalem crisis in Hezekiah's day is shown within the Assyrian pressure context.", ko: "히스기야 시대 예루살렘 위기는 앗수르의 유다 압박 배경 속에 표시됩니다." },
+    periodId: "divided-kingdom",
+    empireTags: [assyriaEmpireTag],
+    prophetTags: [isaiahProphetTag],
+    relatedEventIds: ["hezekiah-assyria"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 18:13-37", ko: "열왕기하 18:13-37" },
+        { book: "2-kings", chapter: 18, verse: 13, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 19:1-37", ko: "열왕기하 19:1-37" },
+        { book: "2-kings", chapter: 19, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 36:1-22", ko: "이사야 36:1-22" },
+        { book: "isaiah", chapter: 36, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 37:1-38", ko: "이사야 37:1-38" },
+        { book: "isaiah", chapter: 37, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Hezekiah / Sennacherib", ko: "히스기야 / 산헤립" },
+    judahKing: { en: "Hezekiah", ko: "히스기야" },
+  },
+  {
+    dateLabel: { en: "Supporting date: c. 586 BC", ko: "보조 연대: 약 주전 586년" },
+    dateBasisLabel: { en: "Scripture text with supporting historical chronology", ko: "성경 본문과 보조 역사 연대 연결" },
+    dateConfidenceLabel: { en: "Scripture event high; external date supporting", ko: "본문 사건은 높음, 외부 연대는 보조" },
+    eraLabel: { en: "Fall of Judah / Exile", ko: "유다 멸망 / 포로" },
+    id: "comparison-jerusalem-babylon",
+    note: { en: "The fall of Jerusalem is shown with Babylonian exile context as a supporting layer.", ko: "예루살렘 함락은 바벨론 포로 배경 속에 보조적으로 표시됩니다." },
+    periodId: "exile",
+    empireTags: [babylonEmpireTag],
+    prophetTags: [jeremiahProphetTag],
+    relatedEventIds: ["fall-of-jerusalem"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 25:1-21", ko: "열왕기하 25:1-21" },
+        { book: "2-kings", chapter: 25, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 36:15-21", ko: "역대하 36:15-21" },
+        { book: "2-chronicles", chapter: 36, verse: 15, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Jeremiah 39:1-10", ko: "예레미야 39:1-10" },
+        { book: "jeremiah", chapter: 39, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Zedekiah / Nebuchadnezzar", ko: "시드기야 / 느부갓네살" },
+    judahKing: { en: "Zedekiah", ko: "시드기야" },
+  },
+  {
+    dateLabel: { en: "Supporting date: c. 538 BC", ko: "보조 연대: 약 주전 538년" },
+    dateBasisLabel: { en: "Scripture text with supporting historical chronology", ko: "성경 본문과 보조 역사 연대 연결" },
+    dateConfidenceLabel: { en: "Scripture event high; external date supporting", ko: "본문 사건은 높음, 외부 연대는 보조" },
+    eraLabel: { en: "Return", ko: "귀환" },
+    id: "comparison-cyrus-return",
+    note: { en: "The return is shown within the Persian Empire and Cyrus decree context.", ko: "귀환은 바사 제국과 고레스 칙령 배경 속에 표시됩니다." },
+    periodId: "return",
+    empireTags: [persiaEmpireTag],
+    relatedEventIds: ["return-decree"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Ezra 1:1-11", ko: "에스라 1:1-11" },
+        { book: "ezra", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 36:22-23", ko: "역대하 36:22-23" },
+        { book: "2-chronicles", chapter: 36, verse: 22, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    sequenceLabel: { en: "Cyrus's decree", ko: "고레스 칙령" },
+  },
 ];
 
 export function getTimelineText(text: TimelineText, locale: TimelineLocale): string {

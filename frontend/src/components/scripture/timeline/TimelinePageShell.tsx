@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 
+import Link from "next/link";
+
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils/cn";
 
@@ -10,8 +12,10 @@ import {
   getTimelinePeriod,
   getTimelinePlace,
   getTimelineReaderHref,
+  getTimelineReaderHrefFromReader,
   getTimelineText,
   passionWeekTimelineEvents,
+  timelineKingdomComparisonRows,
   timelineBooks,
   timelinePeriods,
   timelinePlaces,
@@ -347,9 +351,8 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
 
             {activeView === "kingdoms" ? (
               <KingsKingdomsPreviewPanel
-                events={visibleEvents}
                 locale={activeLocale}
-                onSelect={setSelectedEventId}
+                selectedEventId={selectedEvent?.id ?? ""}
               />
             ) : null}
 
@@ -432,63 +435,22 @@ function CompactStatusRow({
 }
 
 type KingsKingdomsPreviewPanelProps = {
-  events: typeof passionWeekTimelineEvents;
   locale: TimelineLocale;
-  onSelect: (eventId: string) => void;
+  selectedEventId: string;
 };
 
-function KingsKingdomsPreviewPanel({ events, locale, onSelect }: KingsKingdomsPreviewPanelProps) {
-  const unitedKingdomEvents = events.filter(
-    (event) => event.id === "samuel-transition" || hasTag(event.kingdomTags, "United Kingdom"),
-  );
-  const dividedKingdomEvents = events.filter(
-    (event) => hasTag(event.kingdomTags, "Judah") || hasTag(event.kingdomTags, "Northern Israel"),
-  );
-  const surroundingContextEvents = events.filter(
-    (event) => Boolean(event.empireTags?.length || event.surroundingNationTags?.length),
-  );
-
-  const groups = [
-    {
-      events: unitedKingdomEvents,
-      key: "united",
-      note:
-        locale === "ko"
-          ? "사무엘, 사울, 다윗, 솔로몬을 중심으로 본 왕정 미리보기"
-          : "Samuel, Saul, David, and Solomon in a compact monarchy preview",
-      title: locale === "ko" ? "통일 왕국" : "United Kingdom",
-    },
-    {
-      events: dividedKingdomEvents,
-      key: "divided",
-      note:
-        locale === "ko"
-          ? "유다와 북이스라엘이 갈라진 뒤의 선지자 및 왕정 흐름"
-          : "Judah and Northern Israel after the split, with prophet and king context",
-      title: locale === "ko" ? "분열 왕국" : "Divided Kingdom",
-    },
-    {
-      events: surroundingContextEvents,
-      key: "surrounding",
-      note:
-        locale === "ko"
-          ? "앗수르, 바벨론, 바사 같은 지원 역사 문맥"
-          : "Supporting historical context for Assyria, Babylon, and Persia",
-      title: locale === "ko" ? "주변 열강 / 민족" : "Surrounding Empires / Nations",
-    },
-  ];
-
+function KingsKingdomsPreviewPanel({ locale, selectedEventId }: KingsKingdomsPreviewPanelProps) {
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4">
       <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
-            {locale === "ko" ? "왕국 / 제국 미리보기" : "Kings / Kingdoms Preview"}
+            {locale === "ko" ? "왕국 / 제국 비교표" : "Kings / Kingdoms Comparison"}
           </p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "이 보기는 성경 본문 근거를 따라 왕국과 열강 문맥을 미리 보여 줍니다."
-              : "This view previews kingdom and empire context while remaining anchored to Scripture."}
+              ? "이 표는 성경 근거를 따라 왕국, 열강, 선지자, 보조 연대를 간단히 비교합니다."
+              : "This table compares kingdoms, empires, prophets, and supporting dates while staying anchored to Scripture."}
           </p>
         </div>
         <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
@@ -496,67 +458,166 @@ function KingsKingdomsPreviewPanel({ events, locale, onSelect }: KingsKingdomsPr
         </span>
       </div>
 
-      <div className="mt-4 grid gap-3 lg:grid-cols-3">
-        {groups.map((group) => (
-          <section className="rounded-md border border-zinc-200 bg-zinc-50 p-3" key={group.key}>
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-zinc-950">{group.title}</h3>
-                <p className="mt-1 text-xs leading-5 text-zinc-500">{group.note}</p>
-              </div>
-              <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
-                {locale === "ko" ? `${group.events.length}개` : `${group.events.length}`}
-              </span>
-            </div>
+      <div className="mt-4 overflow-x-auto">
+        <table className="min-w-[88rem] w-full border-separate border-spacing-0">
+          <thead>
+            <tr className="text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "시대 / 흐름" : "Era / Flow"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "통일 왕국" : "United Kingdom"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "유다" : "Judah"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "북이스라엘" : "Northern Israel"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "선지자" : "Prophets"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "열강 / 주변 민족" : "Empires / Nations"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
+              </th>
+              <th className="border-b border-zinc-200 px-3 py-2">
+                {locale === "ko" ? "보조 연대 / 메모" : "Supporting Date / Note"}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {timelineKingdomComparisonRows.map((row) => {
+              const period = getTimelinePeriod(row.periodId);
+              const isSelected = Boolean(row.relatedEventIds?.includes(selectedEventId));
 
-            <div className="mt-3 flex flex-col gap-2">
-              {group.events.length ? (
-                group.events.map((event) => (
-                  <button
-                    className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-left transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2"
-                    key={event.id}
-                    onClick={() => onSelect(event.id)}
-                    type="button"
-                  >
-                    <p className="text-sm font-semibold text-zinc-950">
-                      {getTimelineText(event.title, locale)}
-                    </p>
-                    <p className="mt-1 flex flex-wrap gap-1.5 text-[11px] font-medium text-zinc-600">
-                      {event.kingdomTags?.slice(0, 1).map((tag) => (
-                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`kg-${event.id}-${tag.en}`}>
-                          {getTimelineText(tag, locale)}
+              return (
+                <tr
+                  className={cn(
+                    "align-top",
+                    isSelected ? "bg-zinc-50/80" : "bg-white",
+                  )}
+                  key={row.id}
+                >
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <div className="flex flex-col gap-1.5">
+                      {period ? (
+                        <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                          {getTimelineText(period.label, locale)}
                         </span>
+                      ) : null}
+                      <span className="text-sm font-semibold text-zinc-950">
+                        {getTimelineText(row.eraLabel, locale)}
+                      </span>
+                      <span className="text-xs font-medium leading-5 text-zinc-500">
+                        {getTimelineText(row.sequenceLabel, locale)}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <ComparisonCellValue value={row.unitedKing} locale={locale} />
+                  </td>
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <ComparisonCellValue value={row.judahKing} locale={locale} />
+                  </td>
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <ComparisonCellValue value={row.northernKing} locale={locale} />
+                  </td>
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <ComparisonTagList tags={row.prophetTags} locale={locale} />
+                  </td>
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <ComparisonTagList
+                      locale={locale}
+                      tags={[...(row.empireTags ?? []), ...(row.surroundingNationTags ?? [])]}
+                    />
+                  </td>
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <div className="flex flex-wrap gap-1.5">
+                      {row.scriptureAnchors.map((anchor) => (
+                        <Link
+                          className={cn(
+                            "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                          )}
+                          href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                          key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                        >
+                          {getTimelineText(anchor.label, locale)}
+                        </Link>
                       ))}
-                      {event.empireTags?.slice(0, 1).map((tag) => (
-                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`em-${event.id}-${tag.en}`}>
-                          {getTimelineText(tag, locale)}
+                    </div>
+                  </td>
+                  <td className="border-b border-zinc-200 px-3 py-3">
+                    <div className="flex flex-col gap-1.5">
+                      {row.dateLabel ? (
+                        <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                          {getTimelineText(row.dateLabel, locale)}
                         </span>
-                      ))}
-                      {event.rulerTags?.slice(0, 1).map((tag) => (
-                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`ru-${event.id}-${tag.en}`}>
-                          {getTimelineText(tag, locale)}
-                        </span>
-                      ))}
-                      {event.prophetTags?.slice(0, 1).map((tag) => (
-                        <span className="rounded-full bg-zinc-100 px-2 py-0.5" key={`pr-${event.id}-${tag.en}`}>
-                          {getTimelineText(tag, locale)}
-                        </span>
-                      ))}
-                    </p>
-                  </button>
-                ))
-              ) : (
-                <p className="rounded-md border border-dashed border-zinc-200 bg-white px-3 py-4 text-sm leading-6 text-zinc-500">
-                  {locale === "ko"
-                    ? "현재 필터에 맞는 미리보기 항목이 없습니다."
-                    : "No preview items match the current filters."}
-                </p>
-              )}
-            </div>
-          </section>
-        ))}
+                      ) : null}
+                      {row.dateBasisLabel ? (
+                        <p className="text-xs font-medium leading-5 text-zinc-500">
+                          {getTimelineText(row.dateBasisLabel, locale)}
+                        </p>
+                      ) : null}
+                      {row.dateConfidenceLabel ? (
+                        <p className="text-xs leading-5 text-zinc-500">
+                          {getTimelineText(row.dateConfidenceLabel, locale)}
+                        </p>
+                      ) : null}
+                      {row.note ? (
+                        <p className="text-sm leading-6 text-zinc-600">
+                          {getTimelineText(row.note, locale)}
+                        </p>
+                      ) : null}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </section>
+  );
+}
+
+type ComparisonCellValueProps = {
+  locale: TimelineLocale;
+  value?: { en: string; ko: string };
+};
+
+function ComparisonCellValue({ locale, value }: ComparisonCellValueProps) {
+  if (!value) {
+    return <span className="text-sm leading-6 text-zinc-400">—</span>;
+  }
+
+  return <span className="text-sm font-medium leading-6 text-zinc-900">{getTimelineText(value, locale)}</span>;
+}
+
+type ComparisonTagListProps = {
+  locale: TimelineLocale;
+  tags?: readonly TimelineText[];
+};
+
+function ComparisonTagList({ locale, tags }: ComparisonTagListProps) {
+  if (!tags?.length) {
+    return <span className="text-sm leading-6 text-zinc-400">—</span>;
+  }
+
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {tags.map((tag) => (
+        <span
+          className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700"
+          key={`${tag.en}-${tag.ko}`}
+        >
+          {getTimelineText(tag, locale)}
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -582,10 +643,6 @@ function placeLabelForStatus(placeId: string, placeOptions: TimelineOption[], lo
   }
 
   return placeOptions.find((option) => option.id === placeId)?.label ?? "";
-}
-
-function hasTag(tags: TimelineText[] | undefined, needleEn: string) {
-  return Boolean(tags?.some((tag) => tag.en === needleEn));
 }
 
 function matchesTimelineSearch(event: (typeof passionWeekTimelineEvents)[number], query: string) {
