@@ -949,3 +949,5 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 - Do not bundle full Bible or original-language datasets into the frontend.
 
 Timeline MVP release notes and the staging readiness checklist are documented. Next objective: staging readiness review and beta-tag decision after staging validation.
+
+Staging readiness review completed through available local validation: frontend build passed, and escalated route smoke returned HTTP 200 for `/ko/timeline` and `/en/timeline` on both `wordcovenantministry.local:3030` and `127.0.0.1:3030`. No deployment or beta tag was created. Next objective: confirm staging target details, then run staging validation before deciding on any beta tag.

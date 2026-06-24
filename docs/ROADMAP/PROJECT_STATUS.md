@@ -1024,3 +1024,5 @@ Before this document update:
 - Actual filesystem inspection confirmed the official plugin path and the non-official `backend/wcm-core/` directory.
 
 Timeline MVP release notes and the staging readiness checklist are now documented, and staging readiness review remains the next decision point.
+
+Staging readiness review completed through available local validation: frontend build passed, and escalated route smoke returned HTTP 200 for `/ko/timeline` and `/en/timeline` on both `wordcovenantministry.local:3030` and `127.0.0.1:3030`. No deployment or beta tag was created. Next step is to confirm the staging target and run staging validation before any release tag decision.
