@@ -90,6 +90,7 @@ export type TimelineKingdomComparisonRow = {
   dateLabel?: TimelineText;
   dateBasisLabel?: TimelineText;
   dateConfidenceLabel?: TimelineText;
+  nameVariantNote?: TimelineText;
   note?: TimelineText;
   relatedEventIds?: string[];
 };
@@ -176,6 +177,7 @@ export const timelineBooks: TimelineBook[] = [
   { id: "2-kings", label: { en: "2 Kings", ko: "열왕기하" } },
   { id: "ezra", label: { en: "Ezra", ko: "에스라" } },
   { id: "nehemiah", label: { en: "Nehemiah", ko: "느헤미야" } },
+  { id: "esther", label: { en: "Esther", ko: "에스더" } },
   { id: "isaiah", label: { en: "Isaiah", ko: "이사야" } },
   { id: "jeremiah", label: { en: "Jeremiah", ko: "예레미야" } },
   { id: "matthew", label: { en: "Matthew", ko: "마태복음" } },
@@ -217,6 +219,15 @@ export const timelinePlaces: TimelinePlace[] = [
   { id: "jordan", label: { en: "Jordan", ko: "요단" } },
   { id: "jericho", label: { en: "Jericho", ko: "여리고" } },
   { id: "shiloh", label: { en: "Shiloh", ko: "실로" } },
+  { id: "gath", label: { en: "Gath", ko: "가드" } },
+  { id: "nob", label: { en: "Nob", ko: "놉" } },
+  { id: "zif", label: { en: "Ziph", ko: "십" } },
+  { id: "adullam", label: { en: "Adullam", ko: "아둘람" } },
+  { id: "en-gedi", label: { en: "En Gedi", ko: "엔게디" } },
+  { id: "gibeah", label: { en: "Gibeah", ko: "기브아" } },
+  { id: "valley-of-salt", label: { en: "Valley of Salt", ko: "염곡" } },
+  { id: "wilderness-of-judah", label: { en: "Wilderness of Judah", ko: "유다 광야" } },
+  { id: "susa", label: { en: "Susa", ko: "수산" } },
   { id: "uz", label: { en: "Uz", ko: "우스" } },
   { id: "bethlehem", label: { en: "Bethlehem", ko: "베들레헴" } },
   { id: "jerusalem", label: { en: "Jerusalem", ko: "예루살렘" } },
@@ -2963,6 +2974,281 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
     ],
     sequenceLabel: { en: "Cyrus's decree", ko: "고레스 칙령" },
   },
+  {
+    id: "comparison-asa-judah",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Asa", ko: "아사" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Kings 15:9-24", ko: "열왕기상 15:9-24" },
+        { book: "1-kings", chapter: 15, verse: 9, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 14:1-15", ko: "역대하 14:1-15" },
+        { book: "2-chronicles", chapter: 14, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    judahKing: { en: "Asa", ko: "아사" },
+    prophetTags: [{ en: "Azariah", ko: "아사랴" }],
+    surroundingNationTags: [{ en: "Cush", ko: "구스" }],
+    dateLabel: { en: "Biblical royal sequence", ko: "성경 내부 왕정 순서" },
+    note: { en: "Asa is shown as an early king of Judah in the divided kingdom.", ko: "아사는 분열 왕국 초기 유다 왕으로 표시됩니다." },
+  },
+  {
+    id: "comparison-jehoshaphat-judah",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Jehoshaphat", ko: "여호사밧" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Kings 22:41-50", ko: "열왕기상 22:41-50" },
+        { book: "1-kings", chapter: 22, verse: 41, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 17:1-19", ko: "역대하 17:1-19" },
+        { book: "2-chronicles", chapter: 17, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    judahKing: { en: "Jehoshaphat", ko: "여호사밧" },
+    prophetTags: [{ en: "Jehu son of Hanani", ko: "하나니의 아들 예후" }],
+    note: {
+      en: "Jehoshaphat belongs to Judah's royal line and overlaps with Ahab's Northern Israel context.",
+      ko: "여호사밧은 유다 왕정 흐름에서 아합 시대 북이스라엘과도 연결됩니다.",
+    },
+  },
+  {
+    id: "comparison-omri-ahab",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Omri / Ahab", ko: "오므리 / 아합" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "1 Kings 16:21-34", ko: "열왕기상 16:21-34" },
+        { book: "1-kings", chapter: 16, verse: 21, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    northernKing: { en: "Omri / Ahab", ko: "오므리 / 아합" },
+    prophetTags: [{ en: "Elijah", ko: "엘리야" }],
+    note: {
+      en: "Omri's dynasty and Ahab are major textual markers in Northern Israel.",
+      ko: "오므리 왕조와 아합은 북이스라엘 흐름의 중요한 본문 표지입니다.",
+    },
+  },
+  {
+    id: "comparison-jehu-northern-israel",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Jehu", ko: "예후" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 9:1-37", ko: "열왕기하 9:1-37" },
+        { book: "2-kings", chapter: 9, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 10:1-36", ko: "열왕기하 10:1-36" },
+        { book: "2-kings", chapter: 10, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    northernKing: { en: "Jehu", ko: "예후" },
+    prophetTags: [{ en: "Elisha", ko: "엘리사" }],
+    note: {
+      en: "Jehu marks a dynastic transition in Northern Israel connected with Elisha's prophetic circle.",
+      ko: "예후는 엘리사의 선지자 제자와 연결되어 북이스라엘 왕조 전환을 보여 줍니다.",
+    },
+  },
+  {
+    id: "comparison-jeroboam-ii",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Jeroboam II", ko: "여로보암 2세" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 14:23-29", ko: "열왕기하 14:23-29" },
+        { book: "2-kings", chapter: 14, verse: 23, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Hosea 1:1", ko: "호세아 1:1" },
+        { book: "hosea", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Amos 1:1", ko: "아모스 1:1" },
+        { book: "amos", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    northernKing: { en: "Jeroboam II", ko: "여로보암 2세" },
+    prophetTags: [
+      { en: "Hosea", ko: "호세아" },
+      { en: "Amos", ko: "아모스" },
+      { en: "Jonah son of Amittai", ko: "아밋대의 아들 요나" },
+    ],
+    dateLabel: { en: "Biblical royal sequence", ko: "성경 내부 왕정 순서" },
+    note: {
+      en: "Jeroboam II's reign connects with the superscription settings of Hosea and Amos.",
+      ko: "여로보암 2세 시대는 호세아와 아모스의 표제 배경과 연결됩니다.",
+    },
+  },
+  {
+    id: "comparison-uzziah-azariah",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Uzziah / Azariah", ko: "웃시야 / 아사랴" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 15:1-7", ko: "열왕기하 15:1-7" },
+        { book: "2-kings", chapter: 15, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 26:1-23", ko: "역대하 26:1-23" },
+        { book: "2-chronicles", chapter: 26, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 1:1", ko: "이사야 1:1" },
+        { book: "isaiah", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    judahKing: { en: "Uzziah / Azariah", ko: "웃시야 / 아사랴" },
+    nameVariantNote: {
+      en: "2 Kings uses Azariah, while 2 Chronicles and Isaiah's superscription use Uzziah.",
+      ko: "열왕기하에서는 아사랴, 역대하와 이사야 표제에서는 웃시야 이름이 사용됩니다.",
+    },
+    note: { en: "Uzziah's reign connects with Isaiah's superscription setting.", ko: "웃시야 시대는 이사야 표제의 왕정 배경과 연결됩니다." },
+    prophetTags: [{ en: "Isaiah", ko: "이사야" }],
+  },
+  {
+    id: "comparison-ahaz-judah",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Judah / Assyrian Crisis", ko: "유다 / 앗수르 위기" },
+    sequenceLabel: { en: "Ahaz", ko: "아하스" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 16:1-20", ko: "열왕기하 16:1-20" },
+        { book: "2-kings", chapter: 16, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Isaiah 7:1-17", ko: "이사야 7:1-17" },
+        { book: "isaiah", chapter: 7, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    empireTags: [{ en: "Assyria", ko: "앗수르" }],
+    judahKing: { en: "Ahaz", ko: "아하스" },
+    prophetTags: [{ en: "Isaiah", ko: "이사야" }],
+    surroundingNationTags: [
+      { en: "Aram", ko: "아람" },
+      { en: "Northern Israel", ko: "북이스라엘" },
+    ],
+    note: {
+      en: "Ahaz's reign connects with the Aram-Ephraim crisis in Isaiah 7.",
+      ko: "아하스 시대는 이사야 7장의 아람-에브라임 위기와 연결됩니다.",
+    },
+  },
+  {
+    id: "comparison-manasseh-judah",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Manasseh", ko: "므낫세" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 21:1-18", ko: "열왕기하 21:1-18" },
+        { book: "2-kings", chapter: 21, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 33:1-20", ko: "역대하 33:1-20" },
+        { book: "2-chronicles", chapter: 33, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    empireTags: [{ en: "Assyria", ko: "앗수르" }],
+    judahKing: { en: "Manasseh", ko: "므낫세" },
+    note: {
+      en: "Manasseh is a major textual marker in late Judah's royal history.",
+      ko: "므낫세는 유다 말기 왕정 흐름의 중요한 본문 표지입니다.",
+    },
+  },
+  {
+    id: "comparison-josiah-judah",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Josiah", ko: "요시야" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 22:1-20", ko: "열왕기하 22:1-20" },
+        { book: "2-kings", chapter: 22, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Kings 23:1-30", ko: "열왕기하 23:1-30" },
+        { book: "2-kings", chapter: 23, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "2 Chronicles 34:1-33", ko: "역대하 34:1-33" },
+        { book: "2-chronicles", chapter: 34, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    judahKing: { en: "Josiah", ko: "요시야" },
+    prophetTags: [
+      { en: "Huldah", ko: "훌다" },
+      { en: "Jeremiah", ko: "예레미야" },
+    ],
+    note: {
+      en: "Josiah connects with late Judah through the discovery of the Book of the Law and reform.",
+      ko: "요시야는 율법책 발견과 개혁 사건을 통해 포로 직전 유다 흐름과 연결됩니다.",
+    },
+  },
+  {
+    id: "comparison-jehoiakim-judah",
+    periodId: "divided-kingdom",
+    eraLabel: { en: "Divided Kingdom", ko: "분열 왕국" },
+    sequenceLabel: { en: "Jehoiakim", ko: "여호야김" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 23:34-37", ko: "열왕기하 23:34-37" },
+        { book: "2-kings", chapter: 23, verse: 34, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Jeremiah 36:1-32", ko: "예레미야 36:1-32" },
+        { book: "jeremiah", chapter: 36, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    empireTags: [{ en: "Babylon", ko: "바벨론" }],
+    judahKing: { en: "Jehoiakim", ko: "여호야김" },
+    prophetTags: [
+      { en: "Jeremiah", ko: "예레미야" },
+      { en: "Baruch", ko: "바룩" },
+    ],
+    note: {
+      en: "Jehoiakim connects with the scroll episode in Jeremiah 36.",
+      ko: "여호야김은 예레미야 36장의 두루마리 사건과 연결됩니다.",
+    },
+  },
+  {
+    id: "comparison-jehoiachin-jeconiah",
+    periodId: "exile",
+    eraLabel: { en: "Fall of Judah / Exile", ko: "유다 멸망 / 포로" },
+    sequenceLabel: { en: "Jehoiachin / Jeconiah", ko: "여호야긴 / 여고냐" },
+    scriptureAnchors: [
+      createAnchor(
+        { en: "2 Kings 24:8-17", ko: "열왕기하 24:8-17" },
+        { book: "2-kings", chapter: 24, verse: 8, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "1 Chronicles 3:16", ko: "역대상 3:16" },
+        { book: "1-chronicles", chapter: 3, verse: 16, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Matthew 1:11-12", ko: "마태복음 1:11-12" },
+        { book: "matthew", chapter: 1, verse: 11, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    empireTags: [{ en: "Babylon", ko: "바벨론" }],
+    judahKing: { en: "Jehoiachin / Jeconiah", ko: "여호야긴 / 여고냐" },
+    nameVariantNote: {
+      en: "Jehoiachin is associated with the names Jeconiah and Coniah.",
+      ko: "여호야긴은 여고냐, 고니야와 연결되는 이름입니다.",
+    },
+    note: {
+      en: "Jehoiachin/Jeconiah forms a connection between the deportation and Matthew's genealogy.",
+      ko: "여호야긴/여고냐는 포로기와 마태복음 족보의 연결점입니다.",
+    },
+  },
 ];
 
 export const timelineBookContextRows: TimelineBookContextRow[] = [
@@ -3188,6 +3474,176 @@ export const timelineBookContextRows: TimelineBookContextRow[] = [
       ),
     ],
     title: { en: "Daniel", ko: "다니엘" },
+  },
+  {
+    backgroundBasisLabel: { en: "Textual background / return-period connection", ko: "본문 배경 / 귀환기 연결" },
+    canonicalLocation: { en: "Historical / Return context", ko: "역사서 / 귀환기" },
+    dateConfidenceLabel: {
+      en: "Textual setting clear; exact composition date not asserted",
+      ko: "본문 배경은 분명, 정확한 작성 연대는 단정하지 않음",
+    },
+    dateLabel: { en: "Return-period connection", ko: "귀환기 연결" },
+    historicalSettingLabel: { en: "Return and temple restoration under Persia", ko: "바사 시대 귀환과 성전 회복" },
+    id: "book-context-ezra",
+    note: {
+      en: "Ezra belongs with the return and temple-restoration movement after the exile. This preview keeps the setting Scripture-first and does not overstate the date.",
+      ko: "에스라는 포로기 이후 귀환과 성전 회복 흐름에 속합니다. 이 미리보기는 본문 우선을 유지하고 연대를 과도하게 단정하지 않습니다.",
+    },
+    periodId: "return",
+    bookId: "ezra",
+    relatedEmpires: [{ en: "Persia", ko: "바사" }],
+    relatedPeople: [
+      { en: "Ezra", ko: "에스라" },
+      { en: "Zerubbabel", ko: "스룹바벨" },
+    ],
+    relatedEventIds: ["return-decree"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Ezra 1:1-11", ko: "에스라 1:1-11" },
+        { book: "ezra", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Ezra 7:1-10", ko: "에스라 7:1-10" },
+        { book: "ezra", chapter: 7, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Ezra", ko: "에스라" },
+  },
+  {
+    backgroundBasisLabel: { en: "Textual background / return-period connection", ko: "본문 배경 / 귀환기 연결" },
+    canonicalLocation: { en: "Historical / Return context", ko: "역사서 / 귀환기" },
+    dateConfidenceLabel: {
+      en: "Textual setting clear; exact composition date not asserted",
+      ko: "본문 배경은 분명, 정확한 작성 연대는 단정하지 않음",
+    },
+    dateLabel: { en: "Return-period connection", ko: "귀환기 연결" },
+    historicalSettingLabel: { en: "Rebuilding Jerusalem's wall", ko: "예루살렘 성벽 재건" },
+    id: "book-context-nehemiah",
+    note: {
+      en: "Nehemiah is read in the return period as the rebuilding of Jerusalem's wall takes shape. The preview keeps that setting without claiming a final dating solution.",
+      ko: "느헤미야는 귀환기 예루살렘 성벽 재건이 진행되는 흐름 속에서 읽힙니다. 이 미리보기는 그 배경을 보여 주되 최종 연대 해법을 단정하지 않습니다.",
+    },
+    periodId: "return",
+    bookId: "nehemiah",
+    relatedEmpires: [{ en: "Persia", ko: "바사" }],
+    relatedPeople: [
+      { en: "Nehemiah", ko: "느헤미야" },
+      { en: "Ezra", ko: "에스라" },
+    ],
+    relatedPlaces: ["jerusalem", "susa"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Nehemiah 1:1-11", ko: "느헤미야 1:1-11" },
+        { book: "nehemiah", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Nehemiah 2:1-20", ko: "느헤미야 2:1-20" },
+        { book: "nehemiah", chapter: 2, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Nehemiah", ko: "느헤미야" },
+  },
+  {
+    backgroundBasisLabel: { en: "Textual background / Persian imperial setting", ko: "본문 배경 / 바사 제국 배경" },
+    canonicalLocation: { en: "Historical / Wisdom-Historical context", ko: "역사서 / 지혜적 역사 맥락" },
+    dateConfidenceLabel: {
+      en: "Textual setting clear; detailed external chronology supporting",
+      ko: "본문 배경은 분명, 세부 외부 연대는 보조",
+    },
+    dateLabel: { en: "Persian-period connection", ko: "바사 시대 연결" },
+    historicalSettingLabel: { en: "Persian imperial setting in Susa", ko: "바사 제국 수산 궁 배경" },
+    id: "book-context-esther",
+    note: {
+      en: "Esther is set inside the Persian imperial court at Susa. The preview keeps the historical setting clear while treating external chronology as supporting only.",
+      ko: "에스더는 수산 궁의 바사 제국 배경 속에 놓입니다. 이 미리보기는 역사적 배경을 분명히 하되 외부 연대는 보조로만 둡니다.",
+    },
+    periodId: "return",
+    bookId: "esther",
+    relatedEmpires: [{ en: "Persia", ko: "바사" }],
+    relatedPeople: [
+      { en: "Esther", ko: "에스더" },
+      { en: "Mordecai", ko: "모르드개" },
+      { en: "Ahasuerus", ko: "아하수에로" },
+    ],
+    relatedPlaces: ["susa"],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Esther 1:1-3", ko: "에스더 1:1-3" },
+        { book: "esther", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Esther 2:5-18", ko: "에스더 2:5-18" },
+        { book: "esther", chapter: 2, verse: 5, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Esther", ko: "에스더" },
+  },
+  {
+    backgroundBasisLabel: { en: "Textual background / return-period connection", ko: "본문 배경 / 귀환기 연결" },
+    canonicalLocation: { en: "Prophetic / Post-exilic context", ko: "예언서 / 포로기 이후" },
+    dateConfidenceLabel: {
+      en: "Textual setting clear; exact dating not asserted",
+      ko: "본문 배경은 분명, 정확한 연대는 단정하지 않음",
+    },
+    dateLabel: { en: "Return-period connection", ko: "귀환기 연결" },
+    historicalSettingLabel: { en: "Exhortation to rebuild the temple", ko: "성전 재건 권면" },
+    id: "book-context-haggai",
+    note: {
+      en: "Haggai speaks into the return-period call to rebuild the temple. This preview marks the biblical setting without claiming a full external chronology.",
+      ko: "학개는 귀환기 성전 재건 권면의 흐름 속에서 말합니다. 이 미리보기는 성경 배경을 표시하되 외부 연대를 완전하게 단정하지 않습니다.",
+    },
+    periodId: "return",
+    bookId: "haggai",
+    relatedEmpires: [{ en: "Persia", ko: "바사" }],
+    relatedPeople: [
+      { en: "Haggai", ko: "학개" },
+      { en: "Zerubbabel", ko: "스룹바벨" },
+      { en: "Joshua son of Jehozadak", ko: "여호사닥의 아들 여호수아" },
+    ],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Haggai 1:1-15", ko: "학개 1:1-15" },
+        { book: "haggai", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Ezra 5:1-2", ko: "에스라 5:1-2" },
+        { book: "ezra", chapter: 5, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Haggai", ko: "학개" },
+  },
+  {
+    backgroundBasisLabel: { en: "Textual background / return-period connection", ko: "본문 배경 / 귀환기 연결" },
+    canonicalLocation: { en: "Prophetic / Post-exilic context", ko: "예언서 / 포로기 이후" },
+    dateConfidenceLabel: {
+      en: "Textual setting clear; exact dating not asserted",
+      ko: "본문 배경은 분명, 정확한 연대는 단정하지 않음",
+    },
+    dateLabel: { en: "Return-period connection", ko: "귀환기 연결" },
+    historicalSettingLabel: { en: "Returned community and temple rebuilding setting", ko: "귀환 공동체와 성전 재건 배경" },
+    id: "book-context-zechariah",
+    note: {
+      en: "Zechariah addresses the returned community as the temple rebuilding work continues. The preview keeps the setting Scripture-first and date-cautious.",
+      ko: "스가랴는 성전 재건이 이어지는 귀환 공동체를 향해 말합니다. 이 미리보기는 본문 우선과 연대 주의를 유지합니다.",
+    },
+    periodId: "return",
+    bookId: "zechariah",
+    relatedEmpires: [{ en: "Persia", ko: "바사" }],
+    relatedPeople: [
+      { en: "Zechariah", ko: "스가랴" },
+      { en: "Zerubbabel", ko: "스룹바벨" },
+    ],
+    scriptureAnchors: [
+      createAnchor(
+        { en: "Zechariah 1:1-6", ko: "스가랴 1:1-6" },
+        { book: "zechariah", chapter: 1, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+      createAnchor(
+        { en: "Ezra 5:1-2", ko: "에스라 5:1-2" },
+        { book: "ezra", chapter: 5, verse: 1, translation: { en: "WEB", ko: "KRV" } },
+      ),
+    ],
+    title: { en: "Zechariah", ko: "스가랴" },
   },
 ];
 
