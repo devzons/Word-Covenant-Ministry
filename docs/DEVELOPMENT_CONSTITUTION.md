@@ -159,6 +159,29 @@ Authority relationship:
 - `AGENTS.md` and `docs/DEVELOPMENT_CONSTITUTION.md` are the top-level rules.
 - `docs/ROADMAP/*` is the source of truth for current status and next work.
 
+## Documentation Gate Proportionality Rule
+
+Not every task requires the same documentation and approval weight.
+
+Architecture, database, API, schema, import, migration, source-data, deployment, Data Package, and production-impacting work must keep the full documentation-first and approval-gate process. These changes affect long-term project structure, data integrity, runtime contracts, deployment safety, or production state.
+
+Small frontend-only work may use a lighter workflow when it does not change backend behavior, APIs, database schema, imports, migrations, source-data handling, generated data, deployment behavior, runtime contracts, or project architecture.
+
+For small frontend-only UI work, route-shell fixes, component polish, browser QA fixes, and narrow UX improvements, the agent should:
+
+1. Inspect the repository and current git status.
+2. Read the directly relevant docs and target files.
+3. Report the current phase and intended scope briefly.
+4. Implement the smallest safe change.
+5. Run relevant validation.
+6. Update roadmap status only when project phase or task state changes.
+
+Approval review documents are required for architecture, API, database, import, migration, deployment, source-data, schema, Data Package, and production-impacting decisions.
+
+Approval review documents are not required for every small frontend-only implementation, route-shell, browser QA, or UX polish task unless the change creates a new long-term decision, changes architecture, changes API contracts, changes data behavior, or affects production/deployment safety.
+
+The documentation process should protect the project without becoming a blocker to safe, narrow implementation.
+
 # No Code Change Without Inspection Rule
 
 No code may be modified until the repository structure and relevant documentation have been inspected in the current session.

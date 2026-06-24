@@ -31,10 +31,12 @@ export function TimelineEventCard({
       <button
         className={cn(
           "w-full rounded-md border bg-white p-4 text-left transition-colors",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
           selected
             ? "border-zinc-950 shadow-sm ring-1 ring-zinc-950"
             : "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50",
         )}
+        aria-pressed={selected}
         onClick={() => onSelect(event.id)}
         type="button"
       >

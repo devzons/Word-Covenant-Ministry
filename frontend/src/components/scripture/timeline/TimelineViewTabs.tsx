@@ -27,6 +27,7 @@ export function TimelineViewTabs({ activeTab, locale, tabs }: TimelineViewTabsPr
             aria-current={active ? "page" : undefined}
             className={cn(
               "inline-flex min-h-10 items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
               active
                 ? "border-zinc-950 bg-zinc-950 text-white"
                 : "border-zinc-300 bg-white text-zinc-700",

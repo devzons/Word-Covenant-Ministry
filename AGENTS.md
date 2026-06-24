@@ -179,6 +179,14 @@ Authority relationship:
 - `AGENTS.md` and `docs/DEVELOPMENT_CONSTITUTION.md` are the top-level rules.
 - `docs/ROADMAP/*` is the source of truth for current status and next work.
 
+# Documentation Gate Proportionality Rule
+
+Use the full documentation and approval gate for architecture, API, database, schema, import, migration, source-data, Data Package, deployment, and production-impacting work.
+
+Use the lighter workflow for small frontend-only UI fixes, route-shell work, browser QA fixes, and UX polish when the change does not alter backend behavior, APIs, schema, imports, migrations, generated data, or project architecture.
+
+Even in the lighter workflow, still inspect the repository, read the relevant files, report scope briefly, make the smallest safe change, validate the result, and update roadmap status only when phase or task state changes.
+
 # No Code Change Without Inspection Rule
 
 No code may be modified until the repository structure and relevant documentation have been inspected in the current session.

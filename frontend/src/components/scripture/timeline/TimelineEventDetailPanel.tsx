@@ -36,24 +36,24 @@ export function TimelineEventDetailPanel({
         <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
           {locale === "ko" ? "선택한 사건의 성경 문맥" : "Selected Event Scripture Context"}
         </p>
-        {event ? (
-          <>
-            <h2 className="text-2xl font-semibold text-zinc-950">
-              {getTimelineText(event.title, locale)}
-            </h2>
-            <p className="text-sm text-zinc-600">{getTimelineText(event.period, locale)}</p>
-          </>
-        ) : (
+        {!event ? (
           <p className="text-base leading-7 text-zinc-600">{noSelection}</p>
+        ) : (
+          <DetailSection
+            label={locale === "ko" ? "성경 근거" : "Scripture Anchor"}
+            value={getTimelineText(event.scriptureAnchor, locale)}
+          />
         )}
       </div>
 
       {event ? (
         <>
-          <DetailSection
-            label={locale === "ko" ? "성경 근거" : "Scripture Anchor"}
-            value={getTimelineText(event.scriptureAnchor, locale)}
-          />
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold text-zinc-950">
+              {getTimelineText(event.title, locale)}
+            </h2>
+            <p className="text-sm text-zinc-600">{getTimelineText(event.period, locale)}</p>
+          </div>
           <DetailSection
             label={locale === "ko" ? "사건 요약" : "Event Summary"}
             value={getTimelineText(event.title, locale)}
