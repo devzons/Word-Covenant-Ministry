@@ -947,3 +947,5 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 - Do not build morphology explorer yet.
 - Do not implement cross references or commentary.
 - Do not bundle full Bible or original-language datasets into the frontend.
+
+Timeline MVP release notes and the staging readiness checklist are documented. Next objective: staging readiness review and beta-tag decision after staging validation.

@@ -1022,3 +1022,5 @@ Before this document update:
 - `git rev-parse --show-toplevel` returned `/Users/donmini/Local Sites/wordcovenantministry`.
 - `git status` was clean.
 - Actual filesystem inspection confirmed the official plugin path and the non-official `backend/wcm-core/` directory.
+
+Timeline MVP release notes and the staging readiness checklist are now documented, and staging readiness review remains the next decision point.
