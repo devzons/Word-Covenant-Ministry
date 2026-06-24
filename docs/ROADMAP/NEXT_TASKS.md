@@ -948,6 +948,6 @@ curl "http://api.wordcovenantministry.local/wp-json/wcm/v1/search?q=태초&trans
 - Do not implement cross references or commentary.
 - Do not bundle full Bible or original-language datasets into the frontend.
 
-Timeline MVP release notes and the staging readiness checklist are documented. Next objective: staging readiness review and beta-tag decision after staging validation.
+Timeline MVP release notes, the staging readiness checklist, and the staging environment plan are documented. Next objective: confirm staging frontend/API URLs and environment values, then run staging validation before any beta-tag decision.
 
-Staging readiness review completed through available local validation: frontend build passed, and escalated route smoke returned HTTP 200 for `/ko/timeline` and `/en/timeline` on both `wordcovenantministry.local:3030` and `127.0.0.1:3030`. No deployment or beta tag was created. Next objective: confirm staging target details, then run staging validation before deciding on any beta tag.
+Staging readiness review completed through available local validation: frontend build passed, and escalated route smoke returned HTTP 200 for `/ko/timeline` and `/en/timeline` on both `wordcovenantministry.local:3030` and `127.0.0.1:3030`. No deployment or beta tag was created. The staging environment plan is documented. Next objective: confirm staging target details, then run staging validation before deciding on any beta tag.
