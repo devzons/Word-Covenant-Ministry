@@ -43,7 +43,7 @@ export function TimelineEventCard({
       />
       <button
         className={cn(
-          "w-full rounded-md border bg-white p-4 text-left transition-colors sm:p-5",
+          "w-full rounded-md border bg-white px-4 py-3 text-left transition-colors sm:px-4 sm:py-3.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
           selected
             ? "border-zinc-950 bg-zinc-50 shadow-sm ring-1 ring-zinc-950"
@@ -53,7 +53,7 @@ export function TimelineEventCard({
         onClick={() => onSelect(event.id)}
         type="button"
       >
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2.5">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
               {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
@@ -68,16 +68,16 @@ export function TimelineEventCard({
             ) : null}
           </div>
 
-          <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex flex-wrap items-start justify-between gap-2.5">
             <div className="min-w-0">
-              <h3 className="text-base font-semibold text-zinc-950">
+              <h3 className="text-sm font-semibold text-zinc-950 sm:text-[15px]">
                 {getTimelineText(event.title, locale)}
               </h3>
-              <p className="mt-1 text-sm leading-6 text-zinc-600">
+              <p className="mt-1 text-sm leading-5 text-zinc-600">
                 {getTimelineText(event.summary, locale)}
               </p>
             </div>
-            <div className="flex flex-col items-end gap-2">
+            <div className="flex flex-col items-end gap-1.5">
               <TimelineConfidenceBadge
                 label={getTimelineText(event.confidenceLevel, locale)}
                 locale={locale}

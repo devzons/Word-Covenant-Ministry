@@ -276,7 +276,7 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
   };
 
   return (
-    <Container className="py-12 sm:py-16">
+    <Container className="max-w-[96rem] py-12 sm:py-16">
       <section className="flex flex-col gap-6 sm:gap-8">
         <header className="flex max-w-4xl flex-col gap-2 sm:gap-3">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
@@ -298,7 +298,8 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
         <div
           className={cn(
             "grid gap-6",
-            "xl:grid-cols-[minmax(18rem,20rem)_minmax(0,1fr)_minmax(22rem,24rem)]",
+            "xl:grid-cols-[minmax(20rem,22rem)_minmax(0,1fr)_minmax(22rem,24rem)]",
+            "2xl:grid-cols-[minmax(21rem,24rem)_minmax(0,1fr)_minmax(23rem,25rem)]",
             "xl:items-start",
           )}
         >
@@ -457,42 +458,41 @@ function OverviewPanel({ groups, locale, onFocusPeriod, searchTerm }: OverviewPa
         </p>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="flex flex-col gap-3">
         {groups.map(({ events, period }) => {
           const firstEvent = events[0];
 
           return (
             <button
               className={cn(
-                "flex min-h-28 flex-col justify-between rounded-md border border-zinc-200 bg-white p-4 text-left transition-colors",
+                "flex min-h-0 w-full flex-col gap-3 rounded-md border border-zinc-200 bg-white p-4 text-left text-sm transition-colors",
                 "hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
               )}
               key={period.id}
               onClick={() => onFocusPeriod(period.id)}
               type="button"
             >
-              <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-                    {getTimelineText(period.label, locale)}
-                  </span>
-                  <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
-                    {locale === "ko" ? `${events.length}개 사건` : `${events.length} events`}
-                  </span>
-                </div>
-                {firstEvent ? (
-                  <>
-                    <p className="text-base font-semibold text-zinc-950">
-                      {getTimelineText(firstEvent.title, locale)}
-                    </p>
-                    <p className="text-sm leading-6 text-zinc-600">
-                      {getTimelineText(firstEvent.summary, locale)}
-                    </p>
-                  </>
-                ) : null}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                  {getTimelineText(period.label, locale)}
+                </span>
+                <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                  {locale === "ko" ? `${events.length}개 사건` : `${events.length} events`}
+                </span>
               </div>
 
-              <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium text-zinc-600">
+              {firstEvent ? (
+                <div className="space-y-2">
+                  <p className="text-base font-semibold text-zinc-950">
+                    {getTimelineText(firstEvent.title, locale)}
+                  </p>
+                  <p className="text-sm leading-6 text-zinc-600">
+                    {getTimelineText(firstEvent.summary, locale)}
+                  </p>
+                </div>
+              ) : null}
+
+              <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-600">
                 {firstEvent?.placeIds.slice(0, 2).map((placeId) => {
                   const place = getTimelinePlace(placeId);
 
