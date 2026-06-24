@@ -273,6 +273,8 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
     [activeLocale, visibleEvents],
   );
 
+  const activeViewLabel = getTimelineViewLabel(activeView, activeLocale);
+
   return (
     <Container className="max-w-[96rem] py-12 sm:py-16">
       <section className="flex flex-col gap-6 sm:gap-8">
@@ -348,82 +350,70 @@ export function TimelinePageShell({ locale }: TimelinePageShellProps) {
               activePeriodLabel={periodLabelForStatus(filters.periodId, periodOptions, activeLocale)}
               activePlaceLabel={placeLabelForStatus(filters.placeId, placeOptions, activeLocale)}
               locale={activeLocale}
-              modeLabel={
-                activeView === "overview"
-                  ? activeLocale === "ko"
-                    ? "성경 흐름"
-                    : "Scripture Flow"
-                  : activeView === "kingdoms"
-                    ? activeLocale === "ko"
-                      ? "왕국 / 제국"
-                      : "Kings & Kingdoms"
-                    : activeView === "genealogy"
-                      ? activeLocale === "ko"
-                        ? "족보 / 마태복음"
-                        : "Genealogy"
-                  : activeLocale === "ko"
-                    ? "사건 흐름"
-                    : "Event Stream"
-              }
+              modeLabel={activeViewLabel}
               totalCount={previewCounts.totalCount}
               visibleCount={previewCounts.visibleCount}
             />
 
-            {activeView === "overview" ? (
-              <OverviewPreviewPanel
-                locale={activeLocale}
-                overviewHeading={copy.overviewHeading}
-                overviewNote={copy.overviewNote}
-                previewCounts={previewCounts}
-                periods={visiblePeriodSummaries}
-              />
-            ) : null}
+            <div key={activeView} className="min-w-0">
+              {activeView === "overview" ? (
+                <OverviewPreviewPanel
+                  locale={activeLocale}
+                  overviewHeading={copy.overviewHeading}
+                  overviewNote={copy.overviewNote}
+                  previewCounts={previewCounts}
+                  periods={visiblePeriodSummaries}
+                />
+              ) : null}
 
-            {activeView === "events" ? (
-              <EventsPreviewPanel
-                eventsHeading={copy.eventsHeading}
-                eventsNote={copy.eventsNote}
-                locale={activeLocale}
-                previewCounts={previewCounts}
-              />
-            ) : null}
+              {activeView === "events" ? (
+                <EventsPreviewPanel
+                  eventsHeading={copy.eventsHeading}
+                  eventsNote={copy.eventsNote}
+                  locale={activeLocale}
+                  previewCounts={previewCounts}
+                />
+              ) : null}
 
-            {activeView === "kingdoms" ? (
-              <KingsKingdomsPreviewPanel
-                locale={activeLocale}
-                selectedEventId={selectedEvent?.id ?? ""}
-              />
-            ) : null}
+              {activeView === "kingdoms" ? (
+                <KingsKingdomsPreviewPanel
+                  locale={activeLocale}
+                  selectedEventId={selectedEvent?.id ?? ""}
+                />
+              ) : null}
 
-            {activeView === "books" ? (
-              <BooksContextPreviewPanel
-                activeBookId={filters.bookId}
-                activePeriodId={filters.periodId}
-                locale={activeLocale}
-                searchTerm={filters.searchTerm}
-                selectedEventId={selectedEvent?.id ?? ""}
-              />
-            ) : null}
+              {activeView === "books" ? (
+                <BooksContextPreviewPanel
+                  activeBookId={filters.bookId}
+                  activePeriodId={filters.periodId}
+                  locale={activeLocale}
+                  searchTerm={filters.searchTerm}
+                  selectedEventId={selectedEvent?.id ?? ""}
+                />
+              ) : null}
 
-            {activeView === "genealogy" ? (
-              <GenealogyComparisonPreviewPanel
-                activePeriodId={filters.periodId}
-                locale={activeLocale}
-                searchTerm={filters.searchTerm}
-                selectedEventId={selectedEvent?.id ?? ""}
-              />
-            ) : null}
+              {activeView === "genealogy" ? (
+                <GenealogyComparisonPreviewPanel
+                  activePeriodId={filters.periodId}
+                  locale={activeLocale}
+                  searchTerm={filters.searchTerm}
+                  selectedEventId={selectedEvent?.id ?? ""}
+                />
+              ) : null}
 
-            {activeView !== "overview" ? (
-              <ScriptureTimelineList
-                activePeriodId={filters.periodId}
-                events={visibleEvents}
-                locale={activeLocale}
-                searchTerm={filters.searchTerm}
-                onSelect={setSelectedEventId}
-                selectedEventId={selectedEvent?.id ?? ""}
-              />
-            ) : null}
+              {activeView === "events" ? (
+                <div className="mt-4">
+                  <ScriptureTimelineList
+                    activePeriodId={filters.periodId}
+                    events={visibleEvents}
+                    locale={activeLocale}
+                    searchTerm={filters.searchTerm}
+                    onSelect={setSelectedEventId}
+                    selectedEventId={selectedEvent?.id ?? ""}
+                  />
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <TimelineEventDetailPanel
@@ -492,6 +482,25 @@ function CompactStatusRow({
       </span>
     </div>
   );
+}
+
+function getTimelineViewLabel(view: TimelineView, locale: TimelineLocale) {
+  switch (view) {
+    case "overview":
+      return locale === "ko" ? "성경 흐름" : "Scripture Flow";
+    case "events":
+      return locale === "ko" ? "사건 흐름" : "Event Stream";
+    case "books":
+      return locale === "ko" ? "책·시편" : "Books & Psalms";
+    case "kingdoms":
+      return locale === "ko" ? "왕국·제국" : "Kings & Kingdoms";
+    case "genealogy":
+      return locale === "ko" ? "족보 / 마태복음" : "Matthew Genealogy";
+    case "places":
+      return locale === "ko" ? "지명 / 지도" : "Places / Map";
+    case "themes":
+      return locale === "ko" ? "주제" : "Themes";
+  }
 }
 
 type OverviewPreviewPanelProps = {
