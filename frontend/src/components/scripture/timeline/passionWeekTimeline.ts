@@ -9,6 +9,12 @@ export type {
   TimelineText,
   TimelineEvent as PassionWeekTimelineEvent,
   TimelineDatePreview,
+  TimelineGenealogyComparisonRow,
+  TimelineGenealogySegment,
+  TimelineInspectorSelection,
+  TimelineBookContextRow,
+  TimelineKingdomComparisonRow,
+  TimelineSchematicPlaceRow,
 } from "./timelinePreviewData";
 
 export {

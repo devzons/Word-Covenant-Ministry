@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import type { KeyboardEvent } from "react";
 
 import Link from "next/link";
 
@@ -11,10 +12,10 @@ import {
   getTimelineBook,
   getTimelinePeriod,
   getTimelinePlace,
-  getTimelineReaderHref,
   getTimelineReaderHrefFromReader,
   getTimelineText,
   passionWeekTimelineEvents,
+  type TimelineInspectorSelection,
   timelineBookContextRows,
   timelineGenealogyComparisonRows,
   timelineGenealogySegments,
@@ -53,7 +54,7 @@ type TimelineFilterState = {
 
 const pageCopy = {
   en: {
-    detailHeading: "Selected Event Scripture Context",
+    detailHeading: "Scripture Evidence Panel",
     eventsHeading: "Events View",
     eventsNote: "The flow stays Scripture-first and preserves the selected item in the right panel.",
     futureViewNote:
@@ -94,7 +95,7 @@ const pageCopy = {
     ],
   },
   ko: {
-    detailHeading: "선택한 사건의 성경 문맥",
+    detailHeading: "성경 근거 패널",
     eventsHeading: "사건 보기",
     eventsNote: "본문 흐름은 성경 우선을 유지하며, 선택 항목은 오른쪽 패널에 계속 남아 있습니다.",
     futureViewNote: "주제는 이후 승인 단계에서 각자 고유한 내용 층이 추가되기 전까지 미래 전용으로 남습니다.",
@@ -140,7 +141,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
   const copy = pageCopy[activeLocale];
   const [activeView, setActiveView] = useState<TimelineView>(initialView);
   const [filters, setFilters] = useState<TimelineFilterState>(initialFilters);
-  const [selectedEventId, setSelectedEventId] = useState(passionWeekTimelineEvents[0]?.id ?? "");
+  const [inspectorSelection, setInspectorSelection] = useState<TimelineInspectorSelection>(null);
   const [clientMounted, setClientMounted] = useState(false);
 
   useEffect(() => {
@@ -243,11 +244,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
     [filters.bookId, filters.periodId, filters.placeId, normalizedSearch],
   );
 
-  const selectedEvent =
-    visibleEvents.find((event) => event.id === selectedEventId) ?? visibleEvents[0];
-  const selectedReaderHref = selectedEvent
-    ? getTimelineReaderHref(selectedEvent, activeLocale)
-    : "";
+  const selectedEventId = inspectorSelection?.type === "event" ? inspectorSelection.id : "";
 
   const previewCounts = useMemo(() => {
     const periodCount = new Set(visibleEvents.map((event) => event.periodId)).size;
@@ -296,7 +293,10 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
         <TimelineViewTabs
           activeTab={activeView}
           locale={activeLocale}
-          onTabChange={(tabId) => setActiveView(tabId as TimelineView)}
+          onTabChange={(tabId) => {
+            setActiveView(tabId as TimelineView);
+            setInspectorSelection(null);
+          }}
           tabs={copy.viewTabs}
         />
 
@@ -392,7 +392,8 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
               {activeView === "kingdoms" ? (
                 <KingsKingdomsPreviewPanel
                   locale={activeLocale}
-                  selectedEventId={selectedEvent?.id ?? ""}
+                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "kingdom" })}
+                  selectedRowId={inspectorSelection?.type === "kingdom" ? inspectorSelection.id : ""}
                 />
               ) : null}
 
@@ -401,8 +402,9 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
                   activeBookId={filters.bookId}
                   activePeriodId={filters.periodId}
                   locale={activeLocale}
+                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "book" })}
                   searchTerm={filters.searchTerm}
-                  selectedEventId={selectedEvent?.id ?? ""}
+                  selectedRowId={inspectorSelection?.type === "book" ? inspectorSelection.id : ""}
                 />
               ) : null}
 
@@ -410,13 +412,19 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
                 <GenealogyComparisonPreviewPanel
                   activePeriodId={filters.periodId}
                   locale={activeLocale}
+                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "genealogy" })}
                   searchTerm={filters.searchTerm}
-                  selectedEventId={selectedEvent?.id ?? ""}
+                  selectedRowId={inspectorSelection?.type === "genealogy" ? inspectorSelection.id : ""}
                 />
               ) : null}
 
               {activeView === "places" ? (
-                <PlacesSchematicMapPreviewPanel locale={activeLocale} searchTerm={filters.searchTerm} />
+                <PlacesSchematicMapPreviewPanel
+                  locale={activeLocale}
+                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "place" })}
+                  searchTerm={filters.searchTerm}
+                  selectedRowId={inspectorSelection?.type === "place" ? inspectorSelection.id : ""}
+                />
               ) : null}
 
               {activeView === "events" ? (
@@ -426,8 +434,8 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
                     events={visibleEvents}
                     locale={activeLocale}
                     searchTerm={filters.searchTerm}
-                    onSelect={setSelectedEventId}
-                    selectedEventId={selectedEvent?.id ?? ""}
+                    onSelect={(eventId) => setInspectorSelection({ id: eventId, type: "event" })}
+                    selectedEventId={selectedEventId}
                   />
                 </div>
               ) : null}
@@ -435,15 +443,15 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
           </div>
 
           <TimelineEventDetailPanel
-            event={selectedEvent}
+            selection={inspectorSelection}
+            panelHeading={copy.detailHeading}
             locale={activeLocale}
             noSelection={
               activeLocale === "ko"
-                ? "사건을 선택하거나 필터를 넓혀 성경 근거, 순서, 연대 메모를 확인하세요."
-                : "Select an event or widen the filters to inspect the Scripture anchor, sequence, and dating note."
+                ? "항목을 선택하세요. 사건, 시편, 왕국, 족보, 장소 항목을 선택하면 이곳에 성경 근거와 연결 본문이 표시됩니다."
+                : "Select an item. When you choose an event, psalm, kingdom, genealogy row, or place, this panel will show its Scripture anchors and supporting context."
             }
             openInReaderLabel={copy.openInReader}
-            readerHref={selectedReaderHref}
             relatedStudy={copy.relatedStudy}
             selectedLabel={copy.selectedLabel}
           />
@@ -696,7 +704,9 @@ function EventsPreviewPanel({
 
 type PlacesSchematicMapPreviewPanelProps = {
   locale: TimelineLocale;
+  onSelectRow: (rowId: string) => void;
   searchTerm: string;
+  selectedRowId: string;
 };
 
 type SchematicRegion = {
@@ -762,7 +772,12 @@ const noCoordinatesNote = {
   ko: "이 미리보기에는 좌표가 없습니다.",
 } satisfies TimelineText;
 
-function PlacesSchematicMapPreviewPanel({ locale, searchTerm }: PlacesSchematicMapPreviewPanelProps) {
+function PlacesSchematicMapPreviewPanel({
+  locale,
+  onSelectRow,
+  searchTerm,
+  selectedRowId,
+}: PlacesSchematicMapPreviewPanelProps) {
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
   const visibleRows = timelineSchematicPlaceRows.filter((row) => matchesSchematicPlaceSearch(row, normalizedSearch));
@@ -818,7 +833,19 @@ function PlacesSchematicMapPreviewPanel({ locale, searchTerm }: PlacesSchematicM
 
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
                   {rows.map((row) => (
-                    <article className="rounded-md border border-zinc-200 bg-zinc-50 p-2.5" key={row.id}>
+                    <article
+                      className={cn(
+                        "rounded-md border p-2.5 transition-colors",
+                        selectedRowId === row.id
+                          ? "border-zinc-950 bg-white shadow-sm"
+                          : "cursor-pointer border-zinc-200 bg-zinc-50 hover:border-zinc-300 hover:bg-white",
+                      )}
+                      key={row.id}
+                      onClick={() => onSelectRow(row.id)}
+                      onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
+                      role="button"
+                      tabIndex={0}
+                    >
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</p>
@@ -882,10 +909,24 @@ function PlacesSchematicMapPreviewPanel({ locale, searchTerm }: PlacesSchematicM
           </thead>
           <tbody>
             {visibleRows.map((row) => (
-              <tr className="align-top" key={row.id}>
+              <tr
+                className={cn(
+                  "align-top transition-colors",
+                  selectedRowId === row.id
+                    ? "bg-white shadow-sm"
+                    : "cursor-pointer bg-white hover:bg-zinc-50",
+                )}
+                key={row.id}
+                onClick={() => onSelectRow(row.id)}
+                onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
+                role="button"
+                tabIndex={0}
+              >
                 <td className="border-b border-zinc-200 px-3 py-3">
                   <div className="flex flex-col gap-1.5">
-                    <span className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</span>
+                    <span className="text-sm font-semibold text-zinc-950">
+                      {getTimelineText(row.title, locale)}
+                    </span>
                     <p className="text-xs leading-5 text-zinc-600">{getTimelineText(row.note, locale)}</p>
                   </div>
                 </td>
@@ -934,6 +975,7 @@ function PlacesSchematicMapPreviewPanel({ locale, searchTerm }: PlacesSchematicM
                           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
                         )}
                         href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                        onClick={(event) => event.stopPropagation()}
                         key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
                       >
                         {getTimelineText(anchor.label, locale)}
@@ -980,10 +1022,11 @@ function getSchematicFlowGroupLabel(
 
 type KingsKingdomsPreviewPanelProps = {
   locale: TimelineLocale;
-  selectedEventId: string;
+  onSelectRow: (rowId: string) => void;
+  selectedRowId: string;
 };
 
-function KingsKingdomsPreviewPanel({ locale, selectedEventId }: KingsKingdomsPreviewPanelProps) {
+function KingsKingdomsPreviewPanel({ locale, onSelectRow, selectedRowId }: KingsKingdomsPreviewPanelProps) {
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4">
       <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
@@ -1035,15 +1078,21 @@ function KingsKingdomsPreviewPanel({ locale, selectedEventId }: KingsKingdomsPre
           <tbody>
             {timelineKingdomComparisonRows.map((row) => {
               const period = getTimelinePeriod(row.periodId);
-              const isSelected = Boolean(row.relatedEventIds?.includes(selectedEventId));
+              const isSelected = selectedRowId === row.id;
 
               return (
                 <tr
                   className={cn(
-                    "align-top",
-                    isSelected ? "bg-zinc-50/80" : "bg-white",
+                    "align-top transition-colors",
+                    isSelected
+                      ? "bg-zinc-50/80"
+                      : "cursor-pointer bg-white hover:bg-zinc-50",
                   )}
                   key={row.id}
+                  onClick={() => onSelectRow(row.id)}
+                  onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
+                  role="button"
+                  tabIndex={0}
                 >
                   <td className="border-b border-zinc-200 px-3 py-3">
                     <div className="flex flex-col gap-1.5">
@@ -1087,6 +1136,7 @@ function KingsKingdomsPreviewPanel({ locale, selectedEventId }: KingsKingdomsPre
                             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
                           )}
                           href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                          onClick={(event) => event.stopPropagation()}
                           key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
                         >
                           {getTimelineText(anchor.label, locale)}
@@ -1133,7 +1183,8 @@ type BooksContextPreviewPanelProps = {
   activePeriodId: string;
   locale: TimelineLocale;
   searchTerm: string;
-  selectedEventId: string;
+  onSelectRow: (rowId: string) => void;
+  selectedRowId: string;
 };
 
 function BooksContextPreviewPanel({
@@ -1141,7 +1192,8 @@ function BooksContextPreviewPanel({
   activePeriodId,
   locale,
   searchTerm,
-  selectedEventId,
+  onSelectRow,
+  selectedRowId,
 }: BooksContextPreviewPanelProps) {
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
@@ -1196,15 +1248,21 @@ function BooksContextPreviewPanel({
 
             <div className="mt-3 space-y-2">
               {rows.map((row) => {
-                const selected = Boolean(row.relatedEventIds?.includes(selectedEventId));
+                const selected = selectedRowId === row.id;
 
                 return (
                   <div
                     className={cn(
-                      "rounded-md border px-3 py-3",
-                      selected ? "border-zinc-950 bg-white shadow-sm" : "border-zinc-200 bg-white",
+                      "rounded-md border px-3 py-3 transition-colors",
+                      selected
+                        ? "border-zinc-950 bg-white shadow-sm"
+                        : "cursor-pointer border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50",
                     )}
                     key={row.id}
+                    onClick={() => onSelectRow(row.id)}
+                    onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
+                    role="button"
+                    tabIndex={0}
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
@@ -1245,6 +1303,7 @@ function BooksContextPreviewPanel({
                             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
                           )}
                           href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                          onClick={(event) => event.stopPropagation()}
                           key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
                         >
                           {getTimelineText(anchor.label, locale)}
@@ -1268,14 +1327,16 @@ type GenealogyComparisonPreviewPanelProps = {
   activePeriodId: string;
   locale: TimelineLocale;
   searchTerm: string;
-  selectedEventId: string;
+  onSelectRow: (rowId: string) => void;
+  selectedRowId: string;
 };
 
 function GenealogyComparisonPreviewPanel({
   activePeriodId,
   locale,
   searchTerm,
-  selectedEventId,
+  onSelectRow,
+  selectedRowId,
 }: GenealogyComparisonPreviewPanelProps) {
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
@@ -1368,14 +1429,21 @@ function GenealogyComparisonPreviewPanel({
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+          <tbody>
                   {rows.map((row) => {
-                    const isSelected = Boolean(row.relatedEventIds?.includes(selectedEventId));
+                    const isSelected = selectedRowId === row.id;
 
                     return (
                       <tr
-                        className={cn("align-top", isSelected ? "bg-white shadow-sm" : "bg-zinc-50")}
+                        className={cn(
+                          "align-top transition-colors",
+                          isSelected ? "bg-white shadow-sm" : "cursor-pointer bg-zinc-50 hover:bg-white",
+                        )}
                         key={row.id}
+                        onClick={() => onSelectRow(row.id)}
+                        onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
+                        role="button"
+                        tabIndex={0}
                       >
                         <td className="border-b border-zinc-200 px-3 py-3">
                           <ComparisonCellValue locale={locale} value={row.matthewName} />
@@ -1405,6 +1473,7 @@ function GenealogyComparisonPreviewPanel({
                                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
                                 )}
                                 href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                                onClick={(event) => event.stopPropagation()}
                                 key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
                               >
                                 {getTimelineText(anchor.label, locale)}
@@ -1482,6 +1551,16 @@ function ComparisonTagList({ locale, tags }: ComparisonTagListProps) {
       ))}
     </div>
   );
+}
+
+function handleSelectableKeyDown(
+  event: KeyboardEvent<HTMLElement>,
+  onSelect: () => void,
+) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    onSelect();
+  }
 }
 
 function matchesBookContextSearch(

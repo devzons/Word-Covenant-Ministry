@@ -146,6 +146,14 @@ export type TimelineGenealogyComparisonRow = {
   note?: TimelineText;
 };
 
+export type TimelineInspectorSelection =
+  | { id: string; type: "event" }
+  | { id: string; type: "book" }
+  | { id: string; type: "kingdom" }
+  | { id: string; type: "genealogy" }
+  | { id: string; type: "place" }
+  | null;
+
 export type TimelineSchematicPlaceRow = {
   id: string;
   placeId: string;

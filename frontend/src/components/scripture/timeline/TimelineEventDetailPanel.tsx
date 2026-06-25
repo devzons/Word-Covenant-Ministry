@@ -8,318 +8,97 @@ import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/utils/cn";
 
 import {
-  getTimelineDatePreview,
   getTimelineBook,
+  getTimelineDatePreview,
   getTimelinePlace,
-  getTimelinePeriod,
   getTimelineReaderHrefFromReader,
   getTimelineText,
+  passionWeekTimelineEvents,
+  timelineBookContextRows,
+  timelineGenealogyComparisonRows,
+  timelineGenealogySegments,
+  timelineKingdomComparisonRows,
+  timelineSchematicPlaceRows,
   type PassionWeekTimelineEvent,
+  type TimelineBookContextRow,
+  type TimelineGenealogyComparisonRow,
+  type TimelineInspectorSelection,
+  type TimelineKingdomComparisonRow,
   type TimelineLocale,
+  type TimelineSchematicPlaceRow,
   type TimelineText,
 } from "./passionWeekTimeline";
-import { TimelineConfidenceBadge } from "./TimelineConfidenceBadge";
 import { TimelineDatingNote } from "./TimelineDatingNote";
 
 type TimelineEventDetailPanelProps = {
-  event?: PassionWeekTimelineEvent;
+  selection: TimelineInspectorSelection;
+  panelHeading: string;
   locale: TimelineLocale;
   noSelection: string;
   openInReaderLabel: string;
-  readerHref: string;
   relatedStudy: string;
   selectedLabel: string;
 };
 
+type TimelineInspectorSelectionItem = Exclude<TimelineInspectorSelection, null>;
+type TimelineInspectorSelectionType = TimelineInspectorSelectionItem["type"];
+
 export function TimelineEventDetailPanel({
-  event,
+  selection,
+  panelHeading,
   locale,
   noSelection,
   openInReaderLabel,
-  readerHref,
   relatedStudy,
   selectedLabel,
 }: TimelineEventDetailPanelProps) {
-  const datePreview = event ? getTimelineDatePreview(event) : null;
+  const selectedType = selection?.type ?? null;
+  const selectionId = selection?.id ?? "";
+  const event =
+    selectedType === "event" ? passionWeekTimelineEvents.find((item) => item.id === selectionId) : undefined;
+  const bookRow =
+    selectedType === "book" ? timelineBookContextRows.find((item) => item.id === selectionId) : undefined;
+  const kingdomRow =
+    selectedType === "kingdom"
+      ? timelineKingdomComparisonRows.find((item) => item.id === selectionId)
+      : undefined;
+  const genealogyRow =
+    selectedType === "genealogy"
+      ? timelineGenealogyComparisonRows.find((item) => item.id === selectionId)
+      : undefined;
+  const placeRow =
+    selectedType === "place" ? timelineSchematicPlaceRows.find((item) => item.id === selectionId) : undefined;
 
   return (
     <Card className="flex min-w-0 flex-col gap-4 sm:gap-5">
       <div className="flex flex-col gap-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-          {locale === "ko" ? "선택한 사건의 성경 문맥" : "Selected Event Scripture Context"}
-        </p>
-        {!event ? (
-          <p className="text-base leading-7 text-zinc-600">{noSelection}</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">{panelHeading}</p>
+        {!selection || (!event && !bookRow && !kingdomRow && !genealogyRow && !placeRow) ? (
+          <div className="space-y-3">
+            <p className="text-base leading-7 text-zinc-600">{noSelection}</p>
+            <p className="text-sm leading-6 text-zinc-500">
+              {locale === "ko"
+                ? "연대, 장소, 전통 정보는 성경 본문 아래의 보조 정보로 표시됩니다."
+                : "Dates, places, and tradition labels are shown as supporting information under the biblical text."}
+            </p>
+          </div>
         ) : (
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
               {selectedLabel}
             </span>
             <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
-              {getTimelinePeriodLabel(event.periodId, locale)}
+              {getSelectionTypeLabel(selectedType, locale)}
             </span>
           </div>
         )}
       </div>
 
-      {event ? (
-        <div className="space-y-4">
-          {(() => {
-            const primaryBook = getTimelineBook(event.primaryBookId);
-
-            return (
-              <DetailSection label={locale === "ko" ? "성경 문맥" : "Scripture Context"}>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <ContextRow
-                    label={locale === "ko" ? "정경 위치" : "Canonical Location"}
-                    value={getTimelinePeriodLabel(event.periodId, locale)}
-                  />
-                  <ContextRow
-                    label={locale === "ko" ? "역사/배경" : "Historical / Background"}
-                    value={getTimelineText(event.sequenceLabel, locale)}
-                  />
-                  <ContextRow
-                    label={locale === "ko" ? "책 문맥" : "Book Context"}
-                    value={primaryBook ? getTimelineText(primaryBook.label, locale) : ""}
-                  />
-                  <ContextRow
-                    label={locale === "ko" ? "사건 유형" : "Event Type"}
-                    value={getTimelineText(event.eventType, locale)}
-                  />
-                </div>
-              </DetailSection>
-            );
-          })()}
-
-          <div className="space-y-2">
-            <h2 className="text-2xl font-semibold text-zinc-950">
-              {getTimelineText(event.title, locale)}
-            </h2>
-            <p className="text-sm leading-6 text-zinc-600">
-              {getTimelineText(event.summary, locale)}
-            </p>
-          </div>
-
-          <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchor"}>
-            <div className="flex flex-wrap gap-2">
-              {event.scriptureAnchors.map((anchor) => (
-                <Link
-                  className={cn(
-                    "inline-flex min-h-9 items-center rounded-full border border-zinc-200 bg-white px-3 text-sm font-semibold text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-                  )}
-                  href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
-                  key={`${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
-                >
-                  {getTimelineText(anchor.label, locale)}
-                </Link>
-              ))}
-            </div>
-          </DetailSection>
-
-          <DetailSection label={locale === "ko" ? "기간 / 책" : "Period / Book"}>
-            <div className="flex flex-wrap gap-2">
-              <Tag>{getTimelinePeriodLabel(event.periodId, locale)}</Tag>
-              {(() => {
-                const primaryBook = getTimelineBook(event.primaryBookId);
-
-                return primaryBook ? (
-                  <Tag>{getTimelineText(primaryBook.label, locale)}</Tag>
-                ) : null;
-              })()}
-              {event.relatedBookIds.map((bookId) => {
-                const book = getTimelineBook(bookId);
-
-                return book ? (
-                  <Tag key={book.id}>{getTimelineText(book.label, locale)}</Tag>
-                ) : null;
-              })}
-            </div>
-          </DetailSection>
-
-          {event.kingdomTags?.length ||
-          event.empireTags?.length ||
-          event.rulerTags?.length ||
-          event.prophetTags?.length ||
-          event.surroundingNationTags?.length ||
-          event.synchronismNote ||
-          event.worldContextNote ||
-          event.worldContextBasisLabel ||
-          event.worldContextConfidenceLabel ||
-          event.nameVariantNote ? (
-            <DetailSection label={locale === "ko" ? "왕국 / 열강 문맥" : "Kingdom / Empire Context"}>
-              <div className="space-y-3">
-                <p className="text-xs leading-5 text-zinc-500">
-                  {locale === "ko"
-                    ? "이 항목들은 성경 근거를 돕는 보조 문맥이며, 본문 자체를 대신하지 않습니다."
-                    : "These items support Scripture reading and do not replace the biblical text itself."}
-                </p>
-                <ContextTagGroup label={locale === "ko" ? "왕국" : "Kingdom"} locale={locale} tags={event.kingdomTags} />
-                <ContextTagGroup label={locale === "ko" ? "열강" : "Empire"} locale={locale} tags={event.empireTags} />
-                <ContextTagGroup label={locale === "ko" ? "통치자" : "Rulers"} locale={locale} tags={event.rulerTags} />
-                <ContextTagGroup label={locale === "ko" ? "선지자" : "Prophets"} locale={locale} tags={event.prophetTags} />
-                <ContextTagGroup
-                  label={locale === "ko" ? "주변 민족" : "Surrounding Nations"}
-                  locale={locale}
-                  tags={event.surroundingNationTags}
-                />
-                {event.synchronismNote ? (
-                  <ContextTextRow
-                    label={locale === "ko" ? "동기화 메모" : "Synchronism Note"}
-                    value={getTimelineText(event.synchronismNote, locale)}
-                  />
-                ) : null}
-                {event.worldContextNote ? (
-                  <ContextTextRow
-                    label={locale === "ko" ? "세계 문맥" : "World Context Note"}
-                    value={getTimelineText(event.worldContextNote, locale)}
-                  />
-                ) : null}
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {event.worldContextBasisLabel ? (
-                    <ContextTextRow
-                      label={locale === "ko" ? "문맥 근거" : "Context Basis"}
-                      value={getTimelineText(event.worldContextBasisLabel, locale)}
-                    />
-                  ) : null}
-                  {event.worldContextConfidenceLabel ? (
-                    <ContextTextRow
-                      label={locale === "ko" ? "문맥 신뢰도" : "Context Confidence"}
-                      value={getTimelineText(event.worldContextConfidenceLabel, locale)}
-                    />
-                  ) : null}
-                </div>
-                {event.nameVariantNote ? (
-                  <ContextTextRow
-                    label={locale === "ko" ? "이름 변형 메모" : "Name Variant Note"}
-                    value={getTimelineText(event.nameVariantNote, locale)}
-                  />
-                ) : null}
-              </div>
-            </DetailSection>
-          ) : null}
-
-          <DetailSection label={locale === "ko" ? "지명 / 인물" : "Place / People"}>
-            <div className="space-y-3">
-              <div className="flex flex-wrap gap-2">
-                {event.placeIds.map((placeId) => {
-                  const place = getTimelinePlace(placeId);
-
-                  return place ? <Tag key={place.id}>{getTimelineText(place.label, locale)}</Tag> : null;
-                })}
-              </div>
-              <p className="text-sm leading-6 text-zinc-600">
-                {getTimelineText(event.locationNote, locale)}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {event.people.length ? (
-                  event.people.map((person) => (
-                    <Tag key={`${person.en}-${person.ko}`}>{getTimelineText(person, locale)}</Tag>
-                  ))
-                ) : (
-                  <p className="text-sm text-zinc-500">
-                    {locale === "ko" ? "특정 인물 없음" : "No named person noted"}
-                  </p>
-                )}
-              </div>
-            </div>
-          </DetailSection>
-
-          <DetailSection label={locale === "ko" ? "보조 연대 / 신뢰도" : "Supporting Date / Confidence"}>
-            <div className="space-y-3">
-              <div className="flex flex-wrap gap-2">
-                <Tag>{getTimelineText(datePreview?.dateLabel ?? event.datingNote, locale)}</Tag>
-                <Tag>{getTimelineText(datePreview?.dateBasisLabel ?? event.datingNote, locale)}</Tag>
-                <Tag>
-                  {getTimelineText(datePreview?.dateConfidenceLabel ?? event.confidenceLevel, locale)}
-                </Tag>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <TimelineConfidenceBadge
-                  label={getTimelineText(event.confidenceLevel, locale)}
-                  locale={locale}
-                />
-                <span className="rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
-                  {getTimelineText(event.datingNote, locale)}
-                </span>
-              </div>
-              <TimelineDatingNote
-                label={locale === "ko" ? "연대 메모" : "Dating Note"}
-                locale={locale}
-                note={getTimelineText(event.datingNote, locale)}
-              />
-            </div>
-          </DetailSection>
-
-          {event.relativeYearLabel ? (
-            <DetailSection
-              label={locale === "ko" ? "성경 내부 연수" : "Scripture-Derived Relative Year"}
-            >
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  <Tag>{getTimelineText(event.relativeYearLabel, locale)}</Tag>
-                  {event.relativeYearBasisLabel ? (
-                    <Tag>{getTimelineText(event.relativeYearBasisLabel, locale)}</Tag>
-                  ) : null}
-                </div>
-                {event.relativeYearCalculationNote ? (
-                  <p className="text-sm leading-6 text-zinc-600">
-                    {getTimelineText(event.relativeYearCalculationNote, locale)}
-                  </p>
-                ) : null}
-              </div>
-            </DetailSection>
-          ) : null}
-
-          <DetailSection label={locale === "ko" ? "지도 미리보기" : "Map Preview"}>
-            <div className="space-y-2">
-              <div className="rounded-md border border-dashed border-zinc-200 bg-zinc-50 p-4 text-sm leading-6 text-zinc-600">
-                {locale === "ko"
-                  ? "지도는 이후 승인 단계에서 확장됩니다. 현재는 지명 칩과 배경 설명이 위치 감각을 보여줍니다."
-                  : "Maps expand in a later approved phase. For now, place chips and context notes provide location sense."}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {event.placeIds.map((placeId) => {
-                  const place = getTimelinePlace(placeId);
-
-                  return place ? <Tag key={`map-${place.id}`}>{getTimelineText(place.label, locale)}</Tag> : null;
-                })}
-              </div>
-            </div>
-          </DetailSection>
-
-          <div className="flex flex-col gap-3">
-            <p className="text-sm font-semibold text-zinc-950">
-              {locale === "ko" ? "읽기에서 열기" : "Open in Reader"}
-            </p>
-            <p className="text-sm leading-6 text-zinc-600">
-              {locale === "ko"
-                ? "선택한 성경 근거를 읽기 화면에서 바로 엽니다."
-                : "Open the selected Scripture anchor in the Reader."}
-            </p>
-            <Link
-              className={cn(
-                "inline-flex min-h-11 items-center justify-center rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-800",
-                "w-full sm:w-fit",
-              )}
-              href={readerHref}
-            >
-              {openInReaderLabel} ↗
-            </Link>
-            <div className="rounded-md border border-dashed border-zinc-200 bg-white p-3 text-sm leading-6 text-zinc-600">
-              <p className="font-medium text-zinc-700">
-                {locale === "ko" ? "미래 레이어" : "Future layers"}
-              </p>
-              <p className="mt-1">
-                {locale === "ko"
-                  ? "저자 / 책 배경, 언약, 왕국, 열강, 주제, 이름 변형은 다음 단계에서 더 세분화됩니다."
-                  : "Authorship / book context, covenant, kingdom, empire, themes, and name variants expand in later phases."}
-              </p>
-            </div>
-            <p className="text-sm leading-6 text-zinc-600">{relatedStudy}</p>
-          </div>
-        </div>
-      ) : null}
+      {event ? renderEventEvidencePanel(event, locale, openInReaderLabel, relatedStudy) : null}
+      {bookRow ? renderBookEvidencePanel(bookRow, locale, openInReaderLabel, relatedStudy) : null}
+      {kingdomRow ? renderKingdomEvidencePanel(kingdomRow, locale, openInReaderLabel, relatedStudy) : null}
+      {genealogyRow ? renderGenealogyEvidencePanel(genealogyRow, locale, openInReaderLabel, relatedStudy) : null}
+      {placeRow ? renderPlaceEvidencePanel(placeRow, locale, openInReaderLabel, relatedStudy) : null}
     </Card>
   );
 }
@@ -333,9 +112,17 @@ function DetailSection({ children, label }: DetailSectionProps) {
   return (
     <div className="rounded-md border border-zinc-200 bg-white p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
-      <div className="mt-3">{children}</div>
+      <div className="mt-3 space-y-3">{children}</div>
     </div>
   );
+}
+
+type SectionNoteProps = {
+  children: ReactNode;
+};
+
+function SectionNote({ children }: SectionNoteProps) {
+  return <p className="text-sm leading-6 text-zinc-600">{children}</p>;
 }
 
 type TagProps = {
@@ -343,11 +130,7 @@ type TagProps = {
 };
 
 function Tag({ children }: TagProps) {
-  return (
-    <span className="inline-flex rounded-full bg-zinc-100 px-3 py-1 text-sm font-medium text-zinc-700">
-      {children}
-    </span>
-  );
+  return <span className="inline-flex rounded-full bg-zinc-100 px-3 py-1 text-sm font-medium text-zinc-700">{children}</span>;
 }
 
 type ContextTagGroupProps = {
@@ -373,12 +156,12 @@ function ContextTagGroup({ label, locale, tags }: ContextTagGroupProps) {
   );
 }
 
-type ContextTextRowProps = {
+type ContextRowProps = {
   label: string;
   value: string;
 };
 
-function ContextTextRow({ label, value }: ContextTextRowProps) {
+function ContextRow({ label, value }: ContextRowProps) {
   return (
     <div className="space-y-1.5">
       <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
@@ -387,26 +170,518 @@ function ContextTextRow({ label, value }: ContextTextRowProps) {
   );
 }
 
-function getTimelinePeriodLabel(periodId: string, locale: TimelineLocale) {
-  if (periodId === "all") {
-    return locale === "ko" ? "모든 기간" : "All periods";
-  }
-
-  const period = getTimelinePeriod(periodId);
-
-  return period ? getTimelineText(period.label, locale) : "";
-}
-
-type ContextRowProps = {
-  label: string;
-  value: string;
+type ScriptureAnchorListProps = {
+  anchors: PassionWeekTimelineEvent["scriptureAnchors"];
+  locale: TimelineLocale;
+  openInReaderLabel: string;
+  rowId: string;
 };
 
-function ContextRow({ label, value }: ContextRowProps) {
+function ScriptureAnchorList({ anchors, locale, openInReaderLabel, rowId }: ScriptureAnchorListProps) {
   return (
-    <div className="rounded-md border border-zinc-200 bg-white p-3">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
-      <p className="mt-1 text-sm font-medium text-zinc-800">{value}</p>
+    <div className="flex flex-wrap gap-1.5">
+      {anchors.map((anchor) => (
+        <Link
+          className={cn(
+            "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+          )}
+          href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+          onClick={(event) => event.stopPropagation()}
+          key={`${rowId}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+        >
+          {getTimelineText(anchor.label, locale)}
+        </Link>
+      ))}
+      {anchors.length ? (
+        <Link
+          className={cn(
+            "ml-1 inline-flex min-h-8 items-center rounded-full border border-dashed border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-500 transition-colors hover:border-zinc-300 hover:bg-white",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+          )}
+          href={getTimelineReaderHrefFromReader(anchors[0].reader, locale)}
+          onClick={(event) => event.stopPropagation()}
+        >
+          {openInReaderLabel}
+        </Link>
+      ) : null}
+    </div>
+  );
+}
+
+function getSelectionTypeLabel(selectionType: TimelineInspectorSelectionType | null, locale: TimelineLocale) {
+  switch (selectionType) {
+    case "book":
+      return locale === "ko" ? "책 / 시편" : "Book / Psalm";
+    case "event":
+      return locale === "ko" ? "사건" : "Event";
+    case "genealogy":
+      return locale === "ko" ? "족보" : "Genealogy";
+    case "kingdom":
+      return locale === "ko" ? "왕국 / 제국" : "Kingdom / Empire";
+    case "place":
+      return locale === "ko" ? "장소" : "Place";
+    default:
+      return locale === "ko" ? "선택됨" : "Selected";
+  }
+}
+
+function renderEventEvidencePanel(
+  event: PassionWeekTimelineEvent,
+  locale: TimelineLocale,
+  openInReaderLabel: string,
+  relatedStudy: string,
+) {
+  const datePreview = getTimelineDatePreview(event);
+  const primaryBook = getTimelineBook(event.primaryBookId);
+  const placeLabels = event.placeIds
+    .map((placeId) => getTimelinePlace(placeId))
+    .filter((place): place is NonNullable<typeof place> => Boolean(place));
+  const relativeYearLabel = event.relativeYearLabel ? getTimelineText(event.relativeYearLabel, locale) : "";
+
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(event.title, locale)}</h2>
+        <p className="text-sm leading-6 text-zinc-600">{getTimelineText(event.summary, locale)}</p>
+      </div>
+
+      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
+        <ScriptureAnchorList
+          anchors={event.scriptureAnchors}
+          locale={locale}
+          openInReaderLabel={openInReaderLabel}
+          rowId={event.id}
+        />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "배경 / 요약" : "Background / Summary"}>
+        <SectionNote>{getTimelineText(event.locationNote, locale)}</SectionNote>
+        {event.sequenceLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "사건 순서" : "Sequence"}
+            value={getTimelineText(event.sequenceLabel, locale)}
+          />
+        ) : null}
+        <ContextRow
+          label={locale === "ko" ? "이벤트 유형" : "Event Type"}
+          value={getTimelineText(event.eventType, locale)}
+        />
+        {primaryBook ? (
+          <ContextRow
+            label={locale === "ko" ? "관련 책" : "Related Book"}
+            value={getTimelineText(primaryBook.label, locale)}
+          />
+        ) : null}
+      </DetailSection>
+
+      {datePreview ? (
+        <DetailSection label={locale === "ko" ? "보조 연대 / 연대 근거" : "Supporting Date / Basis"}>
+          <ContextRow label={locale === "ko" ? "연대 표기" : "Date label"} value={getTimelineText(datePreview.dateLabel, locale)} />
+          <ContextRow
+            label={locale === "ko" ? "연대 근거" : "Date basis"}
+            value={getTimelineText(datePreview.dateBasisLabel, locale)}
+          />
+          <ContextRow
+            label={locale === "ko" ? "연대 신뢰" : "Date confidence"}
+            value={getTimelineText(datePreview.dateConfidenceLabel, locale)}
+          />
+          <TimelineDatingNote
+            label={locale === "ko" ? "보조 연대 메모" : "Supporting date note"}
+            locale={locale}
+            note={getTimelineText(event.datingNote, locale)}
+          />
+        </DetailSection>
+      ) : null}
+
+      {relativeYearLabel || event.relativeYearBasisLabel || event.relativeYearCalculationNote ? (
+        <DetailSection label={locale === "ko" ? "성경 내부 연수" : "Scripture-Derived Relative Year"}>
+          {relativeYearLabel ? (
+            <ContextRow label={locale === "ko" ? "연수 표기" : "Relative year"} value={relativeYearLabel} />
+          ) : null}
+          {event.relativeYearBasisLabel ? (
+            <ContextRow
+              label={locale === "ko" ? "기준" : "Basis"}
+              value={getTimelineText(event.relativeYearBasisLabel, locale)}
+            />
+          ) : null}
+          {event.relativeYearCalculationNote ? (
+            <SectionNote>{getTimelineText(event.relativeYearCalculationNote, locale)}</SectionNote>
+          ) : null}
+        </DetailSection>
+      ) : null}
+
+      <DetailSection label={locale === "ko" ? "인물 / 장소 / 문맥" : "People / Places / Context"}>
+        <ContextTagGroup
+          label={locale === "ko" ? "인물" : "People"}
+          locale={locale}
+          tags={event.people}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "장소" : "Places"}
+          locale={locale}
+          tags={placeLabels.map((place) => place.label)}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "왕국" : "Kingdoms"}
+          locale={locale}
+          tags={event.kingdomTags}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "열강" : "Empires"}
+          locale={locale}
+          tags={event.empireTags}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "선지자" : "Prophets"}
+          locale={locale}
+          tags={event.prophetTags}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "주변 민족" : "Surrounding Nations"}
+          locale={locale}
+          tags={event.surroundingNationTags}
+        />
+        {event.synchronismNote ? <SectionNote>{getTimelineText(event.synchronismNote, locale)}</SectionNote> : null}
+        {event.worldContextNote ? <SectionNote>{getTimelineText(event.worldContextNote, locale)}</SectionNote> : null}
+        {event.worldContextBasisLabel ? (
+          <SectionNote>{getTimelineText(event.worldContextBasisLabel, locale)}</SectionNote>
+        ) : null}
+        {event.worldContextConfidenceLabel ? (
+          <SectionNote>{getTimelineText(event.worldContextConfidenceLabel, locale)}</SectionNote>
+        ) : null}
+        {event.nameVariantNote ? <SectionNote>{getTimelineText(event.nameVariantNote, locale)}</SectionNote> : null}
+      </DetailSection>
+
+      <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
+    </div>
+  );
+}
+
+function renderBookEvidencePanel(
+  row: TimelineBookContextRow,
+  locale: TimelineLocale,
+  openInReaderLabel: string,
+  relatedStudy: string,
+) {
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</h2>
+        <p className="text-sm leading-6 text-zinc-600">{getTimelineText(row.canonicalLocation, locale)}</p>
+      </div>
+
+      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
+        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "정경 위치" : "Canonical Location"}>
+        <ContextRow label={locale === "ko" ? "정경 위치" : "Canonical location"} value={getTimelineText(row.canonicalLocation, locale)} />
+        {row.historicalSettingLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "배경 연결" : "Background connection"}
+            value={getTimelineText(row.historicalSettingLabel, locale)}
+          />
+        ) : null}
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "저자 / 근거" : "Authorship / Basis"}>
+        {row.authorshipLabel ? (
+          <ContextRow label={locale === "ko" ? "저자" : "Authorship"} value={getTimelineText(row.authorshipLabel, locale)} />
+        ) : null}
+        {row.authorshipBasisLabel ? (
+          <SectionNote>{getTimelineText(row.authorshipBasisLabel, locale)}</SectionNote>
+        ) : null}
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "배경 근거" : "Background Basis"}>
+        <SectionNote>{getTimelineText(row.backgroundBasisLabel, locale)}</SectionNote>
+        {row.dateLabel || row.dateBasisLabel || row.dateConfidenceLabel ? (
+          <div className="space-y-3">
+            {row.dateLabel ? (
+              <ContextRow label={locale === "ko" ? "연대 표기" : "Date label"} value={getTimelineText(row.dateLabel, locale)} />
+            ) : null}
+            {row.dateBasisLabel ? (
+              <ContextRow label={locale === "ko" ? "기준" : "Basis"} value={getTimelineText(row.dateBasisLabel, locale)} />
+            ) : null}
+            {row.dateConfidenceLabel ? (
+              <ContextRow
+                label={locale === "ko" ? "신뢰" : "Confidence"}
+                value={getTimelineText(row.dateConfidenceLabel, locale)}
+              />
+            ) : null}
+          </div>
+        ) : null}
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "인물 / 장소" : "People / Places"}>
+        <ContextTagGroup label={locale === "ko" ? "인물" : "People"} locale={locale} tags={row.relatedPeople} />
+        <ContextTagGroup
+          label={locale === "ko" ? "장소" : "Places"}
+          locale={locale}
+          tags={row.relatedPlaces?.map((placeId) => getTimelinePlace(placeId)?.label).filter((value): value is TimelineText => Boolean(value))}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "왕국" : "Kingdoms"}
+          locale={locale}
+          tags={row.relatedKingdoms}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "열강" : "Empires"}
+          locale={locale}
+          tags={row.relatedEmpires}
+        />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "주의 / 메모" : "Caution / Note"}>
+        <SectionNote>{getTimelineText(row.note, locale)}</SectionNote>
+        <SectionNote>{relatedStudy}</SectionNote>
+      </DetailSection>
+    </div>
+  );
+}
+
+function renderKingdomEvidencePanel(
+  row: TimelineKingdomComparisonRow,
+  locale: TimelineLocale,
+  openInReaderLabel: string,
+  relatedStudy: string,
+) {
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(row.eraLabel, locale)}</h2>
+        <p className="text-sm leading-6 text-zinc-600">{getTimelineText(row.sequenceLabel, locale)}</p>
+      </div>
+
+      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
+        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "왕국 흐름" : "Kingdom Flow"}>
+        <ContextRow label={locale === "ko" ? "시대 / 흐름" : "Era / flow"} value={getTimelineText(row.eraLabel, locale)} />
+        <ContextRow label={locale === "ko" ? "흐름 순서" : "Sequence"} value={getTimelineText(row.sequenceLabel, locale)} />
+        {row.unitedKing ? <ContextRow label={locale === "ko" ? "통일 왕국" : "United Kingdom"} value={getTimelineText(row.unitedKing, locale)} /> : null}
+        {row.judahKing ? <ContextRow label={locale === "ko" ? "유다" : "Judah"} value={getTimelineText(row.judahKing, locale)} /> : null}
+        {row.northernKing ? (
+          <ContextRow label={locale === "ko" ? "북이스라엘" : "Northern Israel"} value={getTimelineText(row.northernKing, locale)} />
+        ) : null}
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "선지자" : "Prophets"}>
+        <ContextTagGroup label={locale === "ko" ? "선지자" : "Prophets"} locale={locale} tags={row.prophetTags} />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "열강 / 주변 민족" : "Empires / Nations"}>
+        <ContextTagGroup
+          label={locale === "ko" ? "열강" : "Empires"}
+          locale={locale}
+          tags={row.empireTags}
+        />
+        <ContextTagGroup
+          label={locale === "ko" ? "주변 민족" : "Surrounding Nations"}
+          locale={locale}
+          tags={row.surroundingNationTags}
+        />
+      </DetailSection>
+
+      {(row.dateLabel || row.dateBasisLabel || row.dateConfidenceLabel || row.nameVariantNote || row.note) ? (
+        <DetailSection label={locale === "ko" ? "보조 연대 / 주의" : "Supporting Date / Caution"}>
+          {row.dateLabel ? <ContextRow label={locale === "ko" ? "연대 표기" : "Date label"} value={getTimelineText(row.dateLabel, locale)} /> : null}
+          {row.dateBasisLabel ? <SectionNote>{getTimelineText(row.dateBasisLabel, locale)}</SectionNote> : null}
+          {row.dateConfidenceLabel ? (
+            <SectionNote>{getTimelineText(row.dateConfidenceLabel, locale)}</SectionNote>
+          ) : null}
+          {row.nameVariantNote ? <SectionNote>{getTimelineText(row.nameVariantNote, locale)}</SectionNote> : null}
+          {row.note ? <SectionNote>{getTimelineText(row.note, locale)}</SectionNote> : null}
+          <SectionNote>{relatedStudy}</SectionNote>
+        </DetailSection>
+      ) : null}
+    </div>
+  );
+}
+
+function renderGenealogyEvidencePanel(
+  row: TimelineGenealogyComparisonRow,
+  locale: TimelineLocale,
+  openInReaderLabel: string,
+  relatedStudy: string,
+) {
+  const segment = timelineGenealogySegments.find((item) => item.id === row.segmentId);
+
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(row.matthewName, locale)}</h2>
+        <p className="text-sm leading-6 text-zinc-600">
+          {segment ? `${getTimelineText(segment.title, locale)} · ${getTimelineText(segment.rangeLabel, locale)}` : getTimelineText(row.comparisonLabel, locale)}
+        </p>
+      </div>
+
+      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
+        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "관찰" : "Observation"}>
+        <ContextRow label={locale === "ko" ? "마태복음" : "Matthew"} value={getTimelineText(row.matthewName, locale)} />
+        {row.oldTestamentName ? (
+          <ContextRow
+            label={locale === "ko" ? "구약 비교" : "Old Testament Comparison"}
+            value={getTimelineText(row.oldTestamentName, locale)}
+          />
+        ) : null}
+        <ContextRow
+          label={locale === "ko" ? "비교 라벨" : "Comparison"}
+          value={getTimelineText(row.comparisonLabel, locale)}
+        />
+        {segment ? (
+          <>
+            <ContextRow
+              label={locale === "ko" ? "족보 구간" : "Genealogy Segment"}
+              value={`${getTimelineText(segment.title, locale)} · ${getTimelineText(segment.rangeLabel, locale)}`}
+            />
+            <SectionNote>{getTimelineText(segment.note, locale)}</SectionNote>
+          </>
+        ) : null}
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "이름 차이 / 생략 관찰" : "Name Variant / Omission Observation"}>
+        {row.nameVariantNote ? <SectionNote>{getTimelineText(row.nameVariantNote, locale)}</SectionNote> : null}
+        {row.omissionNote ? <SectionNote>{getTimelineText(row.omissionNote, locale)}</SectionNote> : null}
+        {row.basisLabel ? <SectionNote>{getTimelineText(row.basisLabel, locale)}</SectionNote> : null}
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "관련 표지" : "Related Markers"}>
+        <ContextTagGroup label={locale === "ko" ? "왕국" : "Kingdoms"} locale={locale} tags={row.kingdomTags} />
+        <ContextTagGroup label={locale === "ko" ? "열강" : "Empires"} locale={locale} tags={row.empireTags} />
+        <ContextTagGroup label={locale === "ko" ? "통치자" : "Rulers"} locale={locale} tags={row.rulerTags} />
+        {row.relatedBookIds?.length ? (
+          <div className="space-y-1.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              {locale === "ko" ? "관련 책" : "Related Books"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {row.relatedBookIds.map((bookId) => {
+                const book = getTimelineBook(bookId);
+                return (
+                  <Tag key={`${row.id}-${bookId}`}>{book ? getTimelineText(book.label, locale) : bookId}</Tag>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+        {row.relatedEventIds?.length ? (
+          <div className="space-y-1.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              {locale === "ko" ? "관련 사건" : "Related Events"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {row.relatedEventIds.map((eventId) => {
+                const relatedEvent = passionWeekTimelineEvents.find((item) => item.id === eventId);
+                return (
+                  <Tag key={`${row.id}-${eventId}`}>{relatedEvent ? getTimelineText(relatedEvent.title, locale) : eventId}</Tag>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+      </DetailSection>
+
+      <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
+    </div>
+  );
+}
+
+function renderPlaceEvidencePanel(
+  row: TimelineSchematicPlaceRow,
+  locale: TimelineLocale,
+  openInReaderLabel: string,
+  relatedStudy: string,
+) {
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</h2>
+        <p className="text-sm leading-6 text-zinc-600">{getTimelineText(row.conceptRegionLabel, locale)}</p>
+      </div>
+
+      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
+        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "장소 / 개념지도" : "Place / Schematic Map"}>
+        <ContextRow label={locale === "ko" ? "장소" : "Place"} value={getTimelineText(row.title, locale)} />
+        {row.modernReferenceLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "오늘날 보조 표기" : "Modern reference"}
+            value={getTimelineText(row.modernReferenceLabel, locale)}
+          />
+        ) : null}
+        {row.modernReferenceStatusLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "지명 상태" : "Reference status"}
+            value={getTimelineText(row.modernReferenceStatusLabel, locale)}
+          />
+        ) : null}
+        <ContextRow
+          label={locale === "ko" ? "개념 권역" : "Concept region"}
+          value={getTimelineText(row.conceptRegionLabel, locale)}
+        />
+        {row.placeTypeLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "장소 유형" : "Place type"}
+            value={getTimelineText(row.placeTypeLabel, locale)}
+          />
+        ) : null}
+        <SectionNote>{locale === "ko" ? "이 단계에서는 좌표를 제공하지 않습니다. 오늘날 지명은 보조 표기입니다." : "This phase does not provide coordinates. Modern place labels are supporting references."}</SectionNote>
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "위치 근거 / 주의" : "Location Basis / Caution"}>
+        <SectionNote>{getTimelineText(row.locationBasisLabel, locale)}</SectionNote>
+        <SectionNote>{getTimelineText(row.locationConfidenceLabel, locale)}</SectionNote>
+        {row.cautionNote ? <SectionNote>{getTimelineText(row.cautionNote, locale)}</SectionNote> : null}
+        <SectionNote>{getTimelineText(row.note, locale)}</SectionNote>
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "관련 인물 / 문맥" : "Related People / Context"}>
+        <ContextTagGroup label={locale === "ko" ? "인물" : "People"} locale={locale} tags={row.relatedPeople} />
+        <ContextTagGroup label={locale === "ko" ? "왕국" : "Kingdoms"} locale={locale} tags={row.relatedKingdoms} />
+        <ContextTagGroup label={locale === "ko" ? "열강" : "Empires"} locale={locale} tags={row.relatedEmpires} />
+        {row.relatedBookContextIds?.length ? (
+          <div className="space-y-1.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              {locale === "ko" ? "관련 책" : "Related Books"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {row.relatedBookContextIds.map((contextId) => {
+                const relatedBookRow = timelineBookContextRows.find((item) => item.id === contextId);
+                return (
+                  <Tag key={`${row.id}-${contextId}`}>
+                    {relatedBookRow ? getTimelineText(relatedBookRow.title, locale) : contextId}
+                  </Tag>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+        {row.relatedEventIds?.length ? (
+          <div className="space-y-1.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              {locale === "ko" ? "관련 사건" : "Related Events"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {row.relatedEventIds.map((eventId) => {
+                const relatedEvent = passionWeekTimelineEvents.find((item) => item.id === eventId);
+                return (
+                  <Tag key={`${row.id}-${eventId}`}>{relatedEvent ? getTimelineText(relatedEvent.title, locale) : eventId}</Tag>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+      </DetailSection>
+
+      <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
     </div>
   );
 }
