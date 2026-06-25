@@ -174,15 +174,17 @@ export function TimelinePageShell({
   const [filters, setFilters] = useState<TimelineFilterState>(initialFilters);
   const [inspectorSelection, setInspectorSelection] = useState<TimelineInspectorSelection>(null);
   const [activeBookSectionKey, setActiveBookSectionKey] = useState<string>("");
+  const [expandedBookSectionKeys, setExpandedBookSectionKeys] = useState<string[]>([]);
   const timelineEvents = coreEventRows;
   const canonicalBookSections = useMemo(
     () => buildCanonicalBookSectionNavigation(canonicalBookRows),
     [canonicalBookRows],
   );
-  const resolvedActiveBookSectionKey =
-    canonicalBookSections.some((section) => section.sectionKey === activeBookSectionKey)
-      ? activeBookSectionKey
-      : (canonicalBookSections[0]?.sectionKey ?? "");
+  const resolvedActiveBookSectionKey = canonicalBookSections.some(
+    (section) => section.sectionKey === activeBookSectionKey,
+  )
+    ? activeBookSectionKey
+    : "";
 
   const periodCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -391,6 +393,9 @@ export function TimelinePageShell({
 
   function handleBookSectionSelect(section: TimelineBookSectionNavigationItem) {
     setActiveBookSectionKey(section.sectionKey);
+    setExpandedBookSectionKeys((current) =>
+      current.includes(section.sectionKey) ? current : [...current, section.sectionKey],
+    );
 
     if (typeof document === "undefined") {
       return;
@@ -406,6 +411,15 @@ export function TimelinePageShell({
     window.setTimeout(() => {
       sectionElement.focus();
     }, 150);
+  }
+
+  function handleBookSectionToggle(sectionKey: string) {
+    setActiveBookSectionKey(sectionKey);
+    setExpandedBookSectionKeys((current) =>
+      current.includes(sectionKey)
+        ? current.filter((key) => key !== sectionKey)
+        : [...current, sectionKey],
+    );
   }
 
   return (
@@ -535,16 +549,22 @@ export function TimelinePageShell({
 
               {activeView === "books" ? (
                 <BooksContextPreviewPanel
+                  activeSectionKey={resolvedActiveBookSectionKey}
                   canonicalBookRows={canonicalBookRows}
                   canonicalBookStats={canonicalBookStats}
-                  activeSectionKey={resolvedActiveBookSectionKey}
                   bookSections={canonicalBookSections}
+                  expandedSectionKeys={expandedBookSectionKeys}
                   locale={activeLocale}
+                  onSectionToggle={handleBookSectionToggle}
                   onSelectRow={(rowId) => {
                     const selectedRow = canonicalBookRows.find((row) => row.id === rowId);
 
                     if (selectedRow?.canonicalSection) {
-                      setActiveBookSectionKey(getTimelineBooksSectionKey(selectedRow.canonicalSection));
+                      const sectionKey = getTimelineBooksSectionKey(selectedRow.canonicalSection);
+                      setActiveBookSectionKey(sectionKey);
+                      setExpandedBookSectionKeys((current) =>
+                        current.includes(sectionKey) ? current : [...current, sectionKey],
+                      );
                     }
 
                     selectInspectorItem({ id: rowId, type: "book" });
@@ -1282,7 +1302,9 @@ type BooksContextPreviewPanelProps = {
     oldTestamentCount: number;
     totalCount: number;
   };
+  expandedSectionKeys: string[];
   locale: TimelineLocale;
+  onSectionToggle: (sectionKey: string) => void;
   onSelectRow: (rowId: string) => void;
   selectedRowId: string;
 };
@@ -1292,7 +1314,9 @@ function BooksContextPreviewPanel({
   bookSections,
   canonicalBookRows,
   canonicalBookStats,
+  expandedSectionKeys,
   locale,
+  onSectionToggle,
   onSelectRow,
   selectedRowId,
 }: BooksContextPreviewPanelProps) {
@@ -1322,6 +1346,11 @@ function BooksContextPreviewPanel({
             {locale === "ko"
               ? "66권 canonical skeleton package를 metadata-only preview로 연결한 보기입니다."
               : "A metadata-only preview backed by the canonical 66-book skeleton package."}
+          </p>
+          <p className="mt-2 text-xs leading-5 text-zinc-500">
+            {locale === "ko"
+              ? "정경구간을 열어 각 책의 metadata를 확인하세요. 성경 본문은 저장하거나 표시하지 않습니다."
+              : "Open a canonical section to inspect book metadata. Bible text is not stored or rendered here."}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -1369,10 +1398,21 @@ function BooksContextPreviewPanel({
 
             <div className="mt-3 space-y-3">
               {sectionGroups.map(([sectionKey, sectionRows]) => {
-                const sectionNavigationItem = bookSections.find((section) => section.sectionKey === getTimelineBooksSectionKey(sectionKey));
+                const normalizedSectionKey = getTimelineBooksSectionKey(sectionKey);
+                const sectionNavigationItem = bookSections.find((section) => section.sectionKey === normalizedSectionKey);
                 const sectionId = sectionNavigationItem?.sectionId ?? createTimelineBooksSectionId(sectionKey);
                 const headingId = `${sectionId}-heading`;
-                const isActiveSection = activeSectionKey === (sectionNavigationItem?.sectionKey ?? getTimelineBooksSectionKey(sectionKey));
+                const panelId = `${sectionId}-panel`;
+                const isActiveSection = activeSectionKey === (sectionNavigationItem?.sectionKey ?? normalizedSectionKey);
+                const isExpanded = expandedSectionKeys.includes(normalizedSectionKey);
+                const sectionLabel = getTimelineText(
+                  sectionRows[0].canonicalSectionLabel ?? { ko: sectionKey, en: sectionKey },
+                  locale,
+                );
+                const sectionSummary =
+                  locale === "ko"
+                    ? `${sectionLabel} · ${sectionRows.length}권`
+                    : `${sectionLabel} · ${sectionRows.length} books`;
 
                 return (
                 <div
@@ -1386,33 +1426,63 @@ function BooksContextPreviewPanel({
                   tabIndex={-1}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p
+                    <button
+                      aria-controls={panelId}
+                      aria-expanded={isExpanded}
                       className={cn(
-                        "text-xs font-semibold uppercase tracking-[0.08em]",
-                        isActiveSection ? "text-zinc-900" : "text-zinc-500",
+                        "flex min-h-11 flex-1 cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-left transition-colors",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                        isActiveSection
+                          ? "border-zinc-300 bg-white text-zinc-950"
+                          : "border-zinc-200 bg-white/80 text-zinc-700 hover:border-zinc-300 hover:bg-white",
                       )}
                       id={headingId}
+                      onClick={() => onSectionToggle(normalizedSectionKey)}
+                      type="button"
                     >
-                      {getTimelineText(sectionRows[0].canonicalSectionLabel ?? { ko: sectionKey, en: sectionKey }, locale)}
-                    </p>
-                    <span className="text-xs text-zinc-500">{sectionRows.length}</span>
+                      <span className="flex min-w-0 flex-col">
+                        <span className="text-sm font-semibold text-current">{sectionSummary}</span>
+                        <span className="text-xs text-zinc-500">
+                          {sectionNavigationItem?.testament === "NT"
+                            ? locale === "ko"
+                              ? "신약"
+                              : "NT"
+                            : locale === "ko"
+                              ? "구약"
+                              : "OT"}
+                        </span>
+                      </span>
+                      <span className="text-xs font-semibold text-zinc-500">
+                        {isExpanded
+                          ? locale === "ko"
+                            ? "접기"
+                            : "Collapse"
+                          : locale === "ko"
+                            ? "펼치기"
+                            : "Expand"}
+                      </span>
+                    </button>
                   </div>
-                  {sectionRows.map((row) => {
+                  <div
+                    className={cn("space-y-2", !isExpanded ? "hidden" : "")}
+                    id={panelId}
+                  >
+                      {sectionRows.map((row) => {
                 const selected = selectedRowId === row.id;
 
                 return (
-                  <div
+                  <button
+                    aria-pressed={selected}
                     className={cn(
-                      "rounded-md border px-3 py-3 transition-colors",
+                      "w-full rounded-md border px-3 py-3 text-left transition-colors",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
                       selected
                         ? "border-zinc-950 bg-white shadow-sm"
                         : "cursor-pointer border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50",
                     )}
                     key={row.id}
                     onClick={() => onSelectRow(row.id)}
-                    onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
-                    role="button"
-                    tabIndex={0}
+                    type="button"
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       {row.canonicalOrder ? (
@@ -1472,9 +1542,10 @@ function BooksContextPreviewPanel({
                     </div>
 
                     <p className="mt-2 text-sm leading-6 text-zinc-600">{getTimelineText(row.note, locale)}</p>
-                  </div>
+                  </button>
                 );
               })}
+                  </div>
                 </div>
               )})}
             </div>
