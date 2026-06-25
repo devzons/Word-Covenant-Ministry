@@ -162,3 +162,9 @@ Result:
 - Books / Psalms center sections are no longer always-expanded content bands.
 - The current behavior is accordion-first: all canonical sections start collapsed, left navigator selection opens and focuses the target section, and users can manually keep multiple sections open.
 - This preserves the existing metadata-only / Scripture-reference-only guardrail and does not introduce Bible text rendering, coordinates, map-provider data, or backend changes.
+
+## Addendum After CR-93G-6
+
+- Kings / Kingdoms now has its own package-backed interaction QA record at `docs/ROADMAP/KINGS_KINGDOMS_INTERACTION_QA.md`.
+- The current Kings / Kingdoms preview path passed static validation and code-path review without requiring frontend changes.
+- The left navigator, center accordion, and right metadata panel remain aligned with the same metadata-only / Scripture-reference-only guardrail used by the Books and Events package previews.
