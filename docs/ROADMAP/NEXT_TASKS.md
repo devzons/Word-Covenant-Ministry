@@ -34,6 +34,8 @@ CR-93E-4 66-Book Validation is complete. The verifier now hardens canonical 66-b
 
 CR-93E-5 Cross-Link and No-Coordinate Guardrail Expansion is complete. The verifier now hardens cross-link target-type checks, rejects Bible-reference-looking IDs when used as package row IDs, fails ambiguous duplicate-target resolution, warns on self-links and missing target types, recursively scans nested objects and arrays for forbidden coordinate or map-provider fields, and tightens supporting-reference authority guardrails for Korean/world reference layers. Additional invalid and warning fixtures now cover these cases. No frontend code, runtime integration, API, DB, schema, import, or real biblical data expansion was added.
 
+CR-93C Core Biblical Event Skeleton is complete. `docs/data-packages/timeline/events.core-biblical-skeleton.json` now contains a minimal Scripture-reference-only event baseline with 34 core rows from Creation through Revelation. The package is read-only, verifier-checked, and not imported into the frontend runtime yet. No Bible text, coordinates, map provider fields, Korean/world historical rows, frontend code, API, DB, schema migration, or runtime import work were added.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
@@ -47,8 +49,8 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 ## Current Priority Order
 
 1. CR-93E-6 Verifier CI / command wiring.
-2. CR-93C Core Biblical Event Skeleton.
-3. CR-93D-2 66-Book Frontend Preview Integration.
+2. CR-93D-2 66-Book Frontend Preview Integration.
+3. CR-93C-2 Core Event Skeleton Frontend Preview Integration.
 4. CR-91C Context Inspector Deep Links.
 5. CR-91C Context Inspector Deep Links.
 6. CR-91D Schematic Flow Highlights.

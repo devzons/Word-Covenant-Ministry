@@ -33,6 +33,7 @@ Current exported preview collections observed in `timelinePreviewData.ts`:
 | Timeline books lookup | `timelinePreviewData.ts` | 30 | Preview |
 | Timeline places lookup | `timelinePreviewData.ts` | 36 | Preview |
 | Timeline events | `timelinePreviewData.ts` | 65 | Expanded Preview |
+| Core biblical event skeleton package | `docs/data-packages/timeline/events.core-biblical-skeleton.json` | 34 | Skeleton package created |
 | Books / Psalms context rows | `timelinePreviewData.ts` | 12 | Expanded Preview |
 | 66-book context skeleton package | `docs/data-packages/timeline/books.66-canonical-skeleton.json` | 66 | Skeleton package created |
 | Kings / Kingdoms comparison rows | `timelinePreviewData.ts` | 21 | Expanded Preview |
@@ -45,6 +46,7 @@ Notes:
 
 - Counts above are based on the current checked-in fixture file.
 - `passionWeekTimeline.ts` is a compatibility export layer, not a second dataset.
+- `events.core-biblical-skeleton.json` adds a package-level Scripture-first event baseline, but it is not frontend runtime data yet.
 - `books.66-canonical-skeleton.json` improves package coverage documentation, but it is not frontend runtime data yet.
 - Korean history currently exists only as a collapsed placeholder UI in Events period groups.
 
@@ -111,7 +113,7 @@ Coverage matrix:
 | View | Current Purpose | Data Source | Current Coverage | Strengths | Gaps | Next Data Work |
 | --- | --- | --- | --- | --- | --- | --- |
 | Overview | High-level Scripture-first flow summary | `timelinePreviewData.ts` via `TimelinePageShell.tsx` | Preview | Quick period summary using current event set | No standalone overview dataset; depends on event coverage quality | Improve underlying event skeleton first |
-| Events | Primary narrative timeline grouped by period | `passionWeekTimelineEvents` | Expanded Preview | Strongest current view; period grouping; event selection; Scripture Evidence Panel integration | Full Genesis-to-Revelation event skeleton is missing | Build minimal canonical event skeleton |
+| Events | Primary narrative timeline grouped by period | `passionWeekTimelineEvents` plus `docs/data-packages/timeline/events.core-biblical-skeleton.json` | Expanded Preview in frontend; skeleton package created in docs/data | Strongest current view; period grouping; event selection; Scripture Evidence Panel integration; package-level event baseline now exists | Frontend still does not render the package yet; many periods still need finer curation | Keep runtime fixture stable while planning package integration |
 | Books / Psalms | Book background and Psalm context | `timelineBookContextRows` plus `books.66-canonical-skeleton.json` | Expanded Preview in frontend; skeleton package created in docs/data | Clear book-context cards; package-level 66-book skeleton now exists | Frontend still does not render the 66-book skeleton; Psalms and book intros remain minimal | Keep runtime fixture stable while planning package integration |
 | Kings / Kingdoms | Comparison of rulers, kingdoms, prophets, empires | `timelineKingdomComparisonRows` | Expanded Preview | Strongest non-event supporting table; inspector cross-links exist | Full king sequence and prophet coverage remain incomplete | Add missing sequence policy and fuller kingdom coverage |
 | Genealogy | Matthew-oriented comparison rows | `timelineGenealogySegments`, `timelineGenealogyComparisonRows` | Preview | Clear Matthew 14 / 14 / 14 framing; explicit row linking exists | Luke genealogy and broader OT genealogies are absent | Define wider genealogy coverage model |
