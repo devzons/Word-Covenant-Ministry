@@ -50,6 +50,14 @@ type TimelinePageShellProps = {
   locale: TimelineLocale;
 };
 
+type TimelineBookSectionNavigationItem = {
+  count: number;
+  sectionId: string;
+  sectionKey: string;
+  label: TimelineText;
+  testament: "OT" | "NT";
+};
+
 type TimelineView = "overview" | "events" | "books" | "kingdoms" | "genealogy" | "places" | "themes";
 
 type TimelineOption = {
@@ -165,7 +173,16 @@ export function TimelinePageShell({
   const [activeView, setActiveView] = useState<TimelineView>(initialView);
   const [filters, setFilters] = useState<TimelineFilterState>(initialFilters);
   const [inspectorSelection, setInspectorSelection] = useState<TimelineInspectorSelection>(null);
+  const [activeBookSectionKey, setActiveBookSectionKey] = useState<string>("");
   const timelineEvents = coreEventRows;
+  const canonicalBookSections = useMemo(
+    () => buildCanonicalBookSectionNavigation(canonicalBookRows),
+    [canonicalBookRows],
+  );
+  const resolvedActiveBookSectionKey =
+    canonicalBookSections.some((section) => section.sectionKey === activeBookSectionKey)
+      ? activeBookSectionKey
+      : (canonicalBookSections[0]?.sectionKey ?? "");
 
   const periodCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -372,6 +389,25 @@ export function TimelinePageShell({
 
   const activeViewLabel = getTimelineViewLabel(activeView, activeLocale);
 
+  function handleBookSectionSelect(section: TimelineBookSectionNavigationItem) {
+    setActiveBookSectionKey(section.sectionKey);
+
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const sectionElement = document.getElementById(section.sectionId);
+
+    if (!sectionElement) {
+      return;
+    }
+
+    sectionElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => {
+      sectionElement.focus();
+    }, 150);
+  }
+
   return (
     <Container className="max-w-[96rem] py-12 sm:py-16">
       <section className="flex flex-col gap-6 sm:gap-8">
@@ -409,6 +445,7 @@ export function TimelinePageShell({
             activeView={activeView}
             bookOptions={bookOptions}
             booksPreviewStats={canonicalBookStats}
+            bookSections={canonicalBookSections}
             confidenceLabel={activeLocale === "ko" ? "높은 신뢰도 미리보기" : "High-confidence preview"}
             confidenceNote={
               activeLocale === "ko"
@@ -417,7 +454,17 @@ export function TimelinePageShell({
             }
             labels={copy.sidebar}
             locale={activeLocale}
+            activeBookSectionKey={resolvedActiveBookSectionKey}
             onBookChange={(bookId) => setFilters((current) => ({ ...current, bookId }))}
+            onBookSectionSelect={(sectionKey) => {
+              const selectedSection = canonicalBookSections.find((section) => section.sectionKey === sectionKey);
+
+              if (!selectedSection) {
+                return;
+              }
+
+              handleBookSectionSelect(selectedSection);
+            }}
             onClearFilters={() =>
               setFilters({
                 bookId: "all",
@@ -490,8 +537,18 @@ export function TimelinePageShell({
                 <BooksContextPreviewPanel
                   canonicalBookRows={canonicalBookRows}
                   canonicalBookStats={canonicalBookStats}
+                  activeSectionKey={resolvedActiveBookSectionKey}
+                  bookSections={canonicalBookSections}
                   locale={activeLocale}
-                  onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "book" })}
+                  onSelectRow={(rowId) => {
+                    const selectedRow = canonicalBookRows.find((row) => row.id === rowId);
+
+                    if (selectedRow?.canonicalSection) {
+                      setActiveBookSectionKey(getTimelineBooksSectionKey(selectedRow.canonicalSection));
+                    }
+
+                    selectInspectorItem({ id: rowId, type: "book" });
+                  }}
                   selectedRowId={inspectorSelection?.type === "book" ? inspectorSelection.id : ""}
                 />
               ) : null}
@@ -1217,6 +1274,8 @@ function KingsKingdomsPreviewPanel({ locale, onSelectRow, selectedRowId }: Kings
 }
 
 type BooksContextPreviewPanelProps = {
+  activeSectionKey: string;
+  bookSections: TimelineBookSectionNavigationItem[];
   canonicalBookRows: TimelineBookContextRow[];
   canonicalBookStats: {
     newTestamentCount: number;
@@ -1229,6 +1288,8 @@ type BooksContextPreviewPanelProps = {
 };
 
 function BooksContextPreviewPanel({
+  activeSectionKey,
+  bookSections,
   canonicalBookRows,
   canonicalBookStats,
   locale,
@@ -1307,10 +1368,31 @@ function BooksContextPreviewPanel({
             </div>
 
             <div className="mt-3 space-y-3">
-              {sectionGroups.map(([sectionKey, sectionRows]) => (
-                <div className="space-y-2" key={`${id}-${sectionKey}`}>
+              {sectionGroups.map(([sectionKey, sectionRows]) => {
+                const sectionNavigationItem = bookSections.find((section) => section.sectionKey === getTimelineBooksSectionKey(sectionKey));
+                const sectionId = sectionNavigationItem?.sectionId ?? createTimelineBooksSectionId(sectionKey);
+                const headingId = `${sectionId}-heading`;
+                const isActiveSection = activeSectionKey === (sectionNavigationItem?.sectionKey ?? getTimelineBooksSectionKey(sectionKey));
+
+                return (
+                <div
+                  aria-labelledby={headingId}
+                  className={cn(
+                    "space-y-2 scroll-mt-28 rounded-md border border-transparent p-1",
+                    isActiveSection ? "border-zinc-200 bg-white/60" : "",
+                  )}
+                  id={sectionId}
+                  key={`${id}-${sectionKey}`}
+                  tabIndex={-1}
+                >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                    <p
+                      className={cn(
+                        "text-xs font-semibold uppercase tracking-[0.08em]",
+                        isActiveSection ? "text-zinc-900" : "text-zinc-500",
+                      )}
+                      id={headingId}
+                    >
                       {getTimelineText(sectionRows[0].canonicalSectionLabel ?? { ko: sectionKey, en: sectionKey }, locale)}
                     </p>
                     <span className="text-xs text-zinc-500">{sectionRows.length}</span>
@@ -1394,13 +1476,87 @@ function BooksContextPreviewPanel({
                 );
               })}
                 </div>
-              ))}
+              )})}
             </div>
           </section>
         )})}
       </div>
     </section>
   );
+}
+
+function getTimelineBooksSectionKey(canonicalSection: string) {
+  switch (canonicalSection) {
+    case "Torah":
+      return "torah";
+    case "Historical Books":
+      return "historical-books";
+    case "Wisdom / Poetry":
+      return "wisdom-poetry";
+    case "Major Prophets":
+      return "major-prophets";
+    case "Minor Prophets":
+      return "minor-prophets";
+    case "Gospels / Acts":
+      return "gospels-acts";
+    case "Pauline Epistles":
+      return "pauline-epistles";
+    case "General Epistles":
+      return "general-epistles";
+    case "Revelation":
+      return "revelation";
+    default:
+      return canonicalSection
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+  }
+}
+
+function createTimelineBooksSectionId(canonicalSection: string) {
+  return `timeline-books-section-${getTimelineBooksSectionKey(canonicalSection)}`;
+}
+
+function buildCanonicalBookSectionNavigation(
+  canonicalBookRows: TimelineBookContextRow[],
+): TimelineBookSectionNavigationItem[] {
+  const sectionOrder: Record<string, number> = {
+    torah: 1,
+    "historical-books": 2,
+    "wisdom-poetry": 3,
+    "major-prophets": 4,
+    "minor-prophets": 5,
+    "gospels-acts": 6,
+    "pauline-epistles": 7,
+    "general-epistles": 8,
+    revelation: 9,
+  };
+  const groupedSections = new Map<string, TimelineBookSectionNavigationItem>();
+
+  for (const row of canonicalBookRows) {
+    const canonicalSection = row.canonicalSection ?? row.canonicalSectionLabel?.en ?? "other";
+    const sectionKey = getTimelineBooksSectionKey(canonicalSection);
+
+    if (!groupedSections.has(sectionKey)) {
+      groupedSections.set(sectionKey, {
+        count: 0,
+        label: row.canonicalSectionLabel ?? { en: canonicalSection, ko: canonicalSection },
+        sectionId: createTimelineBooksSectionId(canonicalSection),
+        sectionKey,
+        testament: row.testament ?? "OT",
+      });
+    }
+
+    const current = groupedSections.get(sectionKey);
+
+    if (current) {
+      current.count += 1;
+    }
+  }
+
+  return Array.from(groupedSections.values()).sort((left, right) => {
+    return (sectionOrder[left.sectionKey] ?? 999) - (sectionOrder[right.sectionKey] ?? 999);
+  });
 }
 
 type GenealogyComparisonPreviewPanelProps = {

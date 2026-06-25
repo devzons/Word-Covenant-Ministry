@@ -24,6 +24,8 @@ CR-93D 66-Book Context Skeleton is complete. `docs/data-packages/timeline/books.
 
 CR-93D-2 66-Book Frontend Preview Integration is complete through available validation. The Timeline Books / Psalms view now reads the canonical 66-book skeleton through the Timeline route server layer and renders a metadata-only frontend preview with OT/NT grouping, OT 39 / NT 27 counts, canonical order display, locale-aware titles, and a metadata-only right panel. No Bible text rendering, Bible API calls, backend API calls, coordinates, map provider fields, API changes, DB changes, schema migration, or runtime import/export pipeline work were added.
 
+CR-93D-3 Books Canonical Section Navigation Wiring is complete through available validation. The Books / Psalms left sidebar canonical section guide now targets stable center-column section IDs, supports click-to-scroll and focus movement, and preserves a preview-only metadata flow without Bible text rendering or backend integration. No data package rows, API, DB, backend, schema, Next config, coordinates, or map provider work were added.
+
 CR-91E Timeline Left Navigator Redesign is complete through available validation. The left sidebar is now active-view aware and works as a contextual Timeline Navigator instead of a shared filter surface across all views. Events filters remain functional and are clearly scoped to Events. Books / Psalms navigator now acknowledges and summarizes the active 66-book package preview. Places navigator now makes the schematic-map and no-coordinate boundary explicit. No data rows, API, DB, schema, import, or non-approved package integration were added. Korean history remains placeholder/reference only.
 
 CR-93E Timeline Package Verifier Design is complete. `docs/ROADMAP/TIMELINE_PACKAGE_VERIFIER_DESIGN.md` and `docs/data-packages/timeline/verifier.md` now define future verification levels, error/warning policy, 66-book checks, accordion-first checks, no-Bible-text guardrails, no-coordinate guardrails, Korean/world reference guardrails, and a future CLI contract. No verifier script, frontend code, data rows, import, API, DB, or schema work was added.
@@ -52,7 +54,7 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-90Y deeper event package expansion or content-audit branch selection.
+1. CR-90Y timeline interaction polish or deeper content-audit branch selection.
 2. Later approved CI wiring for Timeline package verifier command.
 3. CR-91C Context Inspector Deep Links.
 4. CR-91D Schematic Flow Highlights.

@@ -33,12 +33,25 @@ type TimelineFilterOption = {
   label: string;
 };
 
+type TimelineBookSectionNavigationItem = {
+  count: number;
+  sectionId: string;
+  sectionKey: string;
+  label: {
+    en: string;
+    ko: string;
+  };
+  testament: "OT" | "NT";
+};
+
 type TimelineFilterBarProps = {
   activeBookId: string;
+  activeBookSectionKey?: string;
   activePeriodId: string;
   activePlaceId: string;
   activeView: TimelineView;
   bookOptions: TimelineFilterOption[];
+  bookSections?: TimelineBookSectionNavigationItem[];
   booksPreviewStats?: {
     newTestamentCount: number;
     oldTestamentCount: number;
@@ -49,6 +62,7 @@ type TimelineFilterBarProps = {
   labels: TimelineFilterLabels;
   locale: TimelineLocale;
   onBookChange: (bookId: string) => void;
+  onBookSectionSelect?: (sectionKey: string) => void;
   onClearFilters: () => void;
   onPeriodChange: (periodId: string) => void;
   onPlaceChange: (placeId: string) => void;
@@ -63,16 +77,19 @@ type TimelineFilterBarProps = {
 
 export function TimelineFilterBar({
   activeBookId,
+  activeBookSectionKey,
   activePeriodId,
   activePlaceId,
   activeView,
   bookOptions,
+  bookSections,
   booksPreviewStats,
   confidenceLabel,
   confidenceNote,
   labels,
   locale,
   onBookChange,
+  onBookSectionSelect,
   onClearFilters,
   onPeriodChange,
   onPlaceChange,
@@ -118,7 +135,15 @@ export function TimelineFilterBar({
         />
       ) : null}
 
-      {activeView === "books" ? <BooksNavigator locale={locale} stats={booksPreviewStats} /> : null}
+      {activeView === "books" ? (
+        <BooksNavigator
+          activeSectionKey={activeBookSectionKey}
+          locale={locale}
+          onSectionSelect={onBookSectionSelect}
+          sections={bookSections}
+          stats={booksPreviewStats}
+        />
+      ) : null}
       {activeView === "kingdoms" ? <KingdomsNavigator locale={locale} /> : null}
       {activeView === "genealogy" ? <GenealogyNavigator locale={locale} /> : null}
       {activeView === "places" ? <PlacesNavigator locale={locale} /> : null}
@@ -295,42 +320,23 @@ function EventsNavigator({
 }
 
 function BooksNavigator({
+  activeSectionKey,
   locale,
+  onSectionSelect,
+  sections,
   stats,
 }: {
+  activeSectionKey?: string;
   locale: TimelineLocale;
+  onSectionSelect?: (sectionKey: string) => void;
+  sections?: TimelineBookSectionNavigationItem[];
   stats?: {
     newTestamentCount: number;
     oldTestamentCount: number;
     totalCount: number;
   };
 }) {
-  const sections =
-    locale === "ko"
-      ? [
-          "율법서 / Torah",
-          "역사서 / Historical Books",
-          "시가서 / Wisdom & Poetry",
-          "대선지서 / Major Prophets",
-          "소선지서 / Minor Prophets",
-          "복음서 / Gospels",
-          "사도행전 / Acts",
-          "바울서신 / Pauline Epistles",
-          "공동서신 / General Epistles",
-          "계시록 / Revelation",
-        ]
-      : [
-          "Torah",
-          "Historical Books",
-          "Wisdom & Poetry",
-          "Major Prophets",
-          "Minor Prophets",
-          "Gospels",
-          "Acts",
-          "Pauline Epistles",
-          "General Epistles",
-          "Revelation",
-        ];
+  const sectionItems = sections ?? [];
 
   return (
     <>
@@ -357,12 +363,57 @@ function BooksNavigator({
       </NavigatorCard>
 
       <SidebarSection
-        count={sections.length}
+        count={sectionItems.length}
         defaultOpen
         label={locale === "ko" ? "정경 구간 안내" : "Canonical section guide"}
         subtitle={locale === "ko" ? "package skeleton ready" : "Package skeleton ready"}
       >
-        <StaticList items={sections} />
+        <div className="flex flex-col gap-2">
+          {sectionItems.map((section) => {
+            const isActive = activeSectionKey === section.sectionKey;
+            return (
+              <button
+                aria-controls={section.sectionId}
+                aria-pressed={isActive}
+                className={cn(
+                  "flex min-h-11 cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-left transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                  isActive
+                    ? "border-zinc-900 bg-zinc-950 text-white"
+                    : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50",
+                )}
+                key={section.sectionKey}
+                onClick={() => onSectionSelect?.(section.sectionKey)}
+                type="button"
+              >
+                <span className="flex min-w-0 flex-col">
+                  <span className={cn("text-sm font-semibold", isActive ? "text-white" : "text-zinc-900")}>
+                    {section.label[locale]}
+                  </span>
+                  <span className={cn("text-xs", isActive ? "text-zinc-200" : "text-zinc-500")}>
+                    {section.testament === "OT"
+                      ? locale === "ko"
+                        ? "구약"
+                        : "OT"
+                      : locale === "ko"
+                        ? "신약"
+                        : "NT"}
+                  </span>
+                </span>
+                <span
+                  className={cn(
+                    "inline-flex shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
+                    isActive
+                      ? "border-white/20 bg-white/10 text-white"
+                      : "border-zinc-200 bg-zinc-50 text-zinc-700",
+                  )}
+                >
+                  {section.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </SidebarSection>
     </>
   );
