@@ -19,6 +19,8 @@ Rules:
 - `books.66-canonical-skeleton.json` is the first canonical 66-book skeleton package.
 - The 66-book skeleton is not imported into the frontend yet.
 - Skeleton rows are not complete book introductions, and no book should be treated as complete yet.
+- A verifier design now exists in `verifier.md` and `docs/ROADMAP/TIMELINE_PACKAGE_VERIFIER_DESIGN.md`.
+- The verifier is not implemented yet.
 - Center-column package display must support top-down chronological accordion sections.
 - Scripture anchors are primary.
 - Dates, geography, world history, Korean history, tradition, and authorship labels are supporting layers.
