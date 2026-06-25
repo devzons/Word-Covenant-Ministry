@@ -1,0 +1,2548 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.books.66-canonical-fixture",
+  "packageType": "timeline.books",
+  "packageVersion": "0.0.0-fixture",
+  "status": "canonical-skeleton",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "65-book canonical package should fail exact-count validation."
+  ],
+  "items": [
+    {
+      "id": "book-invalid-01",
+      "bookId": "book-01",
+      "canonicalOrder": 1,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 1",
+        "en": "Fixture Book 1"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 1",
+        "en": "Fixture Canonical Title 1"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 1,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-02",
+      "bookId": "book-02",
+      "canonicalOrder": 2,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 2",
+        "en": "Fixture Book 2"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 2",
+        "en": "Fixture Canonical Title 2"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 2,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-03",
+      "bookId": "book-03",
+      "canonicalOrder": 3,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 3",
+        "en": "Fixture Book 3"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 3",
+        "en": "Fixture Canonical Title 3"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 3,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-04",
+      "bookId": "book-04",
+      "canonicalOrder": 4,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 4",
+        "en": "Fixture Book 4"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 4",
+        "en": "Fixture Canonical Title 4"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 4,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-05",
+      "bookId": "book-05",
+      "canonicalOrder": 5,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 5",
+        "en": "Fixture Book 5"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 5",
+        "en": "Fixture Canonical Title 5"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 5,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-06",
+      "bookId": "book-06",
+      "canonicalOrder": 6,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 6",
+        "en": "Fixture Book 6"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 6",
+        "en": "Fixture Canonical Title 6"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 6,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-07",
+      "bookId": "book-07",
+      "canonicalOrder": 7,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 7",
+        "en": "Fixture Book 7"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 7",
+        "en": "Fixture Canonical Title 7"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 7,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-08",
+      "bookId": "book-08",
+      "canonicalOrder": 8,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 8",
+        "en": "Fixture Book 8"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 8",
+        "en": "Fixture Canonical Title 8"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 8,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-09",
+      "bookId": "book-09",
+      "canonicalOrder": 9,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 9",
+        "en": "Fixture Book 9"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 9",
+        "en": "Fixture Canonical Title 9"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 9,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-10",
+      "bookId": "book-10",
+      "canonicalOrder": 10,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 10",
+        "en": "Fixture Book 10"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 10",
+        "en": "Fixture Canonical Title 10"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 10,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-11",
+      "bookId": "book-11",
+      "canonicalOrder": 11,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 11",
+        "en": "Fixture Book 11"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 11",
+        "en": "Fixture Canonical Title 11"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 11,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-12",
+      "bookId": "book-12",
+      "canonicalOrder": 12,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 12",
+        "en": "Fixture Book 12"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 12",
+        "en": "Fixture Canonical Title 12"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 12,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-13",
+      "bookId": "book-13",
+      "canonicalOrder": 13,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 13",
+        "en": "Fixture Book 13"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 13",
+        "en": "Fixture Canonical Title 13"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 13,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-14",
+      "bookId": "book-14",
+      "canonicalOrder": 14,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 14",
+        "en": "Fixture Book 14"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 14",
+        "en": "Fixture Canonical Title 14"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 14,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-15",
+      "bookId": "book-15",
+      "canonicalOrder": 15,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 15",
+        "en": "Fixture Book 15"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 15",
+        "en": "Fixture Canonical Title 15"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 15,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-16",
+      "bookId": "book-16",
+      "canonicalOrder": 16,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 16",
+        "en": "Fixture Book 16"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 16",
+        "en": "Fixture Canonical Title 16"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 16,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-17",
+      "bookId": "book-17",
+      "canonicalOrder": 17,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 17",
+        "en": "Fixture Book 17"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 17",
+        "en": "Fixture Canonical Title 17"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 17,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-18",
+      "bookId": "book-18",
+      "canonicalOrder": 18,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 18",
+        "en": "Fixture Book 18"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 18",
+        "en": "Fixture Canonical Title 18"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 18,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-19",
+      "bookId": "book-19",
+      "canonicalOrder": 19,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 19",
+        "en": "Fixture Book 19"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 19",
+        "en": "Fixture Canonical Title 19"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 19,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-20",
+      "bookId": "book-20",
+      "canonicalOrder": 20,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 20",
+        "en": "Fixture Book 20"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 20",
+        "en": "Fixture Canonical Title 20"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 20,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-21",
+      "bookId": "book-21",
+      "canonicalOrder": 21,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 21",
+        "en": "Fixture Book 21"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 21",
+        "en": "Fixture Canonical Title 21"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 21,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-22",
+      "bookId": "book-22",
+      "canonicalOrder": 22,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 22",
+        "en": "Fixture Book 22"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 22",
+        "en": "Fixture Canonical Title 22"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 22,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-23",
+      "bookId": "book-23",
+      "canonicalOrder": 23,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 23",
+        "en": "Fixture Book 23"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 23",
+        "en": "Fixture Canonical Title 23"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 23,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-24",
+      "bookId": "book-24",
+      "canonicalOrder": 24,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 24",
+        "en": "Fixture Book 24"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 24",
+        "en": "Fixture Canonical Title 24"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 24,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-25",
+      "bookId": "book-25",
+      "canonicalOrder": 25,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 25",
+        "en": "Fixture Book 25"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 25",
+        "en": "Fixture Canonical Title 25"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 25,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-26",
+      "bookId": "book-26",
+      "canonicalOrder": 26,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 26",
+        "en": "Fixture Book 26"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 26",
+        "en": "Fixture Canonical Title 26"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 26,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-27",
+      "bookId": "book-27",
+      "canonicalOrder": 27,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 27",
+        "en": "Fixture Book 27"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 27",
+        "en": "Fixture Canonical Title 27"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 27,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-28",
+      "bookId": "book-28",
+      "canonicalOrder": 28,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 28",
+        "en": "Fixture Book 28"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 28",
+        "en": "Fixture Canonical Title 28"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 28,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-29",
+      "bookId": "book-29",
+      "canonicalOrder": 29,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 29",
+        "en": "Fixture Book 29"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 29",
+        "en": "Fixture Canonical Title 29"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 29,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-30",
+      "bookId": "book-30",
+      "canonicalOrder": 30,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 30",
+        "en": "Fixture Book 30"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 30",
+        "en": "Fixture Canonical Title 30"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 30,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-31",
+      "bookId": "book-31",
+      "canonicalOrder": 31,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 31",
+        "en": "Fixture Book 31"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 31",
+        "en": "Fixture Canonical Title 31"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 31,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-32",
+      "bookId": "book-32",
+      "canonicalOrder": 32,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 32",
+        "en": "Fixture Book 32"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 32",
+        "en": "Fixture Canonical Title 32"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 32,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-33",
+      "bookId": "book-33",
+      "canonicalOrder": 33,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 33",
+        "en": "Fixture Book 33"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 33",
+        "en": "Fixture Canonical Title 33"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 33,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-34",
+      "bookId": "book-34",
+      "canonicalOrder": 34,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 34",
+        "en": "Fixture Book 34"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 34",
+        "en": "Fixture Canonical Title 34"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 34,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-35",
+      "bookId": "book-35",
+      "canonicalOrder": 35,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 35",
+        "en": "Fixture Book 35"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 35",
+        "en": "Fixture Canonical Title 35"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 35,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-36",
+      "bookId": "book-36",
+      "canonicalOrder": 36,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 36",
+        "en": "Fixture Book 36"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 36",
+        "en": "Fixture Canonical Title 36"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 36,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-37",
+      "bookId": "book-37",
+      "canonicalOrder": 37,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 37",
+        "en": "Fixture Book 37"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 37",
+        "en": "Fixture Canonical Title 37"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 37,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-38",
+      "bookId": "book-38",
+      "canonicalOrder": 38,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 38",
+        "en": "Fixture Book 38"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 38",
+        "en": "Fixture Canonical Title 38"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 38,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-39",
+      "bookId": "book-39",
+      "canonicalOrder": 39,
+      "testament": "OT",
+      "canonicalSection": "Torah",
+      "title": {
+        "ko": "검증용 책 39",
+        "en": "Fixture Book 39"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 39",
+        "en": "Fixture Canonical Title 39"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 39,
+      "accordionGroup": "torah",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-40",
+      "bookId": "book-40",
+      "canonicalOrder": 40,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 40",
+        "en": "Fixture Book 40"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 40",
+        "en": "Fixture Canonical Title 40"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 40,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-41",
+      "bookId": "book-41",
+      "canonicalOrder": 41,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 41",
+        "en": "Fixture Book 41"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 41",
+        "en": "Fixture Canonical Title 41"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 41,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-42",
+      "bookId": "book-42",
+      "canonicalOrder": 42,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 42",
+        "en": "Fixture Book 42"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 42",
+        "en": "Fixture Canonical Title 42"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 42,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-43",
+      "bookId": "book-43",
+      "canonicalOrder": 43,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 43",
+        "en": "Fixture Book 43"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 43",
+        "en": "Fixture Canonical Title 43"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 43,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-44",
+      "bookId": "book-44",
+      "canonicalOrder": 44,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 44",
+        "en": "Fixture Book 44"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 44",
+        "en": "Fixture Canonical Title 44"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 44,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-45",
+      "bookId": "book-45",
+      "canonicalOrder": 45,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 45",
+        "en": "Fixture Book 45"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 45",
+        "en": "Fixture Canonical Title 45"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 45,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-46",
+      "bookId": "book-46",
+      "canonicalOrder": 46,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 46",
+        "en": "Fixture Book 46"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 46",
+        "en": "Fixture Canonical Title 46"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 46,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-47",
+      "bookId": "book-47",
+      "canonicalOrder": 47,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 47",
+        "en": "Fixture Book 47"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 47",
+        "en": "Fixture Canonical Title 47"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 47,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-48",
+      "bookId": "book-48",
+      "canonicalOrder": 48,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 48",
+        "en": "Fixture Book 48"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 48",
+        "en": "Fixture Canonical Title 48"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 48,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-49",
+      "bookId": "book-49",
+      "canonicalOrder": 49,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 49",
+        "en": "Fixture Book 49"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 49",
+        "en": "Fixture Canonical Title 49"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 49,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-50",
+      "bookId": "book-50",
+      "canonicalOrder": 50,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 50",
+        "en": "Fixture Book 50"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 50",
+        "en": "Fixture Canonical Title 50"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 50,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-51",
+      "bookId": "book-51",
+      "canonicalOrder": 51,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 51",
+        "en": "Fixture Book 51"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 51",
+        "en": "Fixture Canonical Title 51"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 51,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-52",
+      "bookId": "book-52",
+      "canonicalOrder": 52,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 52",
+        "en": "Fixture Book 52"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 52",
+        "en": "Fixture Canonical Title 52"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 52,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-53",
+      "bookId": "book-53",
+      "canonicalOrder": 53,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 53",
+        "en": "Fixture Book 53"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 53",
+        "en": "Fixture Canonical Title 53"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 53,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-54",
+      "bookId": "book-54",
+      "canonicalOrder": 54,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 54",
+        "en": "Fixture Book 54"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 54",
+        "en": "Fixture Canonical Title 54"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 54,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-55",
+      "bookId": "book-55",
+      "canonicalOrder": 55,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 55",
+        "en": "Fixture Book 55"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 55",
+        "en": "Fixture Canonical Title 55"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 55,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-56",
+      "bookId": "book-56",
+      "canonicalOrder": 56,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 56",
+        "en": "Fixture Book 56"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 56",
+        "en": "Fixture Canonical Title 56"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 56,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-57",
+      "bookId": "book-57",
+      "canonicalOrder": 57,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 57",
+        "en": "Fixture Book 57"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 57",
+        "en": "Fixture Canonical Title 57"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 57,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-58",
+      "bookId": "book-58",
+      "canonicalOrder": 58,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 58",
+        "en": "Fixture Book 58"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 58",
+        "en": "Fixture Canonical Title 58"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 58,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-59",
+      "bookId": "book-59",
+      "canonicalOrder": 59,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 59",
+        "en": "Fixture Book 59"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 59",
+        "en": "Fixture Canonical Title 59"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 59,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-60",
+      "bookId": "book-60",
+      "canonicalOrder": 60,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 60",
+        "en": "Fixture Book 60"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 60",
+        "en": "Fixture Canonical Title 60"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 60,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-61",
+      "bookId": "book-61",
+      "canonicalOrder": 61,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 61",
+        "en": "Fixture Book 61"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 61",
+        "en": "Fixture Canonical Title 61"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 61,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-62",
+      "bookId": "book-62",
+      "canonicalOrder": 62,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 62",
+        "en": "Fixture Book 62"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 62",
+        "en": "Fixture Canonical Title 62"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 62,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-63",
+      "bookId": "book-63",
+      "canonicalOrder": 63,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 63",
+        "en": "Fixture Book 63"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 63",
+        "en": "Fixture Canonical Title 63"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 63,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-64",
+      "bookId": "book-64",
+      "canonicalOrder": 64,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 64",
+        "en": "Fixture Book 64"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 64",
+        "en": "Fixture Canonical Title 64"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 64,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    },
+    {
+      "id": "book-invalid-65",
+      "bookId": "book-65",
+      "canonicalOrder": 65,
+      "testament": "NT",
+      "canonicalSection": "Gospels / Acts",
+      "title": {
+        "ko": "검증용 책 65",
+        "en": "Fixture Book 65"
+      },
+      "canonicalTitle": {
+        "ko": "검증용 정경 제목 65",
+        "en": "Fixture Canonical Title 65"
+      },
+      "timelinePeriodId": "gospels",
+      "sectionId": "gospels",
+      "displayOrder": 65,
+      "accordionGroup": "gospels-acts",
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "reference": "Matthew",
+          "scope": "book"
+        }
+      ],
+      "isSkeleton": true
+    }
+  ]
+}

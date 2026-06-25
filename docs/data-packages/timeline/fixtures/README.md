@@ -68,6 +68,14 @@ Expected result:
   - Canonical skeleton row missing `bookId`
 - `invalid/books-duplicate-book-id.invalid.sample.json`
   - Duplicate `bookId` values
+- `invalid/books-count-65.invalid.sample.json`
+  - Canonical skeleton package has only 65 rows
+- `invalid/books-duplicate-order.invalid.sample.json`
+  - Canonical skeleton package repeats one `canonicalOrder`
+- `invalid/books-order-out-of-range.invalid.sample.json`
+  - Canonical skeleton package contains out-of-range `canonicalOrder`
+- `invalid/books-testament-count.invalid.sample.json`
+  - Canonical skeleton package has wrong OT / NT distribution
 - `invalid/bible-text.invalid.sample.json`
   - Forbidden Bible text-like field present
 - `invalid/coordinates.invalid.sample.json`

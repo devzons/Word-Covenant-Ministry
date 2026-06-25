@@ -33,10 +33,21 @@ Current supported checks:
 - center-column required fields
 - cross-link field presence and ID resolution
 - canonical 66-book skeleton validation
+- exact 66-row count for canonical-skeleton book packages
+- non-empty unique `bookId` values for canonical-skeleton book packages
+- canonicalOrder integer, range, duplicate, and gap validation
+- testament value validation plus `OT=39` and `NT=27` distribution checks
+- canonical title warning policy for 66-book package rows
 - Bible-text field guardrails
 - no-coordinate and no-map-provider guardrails
 - supporting-reference authority guardrails
 - warning-only review flags for approximate chronology, Korean reference review, and low-confidence cross-links
+
+Current 66-book package detection:
+
+- `packageType: "timeline.books"`
+- `status: "canonical-skeleton"`
+- or canonical package identifiers such as the checked-in `books.66-canonical-skeleton.json`
 
 Alternative shape if implementation direction changes later:
 

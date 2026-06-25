@@ -349,6 +349,15 @@ Implemented current minimum in `CR-93E-3`:
 - outputs: readable summary or `--json`
 - current checks: JSON parse, envelope fields, duplicate IDs, cross-link resolution, 66-book skeleton rules, Bible-text guardrails, no-coordinate guardrails, Scripture-first supporting-reference guardrails, and warning-only review flags
 
+Planned hardening for `CR-93E-4`:
+
+- stronger canonical package detection using filename, package type, package ID, and status
+- exact 66-row count enforcement
+- non-empty unique `bookId` enforcement
+- canonicalOrder integer, range, duplicate, and gap enforcement
+- OT / NT value and distribution enforcement
+- clearer canonical-book issue codes and JSON issue metadata
+
 Known current limitations:
 
 - The CLI does not enforce every future schema field yet.

@@ -64,6 +64,50 @@ const SCRIPTURE_ROW_PACKAGE_TYPES = new Set([
   "timeline.genealogy",
 ]);
 
+const ISSUE = {
+  JSON_INVALID: "TLN_JSON_INVALID",
+  FILE_UNREADABLE: "TLN_FILE_UNREADABLE",
+  PACKAGE_NOT_OBJECT: "TLN_PACKAGE_NOT_OBJECT",
+  ENVELOPE_MISSING_FIELD: "TLN_ENVELOPE_MISSING_FIELD",
+  ENVELOPE_ITEMS_INVALID: "TLN_ENVELOPE_ITEMS_INVALID",
+  ROW_NOT_OBJECT: "TLN_ROW_NOT_OBJECT",
+  ROW_ID_MISSING: "TLN_ROW_ID_MISSING",
+  ROW_ID_DUPLICATE: "TLN_ROW_ID_DUPLICATE",
+  CENTER_FIELD_MISSING: "TLN_CENTER_FIELD_MISSING",
+  TITLE_MISSING: "TLN_TITLE_MISSING",
+  SCRIPTURE_ANCHORS_MISSING: "TLN_SCRIPTURE_ANCHORS_MISSING",
+  CROSS_LINK_FIELD_MISSING: "TLN_CROSS_LINK_FIELD_MISSING",
+  CROSS_LINK_FROM_UNRESOLVED: "TLN_CROSS_LINK_FROM_UNRESOLVED",
+  CROSS_LINK_TO_UNRESOLVED: "TLN_CROSS_LINK_TO_UNRESOLVED",
+  SUPPORTING_REFERENCE_FLAG_MISSING: "TLN_REFERENCE_FLAG_MISSING",
+  SUPPORTING_REFERENCE_AUTHORITY_BREACH: "TLN_REFERENCE_AUTHORITY_BREACH",
+  SUPPORTING_REFERENCE_INTERPRETATION_LABEL_MISSING: "TLN_REFERENCE_INTERPRETATION_LABEL_MISSING",
+  SUPPORTING_REFERENCE_FIELD_MISSING: "TLN_REFERENCE_FIELD_MISSING",
+  SUPPORTING_REFERENCE_SOURCE_REVIEW_WARNING: "TLN_REFERENCE_SOURCE_REVIEW_WARNING",
+  BANNED_BIBLE_TEXT_FIELD: "TLN_BIBLE_TEXT_FIELD_FORBIDDEN",
+  BANNED_COORDINATE_FIELD: "TLN_COORDINATE_FIELD_FORBIDDEN",
+  WARNING_APPROXIMATE_DATE: "TLN_WARNING_APPROXIMATE_DATE",
+  WARNING_CHRONOLOGY_REVIEW: "TLN_WARNING_CHRONOLOGY_REVIEW",
+  WARNING_OPTIONAL_DISPLAY_LABEL: "TLN_WARNING_OPTIONAL_DISPLAY_LABEL",
+  WARNING_LOW_CONFIDENCE_CROSS_LINK: "TLN_WARNING_LOW_CONFIDENCE_CROSS_LINK",
+  BOOKS_COUNT_MISMATCH: "TLN_BOOKS_COUNT_MISMATCH",
+  BOOKS_BOOK_ID_MISSING: "TLN_BOOKS_BOOK_ID_MISSING",
+  BOOKS_BOOK_ID_EMPTY: "TLN_BOOKS_BOOK_ID_EMPTY",
+  BOOKS_BOOK_ID_DUPLICATE: "TLN_BOOKS_BOOK_ID_DUPLICATE",
+  BOOKS_ORDER_MISSING: "TLN_BOOKS_ORDER_MISSING",
+  BOOKS_ORDER_NON_INTEGER: "TLN_BOOKS_ORDER_NON_INTEGER",
+  BOOKS_ORDER_OUT_OF_RANGE: "TLN_BOOKS_ORDER_OUT_OF_RANGE",
+  BOOKS_ORDER_DUPLICATE: "TLN_BOOKS_ORDER_DUPLICATE",
+  BOOKS_ORDER_GAP: "TLN_BOOKS_ORDER_GAP",
+  BOOKS_TESTAMENT_INVALID: "TLN_BOOKS_TESTAMENT_INVALID",
+  BOOKS_TESTAMENT_COUNT_MISMATCH: "TLN_BOOKS_TESTAMENT_COUNT_MISMATCH",
+  BOOKS_FIELD_MISSING: "TLN_BOOKS_FIELD_MISSING",
+  BOOKS_TITLE_MISSING: "TLN_BOOKS_TITLE_MISSING",
+  BOOKS_CANONICAL_TITLE_WARNING: "TLN_BOOKS_CANONICAL_TITLE_WARNING",
+  BOOKS_SCRIPTURE_ANCHORS_MISSING: "TLN_BOOKS_SCRIPTURE_ANCHORS_MISSING",
+  BOOKS_SKELETON_FLAG_INVALID: "TLN_BOOKS_SKELETON_FLAG_INVALID",
+};
+
 function main(argv) {
   const { jsonOutput, targets } = parseArgs(argv);
   const targetFiles = collectTargetFiles(targets);
@@ -80,13 +124,13 @@ function main(argv) {
       try {
         data = JSON.parse(raw);
       } catch (error) {
-        issues.push(makeIssue("error", filePath, null, `Invalid JSON syntax: ${error.message}`));
+        issues.push(makeIssue("error", ISSUE.JSON_INVALID, filePath, null, `Invalid JSON syntax: ${error.message}`));
         continue;
       }
       validatePackage(filePath, data, registry, issues);
     } catch (error) {
       unreadable = true;
-      issues.push(makeIssue("fatal", filePath, null, `Unable to read file: ${error.message}`));
+      issues.push(makeIssue("fatal", ISSUE.FILE_UNREADABLE, filePath, null, `Unable to read file: ${error.message}`));
     }
   }
 
@@ -200,20 +244,20 @@ function validatePackage(filePath, data, registry, issues) {
   const idCounts = new Map();
   items.forEach((item, index) => {
     const rowLabel = item?.id ?? `row#${index + 1}`;
-    validateRow(filePath, packageType, data.status, item, rowLabel, registry, issues, filePath);
-    if (item && typeof item === "object" && typeof item.id === "string") {
-      idCounts.set(item.id, (idCounts.get(item.id) ?? 0) + 1);
-    }
+      validateRow(filePath, data, packageType, data.status, item, rowLabel, registry, issues);
+      if (item && typeof item === "object" && typeof item.id === "string") {
+        idCounts.set(item.id, (idCounts.get(item.id) ?? 0) + 1);
+      }
   });
 
   for (const [id, count] of idCounts.entries()) {
     if (count > 1) {
-      issues.push(makeIssue("error", filePath, id, `Duplicate row id "${id}" (${count} occurrences).`));
+      issues.push(makeIssue("error", ISSUE.ROW_ID_DUPLICATE, filePath, id, `Duplicate row id "${id}" (${count} occurrences).`, { recordId: id }));
     }
   }
 
-  if (packageType === "timeline.books" && (data.status === "canonical-skeleton" || path.basename(filePath) === "books.66-canonical-skeleton.json")) {
-    validateCanonicalBooks(filePath, items, issues);
+  if (isCanonicalBooksPackage(data, filePath)) {
+    validateCanonicalBooks(filePath, data, items, issues);
   }
 }
 
@@ -221,45 +265,45 @@ function validateEnvelope(filePath, data, issues) {
   const requiredEnvelopeFields = ["$schema", "packageType", "packageVersion", "status"];
   for (const field of requiredEnvelopeFields) {
     if (!hasNonEmptyValue(data[field])) {
-      issues.push(makeIssue("error", filePath, null, `Missing required package envelope field "${field}".`));
+      issues.push(makeIssue("error", ISSUE.ENVELOPE_MISSING_FIELD, filePath, null, `Missing required package envelope field "${field}".`, { path: field }));
     }
   }
 
   if (data.packageType !== "timeline.manifest") {
     if (!Array.isArray(data.items)) {
-      issues.push(makeIssue("error", filePath, null, 'Missing required package envelope field "items" as an array.'));
+      issues.push(makeIssue("error", ISSUE.ENVELOPE_ITEMS_INVALID, filePath, null, 'Missing required package envelope field "items" as an array.', { path: "items" }));
     }
   } else if (data.items !== undefined && !Array.isArray(data.items)) {
-    issues.push(makeIssue("error", filePath, null, 'If present, manifest "items" must be an array.'));
+    issues.push(makeIssue("error", ISSUE.ENVELOPE_ITEMS_INVALID, filePath, null, 'If present, manifest "items" must be an array.', { path: "items" }));
   }
 }
 
-function validateRow(filePath, packageType, packageStatus, item, rowLabel, registry, issues) {
+function validateRow(filePath, data, packageType, packageStatus, item, rowLabel, registry, issues) {
   if (!item || typeof item !== "object" || Array.isArray(item)) {
-    issues.push(makeIssue("error", filePath, rowLabel, "Each row must be a JSON object."));
+    issues.push(makeIssue("error", ISSUE.ROW_NOT_OBJECT, filePath, rowLabel, "Each row must be a JSON object.", { recordId: rowLabel }));
     return;
   }
 
   validateGuardrails(filePath, item, issues, rowLabel);
 
   if (!hasNonEmptyValue(item.id)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Missing required row field "id".'));
+    issues.push(makeIssue("error", ISSUE.ROW_ID_MISSING, filePath, rowLabel, 'Missing required row field "id".'));
   }
 
   if (CENTER_COLUMN_PACKAGE_TYPES.has(packageType)) {
     for (const field of ["timelinePeriodId", "sectionId", "displayOrder", "accordionGroup"]) {
       if (!hasNonEmptyValue(item[field])) {
-        issues.push(makeIssue("error", filePath, rowLabel, `Missing required center-column field "${field}".`));
+        issues.push(makeIssue("error", ISSUE.CENTER_FIELD_MISSING, filePath, rowLabel, `Missing required center-column field "${field}".`, { path: field, recordId: item.id ?? rowLabel }));
       }
     }
   }
 
   if (requiresTitle(packageType) && !hasLocalizedField(item.title)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Missing required display field "title".'));
+    issues.push(makeIssue("error", ISSUE.TITLE_MISSING, filePath, rowLabel, 'Missing required display field "title".', { path: "title", recordId: item.id ?? rowLabel }));
   }
 
   if (SCRIPTURE_ROW_PACKAGE_TYPES.has(packageType) && !hasNonEmptyArray(item.scriptureAnchors)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Missing required "scriptureAnchors" array on a Scripture-based row.'));
+    issues.push(makeIssue("error", ISSUE.SCRIPTURE_ANCHORS_MISSING, filePath, rowLabel, 'Missing required "scriptureAnchors" array on a Scripture-based row.', { path: "scriptureAnchors", recordId: item.id ?? rowLabel }));
   }
 
   if (packageType === "timeline.cross-links") {
@@ -270,9 +314,7 @@ function validateRow(filePath, packageType, packageStatus, item, rowLabel, regis
     validateSupportingReferenceRow(filePath, item, rowLabel, issues);
   }
 
-  const strictCanonicalBookValidation =
-    packageType === "timeline.books" &&
-    (packageStatus === "canonical-skeleton" || path.basename(filePath) === "books.66-canonical-skeleton.json");
+  const strictCanonicalBookValidation = isCanonicalBooksPackage(data, filePath);
 
   if (strictCanonicalBookValidation && isCanonicalBookRow(item)) {
     validateCanonicalBookRow(filePath, item, rowLabel, issues);
@@ -284,21 +326,21 @@ function validateRow(filePath, packageType, packageStatus, item, rowLabel, regis
 function validateCrossLinkRow(filePath, item, rowLabel, registry, issues) {
   for (const field of ["fromType", "fromId", "toType", "toId", "relationLabel", "basisLabel", "confidenceLabel"]) {
     if (!hasNonEmptyValue(item[field])) {
-      issues.push(makeIssue("error", filePath, rowLabel, `Missing required cross-link field "${field}".`));
+      issues.push(makeIssue("error", ISSUE.CROSS_LINK_FIELD_MISSING, filePath, rowLabel, `Missing required cross-link field "${field}".`, { path: field, recordId: item.id ?? rowLabel }));
     }
   }
 
   if (hasNonEmptyValue(item.fromId) && !registry.has(item.fromId)) {
-    issues.push(makeIssue("error", filePath, rowLabel, `Cross-link fromId "${item.fromId}" does not resolve.`));
+    issues.push(makeIssue("error", ISSUE.CROSS_LINK_FROM_UNRESOLVED, filePath, rowLabel, `Cross-link fromId "${item.fromId}" does not resolve.`, { path: "fromId", recordId: item.id ?? rowLabel, relatedId: item.fromId }));
   }
   if (hasNonEmptyValue(item.toId) && !registry.has(item.toId)) {
-    issues.push(makeIssue("error", filePath, rowLabel, `Cross-link toId "${item.toId}" does not resolve.`));
+    issues.push(makeIssue("error", ISSUE.CROSS_LINK_TO_UNRESOLVED, filePath, rowLabel, `Cross-link toId "${item.toId}" does not resolve.`, { path: "toId", recordId: item.id ?? rowLabel, relatedId: item.toId }));
   }
 }
 
 function validateSupportingReferenceRow(filePath, item, rowLabel, issues) {
   if (!hasLocalizedField(item.referenceTypeLabel)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Missing required supporting-reference field "referenceTypeLabel".'));
+    issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_FIELD_MISSING, filePath, rowLabel, 'Missing required supporting-reference field "referenceTypeLabel".', { path: "referenceTypeLabel", recordId: item.id ?? rowLabel }));
   }
 
   const referenceLabelText = flattenText(item.referenceTypeLabel).toLowerCase();
@@ -312,30 +354,30 @@ function validateSupportingReferenceRow(filePath, item, rowLabel, issues) {
   const reviewRequired = containsAny(`${sourceBasisText} ${confidenceText} ${cautionText}`, ["review required", "source review required", "검토 필요", "출처 검토 필요"]);
 
   if (item.isSupportingReference !== true) {
-    issues.push(makeIssue("error", filePath, rowLabel, "Supporting reference rows must set isSupportingReference to true."));
+    issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_FLAG_MISSING, filePath, rowLabel, "Supporting reference rows must set isSupportingReference to true.", { path: "isSupportingReference", recordId: item.id ?? rowLabel }));
   }
 
   if (interpretationBreach) {
-    issues.push(makeIssue("error", filePath, rowLabel, "Supporting reference row is improperly presented as interpretive authority."));
+    issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_AUTHORITY_BREACH, filePath, rowLabel, "Supporting reference row is improperly presented as interpretive authority.", { path: "referenceTypeLabel", recordId: item.id ?? rowLabel }));
   }
 
   if (referenceOnly && !nonInterpretive) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Supporting reference row is missing a "not a basis for biblical interpretation" caution.'));
+    issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_INTERPRETATION_LABEL_MISSING, filePath, rowLabel, 'Supporting reference row is missing a "not a basis for biblical interpretation" caution.', { path: "cautionNote", recordId: item.id ?? rowLabel }));
   }
 
   if (!hasLocalizedField(item.confidenceLabel)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Missing required supporting-reference field "confidenceLabel".'));
+    issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_FIELD_MISSING, filePath, rowLabel, 'Missing required supporting-reference field "confidenceLabel".', { path: "confidenceLabel", recordId: item.id ?? rowLabel }));
   }
 
   if (!hasLocalizedField(item.cautionNote)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Missing required supporting-reference field "cautionNote".'));
+    issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_FIELD_MISSING, filePath, rowLabel, 'Missing required supporting-reference field "cautionNote".', { path: "cautionNote", recordId: item.id ?? rowLabel }));
   }
 
   if (isKoreanReference && !hasLocalizedField(item.sourceBasisLabel)) {
     if (reviewRequired) {
-      issues.push(makeIssue("warning", filePath, rowLabel, "Korean supporting reference requires explicit source-basis review."));
+      issues.push(makeIssue("warning", ISSUE.SUPPORTING_REFERENCE_SOURCE_REVIEW_WARNING, filePath, rowLabel, "Korean supporting reference requires explicit source-basis review.", { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
     } else {
-      issues.push(makeIssue("error", filePath, rowLabel, 'Korean supporting reference is missing "sourceBasisLabel".'));
+      issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_FIELD_MISSING, filePath, rowLabel, 'Korean supporting reference is missing "sourceBasisLabel".', { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
     }
   }
 }
@@ -355,72 +397,104 @@ function validateCanonicalBookRow(filePath, item, rowLabel, issues) {
     "dateConfidenceLabel",
   ]) {
     if (!hasNonEmptyValue(item[field])) {
-      issues.push(makeIssue("error", filePath, rowLabel, `Missing required canonical-book field "${field}".`));
+      issues.push(makeIssue("error", ISSUE.BOOKS_FIELD_MISSING, filePath, rowLabel, `Missing required canonical-book field "${field}".`, { path: field, recordId: item.id ?? rowLabel, bookId: item.bookId, order: item.canonicalOrder }));
     }
   }
 
   if (!hasLocalizedField(item.title)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Canonical book row is missing "title.ko" or "title.en".'));
+    issues.push(makeIssue("error", ISSUE.BOOKS_TITLE_MISSING, filePath, rowLabel, 'Canonical book row is missing "title.ko" or "title.en".', { path: "title", recordId: item.id ?? rowLabel, bookId: item.bookId, order: item.canonicalOrder }));
+  }
+
+  if (!hasLocalizedField(item.canonicalTitle)) {
+    issues.push(makeIssue("warning", ISSUE.BOOKS_CANONICAL_TITLE_WARNING, filePath, rowLabel, 'Canonical book row is missing optional "canonicalTitle.ko" or "canonicalTitle.en".', { path: "canonicalTitle", recordId: item.id ?? rowLabel, bookId: item.bookId, order: item.canonicalOrder }));
   }
 
   if (!hasNonEmptyArray(item.scriptureAnchors)) {
-    issues.push(makeIssue("error", filePath, rowLabel, 'Canonical book row is missing non-empty "scriptureAnchors".'));
+    issues.push(makeIssue("error", ISSUE.BOOKS_SCRIPTURE_ANCHORS_MISSING, filePath, rowLabel, 'Canonical book row is missing non-empty "scriptureAnchors".', { path: "scriptureAnchors", recordId: item.id ?? rowLabel, bookId: item.bookId, order: item.canonicalOrder }));
   }
 
   if (item.testament && !["OT", "NT"].includes(item.testament)) {
-    issues.push(makeIssue("error", filePath, rowLabel, `Invalid testament "${item.testament}". Expected OT or NT.`));
+    issues.push(makeIssue("error", ISSUE.BOOKS_TESTAMENT_INVALID, filePath, rowLabel, `Invalid testament "${item.testament}". Expected OT or NT.`, { path: "testament", recordId: item.id ?? rowLabel, bookId: item.bookId, order: item.canonicalOrder }));
   }
 
   if (item.canonicalSection && !CANONICAL_SECTIONS.has(item.canonicalSection)) {
-    issues.push(makeIssue("error", filePath, rowLabel, `Invalid canonicalSection "${item.canonicalSection}".`));
+    issues.push(makeIssue("error", ISSUE.BOOKS_FIELD_MISSING, filePath, rowLabel, `Invalid canonicalSection "${item.canonicalSection}".`, { path: "canonicalSection", recordId: item.id ?? rowLabel, bookId: item.bookId, order: item.canonicalOrder }));
   }
 }
 
-function validateCanonicalBooks(filePath, items, issues) {
+function validateCanonicalBooks(filePath, data, items, issues) {
+  const packageIdentifier = data.packageId ?? path.basename(filePath);
+
   if (items.length !== 66) {
-    issues.push(makeIssue("error", filePath, null, `Canonical books package must contain 66 rows; found ${items.length}.`));
+    issues.push(makeIssue("error", ISSUE.BOOKS_COUNT_MISMATCH, filePath, null, `Canonical books package must contain exactly 66 rows; expected 66 and found ${items.length}.`, { packageId: packageIdentifier, expected: 66, actual: items.length }));
   }
 
   const bookIds = new Map();
   const canonicalOrders = new Map();
+  const testamentCounts = new Map([
+    ["OT", 0],
+    ["NT", 0],
+  ]);
 
   for (const item of items) {
     const rowLabel = item?.id ?? "unknown-book-row";
-    if (!hasNonEmptyValue(item?.bookId)) {
-      issues.push(makeIssue("error", filePath, rowLabel, 'Canonical books row is missing "bookId".'));
+    if (item?.bookId === undefined || item?.bookId === null) {
+      issues.push(makeIssue("error", ISSUE.BOOKS_BOOK_ID_MISSING, filePath, rowLabel, 'Canonical books row is missing "bookId".', { path: "bookId", recordId: rowLabel, order: item?.canonicalOrder }));
+    } else if (typeof item.bookId !== "string" || item.bookId.trim().length === 0) {
+      issues.push(makeIssue("error", ISSUE.BOOKS_BOOK_ID_EMPTY, filePath, rowLabel, 'Canonical books row must use a non-empty string "bookId".', { path: "bookId", recordId: rowLabel, order: item?.canonicalOrder }));
     } else {
       bookIds.set(item.bookId, (bookIds.get(item.bookId) ?? 0) + 1);
     }
 
-    if (typeof item?.canonicalOrder !== "number") {
-      issues.push(makeIssue("error", filePath, rowLabel, 'Canonical books row is missing numeric "canonicalOrder".'));
+    if (item?.canonicalOrder === undefined || item?.canonicalOrder === null) {
+      issues.push(makeIssue("error", ISSUE.BOOKS_ORDER_MISSING, filePath, rowLabel, 'Canonical books row is missing "canonicalOrder".', { path: "canonicalOrder", recordId: rowLabel, bookId: item?.bookId }));
+    } else if (!Number.isInteger(item.canonicalOrder)) {
+      issues.push(makeIssue("error", ISSUE.BOOKS_ORDER_NON_INTEGER, filePath, rowLabel, `Canonical books row must use an integer canonicalOrder; received "${item.canonicalOrder}".`, { path: "canonicalOrder", recordId: rowLabel, bookId: item?.bookId, order: item?.canonicalOrder }));
+    } else if (item.canonicalOrder < 1 || item.canonicalOrder > 66) {
+      issues.push(makeIssue("error", ISSUE.BOOKS_ORDER_OUT_OF_RANGE, filePath, rowLabel, `Canonical books row canonicalOrder must be within 1..66; received "${item.canonicalOrder}".`, { path: "canonicalOrder", recordId: rowLabel, bookId: item?.bookId, order: item?.canonicalOrder }));
     } else {
       canonicalOrders.set(item.canonicalOrder, (canonicalOrders.get(item.canonicalOrder) ?? 0) + 1);
     }
 
     if (item?.isSkeleton !== true) {
-      issues.push(makeIssue("error", filePath, rowLabel, 'Canonical books skeleton row must set "isSkeleton" to true.'));
+      issues.push(makeIssue("error", ISSUE.BOOKS_SKELETON_FLAG_INVALID, filePath, rowLabel, 'Canonical books skeleton row must set "isSkeleton" to true.', { path: "isSkeleton", recordId: rowLabel, bookId: item?.bookId, order: item?.canonicalOrder }));
+    }
+
+    if (item?.testament === "OT" || item?.testament === "NT") {
+      testamentCounts.set(item.testament, (testamentCounts.get(item.testament) ?? 0) + 1);
     }
   }
 
   for (const [bookId, count] of bookIds.entries()) {
     if (count > 1) {
-      issues.push(makeIssue("error", filePath, bookId, `Duplicate canonical bookId "${bookId}" (${count} occurrences).`));
+      issues.push(makeIssue("error", ISSUE.BOOKS_BOOK_ID_DUPLICATE, filePath, bookId, `Duplicate canonical bookId "${bookId}" (${count} occurrences).`, { path: "bookId", bookId, occurrences: count }));
     }
   }
 
   for (const [order, count] of canonicalOrders.entries()) {
     if (count > 1) {
-      issues.push(makeIssue("error", filePath, `canonicalOrder:${order}`, `Duplicate canonicalOrder "${order}" (${count} occurrences).`));
+      issues.push(makeIssue("error", ISSUE.BOOKS_ORDER_DUPLICATE, filePath, `canonicalOrder:${order}`, `Duplicate canonicalOrder "${order}" (${count} occurrences).`, { path: "canonicalOrder", order, occurrences: count }));
     }
   }
 
-  if (items.length === 66) {
-    for (let order = 1; order <= 66; order += 1) {
-      if (!canonicalOrders.has(order)) {
-        issues.push(makeIssue("error", filePath, null, `Missing canonicalOrder "${order}" in canonical books package.`));
-      }
+  const missingOrders = [];
+  for (let order = 1; order <= 66; order += 1) {
+    if (!canonicalOrders.has(order)) {
+      missingOrders.push(order);
     }
+  }
+  if (missingOrders.length > 0) {
+    issues.push(makeIssue("error", ISSUE.BOOKS_ORDER_GAP, filePath, null, `Canonical books package must cover canonicalOrder 1..66 without gaps; missing ${missingOrders.join(", ")}.`, { path: "canonicalOrder", missingOrders }));
+  }
+
+  if (testamentCounts.get("OT") !== 39 || testamentCounts.get("NT") !== 27) {
+    issues.push(makeIssue("error", ISSUE.BOOKS_TESTAMENT_COUNT_MISMATCH, filePath, null, `Canonical books package must contain OT=39 and NT=27; found OT=${testamentCounts.get("OT")} and NT=${testamentCounts.get("NT")}.`, {
+      path: "testament",
+      expectedOT: 39,
+      actualOT: testamentCounts.get("OT"),
+      expectedNT: 27,
+      actualNT: testamentCounts.get("NT"),
+    }));
   }
 }
 
@@ -431,28 +505,28 @@ function validateWarnings(filePath, packageType, item, rowLabel, issues) {
   const sourceBasisText = flattenText(item.sourceBasisLabel).toLowerCase();
 
   if (containsAny(dateText, ["approximate", "대략", "approx"]) && !containsAny(`${cautionText} ${confidenceText} ${sourceBasisText}`, ["review required", "검토 필요", "source review required", "출처 검토 필요"])) {
-    issues.push(makeIssue("warning", filePath, rowLabel, "Approximate date is present without an explicit review flag."));
+    issues.push(makeIssue("warning", ISSUE.WARNING_APPROXIMATE_DATE, filePath, rowLabel, "Approximate date is present without an explicit review flag.", { recordId: item.id ?? rowLabel }));
   }
 
   if (containsAny(dateText, ["uncertain", "불확실"]) && !containsAny(`${cautionText} ${confidenceText}`, ["review required", "검토 필요", "uncertain", "불확실"])) {
-    issues.push(makeIssue("warning", filePath, rowLabel, "Chronology uncertainty should carry a clearer review flag."));
+    issues.push(makeIssue("warning", ISSUE.WARNING_CHRONOLOGY_REVIEW, filePath, rowLabel, "Chronology uncertainty should carry a clearer review flag.", { recordId: item.id ?? rowLabel }));
   }
 
   if (packageType === "timeline.sections" && !hasLocalizedField(item.title) && !hasLocalizedField(item.sectionTitle)) {
-    issues.push(makeIssue("warning", filePath, rowLabel, "Section row is missing an optional display label."));
+    issues.push(makeIssue("warning", ISSUE.WARNING_OPTIONAL_DISPLAY_LABEL, filePath, rowLabel, "Section row is missing an optional display label.", { recordId: item.id ?? rowLabel }));
   }
 
   if ((packageType === "timeline.references" || item.isSupportingReference === true) && !hasLocalizedField(item.sourceBasisLabel)) {
     const reviewText = `${confidenceText} ${cautionText}`.toLowerCase();
     if (containsAny(reviewText, ["review required", "검토 필요"])) {
-      issues.push(makeIssue("warning", filePath, rowLabel, "Supporting reference should add explicit sourceBasisLabel after review."));
+      issues.push(makeIssue("warning", ISSUE.SUPPORTING_REFERENCE_SOURCE_REVIEW_WARNING, filePath, rowLabel, "Supporting reference should add explicit sourceBasisLabel after review.", { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
     }
   }
 
   if (packageType === "timeline.cross-links") {
     const crossLinkReviewText = `${flattenText(item.basisLabel)} ${flattenText(item.confidenceLabel)}`.toLowerCase();
     if (containsAny(crossLinkReviewText, ["low", "낮음", "review required", "검토 필요"])) {
-      issues.push(makeIssue("warning", filePath, rowLabel, "Cross-link is explicitly low-confidence and should be reviewed."));
+      issues.push(makeIssue("warning", ISSUE.WARNING_LOW_CONFIDENCE_CROSS_LINK, filePath, rowLabel, "Cross-link is explicitly low-confidence and should be reviewed.", { recordId: item.id ?? rowLabel }));
     }
   }
 }
@@ -473,13 +547,30 @@ function validateGuardrails(filePath, value, issues, rowLabel = null, seen = new
 
   for (const [key, nestedValue] of Object.entries(value)) {
     if (BANNED_BIBLE_TEXT_FIELDS.has(key)) {
-      issues.push(makeIssue("error", filePath, rowLabel, `Forbidden Bible-text field "${key}" is present.`));
+      issues.push(makeIssue("error", ISSUE.BANNED_BIBLE_TEXT_FIELD, filePath, rowLabel, `Forbidden Bible-text field "${key}" is present.`, { path: key, recordId: rowLabel }));
     }
     if (BANNED_COORDINATE_FIELDS.has(key)) {
-      issues.push(makeIssue("error", filePath, rowLabel, `Forbidden no-coordinate field "${key}" is present.`));
+      issues.push(makeIssue("error", ISSUE.BANNED_COORDINATE_FIELD, filePath, rowLabel, `Forbidden no-coordinate field "${key}" is present.`, { path: key, recordId: rowLabel }));
     }
     validateGuardrails(filePath, nestedValue, issues, rowLabel, seen);
   }
+}
+
+function isCanonicalBooksPackage(data, filePath) {
+  if (data?.packageType !== "timeline.books") {
+    return false;
+  }
+
+  const basename = path.basename(filePath);
+  const packageId = typeof data?.packageId === "string" ? data.packageId : "";
+  const status = typeof data?.status === "string" ? data.status : "";
+
+  return (
+    basename === "books.66-canonical-skeleton.json" ||
+    packageId === "timeline.books.66-canonical-skeleton" ||
+    packageId === "timeline.books.66-canonical-fixture" ||
+    status === "canonical-skeleton"
+  );
 }
 
 function requiresTitle(packageType) {
@@ -524,12 +615,16 @@ function containsAny(text, needles) {
   return needles.some((needle) => text.includes(needle));
 }
 
-function makeIssue(severity, filePath, rowId, message) {
+function makeIssue(level, code, filePath, rowId, message, details = {}) {
   return {
-    severity,
+    level,
+    severity: level,
+    code,
     filePath,
+    file: path.relative(process.cwd(), filePath),
     rowId,
     message,
+    ...details,
   };
 }
 
@@ -543,9 +638,9 @@ function summarizeIssues(targetFiles, issues) {
   return {
     targetCount: targetFiles.length,
     targets: targetFiles,
-    errorCount: sortedIssues.filter((issue) => issue.severity === "error").length,
-    warningCount: sortedIssues.filter((issue) => issue.severity === "warning").length,
-    fatalCount: sortedIssues.filter((issue) => issue.severity === "fatal").length,
+    errorCount: sortedIssues.filter((issue) => issue.level === "error").length,
+    warningCount: sortedIssues.filter((issue) => issue.level === "warning").length,
+    fatalCount: sortedIssues.filter((issue) => issue.level === "fatal").length,
     issues: sortedIssues,
   };
 }
@@ -564,8 +659,12 @@ function printSummary(summary) {
   }
   console.log("");
   for (const issue of summary.issues) {
-    const rowSuffix = issue.rowId ? ` [${issue.rowId}]` : "";
-    console.log(`${issue.severity.toUpperCase()} ${path.relative(process.cwd(), issue.filePath)}${rowSuffix}: ${issue.message}`);
+    const rowBits = [];
+    if (issue.rowId) rowBits.push(issue.rowId);
+    if (issue.bookId) rowBits.push(`bookId=${issue.bookId}`);
+    if (issue.order !== undefined) rowBits.push(`order=${issue.order}`);
+    const rowSuffix = rowBits.length > 0 ? ` [${rowBits.join(", ")}]` : "";
+    console.log(`${issue.level.toUpperCase()} ${issue.code} ${path.relative(process.cwd(), issue.filePath)}${rowSuffix}: ${issue.message}`);
   }
 }
 

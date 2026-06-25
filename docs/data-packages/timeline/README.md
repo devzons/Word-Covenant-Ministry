@@ -20,7 +20,8 @@ Rules:
 - The 66-book skeleton is not imported into the frontend yet.
 - Skeleton rows are not complete book introductions, and no book should be treated as complete yet.
 - A verifier design now exists in `verifier.md` and `docs/ROADMAP/TIMELINE_PACKAGE_VERIFIER_DESIGN.md`.
-- The verifier is not implemented yet.
+- A minimal read-only verifier CLI now exists at `scripts/timeline/verify-timeline-package.mjs`.
+- The verifier currently covers JSON/package checks, 66-book canonical validation, cross-link resolution, and package guardrails.
 - Center-column package display must support top-down chronological accordion sections.
 - Scripture anchors are primary.
 - Dates, geography, world history, Korean history, tradition, and authorship labels are supporting layers.

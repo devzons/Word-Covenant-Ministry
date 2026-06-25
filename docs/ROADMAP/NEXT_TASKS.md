@@ -30,6 +30,8 @@ CR-93E-2 Verifier Test Fixtures is complete. `docs/data-packages/timeline/fixtur
 
 CR-93E-3 Minimal Verifier Implementation is complete. `scripts/timeline/verify-timeline-package.mjs` now provides a read-only CLI for single-file and directory verification with readable-summary and `--json` output modes. Current checks cover JSON parse, package envelope fields, duplicate IDs, center-column required fields, cross-link resolution, 66-book skeleton validation, Bible-text guardrails, no-coordinate guardrails, supporting-reference authority guardrails, and warning-only review flags. No frontend code, API, DB, schema, import, runtime integration, or real biblical data expansion was added.
 
+CR-93E-4 66-Book Validation is complete. The verifier now hardens canonical 66-book package detection, exact row-count checks, non-empty unique `bookId` checks, canonical order integer/range/duplicate/gap checks, and OT/NT distribution checks. Additional invalid fixtures now cover 65-row, duplicate-order, out-of-range-order, and wrong-testament-count cases. No frontend code, runtime integration, API, DB, schema, import, or real biblical data expansion was added.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
@@ -42,10 +44,10 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93E-4 66-Book Validation.
-2. CR-93E-5 Cross-Link and No-Coordinate Guardrail Expansion.
-3. CR-93C Core Biblical Event Skeleton.
-4. CR-93D-2 66-Book Frontend Preview Integration.
+1. CR-93E-5 Cross-Link and No-Coordinate Guardrail Expansion.
+2. CR-93C Core Biblical Event Skeleton.
+3. CR-93D-2 66-Book Frontend Preview Integration.
+4. CR-91C Context Inspector Deep Links.
 5. CR-91C Context Inspector Deep Links.
 6. CR-91D Schematic Flow Highlights.
 7. CR-92C Korean History Pilot Rows after source review.
