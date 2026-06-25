@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.invalid-exact-chronology-fixture",
+  "packageType": "timeline.kings-kingdoms",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Exact-looking chronology without a review flag should become a Kings / Kingdoms verifier failure in CR-93G-4.",
+    "Current generic verifier is expected to pass this file until kings-specific chronology hardening is implemented."
+  ],
+  "items": [
+    {
+      "id": "fixture-kings-exact-chronology-pending",
+      "recordType": "king",
+      "title": {
+        "ko": "정확 연대 pending fixture",
+        "en": "Exact chronology pending fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "fixture-kings-pending",
+      "accordionGroup": "fixture-kings",
+      "kingdomId": "fixture-kings-judah-pending",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "reference": "2 Kings 22-23",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "2-chronicles"],
+      "confidence": "high",
+      "reviewRequired": false,
+      "approximateDateLabel": {
+        "ko": "기원전 640-609년",
+        "en": "640-609 BCE"
+      },
+      "basisLabel": {
+        "ko": "정확 연대처럼 보이는 fixture",
+        "en": "Exact-looking chronology fixture"
+      },
+      "confidenceLabel": {
+        "ko": "높음",
+        "en": "High"
+      },
+      "cautionNote": {
+        "ko": "CR-93G-4에서 chronology rule을 기대하는 pending fixture입니다.",
+        "en": "Pending fixture for chronology-rule hardening in CR-93G-4."
+      }
+    }
+  ]
+}

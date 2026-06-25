@@ -53,6 +53,10 @@ Expected result:
   - Valid world/Korean supporting reference sample with non-interpretive labels
 - `valid/books-66-reference.valid.sample.json`
   - Reference fixture that points to `../books.66-canonical-skeleton.json` as the canonical 66-book validation target
+- `valid/kings-kingdoms-minimal.valid.sample.json`
+  - Minimal Kings / Kingdoms package sample using the current verifier-compatible `items` envelope
+- `valid/kings-kingdoms-links.valid.sample.json`
+  - Valid Kings / Kingdoms-related cross-link sample using resolvable existing package IDs
 
 ### Invalid
 
@@ -94,6 +98,16 @@ Expected result:
   - Forbidden map provider value present inside nested objects or arrays
 - `invalid/reference-authority-breach.invalid.sample.json`
   - Supporting reference row improperly presented as interpretive authority
+- `invalid/kings-kingdoms-broken-kingdom-id.invalid.sample.json`
+  - Broken kingdom target ID via a Kings / Kingdoms cross-link sample
+- `invalid/kings-kingdoms-broken-predecessor.invalid.sample.json`
+  - Proxy broken predecessor target for future Kings / Kingdoms hardening
+- `invalid/kings-kingdoms-bible-text.invalid.sample.json`
+  - Forbidden Bible-text-like field inside a Kings / Kingdoms sample
+- `invalid/kings-kingdoms-coordinates.invalid.sample.json`
+  - Forbidden coordinate field inside a Kings / Kingdoms sample
+- `invalid/kings-kingdoms-exact-chronology-without-review.invalid.sample.json`
+  - Pending CR-93G-4 exact-chronology failure target; current generic verifier does not fail it yet
 
 ### Warnings
 
@@ -111,3 +125,41 @@ Expected result:
   - Cross-link omits explicit target type and should warn for review
 - `warnings/supporting-reference-placeholder-review.warning.sample.json`
   - Supporting reference placeholder remains secondary but still needs source review
+- `warnings/kings-kingdoms-approximate-date-review.warning.sample.json`
+  - Approximate Kings / Kingdoms chronology label without stronger review wording
+- `warnings/kings-kingdoms-low-confidence-synchronism.warning.sample.json`
+  - Low-confidence Kings / Kingdoms synchronism proxy that should warn
+- `warnings/kings-kingdoms-missing-reign-label.warning.sample.json`
+  - Pending CR-93G-4 optional `reignLabel` warning target; current generic verifier does not warn yet
+
+## Kings / Kingdoms Fixture Notes
+
+Kings / Kingdoms fixtures anchor two separate layers:
+
+- current generic verifier coverage
+- future `timeline.kings-kingdoms`-specific hardening
+
+Current verifier can immediately enforce:
+
+- JSON syntax
+- package envelope shape
+- duplicate IDs
+- forbidden Bible-text-like fields
+- forbidden coordinate or map-provider fields
+- generic cross-link target resolution where explicit `timeline.cross-links` rows are used
+
+Pending `CR-93G-4` hardening targets:
+
+- `kingdomId` resolution inside `timeline.kings-kingdoms` rows
+- `predecessorId` / `successorId` resolution inside king rows
+- `previousStateId` / `nextStateId` resolution inside transition rows
+- exact chronology without review gating
+- low-confidence synchronism policy beyond cross-link proxies
+- optional `reignLabel` warning behavior
+
+Guardrails remain unchanged:
+
+- no Bible text
+- no coordinates
+- no map-provider fields
+- no exact chronology claims as settled package truth

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.invalid-bible-text-fixture",
+  "packageType": "timeline.kings-kingdoms",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Forbidden Bible-text-like field present."
+  ],
+  "items": [
+    {
+      "id": "fixture-kings-bible-text-invalid",
+      "recordType": "king",
+      "title": {
+        "ko": "금지 본문 field fixture",
+        "en": "Forbidden text-field fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "fixture-kings-invalid",
+      "accordionGroup": "fixture-kings",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "reference": "1 Samuel 9-10",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "bibleText": "FORBIDDEN_FIXTURE_TEXT"
+    }
+  ]
+}

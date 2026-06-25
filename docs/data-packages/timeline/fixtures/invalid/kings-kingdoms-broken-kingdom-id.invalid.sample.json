@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.invalid-broken-kingdom-id-fixture",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Broken kingdom target reference for Kings / Kingdoms integration."
+  ],
+  "items": [
+    {
+      "id": "kings-cross-link-broken-kingdom-id",
+      "fromType": "king",
+      "fromId": "king-saul-skeleton",
+      "toType": "kingdom",
+      "toId": "missing-kingdom-row",
+      "relationLabel": {
+        "ko": "왕국 소속",
+        "en": "Belongs to kingdom"
+      },
+      "basisLabel": {
+        "ko": "깨진 검증용 연결",
+        "en": "Broken verifier link"
+      },
+      "confidenceLabel": {
+        "ko": "중간",
+        "en": "Medium"
+      }
+    }
+  ]
+}

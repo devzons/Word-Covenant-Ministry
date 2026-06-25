@@ -1,0 +1,187 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.valid-minimal-fixture",
+  "packageType": "timeline.kings-kingdoms",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Minimal valid Kings / Kingdoms package sample using the current verifier-compatible items envelope."
+  ],
+  "items": [
+    {
+      "id": "fixture-kings-period-united-monarchy",
+      "recordType": "kingdomPeriod",
+      "title": {
+        "ko": "통일 왕국 fixture",
+        "en": "United Monarchy fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "fixture-kings-united-monarchy",
+      "accordionGroup": "fixture-kings",
+      "periodType": "kingdomPeriod",
+      "scope": {
+        "ko": "검증용 최소 왕국 구간",
+        "en": "Minimal kingdom-period sample for verification"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 8-10장",
+            "en": "1 Samuel 8-10"
+          },
+          "reference": "1 Samuel 8-10",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel", "2-samuel", "1-kings"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / fixture",
+        "en": "Scripture reference / fixture"
+      },
+      "confidenceLabel": {
+        "ko": "검증용 중간 신뢰도",
+        "en": "Medium confidence for verification"
+      },
+      "cautionNote": {
+        "ko": "실제 연표 데이터가 아닌 synthetic fixture입니다.",
+        "en": "This is a synthetic fixture, not production timeline data."
+      }
+    },
+    {
+      "id": "fixture-kings-united-israel",
+      "recordType": "kingdom",
+      "title": {
+        "ko": "통일 이스라엘 fixture",
+        "en": "United Israel fixture"
+      },
+      "displayOrder": 2,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "fixture-kings-united-monarchy",
+      "accordionGroup": "fixture-kings",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 8-10장",
+            "en": "1 Samuel 8-10"
+          },
+          "reference": "1 Samuel 8-10",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel", "2-samuel", "1-kings"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / fixture",
+        "en": "Scripture reference / fixture"
+      },
+      "confidenceLabel": {
+        "ko": "검증용 중간 신뢰도",
+        "en": "Medium confidence for verification"
+      },
+      "cautionNote": {
+        "ko": "실제 왕국 분류 확정이 아닌 검증용 shape입니다.",
+        "en": "This is a shape fixture and not a final kingdom classification."
+      }
+    },
+    {
+      "id": "fixture-king-saul",
+      "recordType": "king",
+      "title": {
+        "ko": "사울 fixture",
+        "en": "Saul fixture"
+      },
+      "displayOrder": 3,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "fixture-kings-united-monarchy",
+      "accordionGroup": "fixture-kings",
+      "kingdomId": "fixture-kings-united-israel",
+      "kingdomName": {
+        "ko": "통일 이스라엘",
+        "en": "United Israel"
+      },
+      "reignLabel": {
+        "ko": "초기 왕정 대표 fixture",
+        "en": "Representative early monarchy fixture"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함",
+        "en": "Exact years not asserted"
+      },
+      "successorId": "fixture-transition-monarchy-begins",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 9-10장",
+            "en": "1 Samuel 9-10"
+          },
+          "reference": "1 Samuel 9-10",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel", "1-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / fixture",
+        "en": "Scripture reference / fixture"
+      },
+      "confidenceLabel": {
+        "ko": "검증용 중간 신뢰도",
+        "en": "Medium confidence for verification"
+      },
+      "cautionNote": {
+        "ko": "실제 완성형 왕 연대표가 아닌 fixture입니다.",
+        "en": "This fixture is not a complete royal chronology."
+      }
+    },
+    {
+      "id": "fixture-transition-monarchy-begins",
+      "recordType": "transition",
+      "title": {
+        "ko": "왕정 시작 fixture",
+        "en": "Monarchy begins fixture"
+      },
+      "displayOrder": 4,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "fixture-kings-united-monarchy",
+      "accordionGroup": "fixture-kings",
+      "previousStateId": "fixture-kings-period-united-monarchy",
+      "nextStateId": "fixture-kings-united-israel",
+      "relatedKingIds": ["fixture-king-saul"],
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 8-10장",
+            "en": "1 Samuel 8-10"
+          },
+          "reference": "1 Samuel 8-10",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / fixture",
+        "en": "Scripture reference / fixture"
+      },
+      "confidenceLabel": {
+        "ko": "검증용 중간 신뢰도",
+        "en": "Medium confidence for verification"
+      },
+      "cautionNote": {
+        "ko": "이 row는 구조 검증용 transition fixture입니다.",
+        "en": "This row is a structural transition fixture for verification."
+      }
+    }
+  ]
+}

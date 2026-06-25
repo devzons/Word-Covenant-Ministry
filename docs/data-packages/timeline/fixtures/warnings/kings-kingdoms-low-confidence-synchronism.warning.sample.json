@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.warning-low-confidence-synchronism-fixture",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Low-confidence synchronism proxy that should warn rather than fail."
+  ],
+  "items": [
+    {
+      "id": "kings-cross-link-low-confidence-synchronism-warning",
+      "fromType": "king",
+      "fromId": "king-hezekiah-skeleton",
+      "toType": "kingdom",
+      "toId": "kingdom-southern-judah-skeleton",
+      "relationLabel": {
+        "ko": "동시대 연결 proxy",
+        "en": "Synchronism proxy"
+      },
+      "basisLabel": {
+        "ko": "낮은 신뢰도 / 검토 필요",
+        "en": "Low confidence / review required"
+      },
+      "confidenceLabel": {
+        "ko": "낮음",
+        "en": "Low"
+      },
+      "cautionNote": {
+        "ko": "Kings synchronism warning fixture",
+        "en": "Kings synchronism warning fixture"
+      }
+    }
+  ]
+}

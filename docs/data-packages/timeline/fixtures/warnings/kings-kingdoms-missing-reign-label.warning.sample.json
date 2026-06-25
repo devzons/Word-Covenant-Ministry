@@ -1,0 +1,49 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.warning-missing-reign-label-fixture",
+  "packageType": "timeline.kings-kingdoms",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Missing reignLabel should become a Kings / Kingdoms warning target in CR-93G-4.",
+    "Current generic verifier is expected to pass this file without a dedicated warning."
+  ],
+  "items": [
+    {
+      "id": "fixture-kings-missing-reign-label-warning",
+      "recordType": "king",
+      "title": {
+        "ko": "reignLabel 누락 pending fixture",
+        "en": "Missing reignLabel pending fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "fixture-kings-warning",
+      "accordionGroup": "fixture-kings",
+      "kingdomId": "fixture-kings-warning-judah",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "reference": "2 Kings 22-23",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "2-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "optional reignLabel warning target",
+        "en": "Optional reignLabel warning target"
+      },
+      "confidenceLabel": {
+        "ko": "중간",
+        "en": "Medium"
+      },
+      "cautionNote": {
+        "ko": "CR-93G-4에서 optional reignLabel warning을 기대하는 fixture입니다.",
+        "en": "Pending fixture for optional reignLabel warning in CR-93G-4."
+      }
+    }
+  ]
+}

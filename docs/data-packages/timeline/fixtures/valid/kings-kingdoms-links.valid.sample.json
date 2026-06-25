@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.valid-links-fixture",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Valid Kings / Kingdoms-related cross-link sample using existing package row IDs."
+  ],
+  "items": [
+    {
+      "id": "kings-cross-link-valid-1",
+      "fromType": "king",
+      "fromId": "king-saul-skeleton",
+      "toType": "kingdom",
+      "toId": "kingdom-united-israel-skeleton",
+      "relationLabel": {
+        "ko": "왕국 소속",
+        "en": "Belongs to kingdom"
+      },
+      "basisLabel": {
+        "ko": "명시적 검증용 연결",
+        "en": "Explicit verifier link"
+      },
+      "confidenceLabel": {
+        "ko": "중간",
+        "en": "Medium"
+      },
+      "cautionNote": {
+        "ko": "검증용 synthetic link",
+        "en": "Synthetic verifier link"
+      }
+    }
+  ]
+}

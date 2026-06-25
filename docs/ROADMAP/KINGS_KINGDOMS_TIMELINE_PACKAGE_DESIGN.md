@@ -46,6 +46,12 @@ Suggested future package files:
 - `docs/data-packages/timeline/fixtures/invalid/kings-kingdoms-invalid-kingdom-id.invalid.sample.json`
 - `docs/data-packages/timeline/fixtures/warnings/kings-kingdoms-low-confidence-synchronism.warning.sample.json`
 
+Status note:
+
+- `CR-93G-2` added `docs/data-packages/timeline/kings-kingdoms.skeleton.json`.
+- `CR-93G-3` adds the initial Kings / Kingdoms verifier fixture set.
+- `CR-93G-4` remains the step for Kings-specific verifier hardening where current generic rules are still insufficient.
+
 Optional later split if needed:
 
 - `docs/data-packages/timeline/prophets.skeleton.json`

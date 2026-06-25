@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.invalid-coordinates-fixture",
+  "packageType": "timeline.kings-kingdoms",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Forbidden coordinate field present in a Kings / Kingdoms context object."
+  ],
+  "items": [
+    {
+      "id": "fixture-kings-coordinates-invalid",
+      "recordType": "kingdom",
+      "title": {
+        "ko": "금지 좌표 fixture",
+        "en": "Forbidden coordinate fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "fixture-kings-invalid",
+      "accordionGroup": "fixture-kings",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "reference": "1 Kings 12",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-kings"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "metadata": {
+        "coordinates": {
+          "lat": 0,
+          "lng": 0
+        }
+      }
+    }
+  ]
+}

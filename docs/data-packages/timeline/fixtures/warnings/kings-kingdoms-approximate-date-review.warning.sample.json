@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.warning-approximate-date-fixture",
+  "packageType": "timeline.kings-kingdoms",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Approximate chronology label without stronger review wording."
+  ],
+  "items": [
+    {
+      "id": "fixture-kings-approximate-date-warning",
+      "recordType": "king",
+      "title": {
+        "ko": "대략 연대 경고 fixture",
+        "en": "Approximate date warning fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "fixture-kings-warning",
+      "accordionGroup": "fixture-kings",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "reference": "2 Kings 18-20",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "isaiah"],
+      "confidence": "medium",
+      "reviewRequired": false,
+      "approximateDateLabel": {
+        "ko": "대략 후기 분열 왕국",
+        "en": "Approximate later divided-kingdom setting"
+      },
+      "basisLabel": {
+        "ko": "대략 추정",
+        "en": "Approximate estimate"
+      }
+    }
+  ]
+}

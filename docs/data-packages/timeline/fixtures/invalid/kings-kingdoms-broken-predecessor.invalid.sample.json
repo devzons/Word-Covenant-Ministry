@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "timeline.kings-kingdoms.invalid-broken-predecessor-fixture",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Proxy broken predecessor reference for Kings / Kingdoms rule hardening.",
+    "Current verifier catches the missing target ID generically; true predecessor/successor semantics remain pending CR-93G-4."
+  ],
+  "items": [
+    {
+      "id": "kings-cross-link-broken-predecessor",
+      "fromType": "king",
+      "fromId": "king-david-skeleton",
+      "toType": "person",
+      "toId": "missing-predecessor-king-row",
+      "relationLabel": {
+        "ko": "선행 왕 proxy",
+        "en": "Predecessor proxy"
+      },
+      "basisLabel": {
+        "ko": "깨진 검증용 predecessor proxy",
+        "en": "Broken predecessor proxy"
+      },
+      "confidenceLabel": {
+        "ko": "낮음",
+        "en": "Low"
+      }
+    }
+  ]
+}

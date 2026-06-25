@@ -32,6 +32,8 @@ CR-93G Kings / Kingdoms Timeline Package Design is complete as a docs-only desig
 
 CR-93G-2 Kings / Kingdoms Skeleton Package is complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now adds a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdoms, representative kings, transitions, exile markers, and a temple marker. The package remains frontend-unlinked, stores no Bible text, uses no coordinates or map-provider fields, and keeps chronology approximate and review-gated. Kings / Kingdoms verifier fixtures remain deferred to CR-93G-3, and verifier rule hardening remains deferred to CR-93G-4 if needed.
 
+CR-93G-3 Kings / Kingdoms Verifier Fixtures is complete as a docs/data-fixture step. Kings / Kingdoms valid, invalid, and warning fixture files now exist under `docs/data-packages/timeline/fixtures/` to anchor current generic verifier behavior and to document Kings-specific hardening targets for CR-93G-4. Immediate guardrails now cover Bible-text and coordinate/map-provider violations plus explicit broken cross-link targets. Kings-specific kingdomId, predecessor/successor, transition state, and exact chronology rules remain pending CR-93G-4.
+
 CR-93F Timeline Workspace Interaction QA is complete through available validation. The current package-backed Events and Books / Psalms previews, active-view-aware left navigator, and metadata-only right panel were checked through static validation, explicit code-path review, and attempted local route smoke. No required frontend fixes were identified in this pass. Bible text remains unrendered, no coordinates or map-provider fields were introduced, and no API, DB, backend, schema, or package-row changes were added.
 
 CR-91E Timeline Left Navigator Redesign is complete through available validation. The left sidebar is now active-view aware and works as a contextual Timeline Navigator instead of a shared filter surface across all views. Events filters remain functional and are clearly scoped to Events. Books / Psalms navigator now acknowledges and summarizes the active 66-book package preview. Places navigator now makes the schematic-map and no-coordinate boundary explicit. No data rows, API, DB, schema, import, or non-approved package integration were added. Korean history remains placeholder/reference only.
@@ -62,24 +64,23 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93G-3 Kings / Kingdoms Verifier Fixtures.
-2. CR-93G-4 Kings / Kingdoms Verifier Rule Hardening, if needed.
-3. CR-93G-5 Kings / Kingdoms Frontend Preview Integration.
-4. CR-93G-6 Kings / Kingdoms Interaction QA.
-5. CR-91C Context Inspector Deep Links.
-6. CR-91D Schematic Flow Highlights.
-7. CR-92C Korean History Pilot Rows after source review.
-8. CR-90Y-5 Genealogy Detail Refinement.
-9. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-10. CR-91 Place / Map Preview.
-11. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
-12. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
-13. After explicit approval, implement seed migration tracking and release automation support.
-14. Later: Strong detail pages or dedicated Word Study pages.
-15. Later: advanced search.
-16. Later: morphology explorer.
-17. Later: Commentary Layer.
-18. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+1. CR-93G-4 Kings / Kingdoms Verifier Rule Hardening, if needed.
+2. CR-93G-5 Kings / Kingdoms Frontend Preview Integration.
+3. CR-93G-6 Kings / Kingdoms Interaction QA.
+4. CR-91C Context Inspector Deep Links.
+5. CR-91D Schematic Flow Highlights.
+6. CR-92C Korean History Pilot Rows after source review.
+7. CR-90Y-5 Genealogy Detail Refinement.
+8. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+9. CR-91 Place / Map Preview.
+10. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+11. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
+12. After explicit approval, implement seed migration tracking and release automation support.
+13. Later: Strong detail pages or dedicated Word Study pages.
+14. Later: advanced search.
+15. Later: morphology explorer.
+16. Later: Commentary Layer.
+17. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 

@@ -59,6 +59,27 @@ Current wrapper coverage:
 - `fixtures/warnings` pass with `errorCount === 0` and `warningCount >= 1`
 - JSON smoke parse for `events.core-biblical-skeleton.json`
 
+Kings / Kingdoms fixture expectations:
+
+- `timeline.kings-kingdoms` fixtures currently use the implemented verifier envelope shape with `items`
+- valid fixtures should show minimal `kingdomPeriod`, `kingdom`, `king`, and `transition` samples with reference-only `scriptureAnchors`
+- invalid fixtures should immediately fail when they use banned Bible-text fields, banned coordinate/map-provider fields, or broken explicit cross-link IDs
+- warning fixtures should cover approximate chronology wording and low-confidence synchronism proxies without failing the overall package check
+
+Pending `CR-93G-4` Kings / Kingdoms verifier rules:
+
+- `kingdomId` resolution inside `timeline.kings-kingdoms` rows
+- `predecessorId` and `successorId` resolution inside king rows
+- `previousStateId` and `nextStateId` resolution inside transition rows
+- allowed kingdom scope or kingdom-name validation
+- exact chronology without review gating
+- low-confidence synchronism warning behavior beyond generic cross-link review
+- optional `reignLabel` warning behavior
+
+Current implementation note:
+
+- Kings / Kingdoms fixtures are now present, but several Kings-specific semantics remain documentation targets until `CR-93G-4` hardens the CLI.
+
 Current cross-link inventory:
 
 - `timeline.cross-links` rows currently use `fromType`, `fromId`, `toType`, `toId`
