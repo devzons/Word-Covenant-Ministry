@@ -39,6 +39,11 @@ type TimelineFilterBarProps = {
   activePlaceId: string;
   activeView: TimelineView;
   bookOptions: TimelineFilterOption[];
+  booksPreviewStats?: {
+    newTestamentCount: number;
+    oldTestamentCount: number;
+    totalCount: number;
+  };
   confidenceLabel: string;
   confidenceNote: string;
   labels: TimelineFilterLabels;
@@ -62,6 +67,7 @@ export function TimelineFilterBar({
   activePlaceId,
   activeView,
   bookOptions,
+  booksPreviewStats,
   confidenceLabel,
   confidenceNote,
   labels,
@@ -112,7 +118,7 @@ export function TimelineFilterBar({
         />
       ) : null}
 
-      {activeView === "books" ? <BooksNavigator locale={locale} /> : null}
+      {activeView === "books" ? <BooksNavigator locale={locale} stats={booksPreviewStats} /> : null}
       {activeView === "kingdoms" ? <KingdomsNavigator locale={locale} /> : null}
       {activeView === "genealogy" ? <GenealogyNavigator locale={locale} /> : null}
       {activeView === "places" ? <PlacesNavigator locale={locale} /> : null}
@@ -288,7 +294,17 @@ function EventsNavigator({
   );
 }
 
-function BooksNavigator({ locale }: { locale: TimelineLocale }) {
+function BooksNavigator({
+  locale,
+  stats,
+}: {
+  locale: TimelineLocale;
+  stats?: {
+    newTestamentCount: number;
+    oldTestamentCount: number;
+    totalCount: number;
+  };
+}) {
   const sections =
     locale === "ko"
       ? [
@@ -328,13 +344,15 @@ function BooksNavigator({ locale }: { locale: TimelineLocale }) {
 
       <NavigatorCard title={locale === "ko" ? "66권 전체 skeleton" : "66-book skeleton"}>
         <div className="flex flex-wrap gap-1.5">
-          <MetaBadge>{locale === "ko" ? "data package 준비됨" : "Package prepared"}</MetaBadge>
-          <MetaBadge>{locale === "ko" ? "frontend 연결 전" : "Frontend integration pending"}</MetaBadge>
+          <MetaBadge>{locale === "ko" ? "package 기반 preview" : "Package-backed preview"}</MetaBadge>
+          <MetaBadge>{locale === "ko" ? `구약 ${stats?.oldTestamentCount ?? 39}` : `OT ${stats?.oldTestamentCount ?? 39}`}</MetaBadge>
+          <MetaBadge>{locale === "ko" ? `신약 ${stats?.newTestamentCount ?? 27}` : `NT ${stats?.newTestamentCount ?? 27}`}</MetaBadge>
+          <MetaBadge>{locale === "ko" ? `총 ${stats?.totalCount ?? 66}권` : `${stats?.totalCount ?? 66} books`}</MetaBadge>
         </div>
         <p className="mt-3 text-sm leading-6 text-zinc-600">
           {locale === "ko"
-            ? "현재 runtime Books / Psalms 보기는 preview row를 사용합니다."
-            : "The current runtime Books / Psalms view still uses preview rows."}
+            ? "현재 Books / Psalms 보기는 66권 canonical skeleton package를 metadata-only preview로 표시합니다."
+            : "The current Books / Psalms view shows the 66-book canonical skeleton package as a metadata-only preview."}
         </p>
       </NavigatorCard>
 

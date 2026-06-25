@@ -276,6 +276,27 @@ function ScriptureAnchorList({ anchors, locale, openInReaderLabel, rowId }: Scri
   );
 }
 
+function ReferenceOnlyAnchorList({
+  anchors,
+  locale,
+}: {
+  anchors: PassionWeekTimelineEvent["scriptureAnchors"];
+  locale: TimelineLocale;
+}) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {anchors.map((anchor) => (
+        <span
+          className="inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700"
+          key={`${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+        >
+          {getTimelineText(anchor.label, locale)}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function getSelectionTypeLabel(selectionType: TimelineInspectorSelectionType | null, locale: TimelineLocale) {
   switch (selectionType) {
     case "book":
@@ -519,11 +540,40 @@ function renderBookEvidencePanel(
       </div>
 
       <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
+        {row.scriptureReferencesOnly ? (
+          <>
+            <ReferenceOnlyAnchorList anchors={row.scriptureAnchors} locale={locale} />
+            <SectionNote>
+              {locale === "ko"
+                ? "이 package는 성경 본문을 저장하지 않습니다. 책 수준 Scripture reference만 표시합니다."
+                : "This package does not store Bible text. It shows book-level Scripture references only."}
+            </SectionNote>
+          </>
+        ) : (
+          <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
+        )}
       </DetailSection>
 
       <DetailSection label={locale === "ko" ? "정경 위치" : "Canonical Location"}>
         <ContextRow label={locale === "ko" ? "정경 위치" : "Canonical location"} value={getTimelineText(row.canonicalLocation, locale)} />
+        {row.canonicalOrder ? (
+          <ContextRow
+            label={locale === "ko" ? "정경 순서" : "Canonical order"}
+            value={`${row.canonicalOrder}`}
+          />
+        ) : null}
+        {row.testament ? (
+          <ContextRow
+            label={locale === "ko" ? "구분" : "Testament"}
+            value={row.testament === "OT" ? (locale === "ko" ? "구약" : "Old Testament") : locale === "ko" ? "신약" : "New Testament"}
+          />
+        ) : null}
+        {row.canonicalSectionLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "정경 구간" : "Canonical section"}
+            value={getTimelineText(row.canonicalSectionLabel, locale)}
+          />
+        ) : null}
         {row.historicalSettingLabel ? (
           <ContextRow
             label={locale === "ko" ? "배경 연결" : "Background connection"}
@@ -616,6 +666,13 @@ function renderBookEvidencePanel(
 
       <DetailSection label={locale === "ko" ? "주의 / 메모" : "Caution / Note"}>
         <SectionNote>{getTimelineText(row.note, locale)}</SectionNote>
+        {row.sourcePackage === "canonical-66-skeleton" ? (
+          <SectionNote>
+            {locale === "ko"
+              ? "이 패널은 66권 canonical skeleton package의 metadata-only preview를 보여 줍니다."
+              : "This panel shows a metadata-only preview from the canonical 66-book skeleton package."}
+          </SectionNote>
+        ) : null}
         <SectionNote>{relatedStudy}</SectionNote>
       </DetailSection>
     </div>

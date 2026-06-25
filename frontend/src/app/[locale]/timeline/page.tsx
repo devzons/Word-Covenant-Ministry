@@ -1,7 +1,15 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 import { SiteShell } from "@/components/layout/SiteShell";
 import { siteConfig } from "@/config/site";
 
 import { TimelinePageShell } from "@/components/scripture/timeline/TimelinePageShell";
+import {
+  getCanonicalBookPreviewStats,
+  normalizeCanonicalBooksPackage,
+  type CanonicalBooksPackage,
+} from "@/components/scripture/timeline/timelineBooksPackage";
 
 type TimelinePageProps = {
   params: Promise<{
@@ -23,6 +31,9 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const activeLocale = getSupportedLocale(locale);
   const query = await searchParams;
   const initialView = parseTimelineView(query.view);
+  const canonicalBooksPackage = await loadCanonicalBooksPackage();
+  const canonicalBookRows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
+  const canonicalBookStats = getCanonicalBookPreviewStats(canonicalBookRows);
   const initialFilters = {
     bookId: parseFilterValue(query.book),
     periodId: parseFilterValue(query.period),
@@ -33,10 +44,13 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   return (
     <SiteShell locale={activeLocale}>
       <TimelinePageShell
+        canonicalBookRows={canonicalBookRows}
+        canonicalBookStats={canonicalBookStats}
         initialFilters={initialFilters}
         initialView={initialView}
         key={[
           activeLocale,
+          canonicalBookStats.totalCount,
           initialView,
           initialFilters.bookId,
           initialFilters.periodId,
@@ -75,4 +89,17 @@ function parseFilterValue(value: string | string[] | undefined): string {
   const parsed = parseQueryValue(value);
 
   return parsed !== "" ? parsed : "all";
+}
+
+async function loadCanonicalBooksPackage(): Promise<CanonicalBooksPackage> {
+  const packagePath = path.join(
+    process.cwd(),
+    "..",
+    "docs",
+    "data-packages",
+    "timeline",
+    "books.66-canonical-skeleton.json",
+  );
+  const raw = await readFile(packagePath, "utf8");
+  return JSON.parse(raw) as CanonicalBooksPackage;
 }

@@ -101,6 +101,13 @@ export type TimelineBookContextRow = {
   periodId: string;
   title: TimelineText;
   canonicalLocation: TimelineText;
+  canonicalOrder?: number;
+  testament?: "OT" | "NT";
+  canonicalSection?: string;
+  canonicalSectionLabel?: TimelineText;
+  sectionId?: string;
+  displayOrder?: number;
+  accordionGroup?: string;
   historicalSettingLabel?: TimelineText;
   authorshipLabel?: TimelineText;
   authorshipBasisLabel?: TimelineText;
@@ -115,6 +122,9 @@ export type TimelineBookContextRow = {
   dateBasisLabel?: TimelineText;
   dateConfidenceLabel?: TimelineText;
   note: TimelineText;
+  sourcePackage?: "preview-fixture" | "canonical-66-skeleton";
+  scriptureReferencesOnly?: boolean;
+  isSkeleton?: boolean;
 };
 
 export type TimelineGenealogySegment = {

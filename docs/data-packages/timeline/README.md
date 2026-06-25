@@ -18,8 +18,9 @@ Rules:
 - Real data rows may be added only in later approved phases.
 - The books package must eventually cover all 66 canonical books.
 - `books.66-canonical-skeleton.json` is the first canonical 66-book skeleton package.
-- The 66-book skeleton is not imported into the frontend yet.
+- The 66-book skeleton is now connected to the Timeline Books / Psalms view as a preview-only frontend read.
 - The core biblical event skeleton is not imported into the frontend yet.
+- The frontend preview remains metadata-only and does not render Bible text from package files.
 - Skeleton rows are not complete book introductions, and no book should be treated as complete yet.
 - Skeleton event rows are not a complete biblical timeline dataset and should not be treated as final chronology.
 - A verifier design now exists in `verifier.md` and `docs/ROADMAP/TIMELINE_PACKAGE_VERIFIER_DESIGN.md`.

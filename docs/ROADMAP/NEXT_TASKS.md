@@ -20,9 +20,11 @@ CR-93B Timeline Data Package Design is complete as a documentation-only architec
 
 CR-93B-2 Timeline Data Package Skeleton Files is complete. Skeleton sample package files now exist under `docs/data-packages/timeline/` for manifest, periods, sections, events, books, psalms, kings, prophets, empires, places, genealogy, references, and cross-links. All current sample JSON files remain skeleton-only with empty `items` arrays. No real data rows, code, import, API, DB, or schema work were added.
 
-CR-93D 66-Book Context Skeleton is complete. `docs/data-packages/timeline/books.66-canonical-skeleton.json` now contains 66 canonical book rows as a cautious package-level skeleton with Scripture anchors, basis labels, provisional timeline grouping fields, and accordion-first display fields. The file is not imported into the frontend yet. No Bible text, frontend code, API, DB, schema migration, import script, or commentary layer was added.
+CR-93D 66-Book Context Skeleton is complete. `docs/data-packages/timeline/books.66-canonical-skeleton.json` now contains 66 canonical book rows as a cautious package-level skeleton with Scripture anchors, basis labels, provisional timeline grouping fields, and accordion-first display fields.
 
-CR-91E Timeline Left Navigator Redesign is complete through available validation. The left sidebar is now active-view aware and works as a contextual Timeline Navigator instead of a shared filter surface across all views. Events filters remain functional and are clearly scoped to Events. Books / Psalms navigator now acknowledges that the 66-book package skeleton exists but is not imported into the frontend yet. Places navigator now makes the schematic-map and no-coordinate boundary explicit. No data rows, API, DB, schema, import, or package integration were added. Korean history remains placeholder/reference only.
+CR-93D-2 66-Book Frontend Preview Integration is complete through available validation. The Timeline Books / Psalms view now reads the canonical 66-book skeleton through the Timeline route server layer and renders a metadata-only frontend preview with OT/NT grouping, OT 39 / NT 27 counts, canonical order display, locale-aware titles, and a metadata-only right panel. No Bible text rendering, Bible API calls, backend API calls, coordinates, map provider fields, API changes, DB changes, schema migration, runtime import/export pipeline work, or event-package runtime integration were added. `events.core-biblical-skeleton.json` remains unlinked from the frontend runtime.
+
+CR-91E Timeline Left Navigator Redesign is complete through available validation. The left sidebar is now active-view aware and works as a contextual Timeline Navigator instead of a shared filter surface across all views. Events filters remain functional and are clearly scoped to Events. Books / Psalms navigator now acknowledges and summarizes the active 66-book package preview. Places navigator now makes the schematic-map and no-coordinate boundary explicit. No data rows, API, DB, schema, import, or non-approved package integration were added. Korean history remains placeholder/reference only.
 
 CR-93E Timeline Package Verifier Design is complete. `docs/ROADMAP/TIMELINE_PACKAGE_VERIFIER_DESIGN.md` and `docs/data-packages/timeline/verifier.md` now define future verification levels, error/warning policy, 66-book checks, accordion-first checks, no-Bible-text guardrails, no-coordinate guardrails, Korean/world reference guardrails, and a future CLI contract. No verifier script, frontend code, data rows, import, API, DB, or schema work was added.
 
@@ -50,16 +52,14 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93D-2 66-Book Frontend Preview Integration.
-2. CR-93C-2 Core Event Skeleton Frontend Preview Integration.
-3. Later approved CI wiring for Timeline package verifier command.
-4. CR-91C Context Inspector Deep Links.
-5. CR-91C Context Inspector Deep Links.
-6. CR-91D Schematic Flow Highlights.
-7. CR-92C Korean History Pilot Rows after source review.
-8. CR-90Y-5 Genealogy Detail Refinement.
-9. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-10. CR-91 Place / Map Preview.
+1. CR-93C-2 Core Event Skeleton Frontend Preview Integration.
+2. Later approved CI wiring for Timeline package verifier command.
+3. CR-91C Context Inspector Deep Links.
+4. CR-91D Schematic Flow Highlights.
+5. CR-92C Korean History Pilot Rows after source review.
+6. CR-90Y-5 Genealogy Detail Refinement.
+7. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+8. CR-91 Place / Map Preview.
 10. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
 11. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
 12. After explicit approval, implement seed migration tracking and release automation support.

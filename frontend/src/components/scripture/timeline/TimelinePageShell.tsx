@@ -25,6 +25,7 @@ import {
   timelineBooks,
   timelinePeriods,
   timelinePlaces,
+  type TimelineBookContextRow,
   type TimelineText,
   type TimelineLocale,
 } from "./passionWeekTimeline";
@@ -34,6 +35,12 @@ import { TimelineFilterBar } from "./TimelineFilterBar";
 import { TimelineViewTabs } from "./TimelineViewTabs";
 
 type TimelinePageShellProps = {
+  canonicalBookRows: TimelineBookContextRow[];
+  canonicalBookStats: {
+    newTestamentCount: number;
+    oldTestamentCount: number;
+    totalCount: number;
+  };
   initialFilters: TimelineFilterState;
   initialView: TimelineView;
   locale: TimelineLocale;
@@ -137,7 +144,13 @@ const pageCopy = {
   },
 } as const;
 
-export function TimelinePageShell({ initialFilters, initialView, locale }: TimelinePageShellProps) {
+export function TimelinePageShell({
+  canonicalBookRows,
+  canonicalBookStats,
+  initialFilters,
+  initialView,
+  locale,
+}: TimelinePageShellProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = pageCopy[activeLocale];
   const pathname = usePathname();
@@ -277,8 +290,8 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
     [],
   );
   const bookContextById = useMemo(
-    () => new Map(timelineBookContextRows.map((row) => [row.id, row])),
-    [],
+    () => new Map([...timelineBookContextRows, ...canonicalBookRows].map((row) => [row.id, row])),
+    [canonicalBookRows],
   );
   const kingdomComparisonById = useMemo(
     () => new Map(timelineKingdomComparisonRows.map((row) => [row.id, row])),
@@ -384,6 +397,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
             activePlaceId={filters.placeId}
             activeView={activeView}
             bookOptions={bookOptions}
+            booksPreviewStats={canonicalBookStats}
             confidenceLabel={activeLocale === "ko" ? "높은 신뢰도 미리보기" : "High-confidence preview"}
             confidenceNote={
               activeLocale === "ko"
@@ -425,6 +439,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
               activeBookLabel={bookLabelForStatus(filters.bookId, bookOptions, activeLocale)}
               activePeriodLabel={periodLabelForStatus(filters.periodId, periodOptions, activeLocale)}
               activePlaceLabel={placeLabelForStatus(filters.placeId, placeOptions, activeLocale)}
+              canonicalBookStats={canonicalBookStats}
               locale={activeLocale}
               activeView={activeView}
               modeLabel={activeViewLabel}
@@ -462,11 +477,10 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
 
               {activeView === "books" ? (
                 <BooksContextPreviewPanel
-                  activeBookId={filters.bookId}
-                  activePeriodId={filters.periodId}
+                  canonicalBookRows={canonicalBookRows}
+                  canonicalBookStats={canonicalBookStats}
                   locale={activeLocale}
                   onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "book" })}
-                  searchTerm={filters.searchTerm}
                   selectedRowId={inspectorSelection?.type === "book" ? inspectorSelection.id : ""}
                 />
               ) : null}
@@ -538,6 +552,11 @@ type CompactStatusRowProps = {
   activePeriodLabel: string;
   activePlaceLabel: string;
   activeView: TimelineView;
+  canonicalBookStats: {
+    newTestamentCount: number;
+    oldTestamentCount: number;
+    totalCount: number;
+  };
   locale: TimelineLocale;
   modeLabel: string;
   totalCount: number;
@@ -549,12 +568,13 @@ function CompactStatusRow({
   activePeriodLabel,
   activePlaceLabel,
   activeView,
+  canonicalBookStats,
   locale,
   modeLabel,
   totalCount,
   visibleCount,
 }: CompactStatusRowProps) {
-  const viewStatusNote = getCompactStatusNote(activeView, locale, visibleCount, totalCount);
+  const viewStatusNote = getCompactStatusNote(activeView, locale, visibleCount, totalCount, canonicalBookStats);
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-600">
@@ -590,6 +610,11 @@ function getCompactStatusNote(
   locale: TimelineLocale,
   visibleCount: number,
   totalCount: number,
+  canonicalBookStats: {
+    newTestamentCount: number;
+    oldTestamentCount: number;
+    totalCount: number;
+  },
 ) {
   switch (view) {
     case "overview":
@@ -598,7 +623,9 @@ function getCompactStatusNote(
         ? `${visibleCount}개 사건 / 전체 ${totalCount}개`
         : `${visibleCount} events / ${totalCount} total`;
     case "books":
-      return locale === "ko" ? "runtime preview rows · 66권 package 연결 전" : "Runtime preview rows · 66-book package not integrated";
+      return locale === "ko"
+        ? `66권 package preview · 구약 ${canonicalBookStats.oldTestamentCount} / 신약 ${canonicalBookStats.newTestamentCount}`
+        : `66-book package preview · OT ${canonicalBookStats.oldTestamentCount} / NT ${canonicalBookStats.newTestamentCount}`;
     case "kingdoms":
       return locale === "ko" ? "왕국 비교 preview rows" : "Kingdom comparison preview rows";
     case "genealogy":
@@ -1173,39 +1200,38 @@ function KingsKingdomsPreviewPanel({ locale, onSelectRow, selectedRowId }: Kings
 }
 
 type BooksContextPreviewPanelProps = {
-  activeBookId: string;
-  activePeriodId: string;
+  canonicalBookRows: TimelineBookContextRow[];
+  canonicalBookStats: {
+    newTestamentCount: number;
+    oldTestamentCount: number;
+    totalCount: number;
+  };
   locale: TimelineLocale;
-  searchTerm: string;
   onSelectRow: (rowId: string) => void;
   selectedRowId: string;
 };
 
 function BooksContextPreviewPanel({
-  activeBookId,
-  activePeriodId,
+  canonicalBookRows,
+  canonicalBookStats,
   locale,
-  searchTerm,
   onSelectRow,
   selectedRowId,
 }: BooksContextPreviewPanelProps) {
-  const normalizedSearch = searchTerm.trim().toLowerCase();
-
-  const visibleRows = timelineBookContextRows.filter((row) => {
-    const matchesBook = activeBookId === "all" || row.bookId === activeBookId;
-    const matchesPeriod = activePeriodId === "all" || row.periodId === activePeriodId;
-    const matchesSearch = matchesBookContextSearch(row, normalizedSearch);
-
-    return matchesBook && matchesPeriod && matchesSearch;
-  });
-
-  const groupedRows = timelinePeriods
-    .filter((period) => visibleRows.some((row) => row.periodId === period.id))
-    .sort((left, right) => left.order - right.order)
-    .map((period) => ({
-      period,
-      rows: visibleRows.filter((row) => row.periodId === period.id),
-    }));
+  const groupedRows = [
+    {
+      countLabel: locale === "ko" ? `구약 ${canonicalBookStats.oldTestamentCount}` : `OT ${canonicalBookStats.oldTestamentCount}`,
+      id: "OT",
+      label: locale === "ko" ? "구약" : "Old Testament",
+      rows: canonicalBookRows.filter((row) => row.testament === "OT"),
+    },
+    {
+      countLabel: locale === "ko" ? `신약 ${canonicalBookStats.newTestamentCount}` : `NT ${canonicalBookStats.newTestamentCount}`,
+      id: "NT",
+      label: locale === "ko" ? "신약" : "New Testament",
+      rows: canonicalBookRows.filter((row) => row.testament === "NT"),
+    },
+  ];
 
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4">
@@ -1216,32 +1242,63 @@ function BooksContextPreviewPanel({
           </p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "정경 위치와 배경 연결을 분리해 보여 주는 간단한 미리보기입니다."
-              : "A compact preview that separates canonical location from background connection."}
+              ? "66권 canonical skeleton package를 metadata-only preview로 연결한 보기입니다."
+              : "A metadata-only preview backed by the canonical 66-book skeleton package."}
           </p>
         </div>
-        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
-          {locale === "ko" ? "미리보기" : "Preview"}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+            {locale === "ko" ? "미리보기" : "Preview"}
+          </span>
+          <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+            {locale === "ko" ? `총 ${canonicalBookStats.totalCount}권` : `${canonicalBookStats.totalCount} Books`}
+          </span>
+          <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+            {locale === "ko"
+              ? `구약 ${canonicalBookStats.oldTestamentCount} / 신약 ${canonicalBookStats.newTestamentCount}`
+              : `OT ${canonicalBookStats.oldTestamentCount} / NT ${canonicalBookStats.newTestamentCount}`}
+          </span>
+        </div>
       </div>
 
       <div className="mt-4 space-y-4">
-        {groupedRows.map(({ period, rows }) => (
-          <section className="rounded-md border border-zinc-200 bg-zinc-50 p-3" key={period.id}>
+        {groupedRows.map(({ countLabel, id, label, rows }) => {
+          const sectionGroups = Array.from(
+            rows.reduce((map, row) => {
+              const sectionKey = row.canonicalSectionLabel?.en ?? row.canonicalSection ?? "Other";
+              const existingRows = map.get(sectionKey) ?? [];
+              existingRows.push(row);
+              map.set(sectionKey, existingRows);
+              return map;
+            }, new Map<string, typeof rows>()),
+          );
+
+          return (
+          <section className="rounded-md border border-zinc-200 bg-zinc-50 p-3" key={id}>
             <div className="flex items-center justify-between gap-2">
               <div>
-                <h3 className="text-sm font-semibold text-zinc-950">{getTimelineText(period.label, locale)}</h3>
+                <h3 className="text-sm font-semibold text-zinc-950">{label}</h3>
                 <p className="mt-1 text-xs leading-5 text-zinc-500">
-                  {locale === "ko" ? "정경 위치 / 배경 연결" : "Canonical location / background connection"}
+                  {locale === "ko"
+                    ? "정경 순서 / 저자 라벨 / 배경 연결 / Scripture reference only"
+                    : "Canonical order / authorship label / background connection / Scripture references only"}
                 </p>
               </div>
               <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
-                {locale === "ko" ? `${rows.length}개` : `${rows.length}`}
+                {countLabel}
               </span>
             </div>
 
-            <div className="mt-3 space-y-2">
-              {rows.map((row) => {
+            <div className="mt-3 space-y-3">
+              {sectionGroups.map(([sectionKey, sectionRows]) => (
+                <div className="space-y-2" key={`${id}-${sectionKey}`}>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                      {getTimelineText(sectionRows[0].canonicalSectionLabel ?? { ko: sectionKey, en: sectionKey }, locale)}
+                    </p>
+                    <span className="text-xs text-zinc-500">{sectionRows.length}</span>
+                  </div>
+                  {sectionRows.map((row) => {
                 const selected = selectedRowId === row.id;
 
                 return (
@@ -1259,12 +1316,20 @@ function BooksContextPreviewPanel({
                     tabIndex={0}
                   >
                     <div className="flex flex-wrap items-center gap-2">
+                      {row.canonicalOrder ? (
+                        <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold text-white">
+                          {row.canonicalOrder}
+                        </span>
+                      ) : null}
                       <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
                         {getTimelineText(row.title, locale)}
                       </span>
-                      <span className="text-sm font-semibold text-zinc-950">
-                        {getTimelineText(row.canonicalLocation, locale)}
-                      </span>
+                      {row.testament ? (
+                        <span className="text-xs font-medium uppercase tracking-[0.08em] text-zinc-500">
+                          {row.testament}
+                        </span>
+                      ) : null}
+                      <span className="text-sm font-semibold text-zinc-950">{getTimelineText(row.canonicalLocation, locale)}</span>
                       {row.historicalSettingLabel ? (
                         <span className="text-sm text-zinc-600">
                           {getTimelineText(row.historicalSettingLabel, locale)}
@@ -1279,6 +1344,11 @@ function BooksContextPreviewPanel({
                           {row.authorshipBasisLabel ? ` · ${getTimelineText(row.authorshipBasisLabel, locale)}` : ""}
                         </span>
                       ) : null}
+                      {row.scriptureReferencesOnly ? (
+                        <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                          {locale === "ko" ? "본문 미저장 · reference only" : "No Bible text · references only"}
+                        </span>
+                      ) : null}
                       <span className="rounded-full bg-zinc-100 px-2.5 py-1">
                         {getTimelineText(row.backgroundBasisLabel, locale)}
                       </span>
@@ -1291,17 +1361,14 @@ function BooksContextPreviewPanel({
 
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {row.scriptureAnchors.map((anchor) => (
-                        <Link
+                        <span
                           className={cn(
-                            "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                            "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900",
                           )}
-                          href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
-                          onClick={(event) => event.stopPropagation()}
                           key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
                         >
                           {getTimelineText(anchor.label, locale)}
-                        </Link>
+                        </span>
                       ))}
                     </div>
 
@@ -1309,9 +1376,11 @@ function BooksContextPreviewPanel({
                   </div>
                 );
               })}
+                </div>
+              ))}
             </div>
           </section>
-        ))}
+        )})}
       </div>
     </section>
   );
@@ -1555,47 +1624,6 @@ function handleSelectableKeyDown(
     event.preventDefault();
     onSelect();
   }
-}
-
-function matchesBookContextSearch(
-  row: (typeof timelineBookContextRows)[number],
-  query: string,
-) {
-  if (!query) {
-    return true;
-  }
-
-  const rowTokens = [
-    row.title.en,
-    row.title.ko,
-    row.canonicalLocation.en,
-    row.canonicalLocation.ko,
-    row.historicalSettingLabel?.en ?? "",
-    row.historicalSettingLabel?.ko ?? "",
-    row.authorshipLabel?.en ?? "",
-    row.authorshipLabel?.ko ?? "",
-    row.authorshipBasisLabel?.en ?? "",
-    row.authorshipBasisLabel?.ko ?? "",
-    row.backgroundBasisLabel.en,
-    row.backgroundBasisLabel.ko,
-    row.dateLabel?.en ?? "",
-    row.dateLabel?.ko ?? "",
-    row.dateBasisLabel?.en ?? "",
-    row.dateBasisLabel?.ko ?? "",
-    row.dateConfidenceLabel?.en ?? "",
-    row.dateConfidenceLabel?.ko ?? "",
-    row.note.en,
-    row.note.ko,
-    ...row.scriptureAnchors.flatMap((anchor) => [anchor.label.en, anchor.label.ko]),
-    ...(row.relatedPeople?.flatMap((person) => [person.en, person.ko]) ?? []),
-    ...(row.relatedKingdoms?.flatMap((kingdom) => [kingdom.en, kingdom.ko]) ?? []),
-    ...(row.relatedEmpires?.flatMap((empire) => [empire.en, empire.ko]) ?? []),
-    ...(row.relatedPlaces ?? []),
-  ]
-    .join(" ")
-    .toLowerCase();
-
-  return rowTokens.includes(query);
 }
 
 function matchesGenealogySearch(
