@@ -58,6 +58,11 @@ export function ScriptureTimelineList({
         const summaryText = locale === "ko"
           ? `${periodEvents.length}개 · ${hasRelativeYears ? "성경 내부 연수 포함" : "연대표"}`
           : `${periodEvents.length} events · ${hasRelativeYears ? "Includes Scripture-derived years" : "Timeline section"}`;
+        const historyPlaceholderTitle = locale === "ko" ? "한국사 참조" : "Korean History Reference";
+        const historyPlaceholderBody =
+          locale === "ko"
+            ? "이 구간의 한국사 참조는 아직 추가되지 않았습니다. 한국사 정보는 성경 해석의 근거가 아니라, 시대 배경 감각을 돕는 보조 참조로만 제공될 예정입니다."
+            : "Korean history references for this period have not been added yet. They will be provided only as supporting historical context, not as a basis for interpreting Scripture.";
 
         return (
           <details className="group rounded-xl border border-zinc-200 bg-white" key={period.id} open={defaultOpen}>
@@ -87,6 +92,44 @@ export function ScriptureTimelineList({
                   />
                 ))}
               </ol>
+
+              <details className="mt-4 rounded-lg border border-dashed border-zinc-200 bg-zinc-50/60 px-3 py-2.5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium text-zinc-500">
+                      {historyPlaceholderTitle}
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-zinc-500">
+                      {locale === "ko"
+                        ? "참조용 / 성경 해석 근거 아님"
+                        : "Reference only / not a basis for biblical interpretation"}
+                    </p>
+                  </div>
+                  <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white/80 px-2 py-0.5 text-[11px] font-medium text-zinc-500">
+                    {locale === "ko" ? "접기/펼치기" : "Toggle"}
+                  </span>
+                </summary>
+
+                <div className="mt-3 rounded-md border border-zinc-200 bg-white/90 p-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-600">
+                      {locale === "ko" ? "참조용" : "Reference only"}
+                    </span>
+                    <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-600">
+                      {locale === "ko" ? "출처 검토 필요" : "Source review required"}
+                    </span>
+                    <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-600">
+                      {locale === "ko" ? "성경 해석 근거 아님" : "Not a basis for biblical interpretation"}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-zinc-600">{historyPlaceholderBody}</p>
+                  <p className="mt-2 text-xs leading-5 text-zinc-500">
+                    {locale === "ko"
+                      ? `현재 구간: ${periodLabel}`
+                      : `Current period: ${periodLabel}`}
+                  </p>
+                </div>
+              </details>
             </div>
           </details>
         );

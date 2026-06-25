@@ -2,17 +2,19 @@
 
 ## Date
 
-2026-06-24
+2026-06-25
 
 ## Immediate Next Task
 
 CR-90Y Timeline Content Completeness Audit / Content Expansion is complete through available validation. The Scripture Timeline now includes compact Books / Psalms context rows, a compact Kings / Kingdoms comparison table with ruler and empire context, the same Matthew 14 / 14 / 14 comparison view, and the same left sidebar navigator, a main workspace area, and a right detail panel while remaining Scripture-first and page-stay oriented. Staging and release work remain paused until the next Timeline preview branch is chosen.
 
-CR-92A Korean History Reference Layer Design is now documented as a design-only phase. It adds the policy and placement framework for a future reference-only Korean history layer, but no code, data import, or UI implementation has been added yet.
+CR-92A Korean History Reference Layer Design is documented.
+
+CR-92B Korean History Reference Placeholder UI is complete through available validation. Events view period blocks now include a collapsed Korean history reference placeholder below Scripture event rows. No Korean history rows or chronology data were added. No source import, API, DB, schema, map, or chronology dataset work was added. Korean history remains supporting reference only, source and license review remain required before any real content rows, and Korean history is not a basis for biblical interpretation.
 
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
-Documentation Gate Proportionality applies to this narrow frontend investigation: the lighter workflow is acceptable because the work is route-accessibility and runtime-investigation focused, not architecture, API, database, schema, import, migration, Data Package, or production-impacting work.
+Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
 
 Phase 5D Original Language dry-run pipeline is complete. Phase 5E tiny local write smokes are complete. Full TAGNT NT and full TAHOT OT are imported. Phase 6A Original Language Read API, Phase 6B Word Study API, Phase 6C high-level Interlinear API, Phase 7B through Phase 7H frontend MVP implementation, Phase 8A through later Phase 8 beta cleanup and Korean original-language coverage expansion, Bible Study Workspace, Search Workspace, Original Text view, Word Study panel flow, Cross Reference data layer/API/Reader integration/verse preview modal validation, CR-39 Word Study Cross Reference frontend MVP, CR-40 post-MVP unsupported-range validation/research architecture review, CR-41 review workflow design, CR-42 approval review, CR-43 review tool MVP design/readiness review, CR-44 audit metadata design, CR-45 approval review, CR-47 audit metadata schema implementation, CR-49 review tool API/admin design, CR-50 approval review, CR-51 admin-only review API implementation, CR-52 validation/readiness review, CR-53 admin UI approval review, CR-54 admin UI MVP implementation, CR-55 browser validation, CR-56/CR-57/CR-58 Gospel Harmony design and approval reviews, CR-59 Gospel Harmony frontend MVP implementation/static validation, CR-60 browser validation, CR-61 Gospel Harmony Cross Reference integration planning, CR-63 Gospel Harmony Cross Reference frontend MVP implementation/static validation, CR-64 browser validation, CR-65 Scripture Research Workspace architecture design, CR-66 approval review, CR-67 context model design, CR-68 approval review, CR-69 approval review, CR-70 context provider MVP implementation, CR-71 browser validation, and Gospel Harmony frontend foundation are complete through local development. Current work is CR-90Y Timeline Content Completeness Audit / Content Expansion, completed through available validation.
 
@@ -22,18 +24,20 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-92B Korean History Reference Placeholder UI.
-2. CR-90Y-5 Genealogy Detail Refinement.
-3. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-4. CR-91 Place / Map Preview.
-5. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
-4. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
-5. After explicit approval, implement seed migration tracking and release automation support.
-6. Later: Strong detail pages or dedicated Word Study pages.
-7. Later: advanced search.
-8. Later: morphology explorer.
-9. Later: Commentary Layer.
-10. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+1. CR-92C Korean History Pilot Rows after source review.
+2. CR-91B-2 Context Inspector Cross-Linking.
+3. CR-91C Schematic Flow Highlights.
+4. CR-90Y-5 Genealogy Detail Refinement.
+5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+6. CR-91 Place / Map Preview.
+7. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+8. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
+9. After explicit approval, implement seed migration tracking and release automation support.
+10. Later: Strong detail pages or dedicated Word Study pages.
+11. Later: advanced search.
+12. Later: morphology explorer.
+13. Later: Commentary Layer.
+14. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 
