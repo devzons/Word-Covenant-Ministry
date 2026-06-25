@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Cross-link target type is not allowed."
+  ],
+  "items": [
+    {
+      "id": "cross-link-unknown-target-type-1",
+      "fromType": "event",
+      "fromId": "event-fixture-valid-1",
+      "toType": "timelineCard",
+      "toId": "book-context-genesis-skeleton",
+      "relationLabel": {
+        "ko": "허용되지 않은 대상 종류",
+        "en": "Unknown target type"
+      },
+      "basisLabel": {
+        "ko": "fixture 연결",
+        "en": "Fixture link"
+      },
+      "confidenceLabel": {
+        "ko": "높음",
+        "en": "High"
+      }
+    }
+  ]
+}

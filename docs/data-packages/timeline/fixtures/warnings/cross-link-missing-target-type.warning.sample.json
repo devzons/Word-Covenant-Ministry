@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Cross-link omits explicit target type and should warn."
+  ],
+  "items": [
+    {
+      "id": "cross-link-missing-target-type-warning-1",
+      "fromType": "event",
+      "fromId": "event-fixture-valid-1",
+      "toId": "book-context-genesis-skeleton",
+      "relationLabel": {
+        "ko": "대상 종류 누락",
+        "en": "Missing target type"
+      },
+      "basisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "confidenceLabel": {
+        "ko": "보통",
+        "en": "Medium"
+      }
+    }
+  ]
+}

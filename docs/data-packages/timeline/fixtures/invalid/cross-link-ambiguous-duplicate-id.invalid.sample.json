@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Cross-link target id is ambiguous because the same id appears more than once."
+  ],
+  "items": [
+    {
+      "id": "duplicate-target"
+    },
+    {
+      "id": "duplicate-target"
+    },
+    {
+      "id": "cross-link-ambiguous-duplicate-id-1",
+      "fromType": "event",
+      "fromId": "event-fixture-valid-1",
+      "toType": "book",
+      "toId": "duplicate-target",
+      "relationLabel": {
+        "ko": "중복 대상 id",
+        "en": "Duplicate target id"
+      },
+      "basisLabel": {
+        "ko": "fixture 연결",
+        "en": "Fixture link"
+      },
+      "confidenceLabel": {
+        "ko": "높음",
+        "en": "High"
+      }
+    }
+  ]
+}

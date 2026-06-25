@@ -23,10 +23,34 @@ const BANNED_COORDINATE_FIELDS = new Set([
   "lon",
   "longitude",
   "coordinates",
+  "coordinate",
+  "geo",
   "geojson",
   "geometry",
+  "point",
+  "marker",
+  "bounds",
+  "viewport",
   "mapProvider",
   "tileUrl",
+  "mapbox",
+  "googleMaps",
+  "googleMap",
+  "naverMap",
+  "kakaoMap",
+]);
+
+const MAP_PROVIDER_VALUES = new Set(["mapbox", "googlemaps", "googlemap", "navermap", "kakaomap"]);
+
+const ALLOWED_CROSS_LINK_TYPES = new Set([
+  "book",
+  "event",
+  "person",
+  "genealogy",
+  "place",
+  "kingdom",
+  "scriptureEvidence",
+  "supportingReference",
 ]);
 
 const CANONICAL_SECTIONS = new Set([
@@ -77,19 +101,25 @@ const ISSUE = {
   TITLE_MISSING: "TLN_TITLE_MISSING",
   SCRIPTURE_ANCHORS_MISSING: "TLN_SCRIPTURE_ANCHORS_MISSING",
   CROSS_LINK_FIELD_MISSING: "TLN_CROSS_LINK_FIELD_MISSING",
-  CROSS_LINK_FROM_UNRESOLVED: "TLN_CROSS_LINK_FROM_UNRESOLVED",
-  CROSS_LINK_TO_UNRESOLVED: "TLN_CROSS_LINK_TO_UNRESOLVED",
+  CROSS_LINK_SOURCE_MISSING: "TLN_CROSS_LINK_SOURCE_MISSING",
+  CROSS_LINK_TARGET_MISSING: "TLN_CROSS_LINK_TARGET_MISSING",
+  CROSS_LINK_TARGET_DUPLICATE: "TLN_CROSS_LINK_TARGET_DUPLICATE",
+  CROSS_LINK_TARGET_TYPE_INVALID: "TLN_CROSS_LINK_TARGET_TYPE_INVALID",
+  CROSS_LINK_BIBLE_REFERENCE_AS_ID: "TLN_CROSS_LINK_BIBLE_REFERENCE_AS_ID",
+  CROSS_LINK_SELF_LINK: "TLN_CROSS_LINK_SELF_LINK",
+  CROSS_LINK_MISSING_TARGET_TYPE: "TLN_CROSS_LINK_MISSING_TARGET_TYPE",
   SUPPORTING_REFERENCE_FLAG_MISSING: "TLN_REFERENCE_FLAG_MISSING",
   SUPPORTING_REFERENCE_AUTHORITY_BREACH: "TLN_REFERENCE_AUTHORITY_BREACH",
   SUPPORTING_REFERENCE_INTERPRETATION_LABEL_MISSING: "TLN_REFERENCE_INTERPRETATION_LABEL_MISSING",
   SUPPORTING_REFERENCE_FIELD_MISSING: "TLN_REFERENCE_FIELD_MISSING",
-  SUPPORTING_REFERENCE_SOURCE_REVIEW_WARNING: "TLN_REFERENCE_SOURCE_REVIEW_WARNING",
+  SUPPORTING_REFERENCE_REVIEW_REQUIRED: "TLN_REFERENCE_REVIEW_REQUIRED",
   BANNED_BIBLE_TEXT_FIELD: "TLN_BIBLE_TEXT_FIELD_FORBIDDEN",
   BANNED_COORDINATE_FIELD: "TLN_COORDINATE_FIELD_FORBIDDEN",
+  BANNED_MAP_PROVIDER_FIELD: "TLN_MAP_PROVIDER_FORBIDDEN",
   WARNING_APPROXIMATE_DATE: "TLN_WARNING_APPROXIMATE_DATE",
   WARNING_CHRONOLOGY_REVIEW: "TLN_WARNING_CHRONOLOGY_REVIEW",
   WARNING_OPTIONAL_DISPLAY_LABEL: "TLN_WARNING_OPTIONAL_DISPLAY_LABEL",
-  WARNING_LOW_CONFIDENCE_CROSS_LINK: "TLN_WARNING_LOW_CONFIDENCE_CROSS_LINK",
+  WARNING_LOW_CONFIDENCE_CROSS_LINK: "TLN_CROSS_LINK_LOW_CONFIDENCE_REVIEW",
   BOOKS_COUNT_MISMATCH: "TLN_BOOKS_COUNT_MISMATCH",
   BOOKS_BOOK_ID_MISSING: "TLN_BOOKS_BOOK_ID_MISSING",
   BOOKS_BOOK_ID_EMPTY: "TLN_BOOKS_BOOK_ID_EMPTY",
@@ -213,14 +243,17 @@ function collectRegistryFiles(targetFiles, packageRoots) {
 }
 
 function buildIdRegistry(files) {
-  const ids = new Set();
+  const ids = new Map();
   for (const filePath of files) {
     try {
       const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
       if (Array.isArray(data?.items)) {
         for (const item of data.items) {
           if (item && typeof item === "object" && typeof item.id === "string") {
-            ids.add(item.id);
+            const entry = ids.get(item.id) ?? { count: 0, files: new Set() };
+            entry.count += 1;
+            entry.files.add(filePath);
+            ids.set(item.id, entry);
           }
         }
       }
@@ -324,17 +357,43 @@ function validateRow(filePath, data, packageType, packageStatus, item, rowLabel,
 }
 
 function validateCrossLinkRow(filePath, item, rowLabel, registry, issues) {
-  for (const field of ["fromType", "fromId", "toType", "toId", "relationLabel", "basisLabel", "confidenceLabel"]) {
+  for (const field of ["fromType", "fromId", "toId", "relationLabel", "basisLabel", "confidenceLabel"]) {
     if (!hasNonEmptyValue(item[field])) {
       issues.push(makeIssue("error", ISSUE.CROSS_LINK_FIELD_MISSING, filePath, rowLabel, `Missing required cross-link field "${field}".`, { path: field, recordId: item.id ?? rowLabel }));
     }
   }
 
-  if (hasNonEmptyValue(item.fromId) && !registry.has(item.fromId)) {
-    issues.push(makeIssue("error", ISSUE.CROSS_LINK_FROM_UNRESOLVED, filePath, rowLabel, `Cross-link fromId "${item.fromId}" does not resolve.`, { path: "fromId", recordId: item.id ?? rowLabel, relatedId: item.fromId }));
+  if (hasNonEmptyValue(item.toType) && !ALLOWED_CROSS_LINK_TYPES.has(item.toType)) {
+    issues.push(makeIssue("error", ISSUE.CROSS_LINK_TARGET_TYPE_INVALID, filePath, rowLabel, `Cross-link toType "${item.toType}" is not allowed.`, {
+      path: "toType",
+      recordId: item.id ?? rowLabel,
+      sourceId: item.fromId,
+      targetId: item.toId,
+      field: "toType",
+    }));
   }
-  if (hasNonEmptyValue(item.toId) && !registry.has(item.toId)) {
-    issues.push(makeIssue("error", ISSUE.CROSS_LINK_TO_UNRESOLVED, filePath, rowLabel, `Cross-link toId "${item.toId}" does not resolve.`, { path: "toId", recordId: item.id ?? rowLabel, relatedId: item.toId }));
+
+  if (!hasNonEmptyValue(item.toType)) {
+    issues.push(makeIssue("warning", ISSUE.CROSS_LINK_MISSING_TARGET_TYPE, filePath, rowLabel, "Cross-link is missing toType and should add an explicit target type.", {
+      path: "toType",
+      recordId: item.id ?? rowLabel,
+      sourceId: item.fromId,
+      targetId: item.toId,
+      field: "toType",
+    }));
+  }
+
+  validateInternalIdReference(filePath, rowLabel, "fromId", item.fromId, registry, issues, item);
+  validateInternalIdReference(filePath, rowLabel, "toId", item.toId, registry, issues, item);
+
+  if (hasNonEmptyValue(item.fromId) && hasNonEmptyValue(item.toId) && item.fromId === item.toId) {
+    issues.push(makeIssue("warning", ISSUE.CROSS_LINK_SELF_LINK, filePath, rowLabel, `Cross-link points to itself via "${item.fromId}".`, {
+      path: "toId",
+      recordId: item.id ?? rowLabel,
+      sourceId: item.fromId,
+      targetId: item.toId,
+      field: "toId",
+    }));
   }
 }
 
@@ -349,15 +408,27 @@ function validateSupportingReferenceRow(filePath, item, rowLabel, issues) {
   const sourceBasisText = flattenText(item.sourceBasisLabel).toLowerCase();
   const isKoreanReference = flattenText(item.title).includes("한국");
   const referenceOnly = containsAny(referenceLabelText, ["reference only", "참조용"]);
-  const interpretationBreach = containsAny(referenceLabelText, ["basis for biblical interpretation", "성경 해석 근거"]);
+  const interpretationBreach = containsAny(referenceLabelText, ["basis for biblical interpretation", "성경 해석 근거"]) &&
+    !containsAny(referenceLabelText, ["not a basis for biblical interpretation", "성경 해석 근거 아님"]);
   const nonInterpretive = containsAny(cautionText, ["not a basis for biblical interpretation", "성경 해석 근거 아님"]);
   const reviewRequired = containsAny(`${sourceBasisText} ${confidenceText} ${cautionText}`, ["review required", "source review required", "검토 필요", "출처 검토 필요"]);
+  const authorityText = `${referenceLabelText} ${confidenceText} ${cautionText} ${flattenText(item.authority).toLowerCase()} ${flattenText(item.role).toLowerCase()}`;
+  const authorityBreach = containsAny(authorityText, [
+    "basis for biblical interpretation",
+    "성경 해석 근거",
+    "primary authority",
+    "equal authority",
+    "scripture-equivalent",
+    "doctrinal authority",
+    "동등 권위",
+    "주 권위",
+  ]) && !containsAny(authorityText, ["not a basis for biblical interpretation", "성경 해석 근거 아님"]);
 
   if (item.isSupportingReference !== true) {
     issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_FLAG_MISSING, filePath, rowLabel, "Supporting reference rows must set isSupportingReference to true.", { path: "isSupportingReference", recordId: item.id ?? rowLabel }));
   }
 
-  if (interpretationBreach) {
+  if (interpretationBreach || authorityBreach) {
     issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_AUTHORITY_BREACH, filePath, rowLabel, "Supporting reference row is improperly presented as interpretive authority.", { path: "referenceTypeLabel", recordId: item.id ?? rowLabel }));
   }
 
@@ -375,10 +446,15 @@ function validateSupportingReferenceRow(filePath, item, rowLabel, issues) {
 
   if (isKoreanReference && !hasLocalizedField(item.sourceBasisLabel)) {
     if (reviewRequired) {
-      issues.push(makeIssue("warning", ISSUE.SUPPORTING_REFERENCE_SOURCE_REVIEW_WARNING, filePath, rowLabel, "Korean supporting reference requires explicit source-basis review.", { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
+      issues.push(makeIssue("warning", ISSUE.SUPPORTING_REFERENCE_REVIEW_REQUIRED, filePath, rowLabel, "Korean supporting reference requires explicit source-basis review.", { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
     } else {
       issues.push(makeIssue("error", ISSUE.SUPPORTING_REFERENCE_FIELD_MISSING, filePath, rowLabel, 'Korean supporting reference is missing "sourceBasisLabel".', { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
     }
+  } else if (reviewRequired) {
+    issues.push(makeIssue("warning", ISSUE.SUPPORTING_REFERENCE_REVIEW_REQUIRED, filePath, rowLabel, "Supporting reference is explicitly marked for review.", {
+      path: "sourceBasisLabel",
+      recordId: item.id ?? rowLabel,
+    }));
   }
 }
 
@@ -519,7 +595,7 @@ function validateWarnings(filePath, packageType, item, rowLabel, issues) {
   if ((packageType === "timeline.references" || item.isSupportingReference === true) && !hasLocalizedField(item.sourceBasisLabel)) {
     const reviewText = `${confidenceText} ${cautionText}`.toLowerCase();
     if (containsAny(reviewText, ["review required", "검토 필요"])) {
-      issues.push(makeIssue("warning", ISSUE.SUPPORTING_REFERENCE_SOURCE_REVIEW_WARNING, filePath, rowLabel, "Supporting reference should add explicit sourceBasisLabel after review.", { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
+      issues.push(makeIssue("warning", ISSUE.SUPPORTING_REFERENCE_REVIEW_REQUIRED, filePath, rowLabel, "Supporting reference should add explicit sourceBasisLabel after review.", { path: "sourceBasisLabel", recordId: item.id ?? rowLabel }));
     }
   }
 
@@ -547,10 +623,12 @@ function validateGuardrails(filePath, value, issues, rowLabel = null, seen = new
 
   for (const [key, nestedValue] of Object.entries(value)) {
     if (BANNED_BIBLE_TEXT_FIELDS.has(key)) {
-      issues.push(makeIssue("error", ISSUE.BANNED_BIBLE_TEXT_FIELD, filePath, rowLabel, `Forbidden Bible-text field "${key}" is present.`, { path: key, recordId: rowLabel }));
+      issues.push(makeIssue("error", ISSUE.BANNED_BIBLE_TEXT_FIELD, filePath, rowLabel, `Forbidden Bible-text field "${key}" is present.`, { path: key, recordId: rowLabel, field: key }));
     }
-    if (BANNED_COORDINATE_FIELDS.has(key)) {
-      issues.push(makeIssue("error", ISSUE.BANNED_COORDINATE_FIELD, filePath, rowLabel, `Forbidden no-coordinate field "${key}" is present.`, { path: key, recordId: rowLabel }));
+    if (isForbiddenMapProviderField(key, nestedValue)) {
+      issues.push(makeIssue("error", ISSUE.BANNED_MAP_PROVIDER_FIELD, filePath, rowLabel, `Forbidden map-provider field "${key}" is present.`, { path: key, recordId: rowLabel, field: key }));
+    } else if (BANNED_COORDINATE_FIELDS.has(key)) {
+      issues.push(makeIssue("error", ISSUE.BANNED_COORDINATE_FIELD, filePath, rowLabel, `Forbidden no-coordinate field "${key}" is present.`, { path: key, recordId: rowLabel, field: key }));
     }
     validateGuardrails(filePath, nestedValue, issues, rowLabel, seen);
   }
@@ -615,6 +693,64 @@ function containsAny(text, needles) {
   return needles.some((needle) => text.includes(needle));
 }
 
+function isScriptureReferenceLike(value) {
+  if (typeof value !== "string") {
+    return false;
+  }
+  const normalized = value.trim();
+  return /^(gen|genesis|exod|exodus|matt|matthew|john|acts|rom|ps|psalm|창|출|마|요|행|롬)\s*\d+:\d+/i.test(normalized);
+}
+
+function validateInternalIdReference(filePath, rowLabel, fieldName, idValue, registry, issues, item) {
+  if (!hasNonEmptyValue(idValue)) {
+    return;
+  }
+
+  if (isScriptureReferenceLike(idValue)) {
+    issues.push(makeIssue("error", ISSUE.CROSS_LINK_BIBLE_REFERENCE_AS_ID, filePath, rowLabel, `Cross-link ${fieldName} "${idValue}" looks like a Scripture reference, not a package row id.`, {
+      path: fieldName,
+      recordId: item.id ?? rowLabel,
+      sourceId: item.fromId,
+      targetId: item.toId,
+      field: fieldName,
+    }));
+    return;
+  }
+
+  const registryEntry = registry.get(idValue);
+  if (!registryEntry) {
+    issues.push(makeIssue("error", fieldName === "fromId" ? ISSUE.CROSS_LINK_SOURCE_MISSING : ISSUE.CROSS_LINK_TARGET_MISSING, filePath, rowLabel, `Cross-link ${fieldName} "${idValue}" does not resolve.`, {
+      path: fieldName,
+      recordId: item.id ?? rowLabel,
+      sourceId: item.fromId,
+      targetId: item.toId,
+      field: fieldName,
+    }));
+    return;
+  }
+
+  if (registryEntry.count > 1) {
+    issues.push(makeIssue("error", ISSUE.CROSS_LINK_TARGET_DUPLICATE, filePath, rowLabel, `Cross-link ${fieldName} "${idValue}" is ambiguous because the target id appears ${registryEntry.count} times.`, {
+      path: fieldName,
+      recordId: item.id ?? rowLabel,
+      sourceId: item.fromId,
+      targetId: item.toId,
+      field: fieldName,
+      occurrences: registryEntry.count,
+    }));
+  }
+}
+
+function isForbiddenMapProviderField(key, value) {
+  if (key === "mapProvider") {
+    return true;
+  }
+  if (["provider", "sourceProvider"].includes(key) && typeof value === "string") {
+    return MAP_PROVIDER_VALUES.has(value.trim().toLowerCase());
+  }
+  return false;
+}
+
 function makeIssue(level, code, filePath, rowId, message, details = {}) {
   return {
     level,
@@ -663,6 +799,9 @@ function printSummary(summary) {
     if (issue.rowId) rowBits.push(issue.rowId);
     if (issue.bookId) rowBits.push(`bookId=${issue.bookId}`);
     if (issue.order !== undefined) rowBits.push(`order=${issue.order}`);
+    if (issue.sourceId) rowBits.push(`sourceId=${issue.sourceId}`);
+    if (issue.targetId) rowBits.push(`targetId=${issue.targetId}`);
+    if (issue.field) rowBits.push(`field=${issue.field}`);
     const rowSuffix = rowBits.length > 0 ? ` [${rowBits.join(", ")}]` : "";
     console.log(`${issue.level.toUpperCase()} ${issue.code} ${path.relative(process.cwd(), issue.filePath)}${rowSuffix}: ${issue.message}`);
   }

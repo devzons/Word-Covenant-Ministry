@@ -97,9 +97,12 @@ Current notable package artifacts:
 
 - IDs unique
 - all references resolve
+- explicit cross-link rows currently use `fromType`, `fromId`, `toType`, and `toId`
+- cross-link target types should stay within documented Timeline package target kinds
+- Scripture reference strings must not be treated as package row IDs
 - all 66 canonical book IDs present in `books.66-canonical-skeleton.json`
 - all 66 books present in the real books package
 - no Bible text stored
-- no coordinates in the no-coordinate phase
+- no coordinates or map-provider fields anywhere in the no-coordinate phase, including nested objects and arrays
 - Korean reference rows include source basis
 - accordion sections include order fields

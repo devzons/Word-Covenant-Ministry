@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Cross-link targetId looks like a Scripture reference instead of a package row id."
+  ],
+  "items": [
+    {
+      "id": "cross-link-bible-reference-as-id-1",
+      "fromType": "event",
+      "fromId": "event-fixture-valid-1",
+      "toType": "book",
+      "toId": "Genesis 1:1",
+      "relationLabel": {
+        "ko": "성경 참조 오인",
+        "en": "Bible reference mistaken as id"
+      },
+      "basisLabel": {
+        "ko": "fixture 연결",
+        "en": "Fixture link"
+      },
+      "confidenceLabel": {
+        "ko": "높음",
+        "en": "High"
+      }
+    }
+  ]
+}

@@ -64,6 +64,12 @@ Expected result:
   - Duplicate row IDs
 - `invalid/broken-cross-link.invalid.sample.json`
   - Cross-link target does not resolve
+- `invalid/cross-link-unknown-target-type.invalid.sample.json`
+  - Cross-link target type is not allowed
+- `invalid/cross-link-bible-reference-as-id.invalid.sample.json`
+  - Cross-link target ID looks like a Scripture reference instead of a package row ID
+- `invalid/cross-link-ambiguous-duplicate-id.invalid.sample.json`
+  - Cross-link target ID is ambiguous because the same row ID appears more than once
 - `invalid/books-missing-book-id.invalid.sample.json`
   - Canonical skeleton row missing `bookId`
 - `invalid/books-duplicate-book-id.invalid.sample.json`
@@ -80,8 +86,12 @@ Expected result:
   - Forbidden Bible text-like field present
 - `invalid/coordinates.invalid.sample.json`
   - Forbidden coordinate fields present
+- `invalid/nested-coordinates.invalid.sample.json`
+  - Forbidden coordinate fields present inside nested objects or arrays
 - `invalid/map-provider.invalid.sample.json`
   - Forbidden map provider field present
+- `invalid/nested-map-provider.invalid.sample.json`
+  - Forbidden map provider value present inside nested objects or arrays
 - `invalid/reference-authority-breach.invalid.sample.json`
   - Supporting reference row improperly presented as interpretive authority
 
@@ -97,3 +107,7 @@ Expected result:
   - Korean supporting reference needing review
 - `warnings/low-confidence-cross-link.warning.sample.json`
   - Low-confidence explicit cross-link that should warn, not fail
+- `warnings/cross-link-missing-target-type.warning.sample.json`
+  - Cross-link omits explicit target type and should warn for review
+- `warnings/supporting-reference-placeholder-review.warning.sample.json`
+  - Supporting reference placeholder remains secondary but still needs source review

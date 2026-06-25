@@ -79,6 +79,9 @@ Out of scope for the verifier:
 - `related*` IDs resolve to real rows where required.
 - Cross-link `fromId` and `toId` resolve.
 - No dangling IDs remain in linked fields.
+- Duplicate target IDs must not make cross-link resolution ambiguous.
+- Scripture reference strings must not be treated as package row IDs.
+- Explicit cross-link target kinds should stay within documented allowed values when present.
 
 ### Level 5 - Canonical Coverage
 
@@ -101,6 +104,7 @@ Out of scope for the verifier:
 - No `coordinates`
 - No `geojson`
 - No map-provider metadata
+- The scan should recurse into nested objects and arrays.
 
 ### Level 8 - Warnings and Review Flags
 
@@ -249,8 +253,12 @@ The future verifier should check:
 - `relationLabel` exists
 - `basisLabel` exists
 - `confidenceLabel` exists
+- `toType` should use a documented allowed target kind when present
 - no fuzzy inferred links are encoded as if they were explicit links
 - no links point to placeholder-only Korean history rows unless a later phase explicitly approves that
+- Bible-reference-looking IDs should not be resolved as package row IDs
+- ambiguous duplicate target IDs should fail
+- self-links should be reviewable even if not always fatal
 
 ## 12. Package Status Rules
 

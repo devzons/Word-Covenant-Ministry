@@ -31,7 +31,7 @@ Current supported checks:
 - package envelope fields
 - duplicate row IDs
 - center-column required fields
-- cross-link field presence and ID resolution
+- cross-link field presence, ID resolution, target-type validation, Bible-reference-as-id rejection, and duplicate-target ambiguity detection
 - canonical 66-book skeleton validation
 - exact 66-row count for canonical-skeleton book packages
 - non-empty unique `bookId` values for canonical-skeleton book packages
@@ -39,9 +39,35 @@ Current supported checks:
 - testament value validation plus `OT=39` and `NT=27` distribution checks
 - canonical title warning policy for 66-book package rows
 - Bible-text field guardrails
-- no-coordinate and no-map-provider guardrails
-- supporting-reference authority guardrails
-- warning-only review flags for approximate chronology, Korean reference review, and low-confidence cross-links
+- recursive no-coordinate and no-map-provider guardrails, including nested objects and arrays
+- supporting-reference authority guardrails for Korean/world reference layers
+- warning-only review flags for approximate chronology, supporting-reference review, missing cross-link target type, and low-confidence cross-links
+
+Current cross-link inventory:
+
+- `timeline.cross-links` rows currently use `fromType`, `fromId`, `toType`, `toId`
+- supporting metadata currently uses `relationLabel`, `basisLabel`, and `confidenceLabel`
+- shared schema fields such as `relatedEventIds`, `relatedBookIds`, `relatedPlaceIds`, and `relatedKingdomIds` remain documented package fields, but the current CLI explicitly resolves `timeline.cross-links`
+
+Current cross-link guardrail policy:
+
+- `toType` should use explicit allowed values such as `book`, `event`, `person`, `genealogy`, `place`, `kingdom`, `scriptureEvidence`, or `supportingReference`
+- missing `toType` currently warns instead of failing
+- cross-link IDs must resolve to real package row IDs
+- Scripture reference strings such as `Genesis 1:1` are not treated as package row IDs
+- duplicate target IDs make cross-link resolution ambiguous and fail verification
+- self-links currently warn for review rather than failing
+
+Current no-coordinate policy:
+
+- coordinate and map-provider field names are rejected recursively, including nested arrays and supporting-reference objects
+- generic `provider` or `sourceProvider` fields are not rejected unless they clearly carry map-provider values such as `mapbox`
+
+Current supporting-reference authority policy:
+
+- Korean/world references must remain supporting-only
+- labels that imply primary, equal, scripture-equivalent, or interpretive authority fail verification
+- review-required placeholder/supporting rows warn when source basis still needs follow-up
 
 Current 66-book package detection:
 
@@ -79,7 +105,11 @@ grep -n '"text"' docs/data-packages/timeline/books.66-canonical-skeleton.json
 ```
 
 ```bash
-grep -En 'lat|latitude|lng|lon|longitude|coordinates|geojson|geometry|mapProvider|tileUrl' docs/data-packages/timeline/*.json
+grep -En 'lat|latitude|lng|lon|longitude|coordinates|coordinate|geo|geojson|geometry|point|marker|bounds|viewport|mapProvider|mapbox|googleMaps|googleMap|naverMap|kakaoMap' docs/data-packages/timeline/*.json
+```
+
+```bash
+node scripts/timeline/verify-timeline-package.mjs docs/data-packages/timeline/fixtures/invalid
 ```
 
 Fixture notes:

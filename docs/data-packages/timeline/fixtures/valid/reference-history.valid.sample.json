@@ -23,8 +23,8 @@
         "en": "Reference only"
       },
       "sourceBasisLabel": {
-        "ko": "출처 검토 필요",
-        "en": "Source review required"
+        "ko": "검토 완료 보조 출처",
+        "en": "Reviewed supporting source"
       },
       "confidenceLabel": {
         "ko": "보조 정보",
@@ -51,8 +51,8 @@
         "en": "Reference only"
       },
       "sourceBasisLabel": {
-        "ko": "출처 검토 필요",
-        "en": "Source review required"
+        "ko": "검토 완료 보조 출처",
+        "en": "Reviewed supporting source"
       },
       "confidenceLabel": {
         "ko": "보조 정보",

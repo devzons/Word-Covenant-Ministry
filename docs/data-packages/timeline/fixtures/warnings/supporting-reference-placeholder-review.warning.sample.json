@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.references",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Supporting reference placeholder should warn for review without breaching authority."
+  ],
+  "items": [
+    {
+      "id": "supporting-reference-placeholder-review-warning-1",
+      "timelinePeriodId": "return",
+      "sectionId": "supporting-reference",
+      "displayOrder": 1,
+      "accordionGroup": "references",
+      "title": {
+        "ko": "한국사 placeholder 검토 예시",
+        "en": "Korean placeholder review sample"
+      },
+      "referenceTypeLabel": {
+        "ko": "참조용",
+        "en": "Reference only"
+      },
+      "confidenceLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "cautionNote": {
+        "ko": "성경 해석 근거 아님 / placeholder",
+        "en": "Not a basis for biblical interpretation / placeholder"
+      },
+      "isSupportingReference": true
+    }
+  ]
+}
