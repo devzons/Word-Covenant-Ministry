@@ -19,6 +19,12 @@ Current command:
 node scripts/timeline/verify-timeline-package.mjs docs/data-packages/timeline
 ```
 
+Standard wrapper command:
+
+```bash
+node scripts/timeline/verify-timeline-packages.mjs
+```
+
 Optional JSON output:
 
 ```bash
@@ -42,6 +48,16 @@ Current supported checks:
 - recursive no-coordinate and no-map-provider guardrails, including nested objects and arrays
 - supporting-reference authority guardrails for Korean/world reference layers
 - warning-only review flags for approximate chronology, supporting-reference review, missing cross-link target type, and low-confidence cross-links
+
+Current wrapper coverage:
+
+- verifier CLI syntax check
+- `books.66-canonical-skeleton.json` pass
+- `events.core-biblical-skeleton.json` pass
+- `fixtures/valid` pass
+- `fixtures/invalid` expected fail with exit code `1`
+- `fixtures/warnings` pass with `errorCount === 0` and `warningCount >= 1`
+- JSON smoke parse for `events.core-biblical-skeleton.json`
 
 Current cross-link inventory:
 
@@ -118,6 +134,12 @@ Fixture notes:
 - `docs/data-packages/timeline/fixtures/invalid/` contains fail fixtures
 - `docs/data-packages/timeline/fixtures/warnings/` contains warning-only fixtures
 - invalid JSON syntax is documented in `fixtures/README.md`, not stored as a broken `.json` file
+
+Current CI wiring status:
+
+- no repository GitHub Actions workflow exists yet
+- local wrapper command is ready
+- CI wiring remains deferred to a later approved step
 
 Reference:
 

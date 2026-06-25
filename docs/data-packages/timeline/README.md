@@ -24,10 +24,18 @@ Rules:
 - Skeleton event rows are not a complete biblical timeline dataset and should not be treated as final chronology.
 - A verifier design now exists in `verifier.md` and `docs/ROADMAP/TIMELINE_PACKAGE_VERIFIER_DESIGN.md`.
 - A minimal read-only verifier CLI now exists at `scripts/timeline/verify-timeline-package.mjs`.
+- A standard wrapper command now exists at `scripts/timeline/verify-timeline-packages.mjs`.
 - The verifier currently covers JSON/package checks, 66-book canonical validation, cross-link resolution, and package guardrails.
+- The wrapper verifies canonical books, core events, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output in one run.
 - Center-column package display must support top-down chronological accordion sections.
 - Scripture anchors are primary.
 - Dates, geography, world history, Korean history, tradition, and authorship labels are supporting layers.
 - Bible text must not be stored here.
 - Coordinates must not be added during the no-coordinate phase.
 - Sample files must not be treated as production data.
+
+Standard local command:
+
+```bash
+node scripts/timeline/verify-timeline-packages.mjs
+```

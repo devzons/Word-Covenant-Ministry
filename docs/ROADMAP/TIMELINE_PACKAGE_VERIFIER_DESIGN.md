@@ -17,6 +17,7 @@ The future verifier exists to check that Timeline package data continues to foll
 This design preceded implementation.
 
 - The initial minimal CLI is now implemented at `scripts/timeline/verify-timeline-package.mjs`.
+- A standard local wrapper command is now implemented at `scripts/timeline/verify-timeline-packages.mjs`.
 - It remains read-only and fixture-oriented.
 - It does not add runtime import behavior or API behavior.
 
@@ -308,6 +309,24 @@ Recommended exit codes:
 - `0`: pass with no errors
 - `1`: validation errors found
 - `2`: verifier configuration or runtime error
+
+Current local wrapper contract:
+
+```bash
+node scripts/timeline/verify-timeline-packages.mjs
+```
+
+The wrapper currently verifies:
+
+- verifier syntax
+- canonical 66-book package pass
+- core event skeleton package pass
+- valid fixtures pass
+- invalid fixtures expected-fail policy
+- warning fixtures warning-only policy
+- JSON smoke output parsing
+
+Repository CI wiring is still deferred because no existing `.github/workflows/` convention is present in this repository.
 
 ## 14. Suggested Implementation Language
 
