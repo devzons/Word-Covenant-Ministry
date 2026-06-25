@@ -709,68 +709,60 @@ type PlacesSchematicMapPreviewPanelProps = {
   selectedRowId: string;
 };
 
-type SchematicRegion = {
+type SchematicFlowSection = {
   id: string;
   label: TimelineText;
   note: TimelineText;
-  zoneIds: Array<(typeof timelineSchematicPlaceRows)[number]["conceptZoneId"]>;
+  rowIds: string[];
 };
 
-const schematicPlaceRegions: SchematicRegion[] = [
+// Center column follows a top-to-bottom biblical flow first; schematic place views
+// keep that chronology before any regional grouping.
+const schematicFlowSections: SchematicFlowSection[] = [
   {
-    id: "mesopotamia",
-    label: { en: "Mesopotamia / Babylon", ko: "메소포타미아 / 바벨론" },
-    note: { en: "Patriarchal departure and exile background", ko: "족장 이동과 포로기 배경" },
-    zoneIds: ["mesopotamia", "babylon"],
+    id: "patriarchal",
+    label: { en: "Primeval / Patriarchal Setting", ko: "태고 / 족장 배경" },
+    note: { en: "Early movements before Israel enters the land", ko: "이스라엘이 땅에 들어가기 전의 초기 흐름" },
+    rowIds: ["schematic-place-shinar", "schematic-place-ur", "schematic-place-shechem", "schematic-place-hebron"],
   },
   {
-    id: "persia",
-    label: { en: "Persia", ko: "바사" },
-    note: { en: "Return-period imperial setting", ko: "귀환기 제국 배경" },
-    zoneIds: ["persia"],
+    id: "exodus",
+    label: { en: "Exodus / Wilderness", ko: "출애굽 / 광야" },
+    note: { en: "Deliverance, covenant, and wilderness movement", ko: "구원, 언약, 광야 이동 흐름" },
+    rowIds: ["schematic-place-egypt", "schematic-place-sinai"],
   },
   {
-    id: "aram-assyria",
-    label: { en: "Aram / Assyria", ko: "아람 / 앗수르" },
-    note: { en: "Prophetic and royal pressure setting", ko: "선지서와 왕정 압박 배경" },
-    zoneIds: ["aram-assyria"],
+    id: "conquest",
+    label: { en: "Conquest / Judges / Ruth", ko: "정복 / 사사 / 룻기" },
+    note: { en: "Entry, settlement, and covenant family movements", ko: "입성, 정착, 언약 가정의 이동" },
+    rowIds: ["schematic-place-jericho", "schematic-place-moab", "schematic-place-bethlehem"],
   },
   {
-    id: "canaan-judah",
-    label: { en: "Canaan / Israel / Judah", ko: "가나안 / 이스라엘 / 유다" },
-    note: { en: "Covenant land and kingdom center", ko: "언약 땅과 왕국 중심" },
-    zoneIds: ["canaan", "judah"],
+    id: "united-kingdom",
+    label: { en: "United Kingdom / David", ko: "통일 왕국 / 다윗" },
+    note: { en: "Royal center, refuge, and Davidic settings", ko: "왕국 중심, 피난, 다윗 배경" },
+    rowIds: [
+      "schematic-place-jerusalem",
+      "schematic-place-gath",
+      "schematic-place-nob",
+      "schematic-place-adullam",
+      "schematic-place-en-gedi",
+      "schematic-place-wilderness-of-judah",
+    ],
   },
   {
-    id: "philistia",
-    label: { en: "Philistia", ko: "블레셋" },
-    note: { en: "David flight and conflict settings", ko: "다윗 도피와 충돌 배경" },
-    zoneIds: ["philistia"],
+    id: "divided-kingdom",
+    label: { en: "Divided Kingdom / Prophets", ko: "분열 왕국 / 선지자" },
+    note: { en: "Judah, Northern Israel, and imperial pressure", ko: "유다, 북이스라엘, 제국 압박" },
+    rowIds: ["schematic-place-jerusalem-judah", "schematic-place-aram", "schematic-place-assyria"],
   },
   {
-    id: "wilderness",
-    label: { en: "Wilderness / Sinai", ko: "광야 / 시내" },
-    note: { en: "Exodus and wilderness covenant flow", ko: "출애굽과 광야 언약 흐름" },
-    zoneIds: ["wilderness"],
-  },
-  {
-    id: "east-jordan",
-    label: { en: "East of Jordan / Moab", ko: "요단 동편 / 모압" },
-    note: { en: "Ruth and related east-of-Jordan settings", ko: "룻기와 요단 동편 배경" },
-    zoneIds: ["east-jordan"],
-  },
-  {
-    id: "egypt",
-    label: { en: "Egypt", ko: "애굽" },
-    note: { en: "Exodus starting setting", ko: "출애굽 시작 배경" },
-    zoneIds: ["egypt"],
+    id: "exile-return",
+    label: { en: "Exile / Return", ko: "포로기 / 귀환" },
+    note: { en: "Babylon and Persian return settings", ko: "바벨론과 바사 귀환 배경" },
+    rowIds: ["schematic-place-babylon", "schematic-place-susa"],
   },
 ];
-
-const noCoordinatesNote = {
-  en: "No coordinates in this preview.",
-  ko: "이 미리보기에는 좌표가 없습니다.",
-} satisfies TimelineText;
 
 function PlacesSchematicMapPreviewPanel({
   locale,
@@ -782,10 +774,10 @@ function PlacesSchematicMapPreviewPanel({
 
   const visibleRows = timelineSchematicPlaceRows.filter((row) => matchesSchematicPlaceSearch(row, normalizedSearch));
 
-  const groupedRegions = schematicPlaceRegions
-    .map((region) => ({
-      region,
-      rows: visibleRows.filter((row) => region.zoneIds.includes(row.conceptZoneId)),
+  const groupedSections = schematicFlowSections
+    .map((section) => ({
+      rows: visibleRows.filter((row) => section.rowIds.includes(row.id)),
+      section,
     }))
     .filter(({ rows }) => rows.length > 0);
 
@@ -798,8 +790,8 @@ function PlacesSchematicMapPreviewPanel({
           </p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "이 지도는 성경 본문 흐름을 돕는 개념지도입니다. 정확한 좌표 지도가 아니며, 오늘날 지명은 보조 표기로만 표시됩니다. 장소 세부 패널은 다음 단계에서 확장됩니다."
-              : "This map is a schematic aid for following the biblical textual flow. It is not a coordinate map, and modern place labels are shown only as supporting references. A dedicated place detail panel comes later."}
+              ? "이 지도는 성경 본문 흐름을 돕는 개념지도입니다. 정확한 좌표 지도가 아니며, 오늘날 지명은 보조 표기로만 표시됩니다. 중앙 컬럼은 시대순 위→아래 흐름을 우선합니다."
+              : "This map is a schematic aid for following the biblical textual flow. It is not a coordinate map, and modern place labels are shown only as supporting references. The center column defaults to a top-to-bottom chronological flow."}
           </p>
         </div>
         <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
@@ -809,7 +801,7 @@ function PlacesSchematicMapPreviewPanel({
 
       <div className="mt-4 rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-3">
         <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
-          {locale === "ko" ? "개념 권역" : "Concept Regions"}
+          {locale === "ko" ? "성경 흐름 개념지도" : "Biblical Flow Schematic"}
         </p>
         {visibleRows.length === 0 ? (
           <div className="mt-3 rounded-md border border-zinc-200 bg-white px-3 py-4 text-sm leading-6 text-zinc-600">
@@ -818,181 +810,132 @@ function PlacesSchematicMapPreviewPanel({
               : "No places match the current search."}
           </div>
         ) : (
-          <div className="mt-3 grid gap-3 xl:grid-cols-2">
-            {groupedRegions.map(({ region, rows }) => (
-              <section className="rounded-md border border-zinc-200 bg-white p-3" key={region.id}>
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div>
-                    <h3 className="text-sm font-semibold text-zinc-950">{getTimelineText(region.label, locale)}</h3>
-                    <p className="mt-1 text-xs leading-5 text-zinc-500">{getTimelineText(region.note, locale)}</p>
+          <div className="mt-3 flex flex-col gap-3">
+            {groupedSections.map(({ section, rows }, index) => (
+              <div className="flex flex-col gap-3" key={section.id}>
+                <section className="rounded-md border border-zinc-200 bg-white p-3">
+                  <div className="flex flex-wrap items-start justify-between gap-2 border-b border-zinc-200 pb-2.5">
+                    <div>
+                      <h3 className="text-sm font-semibold text-zinc-950">{getTimelineText(section.label, locale)}</h3>
+                      <p className="mt-1 text-xs leading-5 text-zinc-500">{getTimelineText(section.note, locale)}</p>
+                    </div>
+                    <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                      {locale === "ko" ? `${rows.length}개` : `${rows.length}`}
+                    </span>
                   </div>
-                  <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
-                    {locale === "ko" ? `${rows.length}개` : `${rows.length}`}
-                  </span>
-                </div>
 
-                <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {rows.map((row) => (
-                    <article
-                      className={cn(
-                        "rounded-md border p-2.5 transition-colors",
-                        selectedRowId === row.id
-                          ? "border-zinc-950 bg-white shadow-sm"
-                          : "cursor-pointer border-zinc-200 bg-zinc-50 hover:border-zinc-300 hover:bg-white",
-                      )}
-                      key={row.id}
-                      onClick={() => onSelectRow(row.id)}
-                      onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</p>
-                          {row.modernReferenceLabel ? (
-                            <p className="mt-1 text-xs leading-5 text-zinc-500">
-                              {getTimelineText(row.modernReferenceLabel, locale)}
-                            </p>
-                          ) : null}
+                  <div className="mt-3 space-y-2.5">
+                    {rows.map((row) => (
+                      <article
+                        className={cn(
+                          "relative rounded-md border bg-white p-3 transition-colors",
+                          selectedRowId === row.id
+                            ? "border-zinc-950 shadow-sm"
+                            : "cursor-pointer border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50",
+                        )}
+                        key={row.id}
+                        onClick={() => onSelectRow(row.id)}
+                        onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span
+                            aria-hidden="true"
+                            className={cn(
+                              "mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border",
+                              selectedRowId === row.id ? "border-zinc-950 bg-zinc-950" : "border-zinc-300 bg-zinc-300",
+                            )}
+                          />
+
+                          <div className="min-w-0 flex-1 space-y-2">
+                            <div className="flex flex-wrap items-start justify-between gap-2">
+                              <div className="min-w-0">
+                                <p className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</p>
+                                {row.modernReferenceLabel ? (
+                                  <p className="mt-1 text-xs leading-5 text-zinc-500">
+                                    {getTimelineText(row.modernReferenceLabel, locale)}
+                                  </p>
+                                ) : null}
+                              </div>
+                              {row.modernReferenceStatusLabel ? (
+                                <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                                  {getTimelineText(row.modernReferenceStatusLabel, locale)}
+                                </span>
+                              ) : null}
+                            </div>
+
+                            <div className="flex flex-wrap gap-1.5">
+                              <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                                {getTimelineText(row.conceptRegionLabel, locale)}
+                              </span>
+                              {row.placeTypeLabel ? (
+                                <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
+                                  {getTimelineText(row.placeTypeLabel, locale)}
+                                </span>
+                              ) : null}
+                              {row.conceptFlowGroup ? (
+                                <span className="inline-flex rounded-full border border-dashed border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-600">
+                                  {getSchematicFlowGroupLabel(row.conceptFlowGroup, locale)}
+                                </span>
+                              ) : null}
+                            </div>
+
+                            <div className="flex flex-wrap gap-1.5">
+                              {row.scriptureAnchors.map((anchor) => (
+                                <Link
+                                  className={cn(
+                                    "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
+                                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                                  )}
+                                  href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
+                                  onClick={(event) => event.stopPropagation()}
+                                  key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                                >
+                                  {getTimelineText(anchor.label, locale)}
+                                </Link>
+                              ))}
+                            </div>
+
+                            <div className="space-y-1.5 text-xs leading-5 text-zinc-500">
+                              <p>
+                                <span className="font-medium text-zinc-600">
+                                  {locale === "ko" ? "위치 근거: " : "Location basis: "}
+                                </span>
+                                {getTimelineText(row.locationBasisLabel, locale)}
+                              </p>
+                              <p>
+                                <span className="font-medium text-zinc-600">
+                                  {locale === "ko" ? "신뢰도: " : "Confidence: "}
+                                </span>
+                                {getTimelineText(row.locationConfidenceLabel, locale)}
+                              </p>
+                              {row.cautionNote ? (
+                                <p>
+                                  <span className="font-medium text-zinc-600">
+                                    {locale === "ko" ? "주의: " : "Caution: "}
+                                  </span>
+                                  {getTimelineText(row.cautionNote, locale)}
+                                </p>
+                              ) : null}
+                              <p>{getTimelineText(row.note, locale)}</p>
+                            </div>
+                          </div>
                         </div>
-                        {row.modernReferenceStatusLabel ? (
-                          <span className="inline-flex shrink-0 rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
-                            {getTimelineText(row.modernReferenceStatusLabel, locale)}
-                          </span>
-                        ) : null}
-                      </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
 
-                      <p className="mt-2 text-xs font-medium leading-5 text-zinc-600">
-                        {getTimelineText(row.conceptRegionLabel, locale)}
-                      </p>
-
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        {row.conceptFlowGroup ? (
-                          <span className="inline-flex rounded-full border border-dashed border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-600">
-                            {getSchematicFlowGroupLabel(row.conceptFlowGroup, locale)}
-                          </span>
-                        ) : null}
-                        {row.placeTypeLabel ? (
-                          <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
-                            {getTimelineText(row.placeTypeLabel, locale)}
-                          </span>
-                        ) : null}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
+                {index < groupedSections.length - 1 ? (
+                  <div className="flex justify-center text-lg font-semibold text-zinc-300" aria-hidden="true">
+                    ↓
+                  </div>
+                ) : null}
+              </div>
             ))}
           </div>
         )}
-      </div>
-
-      <div className="mt-4 overflow-x-auto">
-        <table className="min-w-[84rem] w-full border-separate border-spacing-0">
-          <thead>
-            <tr className="text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
-              <th className="border-b border-zinc-200 px-3 py-2">{locale === "ko" ? "장소" : "Place"}</th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "오늘날 보조 표기" : "Modern reference"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "개념 권역" : "Concept region"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "위치 근거" : "Location basis"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "성경 근거" : "Scripture anchor"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">{locale === "ko" ? "주의" : "Caution"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visibleRows.map((row) => (
-              <tr
-                className={cn(
-                  "align-top transition-colors",
-                  selectedRowId === row.id
-                    ? "bg-white shadow-sm"
-                    : "cursor-pointer bg-white hover:bg-zinc-50",
-                )}
-                key={row.id}
-                onClick={() => onSelectRow(row.id)}
-                onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
-                role="button"
-                tabIndex={0}
-              >
-                <td className="border-b border-zinc-200 px-3 py-3">
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-sm font-semibold text-zinc-950">
-                      {getTimelineText(row.title, locale)}
-                    </span>
-                    <p className="text-xs leading-5 text-zinc-600">{getTimelineText(row.note, locale)}</p>
-                  </div>
-                </td>
-                <td className="border-b border-zinc-200 px-3 py-3">
-                  <div className="flex flex-col gap-1.5">
-                    {row.modernReferenceLabel ? (
-                      <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
-                        {getTimelineText(row.modernReferenceLabel, locale)}
-                      </span>
-                    ) : null}
-                    {row.modernReferenceStatusLabel ? (
-                      <span className="text-xs leading-5 text-zinc-500">
-                        {getTimelineText(row.modernReferenceStatusLabel, locale)}
-                      </span>
-                    ) : null}
-                  </div>
-                </td>
-                <td className="border-b border-zinc-200 px-3 py-3">
-                  <div className="flex flex-col gap-1.5">
-                    <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
-                      {getTimelineText(row.conceptRegionLabel, locale)}
-                    </span>
-                    {row.placeTypeLabel ? (
-                      <span className="text-xs leading-5 text-zinc-500">
-                        {getTimelineText(row.placeTypeLabel, locale)}
-                      </span>
-                    ) : null}
-                  </div>
-                </td>
-                <td className="border-b border-zinc-200 px-3 py-3">
-                  <div className="flex flex-col gap-1.5">
-                    <p className="text-xs font-medium leading-5 text-zinc-500">
-                      {getTimelineText(row.locationBasisLabel, locale)}
-                    </p>
-                    <p className="text-xs leading-5 text-zinc-500">
-                      {getTimelineText(row.locationConfidenceLabel, locale)}
-                    </p>
-                  </div>
-                </td>
-                <td className="border-b border-zinc-200 px-3 py-3">
-                  <div className="flex flex-wrap gap-1.5">
-                    {row.scriptureAnchors.map((anchor) => (
-                      <Link
-                        className={cn(
-                          "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
-                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-                        )}
-                        href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
-                        onClick={(event) => event.stopPropagation()}
-                        key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
-                      >
-                        {getTimelineText(anchor.label, locale)}
-                      </Link>
-                    ))}
-                  </div>
-                </td>
-                <td className="border-b border-zinc-200 px-3 py-3">
-                  <div className="space-y-1.5 text-xs leading-5 text-zinc-500">
-                    {row.cautionNote ? <p>{getTimelineText(row.cautionNote, locale)}</p> : null}
-                    <p>{getTimelineText(noCoordinatesNote, locale)}</p>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </section>
   );
