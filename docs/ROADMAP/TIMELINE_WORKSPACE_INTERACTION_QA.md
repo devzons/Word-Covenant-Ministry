@@ -70,7 +70,10 @@ Pass through code-path inspection and static validation.
 - The route loader passes `books.66-canonical-skeleton.json` through the existing adapter.
 - The center view remains grouped by canonical section and ordered canonically.
 - Left canonical section navigation targets stable section IDs and uses button-based interaction.
-- Active section state is exposed through `aria-pressed`, and center section targets remain focusable with `tabIndex={-1}`.
+- Canonical sections are now accordion panels that start collapsed on first load.
+- Left canonical section selection opens the matching section, scrolls to it, and focuses the section target.
+- Multiple canonical sections can stay open at the same time, and center-column section headers can directly toggle expanded state.
+- Active section state is exposed through `aria-pressed`, `aria-expanded`, and `aria-controls`, and center section targets remain focusable with `tabIndex={-1}`.
 - The right panel remains metadata-only and reference-only.
 
 ### Left Navigator
@@ -146,10 +149,16 @@ Result:
 
 ## Fixed Issues
 
-- None in this pass
+- After this QA pass, the Books / Psalms center column was updated to a collapsed-by-default canonical-section accordion model with navigator-triggered open plus scroll/focus behavior.
 
 ## Known Limitations
 
 - Live browser interaction QA was not available from this environment.
 - Route smoke could not verify HTTP responses despite a local listener on port `3030`.
 - Books canonical section active state is click-driven and does not yet track viewport position automatically.
+
+## Addendum After CR-93D-4
+
+- Books / Psalms center sections are no longer always-expanded content bands.
+- The current behavior is accordion-first: all canonical sections start collapsed, left navigator selection opens and focuses the target section, and users can manually keep multiple sections open.
+- This preserves the existing metadata-only / Scripture-reference-only guardrail and does not introduce Bible text rendering, coordinates, map-provider data, or backend changes.
