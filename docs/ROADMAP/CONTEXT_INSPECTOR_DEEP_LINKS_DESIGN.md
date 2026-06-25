@@ -35,6 +35,8 @@ Still deferred after `CR-91C-2`:
 - Genealogy and Places deep-link support
 - any backend persistence or share UI beyond the address bar itself
 
+`CR-91C-3` is now complete as a docs-only QA and sync step. The QA record lives in `docs/ROADMAP/CONTEXT_INSPECTOR_DEEP_LINKS_QA.md`.
+
 ## Scope
 
 Included in CR-91C design scope:

@@ -98,6 +98,8 @@ CR-93G Kings / Kingdoms Timeline Package Design is now documented in `docs/ROADM
 CR-91C Context Inspector Deep Links Scope Definition is now documented in `docs/ROADMAP/CONTEXT_INSPECTOR_DEEP_LINKS_DESIGN.md` as a docs-only design step. The new note defines the deep-link purpose, recommends a `view` plus `inspectType` / `inspectId` query policy, scopes the first implementation pass to Events, Books / Psalms, and Kings / Kingdoms, and fixes the metadata-only restore guardrails before frontend work begins. It does not add frontend code, data package rows, verifier changes, API, DB, backend, schema, or runtime import/export behavior. Bible text remains unrendered, coordinates and map-provider state remain out of scope, and invalid deep-link state is required to fall back safely without stale right-panel content.
 
 CR-91C-2 Events / Books / Kings Deep Link Implementation is now complete through available validation. The Timeline route and shell now restore metadata-only Context Inspector selection from `view`, `inspectType`, and `inspectId` for Events, Books / Psalms, and Kings / Kingdoms; item selection updates the address-bar query without adding per-row browser-history noise; invalid or mismatched deep-link state falls back safely to the active view with no stale right-panel content; and matching Books / Psalms or Kings / Kingdoms accordion sections open during restore. The supported v1 inspect types are `event`, `book`, and `kingdom`. Bible text remains unrendered, Scripture anchors remain reference-only, coordinates and map-provider state remain absent, exact chronology is not promoted to final data, and no API, DB, backend, schema, verifier, or data-package row change was required.
+
+CR-91C-3 Deep Link QA and Docs Sync is now complete through available validation. `docs/ROADMAP/CONTEXT_INSPECTOR_DEEP_LINKS_QA.md` now records the checked URLs, supported restore matrix, invalid-query fallback behavior, query-replacement interaction policy, regression review, and the confirmed metadata-only guardrails for the current Events, Books / Psalms, and Kings / Kingdoms deep-link flow. No required frontend fixes were identified in this QA pass. Live route smoke remained unavailable from this environment because curl could not connect to the local `:3030` route, so the QA result is based on static validation, successful frontend build checks, and explicit code-path inspection.
 ```
 
 Completed phase:
@@ -109,13 +111,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Use the implemented CR-91C-2 deep-link baseline to run focused QA, confirm invalid-state fallbacks, and document any small interaction polish without broadening the metadata-only guardrails.
+Use the completed CR-91C deep-link baseline as the stable metadata-only inspector-selection path while moving to the next approved Timeline workspace refinement.
 ```
 
 Next task:
 
 ```txt
-Proceed to CR-91C-3 Deep Link QA and Docs Sync now that query-restored inspector selection is implemented for the supported package-backed views.
+Proceed to CR-91D Schematic Flow Highlights now that CR-91C deep-link design, implementation, and QA are complete for the supported package-backed views.
 ```
 
 Blocked items:
