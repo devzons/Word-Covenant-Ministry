@@ -8,6 +8,8 @@
 
 CR-90Y Timeline Content Completeness Audit / Content Expansion is complete through available validation. The Scripture Timeline now includes compact Books / Psalms context rows, a compact Kings / Kingdoms comparison table with ruler and empire context, the same Matthew 14 / 14 / 14 comparison view, and the same left sidebar navigator, a main workspace area, and a right detail panel while remaining Scripture-first and page-stay oriented. Staging and release work remain paused until the next Timeline preview branch is chosen.
 
+CR-92A Korean History Reference Layer Design is now documented as a design-only phase. It adds the policy and placement framework for a future reference-only Korean history layer, but no code, data import, or UI implementation has been added yet.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applies to this narrow frontend investigation: the lighter workflow is acceptable because the work is route-accessibility and runtime-investigation focused, not architecture, API, database, schema, import, migration, Data Package, or production-impacting work.
@@ -20,10 +22,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-90Y-5 Genealogy Detail Refinement.
-2. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-3. CR-91 Place / Map Preview.
-3. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+1. CR-92B Korean History Reference Placeholder UI.
+2. CR-90Y-5 Genealogy Detail Refinement.
+3. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+4. CR-91 Place / Map Preview.
+5. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
 4. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
 5. After explicit approval, implement seed migration tracking and release automation support.
 6. Later: Strong detail pages or dedicated Word Study pages.
