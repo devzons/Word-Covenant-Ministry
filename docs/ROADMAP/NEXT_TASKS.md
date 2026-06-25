@@ -22,6 +22,8 @@ CR-93B-2 Timeline Data Package Skeleton Files is complete. Skeleton sample packa
 
 CR-93D 66-Book Context Skeleton is complete. `docs/data-packages/timeline/books.66-canonical-skeleton.json` now contains 66 canonical book rows as a cautious package-level skeleton with Scripture anchors, basis labels, provisional timeline grouping fields, and accordion-first display fields. The file is not imported into the frontend yet. No Bible text, frontend code, API, DB, schema migration, import script, or commentary layer was added.
 
+CR-91E Timeline Left Navigator Redesign is complete through available validation. The left sidebar is now active-view aware and works as a contextual Timeline Navigator instead of a shared filter surface across all views. Events filters remain functional and are clearly scoped to Events. Books / Psalms navigator now acknowledges that the 66-book package skeleton exists but is not imported into the frontend yet. Places navigator now makes the schematic-map and no-coordinate boundary explicit. No data rows, API, DB, schema, import, or package integration were added. Korean history remains placeholder/reference only.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
@@ -34,9 +36,9 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93E Timeline Package Verifier Design.
-2. CR-93C Core Biblical Event Skeleton.
-3. CR-93D-2 66-Book Frontend Preview Integration.
+1. CR-93D-2 66-Book Frontend Preview Integration.
+2. CR-93E Timeline Package Verifier Design.
+3. CR-93C Core Biblical Event Skeleton.
 4. CR-91C Context Inspector Deep Links.
 5. CR-91D Schematic Flow Highlights.
 6. CR-92C Korean History Pilot Rows after source review.

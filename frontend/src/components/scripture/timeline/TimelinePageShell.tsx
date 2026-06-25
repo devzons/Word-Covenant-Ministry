@@ -382,6 +382,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
             activeBookId={filters.bookId}
             activePeriodId={filters.periodId}
             activePlaceId={filters.placeId}
+            activeView={activeView}
             bookOptions={bookOptions}
             confidenceLabel={activeLocale === "ko" ? "높은 신뢰도 미리보기" : "High-confidence preview"}
             confidenceNote={
@@ -425,6 +426,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
               activePeriodLabel={periodLabelForStatus(filters.periodId, periodOptions, activeLocale)}
               activePlaceLabel={placeLabelForStatus(filters.placeId, placeOptions, activeLocale)}
               locale={activeLocale}
+              activeView={activeView}
               modeLabel={activeViewLabel}
               totalCount={previewCounts.totalCount}
               visibleCount={previewCounts.visibleCount}
@@ -535,6 +537,7 @@ type CompactStatusRowProps = {
   activeBookLabel: string;
   activePeriodLabel: string;
   activePlaceLabel: string;
+  activeView: TimelineView;
   locale: TimelineLocale;
   modeLabel: string;
   totalCount: number;
@@ -545,39 +548,66 @@ function CompactStatusRow({
   activeBookLabel,
   activePeriodLabel,
   activePlaceLabel,
+  activeView,
   locale,
   modeLabel,
   totalCount,
   visibleCount,
 }: CompactStatusRowProps) {
+  const viewStatusNote = getCompactStatusNote(activeView, locale, visibleCount, totalCount);
+
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-600">
       <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
         {modeLabel}
       </span>
+      {activeView === "events" || activeView === "overview" ? (
+        <>
+          <span className="text-zinc-300" aria-hidden="true">
+            ·
+          </span>
+          <span>{activePeriodLabel}</span>
+          <span className="text-zinc-300" aria-hidden="true">
+            ·
+          </span>
+          <span>{activeBookLabel}</span>
+          <span className="text-zinc-300" aria-hidden="true">
+            ·
+          </span>
+          <span>{activePlaceLabel}</span>
+        </>
+      ) : null}
       <span className="text-zinc-300" aria-hidden="true">
         ·
       </span>
-      <span>{activePeriodLabel}</span>
-      <span className="text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span>{activeBookLabel}</span>
-      <span className="text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span>{activePlaceLabel}</span>
-      <span className="text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span className="font-medium text-zinc-950">
-        {locale === "ko" ? `${visibleCount}개 사건` : `${visibleCount} events`}
-      </span>
-      <span className="text-zinc-500">
-        {locale === "ko" ? `/ 전체 ${totalCount}개` : `/ ${totalCount} total`}
-      </span>
+      <span className="font-medium text-zinc-950">{viewStatusNote}</span>
     </div>
   );
+}
+
+function getCompactStatusNote(
+  view: TimelineView,
+  locale: TimelineLocale,
+  visibleCount: number,
+  totalCount: number,
+) {
+  switch (view) {
+    case "overview":
+    case "events":
+      return locale === "ko"
+        ? `${visibleCount}개 사건 / 전체 ${totalCount}개`
+        : `${visibleCount} events / ${totalCount} total`;
+    case "books":
+      return locale === "ko" ? "runtime preview rows · 66권 package 연결 전" : "Runtime preview rows · 66-book package not integrated";
+    case "kingdoms":
+      return locale === "ko" ? "왕국 비교 preview rows" : "Kingdom comparison preview rows";
+    case "genealogy":
+      return locale === "ko" ? "마태복음 1장 preview" : "Matthew 1 preview";
+    case "places":
+      return locale === "ko" ? "좌표 없는 개념지도 preview" : "Non-coordinate schematic preview";
+    case "themes":
+      return locale === "ko" ? "준비 중" : "Planned";
+  }
 }
 
 function getTimelineViewLabel(view: TimelineView, locale: TimelineLocale) {
