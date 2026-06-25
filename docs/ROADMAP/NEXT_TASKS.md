@@ -28,6 +28,8 @@ CR-93E Timeline Package Verifier Design is complete. `docs/ROADMAP/TIMELINE_PACK
 
 CR-93E-2 Verifier Test Fixtures is complete. `docs/data-packages/timeline/fixtures/` now contains synthetic valid, invalid, and warning-only JSON fixtures for future verifier implementation. The fixtures are documentation and test-data only; they are not runtime imports and not approved production package rows. Invalid JSON syntax remains documented in fixture README rather than committed as a broken `.json` file. No verifier script, frontend code, API, DB, schema, runtime integration, or real biblical data expansion was added.
 
+CR-93E-3 Minimal Verifier Implementation is complete. `scripts/timeline/verify-timeline-package.mjs` now provides a read-only CLI for single-file and directory verification with readable-summary and `--json` output modes. Current checks cover JSON parse, package envelope fields, duplicate IDs, center-column required fields, cross-link resolution, 66-book skeleton validation, Bible-text guardrails, no-coordinate guardrails, supporting-reference authority guardrails, and warning-only review flags. No frontend code, API, DB, schema, import, runtime integration, or real biblical data expansion was added.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
@@ -40,8 +42,8 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93E-3 Minimal Verifier Implementation.
-2. CR-93E-4 66-Book Validation.
+1. CR-93E-4 66-Book Validation.
+2. CR-93E-5 Cross-Link and No-Coordinate Guardrail Expansion.
 3. CR-93C Core Biblical Event Skeleton.
 4. CR-93D-2 66-Book Frontend Preview Integration.
 5. CR-91C Context Inspector Deep Links.

@@ -12,6 +12,8 @@
       "id": "chronology-uncertainty-warning-1",
       "bookId": "job",
       "canonicalOrder": 18,
+      "testament": "OT",
+      "canonicalSection": "Wisdom / Poetry",
       "timelinePeriodId": "patriarchs",
       "sectionId": "wisdom-poetry",
       "displayOrder": 18,
@@ -27,6 +29,14 @@
           "scope": "book"
         }
       ],
+      "authorshipBasisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경 연결",
+        "en": "Textual background connection"
+      },
       "dateLabel": {
         "ko": "불확실",
         "en": "Uncertain"

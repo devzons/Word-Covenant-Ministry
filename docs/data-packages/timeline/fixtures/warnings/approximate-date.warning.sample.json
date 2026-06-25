@@ -14,6 +14,10 @@
       "sectionId": "patriarchal-flow",
       "displayOrder": 1,
       "accordionGroup": "events",
+      "title": {
+        "ko": "대략 연대 경고 예시",
+        "en": "Approximate date warning sample"
+      },
       "scriptureAnchors": [
         {
           "bookId": "genesis",

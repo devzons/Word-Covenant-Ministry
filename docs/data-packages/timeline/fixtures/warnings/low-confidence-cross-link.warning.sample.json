@@ -10,10 +10,10 @@
   "items": [
     {
       "id": "low-confidence-cross-link-warning-1",
-      "fromType": "place",
-      "fromId": "place-fixture-warning-1",
+      "fromType": "event",
+      "fromId": "event-fixture-valid-1",
       "toType": "book",
-      "toId": "book-fixture-valid-1",
+      "toId": "book-context-genesis-skeleton",
       "relationLabel": {
         "ko": "낮은 신뢰 연결",
         "en": "Low-confidence link"

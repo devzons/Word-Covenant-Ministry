@@ -13,7 +13,7 @@
       "fromType": "event",
       "fromId": "event-fixture-valid-1",
       "toType": "book",
-      "toId": "book-fixture-valid-1",
+      "toId": "book-context-genesis-skeleton",
       "relationLabel": {
         "ko": "관련 책",
         "en": "Related book"

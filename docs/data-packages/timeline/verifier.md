@@ -2,10 +2,10 @@
 
 Current status:
 
-- Not implemented
-- Design only
-- No executable verifier script yet
-- Fixture directory planned for verifier behavior locking under `fixtures/`
+- Minimal CLI implemented
+- Read-only verification only
+- No runtime import or transformation behavior
+- Fixture directory available under `fixtures/`
 
 Purpose:
 
@@ -13,11 +13,30 @@ Purpose:
 - Guard against duplicate IDs, missing Scripture anchors, fake cross-links, Bible text storage, and no-coordinate violations
 - Keep supporting reference layers from being treated as interpretive authority over Scripture
 
-Future command shape:
+Current command:
 
 ```bash
 node scripts/timeline/verify-timeline-package.mjs docs/data-packages/timeline
 ```
+
+Optional JSON output:
+
+```bash
+node scripts/timeline/verify-timeline-package.mjs --json docs/data-packages/timeline/fixtures/warnings
+```
+
+Current supported checks:
+
+- JSON syntax
+- package envelope fields
+- duplicate row IDs
+- center-column required fields
+- cross-link field presence and ID resolution
+- canonical 66-book skeleton validation
+- Bible-text field guardrails
+- no-coordinate and no-map-provider guardrails
+- supporting-reference authority guardrails
+- warning-only review flags for approximate chronology, Korean reference review, and low-confidence cross-links
 
 Alternative shape if implementation direction changes later:
 
@@ -25,7 +44,7 @@ Alternative shape if implementation direction changes later:
 php tools/timeline/verify-timeline-package.php docs/data-packages/timeline
 ```
 
-Current manual checks:
+Manual spot checks still remain useful:
 
 ```bash
 python3 -m json.tool docs/data-packages/timeline/books.66-canonical-skeleton.json > /tmp/books-66-check.json

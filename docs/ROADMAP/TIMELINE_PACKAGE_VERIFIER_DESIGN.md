@@ -14,11 +14,11 @@ As the Timeline data package grows, common risks become more likely:
 
 The future verifier exists to check that Timeline package data continues to follow the Scripture-first package rules and structural requirements.
 
-This CR-93E step is design only.
+This design preceded implementation.
 
-- It does not implement a verifier.
-- It does not add runtime code.
-- It does not change import or API behavior.
+- The initial minimal CLI is now implemented at `scripts/timeline/verify-timeline-package.mjs`.
+- It remains read-only and fixture-oriented.
+- It does not add runtime import behavior or API behavior.
 
 Important boundaries:
 
@@ -341,6 +341,20 @@ Recommendation:
 - `CR-93E-4`: add 66-book validation
 - `CR-93E-5`: add cross-link and no-coordinate guardrails
 - `CR-93E-6`: add CI or documented verification command
+
+Implemented current minimum in `CR-93E-3`:
+
+- CLI path: `scripts/timeline/verify-timeline-package.mjs`
+- target modes: single file or directory
+- outputs: readable summary or `--json`
+- current checks: JSON parse, envelope fields, duplicate IDs, cross-link resolution, 66-book skeleton rules, Bible-text guardrails, no-coordinate guardrails, Scripture-first supporting-reference guardrails, and warning-only review flags
+
+Known current limitations:
+
+- The CLI does not enforce every future schema field yet.
+- The CLI does not validate exact Scripture verse existence.
+- The CLI does not integrate with CI yet.
+- The CLI is intentionally read-only and does not import or transform package data.
 
 ## 16. Fixture Design Follow-up
 
