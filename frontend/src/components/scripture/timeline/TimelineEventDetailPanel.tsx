@@ -46,6 +46,7 @@ type TimelineInspectorSelectionType = TimelineInspectorSelectionItem["type"];
 
 type TimelineEvidenceLookupMaps = {
   bookContextById: Map<string, TimelineBookContextRow>;
+  bookContextByBookId: Map<string, TimelineBookContextRow>;
   eventById: Map<string, PassionWeekTimelineEvent>;
   genealogyComparisonById: Map<string, TimelineGenealogyComparisonRow>;
   kingdomComparisonById: Map<string, TimelineKingdomComparisonRow>;
@@ -330,6 +331,11 @@ function renderEventEvidencePanel(
     .filter((place): place is NonNullable<typeof place> => Boolean(place));
   const relativeYearLabel = event.relativeYearLabel ? getTimelineText(event.relativeYearLabel, locale) : "";
   const relatedBookRows = timelineBookContextRows.filter((row) => row.relatedEventIds?.includes(event.id));
+  const relatedPackageBookRows = dedupeById(
+    event.relatedBookIds
+      .map((bookId) => lookupMaps.bookContextByBookId.get(bookId))
+      .filter((row): row is TimelineBookContextRow => Boolean(row)),
+  );
   const relatedPlaceRows = dedupeById(
     [
       ...event.placeIds
@@ -349,12 +355,23 @@ function renderEventEvidencePanel(
       </div>
 
       <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        <ScriptureAnchorList
-          anchors={event.scriptureAnchors}
-          locale={locale}
-          openInReaderLabel={openInReaderLabel}
-          rowId={event.id}
-        />
+        {event.scriptureReferencesOnly ? (
+          <>
+            <ReferenceOnlyAnchorList anchors={event.scriptureAnchors} locale={locale} />
+            <SectionNote>
+              {locale === "ko"
+                ? "이 package는 성경 본문을 저장하지 않습니다. 사건 수준 Scripture reference만 표시합니다."
+                : "This package does not store Bible text. It shows event-level Scripture references only."}
+            </SectionNote>
+          </>
+        ) : (
+          <ScriptureAnchorList
+            anchors={event.scriptureAnchors}
+            locale={locale}
+            openInReaderLabel={openInReaderLabel}
+            rowId={event.id}
+          />
+        )}
       </DetailSection>
 
       <DetailSection label={locale === "ko" ? "배경 / 요약" : "Background / Summary"}>
@@ -375,9 +392,15 @@ function renderEventEvidencePanel(
             value={getTimelineText(primaryBook.label, locale)}
           />
         ) : null}
+        {event.basisLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "패키지 기준" : "Package basis"}
+            value={getTimelineText(event.basisLabel, locale)}
+          />
+        ) : null}
       </DetailSection>
 
-      {datePreview ? (
+      {datePreview && !event.scriptureReferencesOnly ? (
         <DetailSection label={locale === "ko" ? "보조 연대 / 연대 근거" : "Supporting Date / Basis"}>
           <ContextRow label={locale === "ko" ? "연대 표기" : "Date label"} value={getTimelineText(datePreview.dateLabel, locale)} />
           <ContextRow
@@ -396,7 +419,7 @@ function renderEventEvidencePanel(
         </DetailSection>
       ) : null}
 
-      {relativeYearLabel || event.relativeYearBasisLabel || event.relativeYearCalculationNote ? (
+      {!event.scriptureReferencesOnly && (relativeYearLabel || event.relativeYearBasisLabel || event.relativeYearCalculationNote) ? (
         <DetailSection label={locale === "ko" ? "성경 내부 연수" : "Scripture-Derived Relative Year"}>
           {relativeYearLabel ? (
             <ContextRow label={locale === "ko" ? "연수 표기" : "Relative year"} value={relativeYearLabel} />
@@ -453,13 +476,14 @@ function renderEventEvidencePanel(
           <SectionNote>{getTimelineText(event.worldContextConfidenceLabel, locale)}</SectionNote>
         ) : null}
         {event.nameVariantNote ? <SectionNote>{getTimelineText(event.nameVariantNote, locale)}</SectionNote> : null}
+        {event.cautionNote ? <SectionNote>{getTimelineText(event.cautionNote, locale)}</SectionNote> : null}
       </DetailSection>
 
-      {relatedBookRows.length || relatedPlaceRows.length || relatedKingdomRows.length || relatedGenealogyRows.length ? (
+      {relatedBookRows.length || relatedPackageBookRows.length || relatedPlaceRows.length || relatedKingdomRows.length || relatedGenealogyRows.length ? (
         <DetailSection label={locale === "ko" ? "관련 항목" : "Related Items"}>
-          {relatedBookRows.length ? (
+          {relatedBookRows.length || relatedPackageBookRows.length ? (
             <RelatedItemSection label={locale === "ko" ? "관련 책/시편" : "Related Books / Psalms"}>
-              {relatedBookRows.map((row) => (
+              {dedupeById([...relatedBookRows, ...relatedPackageBookRows]).map((row) => (
                 <RelatedItemButton
                   active={selection?.type === "book" && selection.id === row.id}
                   eyebrow={locale === "ko" ? "책 / 시편" : "Book / Psalm"}
@@ -508,6 +532,21 @@ function renderEventEvidencePanel(
                 />
               ))}
             </RelatedItemSection>
+          ) : null}
+        </DetailSection>
+      ) : null}
+
+      {event.sourcePackage === "core-biblical-skeleton" ? (
+        <DetailSection label={locale === "ko" ? "패키지 상태" : "Package Status"}>
+          <SectionNote>
+            {locale === "ko"
+              ? "이 패널은 core biblical event skeleton package의 metadata-only preview를 보여 줍니다."
+              : "This panel shows a metadata-only preview from the core biblical event skeleton package."}
+          </SectionNote>
+          {event.reviewRequired ? (
+            <SectionNote>
+              {locale === "ko" ? "후속 검토 필요 상태로 유지됩니다." : "This row remains marked for further review."}
+            </SectionNote>
           ) : null}
         </DetailSection>
       ) : null}

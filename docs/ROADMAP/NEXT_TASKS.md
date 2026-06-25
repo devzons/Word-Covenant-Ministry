@@ -22,7 +22,7 @@ CR-93B-2 Timeline Data Package Skeleton Files is complete. Skeleton sample packa
 
 CR-93D 66-Book Context Skeleton is complete. `docs/data-packages/timeline/books.66-canonical-skeleton.json` now contains 66 canonical book rows as a cautious package-level skeleton with Scripture anchors, basis labels, provisional timeline grouping fields, and accordion-first display fields.
 
-CR-93D-2 66-Book Frontend Preview Integration is complete through available validation. The Timeline Books / Psalms view now reads the canonical 66-book skeleton through the Timeline route server layer and renders a metadata-only frontend preview with OT/NT grouping, OT 39 / NT 27 counts, canonical order display, locale-aware titles, and a metadata-only right panel. No Bible text rendering, Bible API calls, backend API calls, coordinates, map provider fields, API changes, DB changes, schema migration, runtime import/export pipeline work, or event-package runtime integration were added. `events.core-biblical-skeleton.json` remains unlinked from the frontend runtime.
+CR-93D-2 66-Book Frontend Preview Integration is complete through available validation. The Timeline Books / Psalms view now reads the canonical 66-book skeleton through the Timeline route server layer and renders a metadata-only frontend preview with OT/NT grouping, OT 39 / NT 27 counts, canonical order display, locale-aware titles, and a metadata-only right panel. No Bible text rendering, Bible API calls, backend API calls, coordinates, map provider fields, API changes, DB changes, schema migration, or runtime import/export pipeline work were added.
 
 CR-91E Timeline Left Navigator Redesign is complete through available validation. The left sidebar is now active-view aware and works as a contextual Timeline Navigator instead of a shared filter surface across all views. Events filters remain functional and are clearly scoped to Events. Books / Psalms navigator now acknowledges and summarizes the active 66-book package preview. Places navigator now makes the schematic-map and no-coordinate boundary explicit. No data rows, API, DB, schema, import, or non-approved package integration were added. Korean history remains placeholder/reference only.
 
@@ -36,7 +36,7 @@ CR-93E-4 66-Book Validation is complete. The verifier now hardens canonical 66-b
 
 CR-93E-5 Cross-Link and No-Coordinate Guardrail Expansion is complete. The verifier now hardens cross-link target-type checks, rejects Bible-reference-looking IDs when used as package row IDs, fails ambiguous duplicate-target resolution, warns on self-links and missing target types, recursively scans nested objects and arrays for forbidden coordinate or map-provider fields, and tightens supporting-reference authority guardrails for Korean/world reference layers. Additional invalid and warning fixtures now cover these cases. No frontend code, runtime integration, API, DB, schema, import, or real biblical data expansion was added.
 
-CR-93C Core Biblical Event Skeleton is complete. `docs/data-packages/timeline/events.core-biblical-skeleton.json` now contains a minimal Scripture-reference-only event baseline with 34 core rows from Creation through Revelation. The package is read-only, verifier-checked, and not imported into the frontend runtime yet. No Bible text, coordinates, map provider fields, Korean/world historical rows, frontend code, API, DB, schema migration, or runtime import work were added.
+CR-93C Core Biblical Event Skeleton is complete. `docs/data-packages/timeline/events.core-biblical-skeleton.json` now contains a minimal Scripture-reference-only event baseline with 34 core rows from Creation through Revelation. The package is read-only, verifier-checked, and now connected to the Timeline Events view through a preview-only route server loader. No Bible text, coordinates, map provider fields, Korean/world historical rows, API, DB, schema migration, or runtime import/export pipeline work were added.
 
 CR-93E-6 Verifier CI / Command Wiring is complete. `scripts/timeline/verify-timeline-packages.mjs` now provides a single local wrapper command that checks verifier syntax, the canonical books package, the core events package, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output. No root `package.json`, GitHub Actions workflow, frontend code, runtime integration, API, DB, schema migration, or import behavior was added. Repository CI wiring remains deferred because there is no existing `.github/workflows/` convention in this repository.
 
@@ -52,7 +52,7 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93C-2 Core Event Skeleton Frontend Preview Integration.
+1. CR-90Y deeper event package expansion or content-audit branch selection.
 2. Later approved CI wiring for Timeline package verifier command.
 3. CR-91C Context Inspector Deep Links.
 4. CR-91D Schematic Flow Highlights.

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils/cn";
 import { TimelineConfidenceBadge } from "./TimelineConfidenceBadge";
 import {
   getTimelineDatePreview,
+  getTimelineBook,
   getTimelinePlace,
   getTimelineText,
 } from "./passionWeekTimeline";
@@ -24,6 +25,7 @@ export function TimelineEventCard({
   selected,
 }: TimelineEventCardProps) {
   const datePreview = getTimelineDatePreview(event);
+  const isCoreSkeleton = event.sourcePackage === "core-biblical-skeleton";
   const relativeYearLabel = event.relativeYearLabel ? getTimelineText(event.relativeYearLabel, locale) : "";
   const peopleLabels = event.people.map((person) => getTimelineText(person, locale));
   const placeLabels = event.placeIds
@@ -60,9 +62,18 @@ export function TimelineEventCard({
           <div className="flex flex-wrap items-start gap-3">
             <div className="flex min-w-[6.25rem] flex-col gap-1">
               <span className="inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
-                {getTimelineText(datePreview.dateLabel, locale)}
+                {isCoreSkeleton && event.sequenceNumber
+                  ? locale === "ko"
+                    ? `순서 ${event.sequenceNumber}`
+                    : `Sequence ${event.sequenceNumber}`
+                  : getTimelineText(datePreview.dateLabel, locale)}
               </span>
-              {relativeYearLabel ? (
+              {isCoreSkeleton && event.periodLabel ? (
+                <span className="text-[11px] font-medium leading-4 text-zinc-500">
+                  {getTimelineText(event.periodLabel, locale)}
+                </span>
+              ) : null}
+              {!isCoreSkeleton && relativeYearLabel ? (
                 <span className="text-[11px] font-medium leading-4 text-zinc-500">
                   {relativeYearLabel}
                 </span>
@@ -114,6 +125,15 @@ export function TimelineEventCard({
                     {placeLabel}
                   </span>
                 ))}
+                {isCoreSkeleton
+                  ? event.relatedBookIds.slice(0, 3).map((bookId) => (
+                      <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={`${event.id}-${bookId}`}>
+                        {getTimelineBook(bookId)
+                          ? getTimelineText(getTimelineBook(bookId)!.label, locale)
+                          : bookId}
+                      </span>
+                    ))
+                  : null}
                 <span className="rounded-full bg-zinc-100 px-2.5 py-1">
                   {getTimelineText(event.eventType, locale)}
                 </span>

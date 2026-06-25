@@ -103,13 +103,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Choose the next runtime integration branch now that local verifier command wiring is in place.
+Stabilize Timeline package-backed frontend previews after the Books / Psalms and Events runtime integrations.
 ```
 
 Next task:
 
 ```txt
-Proceed to CR-93C-2 Core Event Skeleton Frontend Preview Integration, then decide whether deeper Timeline package runtime adoption or broader content-audit expansion comes next.
+Proceed to the next approved Timeline content-audit or package-adoption branch now that CR-93C-2 Core Event Skeleton Frontend Preview Integration is complete.
 ```
 
 Blocked items:

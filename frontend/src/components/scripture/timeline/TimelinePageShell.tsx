@@ -15,7 +15,6 @@ import {
   getTimelinePlace,
   getTimelineReaderHrefFromReader,
   getTimelineText,
-  passionWeekTimelineEvents,
   type TimelineInspectorSelection,
   timelineBookContextRows,
   timelineGenealogyComparisonRows,
@@ -25,6 +24,7 @@ import {
   timelineBooks,
   timelinePeriods,
   timelinePlaces,
+  type TimelineEvent,
   type TimelineBookContextRow,
   type TimelineText,
   type TimelineLocale,
@@ -39,6 +39,10 @@ type TimelinePageShellProps = {
   canonicalBookStats: {
     newTestamentCount: number;
     oldTestamentCount: number;
+    totalCount: number;
+  };
+  coreEventRows: TimelineEvent[];
+  coreEventStats: {
     totalCount: number;
   };
   initialFilters: TimelineFilterState;
@@ -147,6 +151,8 @@ const pageCopy = {
 export function TimelinePageShell({
   canonicalBookRows,
   canonicalBookStats,
+  coreEventRows,
+  coreEventStats,
   initialFilters,
   initialView,
   locale,
@@ -159,21 +165,22 @@ export function TimelinePageShell({
   const [activeView, setActiveView] = useState<TimelineView>(initialView);
   const [filters, setFilters] = useState<TimelineFilterState>(initialFilters);
   const [inspectorSelection, setInspectorSelection] = useState<TimelineInspectorSelection>(null);
+  const timelineEvents = coreEventRows;
 
   const periodCounts = useMemo(() => {
     const counts = new Map<string, number>();
 
-    for (const event of passionWeekTimelineEvents) {
+    for (const event of timelineEvents) {
       counts.set(event.periodId, (counts.get(event.periodId) ?? 0) + 1);
     }
 
     return counts;
-  }, []);
+  }, [timelineEvents]);
 
   const bookCounts = useMemo(() => {
     const counts = new Map<string, number>();
 
-    for (const event of passionWeekTimelineEvents) {
+    for (const event of timelineEvents) {
       counts.set(event.primaryBookId, (counts.get(event.primaryBookId) ?? 0) + 1);
 
       for (const relatedBookId of event.relatedBookIds) {
@@ -182,19 +189,19 @@ export function TimelinePageShell({
     }
 
     return counts;
-  }, []);
+  }, [timelineEvents]);
 
   const placeCounts = useMemo(() => {
     const counts = new Map<string, number>();
 
-    for (const event of passionWeekTimelineEvents) {
+    for (const event of timelineEvents) {
       for (const placeId of event.placeIds) {
         counts.set(placeId, (counts.get(placeId) ?? 0) + 1);
       }
     }
 
     return counts;
-  }, []);
+  }, [timelineEvents]);
 
   const periodOptions = useMemo<TimelineOption[]>(
     () => [
@@ -240,7 +247,7 @@ export function TimelinePageShell({
 
   const visibleEvents = useMemo(
     () =>
-      passionWeekTimelineEvents.filter((event) => {
+      timelineEvents.filter((event) => {
         const matchesPeriod = filters.periodId === "all" || event.periodId === filters.periodId;
         const matchesBook =
           filters.bookId === "all" ||
@@ -251,7 +258,7 @@ export function TimelinePageShell({
 
         return matchesPeriod && matchesBook && matchesPlace && matchesSearch;
       }),
-    [filters.bookId, filters.periodId, filters.placeId, normalizedSearch],
+    [filters.bookId, filters.periodId, filters.placeId, normalizedSearch, timelineEvents],
   );
 
   const selectedEventId = inspectorSelection?.type === "event" ? inspectorSelection.id : "";
@@ -267,10 +274,10 @@ export function TimelinePageShell({
       bookCount,
       periodCount,
       placeCount,
-      totalCount: passionWeekTimelineEvents.length,
+      totalCount: coreEventStats.totalCount,
       visibleCount: visibleEvents.length,
     };
-  }, [visibleEvents]);
+  }, [coreEventStats.totalCount, visibleEvents]);
 
   const visiblePeriodSummaries = useMemo(
     () =>
@@ -286,11 +293,15 @@ export function TimelinePageShell({
   );
 
   const eventById = useMemo(
-    () => new Map(passionWeekTimelineEvents.map((event) => [event.id, event])),
-    [],
+    () => new Map(timelineEvents.map((event) => [event.id, event])),
+    [timelineEvents],
   );
   const bookContextById = useMemo(
     () => new Map([...timelineBookContextRows, ...canonicalBookRows].map((row) => [row.id, row])),
+    [canonicalBookRows],
+  );
+  const bookContextByBookId = useMemo(
+    () => new Map([...timelineBookContextRows, ...canonicalBookRows].map((row) => [row.bookId, row])),
     [canonicalBookRows],
   );
   const kingdomComparisonById = useMemo(
@@ -534,6 +545,7 @@ export function TimelinePageShell({
             selectedLabel={copy.selectedLabel}
             lookupMaps={{
               bookContextById,
+              bookContextByBookId,
               eventById,
               genealogyComparisonById,
               kingdomComparisonById,
@@ -769,6 +781,11 @@ function EventsPreviewPanel({
             {eventsHeading}
           </p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">{eventsNote}</p>
+          <p className="mt-2 text-xs leading-5 text-zinc-500">
+            {locale === "ko"
+              ? "core biblical event skeleton package 기반 metadata-only preview입니다. 성경 본문은 저장하거나 표시하지 않습니다."
+              : "This is a metadata-only preview backed by the core biblical event skeleton package. Bible text is not stored or rendered here."}
+          </p>
         </div>
         <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
           {locale === "ko"
@@ -1725,7 +1742,7 @@ function placeLabelForStatus(placeId: string, placeOptions: TimelineOption[], lo
   return placeOptions.find((option) => option.id === placeId)?.label ?? "";
 }
 
-function matchesTimelineSearch(event: (typeof passionWeekTimelineEvents)[number], query: string) {
+function matchesTimelineSearch(event: TimelineEvent, query: string) {
   if (!query) {
     return true;
   }
@@ -1767,6 +1784,12 @@ function matchesTimelineSearch(event: (typeof passionWeekTimelineEvents)[number]
     event.worldContextConfidenceLabel?.ko ?? "",
     event.nameVariantNote?.en ?? "",
     event.nameVariantNote?.ko ?? "",
+    event.basisLabel?.en ?? "",
+    event.basisLabel?.ko ?? "",
+    event.cautionNote?.en ?? "",
+    event.cautionNote?.ko ?? "",
+    event.periodLabel?.en ?? "",
+    event.periodLabel?.ko ?? "",
     primaryBook?.label.en ?? "",
     primaryBook?.label.ko ?? "",
     period?.label.en ?? "",

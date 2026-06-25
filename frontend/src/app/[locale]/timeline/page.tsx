@@ -10,6 +10,11 @@ import {
   normalizeCanonicalBooksPackage,
   type CanonicalBooksPackage,
 } from "@/components/scripture/timeline/timelineBooksPackage";
+import {
+  getCoreEventPreviewStats,
+  normalizeCoreBiblicalEventsPackage,
+  type CoreBiblicalEventsPackage,
+} from "@/components/scripture/timeline/timelineEventsPackage";
 
 type TimelinePageProps = {
   params: Promise<{
@@ -32,8 +37,11 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const query = await searchParams;
   const initialView = parseTimelineView(query.view);
   const canonicalBooksPackage = await loadCanonicalBooksPackage();
+  const coreEventsPackage = await loadCoreBiblicalEventsPackage();
   const canonicalBookRows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
   const canonicalBookStats = getCanonicalBookPreviewStats(canonicalBookRows);
+  const coreEventRows = normalizeCoreBiblicalEventsPackage(coreEventsPackage);
+  const coreEventStats = getCoreEventPreviewStats(coreEventRows);
   const initialFilters = {
     bookId: parseFilterValue(query.book),
     periodId: parseFilterValue(query.period),
@@ -46,6 +54,8 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
       <TimelinePageShell
         canonicalBookRows={canonicalBookRows}
         canonicalBookStats={canonicalBookStats}
+        coreEventRows={coreEventRows}
+        coreEventStats={coreEventStats}
         initialFilters={initialFilters}
         initialView={initialView}
         key={[
@@ -102,4 +112,17 @@ async function loadCanonicalBooksPackage(): Promise<CanonicalBooksPackage> {
   );
   const raw = await readFile(packagePath, "utf8");
   return JSON.parse(raw) as CanonicalBooksPackage;
+}
+
+async function loadCoreBiblicalEventsPackage(): Promise<CoreBiblicalEventsPackage> {
+  const packagePath = path.join(
+    process.cwd(),
+    "..",
+    "docs",
+    "data-packages",
+    "timeline",
+    "events.core-biblical-skeleton.json",
+  );
+  const raw = await readFile(packagePath, "utf8");
+  return JSON.parse(raw) as CoreBiblicalEventsPackage;
 }

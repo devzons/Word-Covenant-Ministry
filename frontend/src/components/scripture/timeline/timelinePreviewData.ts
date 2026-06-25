@@ -66,6 +66,17 @@ export type TimelineEvent = {
   worldContextBasisLabel?: TimelineText;
   worldContextConfidenceLabel?: TimelineText;
   nameVariantNote?: TimelineText;
+  sourcePackage?: "preview-fixture" | "core-biblical-skeleton";
+  scriptureReferencesOnly?: boolean;
+  isSkeleton?: boolean;
+  reviewRequired?: boolean;
+  basisLabel?: TimelineText;
+  cautionNote?: TimelineText;
+  periodLabel?: TimelineText;
+  sectionId?: string;
+  accordionGroup?: string;
+  displayOrder?: number;
+  sequenceNumber?: number;
   reader: TimelineReader;
 };
 
