@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.books",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Use ../../books.66-canonical-skeleton.json as the canonical 66-book validation target.",
+    "This fixture exists only to document expected verifier coverage."
+  ],
+  "items": []
+}

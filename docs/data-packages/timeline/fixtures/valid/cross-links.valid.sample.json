@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Valid explicit ID-based cross-links."
+  ],
+  "items": [
+    {
+      "id": "cross-link-valid-1",
+      "fromType": "event",
+      "fromId": "event-fixture-valid-1",
+      "toType": "book",
+      "toId": "book-fixture-valid-1",
+      "relationLabel": {
+        "ko": "관련 책",
+        "en": "Related book"
+      },
+      "basisLabel": {
+        "ko": "명시적 fixture 연결",
+        "en": "Explicit fixture link"
+      },
+      "confidenceLabel": {
+        "ko": "높음",
+        "en": "High"
+      },
+      "cautionNote": {
+        "ko": "검증용 synthetic link",
+        "en": "Synthetic verifier link"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.events",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Missing required sectionId."
+  ],
+  "items": [
+    {
+      "id": "missing-required-field-1",
+      "timelinePeriodId": "primeval",
+      "displayOrder": 1,
+      "accordionGroup": "events",
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ]
+    }
+  ]
+}

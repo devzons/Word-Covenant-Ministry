@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.books",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Chronology uncertainty needing clearer review labeling."
+  ],
+  "items": [
+    {
+      "id": "chronology-uncertainty-warning-1",
+      "bookId": "job",
+      "canonicalOrder": 18,
+      "timelinePeriodId": "patriarchs",
+      "sectionId": "wisdom-poetry",
+      "displayOrder": 18,
+      "accordionGroup": "wisdom-poetry",
+      "title": {
+        "ko": "욥기",
+        "en": "Job"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "job",
+          "reference": "Job",
+          "scope": "book"
+        }
+      ],
+      "dateLabel": {
+        "ko": "불확실",
+        "en": "Uncertain"
+      }
+    }
+  ]
+}

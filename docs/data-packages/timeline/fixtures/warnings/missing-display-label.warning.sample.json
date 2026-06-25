@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.sections",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Missing optional display label in warning-only scenario."
+  ],
+  "items": [
+    {
+      "id": "missing-display-label-warning-1",
+      "timelinePeriodId": "acts",
+      "sectionId": "acts-flow",
+      "displayOrder": 1,
+      "accordionGroup": "sections"
+    }
+  ]
+}

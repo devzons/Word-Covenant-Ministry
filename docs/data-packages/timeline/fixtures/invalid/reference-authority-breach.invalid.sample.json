@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.references",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Supporting reference improperly treated as equal authority."
+  ],
+  "items": [
+    {
+      "id": "reference-authority-breach-1",
+      "timelinePeriodId": "return",
+      "sectionId": "supporting-reference",
+      "displayOrder": 1,
+      "accordionGroup": "references",
+      "title": {
+        "ko": "권위 침범 예시",
+        "en": "Authority breach sample"
+      },
+      "referenceTypeLabel": {
+        "ko": "성경 해석 근거",
+        "en": "Basis for biblical interpretation"
+      },
+      "sourceBasisLabel": {
+        "ko": "출처 검토 필요",
+        "en": "Source review required"
+      },
+      "confidenceLabel": {
+        "ko": "높음",
+        "en": "High"
+      },
+      "cautionNote": {
+        "ko": "보조 정보임에도 권위를 침범함",
+        "en": "Improperly elevated supporting reference"
+      },
+      "isSupportingReference": true
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.events",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Contains duplicate IDs."
+  ],
+  "items": [
+    {
+      "id": "duplicate-id-1"
+    },
+    {
+      "id": "duplicate-id-1"
+    }
+  ]
+}

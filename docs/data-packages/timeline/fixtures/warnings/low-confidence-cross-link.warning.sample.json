@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.cross-links",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Low-confidence explicit cross-link."
+  ],
+  "items": [
+    {
+      "id": "low-confidence-cross-link-warning-1",
+      "fromType": "place",
+      "fromId": "place-fixture-warning-1",
+      "toType": "book",
+      "toId": "book-fixture-valid-1",
+      "relationLabel": {
+        "ko": "낮은 신뢰 연결",
+        "en": "Low-confidence link"
+      },
+      "basisLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "confidenceLabel": {
+        "ko": "낮음",
+        "en": "Low"
+      }
+    }
+  ]
+}

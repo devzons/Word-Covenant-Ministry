@@ -1,0 +1,11 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.events",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Not runtime data."
+  ],
+  "items": []
+}

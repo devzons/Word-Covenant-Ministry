@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.books",
+  "packageVersion": "0.0.0-fixture",
+  "status": "canonical-skeleton",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Missing bookId in canonical skeleton row."
+  ],
+  "items": [
+    {
+      "id": "book-row-invalid-1",
+      "canonicalOrder": 1,
+      "title": {
+        "ko": "창세기",
+        "en": "Genesis"
+      },
+      "timelinePeriodId": "primeval",
+      "sectionId": "torah-origins",
+      "displayOrder": 1,
+      "accordionGroup": "torah",
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "authorshipBasisLabel": {
+        "ko": "전통 연결",
+        "en": "Traditional association"
+      },
+      "backgroundBasisLabel": {
+        "ko": "본문 배경",
+        "en": "Textual background"
+      },
+      "dateConfidenceLabel": {
+        "ko": "후속 검토 필요",
+        "en": "Further review required"
+      },
+      "isSkeleton": true
+    }
+  ]
+}

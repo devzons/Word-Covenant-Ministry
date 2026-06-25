@@ -1,0 +1,68 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.references",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Valid supporting-reference sample."
+  ],
+  "items": [
+    {
+      "id": "reference-world-valid-1",
+      "timelinePeriodId": "return",
+      "sectionId": "supporting-reference",
+      "displayOrder": 1,
+      "accordionGroup": "references",
+      "title": {
+        "ko": "세계사 참조 예시",
+        "en": "World reference sample"
+      },
+      "referenceTypeLabel": {
+        "ko": "참조용",
+        "en": "Reference only"
+      },
+      "sourceBasisLabel": {
+        "ko": "출처 검토 필요",
+        "en": "Source review required"
+      },
+      "confidenceLabel": {
+        "ko": "보조 정보",
+        "en": "Supporting reference"
+      },
+      "cautionNote": {
+        "ko": "성경 해석 근거 아님",
+        "en": "Not a basis for biblical interpretation"
+      },
+      "isSupportingReference": true
+    },
+    {
+      "id": "reference-korea-valid-1",
+      "timelinePeriodId": "return",
+      "sectionId": "supporting-reference",
+      "displayOrder": 2,
+      "accordionGroup": "references",
+      "title": {
+        "ko": "한국사 참조 예시",
+        "en": "Korean reference sample"
+      },
+      "referenceTypeLabel": {
+        "ko": "참조용",
+        "en": "Reference only"
+      },
+      "sourceBasisLabel": {
+        "ko": "출처 검토 필요",
+        "en": "Source review required"
+      },
+      "confidenceLabel": {
+        "ko": "보조 정보",
+        "en": "Supporting reference"
+      },
+      "cautionNote": {
+        "ko": "성경 해석 근거 아님",
+        "en": "Not a basis for biblical interpretation"
+      },
+      "isSupportingReference": true
+    }
+  ]
+}

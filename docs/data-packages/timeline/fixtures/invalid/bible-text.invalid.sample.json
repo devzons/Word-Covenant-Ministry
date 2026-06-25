@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.events",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Contains forbidden Bible-text-like field."
+  ],
+  "items": [
+    {
+      "id": "bible-text-invalid-1",
+      "timelinePeriodId": "primeval",
+      "sectionId": "primeval-opening",
+      "displayOrder": 1,
+      "accordionGroup": "events",
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "reference": "Genesis 1:1",
+          "scope": "book"
+        }
+      ],
+      "verseText": "Forbidden fixture content"
+    }
+  ]
+}

@@ -26,6 +26,8 @@ CR-91E Timeline Left Navigator Redesign is complete through available validation
 
 CR-93E Timeline Package Verifier Design is complete. `docs/ROADMAP/TIMELINE_PACKAGE_VERIFIER_DESIGN.md` and `docs/data-packages/timeline/verifier.md` now define future verification levels, error/warning policy, 66-book checks, accordion-first checks, no-Bible-text guardrails, no-coordinate guardrails, Korean/world reference guardrails, and a future CLI contract. No verifier script, frontend code, data rows, import, API, DB, or schema work was added.
 
+CR-93E-2 Verifier Test Fixtures is complete. `docs/data-packages/timeline/fixtures/` now contains synthetic valid, invalid, and warning-only JSON fixtures for future verifier implementation. The fixtures are documentation and test-data only; they are not runtime imports and not approved production package rows. Invalid JSON syntax remains documented in fixture README rather than committed as a broken `.json` file. No verifier script, frontend code, API, DB, schema, runtime integration, or real biblical data expansion was added.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
@@ -38,8 +40,8 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93E-2 Verifier Test Fixtures.
-2. CR-93E-3 Minimal Verifier Implementation.
+1. CR-93E-3 Minimal Verifier Implementation.
+2. CR-93E-4 66-Book Validation.
 3. CR-93C Core Biblical Event Skeleton.
 4. CR-93D-2 66-Book Frontend Preview Integration.
 5. CR-91C Context Inspector Deep Links.

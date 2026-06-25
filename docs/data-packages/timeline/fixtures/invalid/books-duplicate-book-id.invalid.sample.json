@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.books",
+  "packageVersion": "0.0.0-fixture",
+  "status": "canonical-skeleton",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Duplicate bookId values."
+  ],
+  "items": [
+    {
+      "id": "book-row-invalid-duplicate-1",
+      "bookId": "genesis",
+      "canonicalOrder": 1
+    },
+    {
+      "id": "book-row-invalid-duplicate-2",
+      "bookId": "genesis",
+      "canonicalOrder": 2
+    }
+  ]
+}

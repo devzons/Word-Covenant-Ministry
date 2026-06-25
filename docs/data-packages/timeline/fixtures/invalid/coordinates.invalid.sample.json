@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.places",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Contains forbidden coordinate fields."
+  ],
+  "items": [
+    {
+      "id": "coordinates-invalid-1",
+      "title": {
+        "ko": "좌표 금지 예시",
+        "en": "Coordinate violation sample"
+      },
+      "latitude": 37.5665,
+      "longitude": 126.978
+    }
+  ]
+}

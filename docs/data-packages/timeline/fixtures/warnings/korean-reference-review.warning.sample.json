@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.references",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Korean supporting reference requiring review."
+  ],
+  "items": [
+    {
+      "id": "korean-reference-warning-1",
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "supporting-reference",
+      "displayOrder": 1,
+      "accordionGroup": "references",
+      "title": {
+        "ko": "한국사 참조 경고 예시",
+        "en": "Korean reference warning sample"
+      },
+      "referenceTypeLabel": {
+        "ko": "참조용",
+        "en": "Reference only"
+      },
+      "confidenceLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "cautionNote": {
+        "ko": "성경 해석 근거 아님",
+        "en": "Not a basis for biblical interpretation"
+      },
+      "isSupportingReference": true
+    }
+  ]
+}

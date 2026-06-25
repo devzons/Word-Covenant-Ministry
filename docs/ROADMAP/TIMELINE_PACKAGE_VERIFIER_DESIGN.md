@@ -336,13 +336,45 @@ Recommendation:
 ## 15. Implementation Phases
 
 - `CR-93E`: verifier design only
-- `CR-93E-2`: add verifier test fixtures with intentional pass/fail samples
+- `CR-93E-2`: add verifier test fixtures with intentional pass/fail/warning samples
 - `CR-93E-3`: implement minimal JSON and package-envelope verifier
 - `CR-93E-4`: add 66-book validation
 - `CR-93E-5`: add cross-link and no-coordinate guardrails
 - `CR-93E-6`: add CI or documented verification command
 
-## 16. Acceptance Criteria
+## 16. Fixture Design Follow-up
+
+The verifier design should be anchored by repository fixtures before implementation.
+
+Recommended fixture directories:
+
+```txt
+docs/data-packages/timeline/fixtures/
+  README.md
+  valid/
+  invalid/
+  warnings/
+```
+
+Required fixture classes:
+
+- valid minimal package envelope
+- valid accordion-first center-column sample
+- valid explicit cross-link sample
+- valid supporting reference sample
+- invalid missing package envelope
+- invalid missing required field
+- invalid duplicate ID
+- invalid broken cross-link
+- invalid canonical-skeleton book problems
+- invalid Bible text storage
+- invalid coordinate or map-provider fields
+- invalid supporting reference authority breach
+- warning-only approximate or uncertain chronology cases
+- warning-only Korean reference review cases
+- warning-only low-confidence cross-link cases
+
+## 17. Acceptance Criteria
 
 - verifier design doc created
 - verification levels defined

@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema.md",
+  "packageType": "timeline.events",
+  "packageVersion": "0.0.0-fixture",
+  "status": "draft",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Valid accordion-first center-column sample."
+  ],
+  "items": [
+    {
+      "id": "event-fixture-valid-1",
+      "timelinePeriodId": "primeval",
+      "sectionId": "primeval-opening",
+      "displayOrder": 1,
+      "accordionGroup": "events",
+      "title": {
+        "ko": "검증용 사건",
+        "en": "Verifier Event"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기",
+            "en": "Genesis"
+          },
+          "reference": "Genesis",
+          "scope": "book"
+        }
+      ],
+      "basisLabel": {
+        "ko": "본문 근거",
+        "en": "Scripture-based"
+      },
+      "confidenceLabel": {
+        "ko": "높음",
+        "en": "High"
+      },
+      "cautionNote": {
+        "ko": "검증용 synthetic row",
+        "en": "Synthetic verifier row"
+      }
+    }
+  ]
+}
