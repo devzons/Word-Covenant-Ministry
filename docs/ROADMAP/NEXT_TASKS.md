@@ -14,6 +14,8 @@ CR-91B-2 Context Inspector Cross-Linking is complete through available validatio
 
 CR-92B Korean History Reference Placeholder UI is complete through available validation. Events view period blocks now include a collapsed Korean history reference placeholder below Scripture event rows. No Korean history rows or chronology data were added. No source import, API, DB, schema, map, or chronology dataset work was added. Korean history remains supporting reference only, source and license review remain required before any real content rows, and Korean history is not a basis for biblical interpretation.
 
+CR-93A Timeline Data Coverage Matrix is complete as a documentation-only audit. `docs/ROADMAP/TIMELINE_DATA_COVERAGE_MATRIX.md` now records current Timeline fixture counts, period-level coverage, view-level readiness, canonical book-context gaps, Psalm coverage, kingdom coverage, place coverage, and the current data-architecture risk around continued growth in `timelinePreviewData.ts`. No Timeline data rows, fixture rows, API, DB, schema, import, or world-history / Korean-history dataset work were added.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
@@ -26,20 +28,22 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-91C Context Inspector Deep Links.
-2. CR-91D Schematic Flow Highlights.
-3. CR-92C Korean History Pilot Rows after source review.
-4. CR-90Y-5 Genealogy Detail Refinement.
-5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-6. CR-91 Place / Map Preview.
-7. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
-8. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
-9. After explicit approval, implement seed migration tracking and release automation support.
-10. Later: Strong detail pages or dedicated Word Study pages.
-11. Later: advanced search.
-12. Later: morphology explorer.
-13. Later: Commentary Layer.
-14. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+1. CR-93B Timeline Data Package Design.
+2. CR-93C Core Biblical Event Skeleton.
+3. CR-91C Context Inspector Deep Links.
+4. CR-91D Schematic Flow Highlights.
+5. CR-92C Korean History Pilot Rows after source review.
+6. CR-90Y-5 Genealogy Detail Refinement.
+7. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+8. CR-91 Place / Map Preview.
+9. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+10. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
+11. After explicit approval, implement seed migration tracking and release automation support.
+12. Later: Strong detail pages or dedicated Word Study pages.
+13. Later: advanced search.
+14. Later: morphology explorer.
+15. Later: Commentary Layer.
+16. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 
