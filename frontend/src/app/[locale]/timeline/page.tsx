@@ -27,6 +27,8 @@ type TimelinePageProps = {
   }>;
   searchParams: Promise<{
     book?: string;
+    inspectId?: string;
+    inspectType?: string;
     period?: string;
     place?: string;
     q?: string;

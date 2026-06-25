@@ -17,6 +17,24 @@ The goal is to let the Timeline Workspace open a shareable URL that restores:
 
 This design is intentionally limited to metadata-only selection restore. It does not add Bible text rendering, backend persistence, or external-history linking.
 
+## Implementation Status
+
+`CR-91C-1` documented the scope. `CR-91C-2` now implements the first-pass deep-link behavior for the package-backed Events, Books / Psalms, and Kings / Kingdoms views.
+
+Implemented v1 behavior:
+
+- `view`, `inspectType`, and `inspectId` query parsing in the Timeline route shell
+- metadata-only selection restore for supported views
+- URL updates on selection through query replacement rather than history growth on each row click
+- safe fallback to no selection when `inspectType` or `inspectId` is invalid for the active view
+- accordion auto-open for matching Books / Psalms and Kings / Kingdoms sections during restore
+
+Still deferred after `CR-91C-2`:
+
+- dedicated deep-link QA and docs sync in `CR-91C-3`
+- Genealogy and Places deep-link support
+- any backend persistence or share UI beyond the address bar itself
+
 ## Scope
 
 Included in CR-91C design scope:
@@ -203,6 +221,12 @@ CR-91C implementation should later satisfy the following acceptance criteria:
 - Bible text is never rendered as part of deep-link restore
 - existing package-backed Books, Events, and Kings previews remain intact
 - frontend typecheck, lint, and build pass after implementation
+
+`CR-91C-2` implementation now targets these examples directly:
+
+- `/ko/timeline?view=events&inspectType=event&inspectId=event-creation-skeleton`
+- `/ko/timeline?view=books&inspectType=book&inspectId=genesis`
+- `/ko/timeline?view=kingdoms&inspectType=kingdom&inspectId=king-david-skeleton`
 
 ## Recommended Implementation Phases
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 
 import Link from "next/link";
@@ -31,6 +31,7 @@ import {
 } from "./passionWeekTimeline";
 import { ScriptureTimelineList } from "./ScriptureTimelineList";
 import { TimelineEventDetailPanel } from "./TimelineEventDetailPanel";
+import { createTimelineEventRowId } from "./TimelineEventCard";
 import { TimelineFilterBar } from "./TimelineFilterBar";
 import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
 import { TimelineViewTabs } from "./TimelineViewTabs";
@@ -73,6 +74,7 @@ type TimelineKingdomSectionNavigationItem = {
 };
 
 type TimelineView = "overview" | "events" | "books" | "kingdoms" | "genealogy" | "places" | "themes";
+type TimelineSupportedInspectType = "book" | "event" | "kingdom";
 
 type TimelineOption = {
   id: string;
@@ -186,14 +188,14 @@ export function TimelinePageShell({
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeView, setActiveView] = useState<TimelineView>(initialView);
   const [filters, setFilters] = useState<TimelineFilterState>(initialFilters);
-  const [inspectorSelection, setInspectorSelection] = useState<TimelineInspectorSelection>(null);
+  const [manualInspectorSelection, setManualInspectorSelection] = useState<TimelineInspectorSelection>(null);
   const [activeBookSectionKey, setActiveBookSectionKey] = useState<string>("");
   const [expandedBookSectionKeys, setExpandedBookSectionKeys] = useState<string[]>([]);
   const [activeKingdomSectionKey, setActiveKingdomSectionKey] = useState<string>("");
   const [expandedKingdomSectionKeys, setExpandedKingdomSectionKeys] = useState<string[]>([]);
   const timelineEvents = coreEventRows;
+  const activeView = parseTimelineViewValue(searchParams.get("view")) ?? initialView;
   const canonicalBookSections = useMemo(
     () => buildCanonicalBookSectionNavigation(canonicalBookRows),
     [canonicalBookRows],
@@ -202,17 +204,6 @@ export function TimelinePageShell({
     () => buildKingsKingdomSectionNavigation(kingsKingdomRows),
     [kingsKingdomRows],
   );
-  const resolvedActiveBookSectionKey = canonicalBookSections.some(
-    (section) => section.sectionKey === activeBookSectionKey,
-  )
-    ? activeBookSectionKey
-    : "";
-  const resolvedActiveKingdomSectionKey = kingsKingdomSections.some(
-    (section) => section.sectionKey === activeKingdomSectionKey,
-  )
-    ? activeKingdomSectionKey
-    : "";
-
   const periodCounts = useMemo(() => {
     const counts = new Map<string, number>();
 
@@ -307,8 +298,6 @@ export function TimelinePageShell({
     [filters.bookId, filters.periodId, filters.placeId, normalizedSearch, timelineEvents],
   );
 
-  const selectedEventId = inspectorSelection?.type === "event" ? inspectorSelection.id : "";
-
   const previewCounts = useMemo(() => {
     const periodCount = new Set(visibleEvents.map((event) => event.periodId)).size;
     const bookCount = new Set(
@@ -369,23 +358,135 @@ export function TimelinePageShell({
     () => new Map(timelineSchematicPlaceRows.map((row) => [row.placeId, row])),
     [],
   );
+  const resolveSelectionFromQuery = useCallback(
+    (
+      view: TimelineView,
+      inspectType: TimelineSupportedInspectType | null,
+      inspectId: string,
+    ): TimelineInspectorSelection => {
+      if (!inspectType || inspectId === "") {
+        return null;
+      }
 
-  function syncViewToUrl(nextView: TimelineView) {
+      if (view === "events" && inspectType === "event" && eventById.has(inspectId)) {
+        return { id: inspectId, type: "event" };
+      }
+
+      if (view === "books" && inspectType === "book") {
+        const bookRow = bookContextByBookId.get(inspectId);
+
+        if (bookRow) {
+          return { id: bookRow.id, type: "book" };
+        }
+      }
+
+      if (view === "kingdoms" && inspectType === "kingdom" && kingdomComparisonById.has(inspectId)) {
+        return { id: inspectId, type: "kingdom" };
+      }
+
+      return null;
+    },
+    [bookContextByBookId, eventById, kingdomComparisonById],
+  );
+  const getInspectQueryState = useCallback(
+    (selection: TimelineInspectorSelection) => {
+      if (!selection) {
+        return null;
+      }
+
+      if (selection.type === "event") {
+        return {
+          inspectId: selection.id,
+          inspectType: "event" as const,
+        };
+      }
+
+      if (selection.type === "book") {
+        const row = bookContextById.get(selection.id);
+
+        return row
+          ? {
+              inspectId: row.bookId,
+              inspectType: "book" as const,
+            }
+          : null;
+      }
+
+      if (selection.type === "kingdom") {
+        return {
+          inspectId: selection.id,
+          inspectType: "kingdom" as const,
+        };
+      }
+
+      return null;
+    },
+    [bookContextById],
+  );
+  const hasInspectQuery =
+    normalizeQueryValue(searchParams.get("inspectType")) !== "" ||
+    normalizeQueryValue(searchParams.get("inspectId")) !== "";
+  const queryInspectorSelection = useMemo(
+    () =>
+      resolveSelectionFromQuery(
+        activeView,
+        parseInspectTypeValue(searchParams.get("inspectType")),
+        normalizeQueryValue(searchParams.get("inspectId")),
+      ),
+    [activeView, resolveSelectionFromQuery, searchParams],
+  );
+  const inspectorSelection = queryInspectorSelection ?? (hasInspectQuery ? null : getManualSelectionForView(manualInspectorSelection, activeView));
+  const forcedBookSectionKey =
+    inspectorSelection?.type === "book"
+      ? getBookSectionKeyForSelection(inspectorSelection.id, canonicalBookRows)
+      : "";
+  const forcedKingdomSectionKey =
+    inspectorSelection?.type === "kingdom"
+      ? getKingdomSectionKeyForSelection(inspectorSelection.id, kingsKingdomRows)
+      : "";
+  const resolvedExpandedBookSectionKeys = forcedBookSectionKey
+    ? Array.from(new Set([...expandedBookSectionKeys, forcedBookSectionKey]))
+    : expandedBookSectionKeys;
+  const resolvedExpandedKingdomSectionKeys = forcedKingdomSectionKey
+    ? Array.from(new Set([...expandedKingdomSectionKeys, forcedKingdomSectionKey]))
+    : expandedKingdomSectionKeys;
+  const resolvedActiveBookSectionKey = forcedBookSectionKey || (
+    canonicalBookSections.some((section) => section.sectionKey === activeBookSectionKey)
+      ? activeBookSectionKey
+      : ""
+  );
+  const resolvedActiveKingdomSectionKey = forcedKingdomSectionKey || (
+    kingsKingdomSections.some((section) => section.sectionKey === activeKingdomSectionKey)
+      ? activeKingdomSectionKey
+      : ""
+  );
+  const selectedEventId = inspectorSelection?.type === "event" ? inspectorSelection.id : "";
+
+  const replaceTimelineQuery = useCallback((nextView: TimelineView, selection: TimelineInspectorSelection) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("view", nextView);
+
+    const inspectState = getInspectQueryState(selection);
+
+    if (inspectState) {
+      params.set("inspectType", inspectState.inspectType);
+      params.set("inspectId", inspectState.inspectId);
+    } else {
+      params.delete("inspectType");
+      params.delete("inspectId");
+    }
+
     const nextQuery = params.toString();
 
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
-  }
+  }, [getInspectQueryState, pathname, router, searchParams]);
 
   function setTimelineView(nextView: TimelineView, clearSelection = false) {
-    setActiveView(nextView);
-
     if (clearSelection) {
-      setInspectorSelection(null);
+      setManualInspectorSelection(null);
     }
 
-    syncViewToUrl(nextView);
+    replaceTimelineQuery(nextView, clearSelection ? null : inspectorSelection ?? manualInspectorSelection);
   }
 
   function getViewForSelection(selection: Exclude<TimelineInspectorSelection, null>): TimelineView {
@@ -405,19 +506,73 @@ export function TimelinePageShell({
 
   function selectInspectorItem(selection: TimelineInspectorSelection, view?: TimelineView) {
     if (!selection) {
-      setInspectorSelection(null);
+      setManualInspectorSelection(null);
+      replaceTimelineQuery(activeView, null);
       return;
     }
 
     const nextView = view ?? getViewForSelection(selection);
-    setInspectorSelection(selection);
+    const querySelection = getInspectQueryState(selection);
 
-    if (nextView !== activeView) {
-      setActiveView(nextView);
+    if (querySelection) {
+      setManualInspectorSelection(null);
+    } else {
+      setManualInspectorSelection(selection);
     }
 
-    syncViewToUrl(nextView);
+    replaceTimelineQuery(nextView, selection);
   }
+
+  function focusSelectionTarget(selection: Exclude<TimelineInspectorSelection, null>) {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const targetId = getSelectionTargetId(selection);
+
+    if (!targetId) {
+      return;
+    }
+
+    window.setTimeout(() => {
+      const element = document.getElementById(targetId);
+
+      if (!element) {
+        return;
+      }
+
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      if ("focus" in element) {
+        (element as HTMLElement).focus();
+      }
+    }, 160);
+  }
+
+  useEffect(() => {
+    const inspectType = parseInspectTypeValue(searchParams.get("inspectType"));
+    const inspectId = normalizeQueryValue(searchParams.get("inspectId"));
+    const shouldClearInvalidInspectQuery = () => {
+      if (inspectType === null) {
+        return Boolean(normalizeQueryValue(searchParams.get("inspectType")) || inspectId);
+      }
+
+      if (inspectId === "") {
+        return true;
+      }
+
+      return resolveSelectionFromQuery(activeView, inspectType, inspectId) === null;
+    };
+
+    if (!queryInspectorSelection) {
+      if ((searchParams.get("inspectType") || searchParams.get("inspectId")) && shouldClearInvalidInspectQuery()) {
+        replaceTimelineQuery(activeView, null);
+      }
+
+      return;
+    }
+
+    focusSelectionTarget(queryInspectorSelection);
+  }, [activeView, queryInspectorSelection, replaceTimelineQuery, resolveSelectionFromQuery, searchParams]);
 
   const activeViewLabel = getTimelineViewLabel(activeView, activeLocale);
 
@@ -617,7 +772,7 @@ export function TimelinePageShell({
               {activeView === "kingdoms" ? (
                 <KingsKingdomsPreviewPanel
                   activeSectionKey={resolvedActiveKingdomSectionKey}
-                  expandedSectionKeys={expandedKingdomSectionKeys}
+                  expandedSectionKeys={resolvedExpandedKingdomSectionKeys}
                   kingdomSections={kingsKingdomSections}
                   kingsKingdomRows={kingsKingdomRows}
                   kingsKingdomStats={kingsKingdomStats}
@@ -647,7 +802,7 @@ export function TimelinePageShell({
                   canonicalBookRows={canonicalBookRows}
                   canonicalBookStats={canonicalBookStats}
                   bookSections={canonicalBookSections}
-                  expandedSectionKeys={expandedBookSectionKeys}
+                  expandedSectionKeys={resolvedExpandedBookSectionKeys}
                   locale={activeLocale}
                   onSectionToggle={handleBookSectionToggle}
                   onSelectRow={(rowId) => {
@@ -818,6 +973,64 @@ function getCompactStatusNote(
     case "themes":
       return locale === "ko" ? "준비 중" : "Planned";
   }
+}
+
+function normalizeQueryValue(value: string | null) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function parseTimelineViewValue(value: string | null): TimelineView {
+  const normalized = normalizeQueryValue(value);
+  const supportedViews: TimelineView[] = ["overview", "events", "books", "kingdoms", "genealogy", "places", "themes"];
+
+  return supportedViews.includes(normalized as TimelineView) ? (normalized as TimelineView) : "overview";
+}
+
+function parseInspectTypeValue(value: string | null): TimelineSupportedInspectType | null {
+  const normalized = normalizeQueryValue(value);
+
+  if (normalized === "event" || normalized === "book" || normalized === "kingdom") {
+    return normalized;
+  }
+
+  return null;
+}
+
+function getManualSelectionForView(
+  selection: TimelineInspectorSelection,
+  activeView: TimelineView,
+): TimelineInspectorSelection {
+  if (!selection) {
+    return null;
+  }
+
+  switch (selection.type) {
+    case "event":
+      return activeView === "events" ? selection : null;
+    case "book":
+      return activeView === "books" ? selection : null;
+    case "genealogy":
+      return activeView === "genealogy" ? selection : null;
+    case "kingdom":
+      return activeView === "kingdoms" ? selection : null;
+    case "place":
+      return activeView === "places" ? selection : null;
+  }
+}
+
+function getBookSectionKeyForSelection(rowId: string, canonicalBookRows: TimelineBookContextRow[]) {
+  const row = canonicalBookRows.find((entry) => entry.id === rowId);
+
+  return row?.canonicalSection ? getTimelineBooksSectionKey(row.canonicalSection) : "";
+}
+
+function getKingdomSectionKeyForSelection(
+  rowId: string,
+  kingsKingdomRows: TimelineKingsKingdomsPreviewRow[],
+) {
+  const row = kingsKingdomRows.find((entry) => entry.id === rowId);
+
+  return row?.sectionId ?? "";
 }
 
 function getTimelineViewLabel(view: TimelineView, locale: TimelineLocale) {
@@ -1343,6 +1556,7 @@ function KingsKingdomsPreviewPanel({
 
                   return (
                     <button
+                      id={createTimelineKingdomRowId(row.id)}
                       aria-pressed={selected}
                       className={cn(
                         "w-full rounded-md border px-3 py-3 text-left transition-colors",
@@ -1612,6 +1826,7 @@ function BooksContextPreviewPanel({
 
                 return (
                   <button
+                    id={createTimelineBookRowId(row.id)}
                     aria-pressed={selected}
                     className={cn(
                       "w-full rounded-md border px-3 py-3 text-left transition-colors",
@@ -1728,6 +1943,10 @@ function createTimelineBooksSectionId(canonicalSection: string) {
   return `timeline-books-section-${getTimelineBooksSectionKey(canonicalSection)}`;
 }
 
+function createTimelineBookRowId(rowId: string) {
+  return `timeline-book-row-${rowId}`;
+}
+
 function buildCanonicalBookSectionNavigation(
   canonicalBookRows: TimelineBookContextRow[],
 ): TimelineBookSectionNavigationItem[] {
@@ -1772,6 +1991,23 @@ function buildCanonicalBookSectionNavigation(
 
 function createTimelineKingsSectionId(sectionId: string) {
   return `timeline-kings-section-${sectionId}`;
+}
+
+function createTimelineKingdomRowId(rowId: string) {
+  return `timeline-kingdom-row-${rowId}`;
+}
+
+function getSelectionTargetId(selection: Exclude<TimelineInspectorSelection, null>) {
+  switch (selection.type) {
+    case "event":
+      return createTimelineEventRowId(selection.id);
+    case "book":
+      return createTimelineBookRowId(selection.id);
+    case "kingdom":
+      return createTimelineKingdomRowId(selection.id);
+    default:
+      return null;
+  }
 }
 
 function buildKingsKingdomSectionNavigation(

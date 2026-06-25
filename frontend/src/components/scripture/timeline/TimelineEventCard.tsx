@@ -47,6 +47,7 @@ export function TimelineEventCard({
         )}
       />
       <button
+        id={createTimelineEventRowId(event.id)}
         className={cn(
           "w-full cursor-pointer rounded-md border bg-white px-3.5 py-3 text-left transition-colors sm:px-4 sm:py-3.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
@@ -169,4 +170,8 @@ export function TimelineEventCard({
       </button>
     </li>
   );
+}
+
+export function createTimelineEventRowId(eventId: string) {
+  return `timeline-event-row-${eventId}`;
 }
