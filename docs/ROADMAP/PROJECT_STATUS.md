@@ -93,7 +93,7 @@ Phase 8A through later Phase 8 original-language UX, morphology presentation, be
 
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
-CR-93G Kings / Kingdoms Timeline Package Design is now documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md` as a docs-only package-design step. No kings skeleton JSON, frontend integration, verifier change, API, DB, backend, schema, or runtime import/export work was added in that step.
+CR-93G Kings / Kingdoms Timeline Package Design is now documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md` as a docs-only package-design step. CR-93G-2 Kings / Kingdoms Skeleton Package is now complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now provides a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdom rows, representative kings, transitions, exile markers, and a temple marker. The package stays metadata-only, stores no Bible text, uses no coordinates or map-provider fields, keeps chronology approximate and review-gated, and is not connected to the frontend runtime yet. No verifier logic, frontend integration, API, DB, backend, schema, or runtime import/export work was added in this step.
 ```
 
 Completed phase:
@@ -105,13 +105,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Proceed from Kings / Kingdoms package design into the next approved skeleton-package step while keeping the current preview layers Scripture-first and metadata-only.
+Proceed from the new Kings / Kingdoms skeleton package into fixture and verifier-compatibility follow-up while keeping the current preview layers Scripture-first and metadata-only.
 ```
 
 Next task:
 
 ```txt
-Proceed to CR-93G-2 Kings / Kingdoms Skeleton Package, followed by verifier-fixture and preview-integration steps if approved.
+Proceed to CR-93G-3 Kings / Kingdoms Verifier Fixtures, followed by verifier-rule hardening if needed and frontend preview integration only after the data package path is verified.
 ```
 
 Blocked items:

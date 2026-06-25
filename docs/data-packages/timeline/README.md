@@ -20,7 +20,10 @@ Rules:
 - `books.66-canonical-skeleton.json` is the first canonical 66-book skeleton package.
 - The 66-book skeleton is now connected to the Timeline Books / Psalms view as a preview-only frontend read.
 - The core biblical event skeleton is now connected to the Timeline Events view as a preview-only frontend read.
-- Kings / Kingdoms package design is now documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md`, but no package file exists yet.
+- Kings / Kingdoms package design is documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md`, and a first skeleton package now exists in `kings-kingdoms.skeleton.json`.
+- The Kings / Kingdoms skeleton is not connected to the frontend runtime yet.
+- Kings / Kingdoms verifier fixtures remain deferred to `CR-93G-3`.
+- Kings / Kingdoms verifier rule hardening remains deferred to `CR-93G-4`, if needed.
 - The frontend preview remains metadata-only and does not render Bible text from package files.
 - Skeleton rows are not complete book introductions, and no book should be treated as complete yet.
 - Skeleton event rows are not a complete biblical timeline dataset and should not be treated as final chronology.

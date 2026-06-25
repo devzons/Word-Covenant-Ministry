@@ -1,0 +1,1131 @@
+{
+  "$schema": "./schema.md",
+  "packageId": "timeline.kings-kingdoms.skeleton",
+  "packageType": "timeline.kings-kingdoms",
+  "packageVersion": "0.1.0-skeleton",
+  "status": "skeleton",
+  "notes": [
+    "This file contains a minimal Kings / Kingdoms timeline skeleton.",
+    "It stores Scripture references only and does not store Bible text.",
+    "It is not connected to the frontend runtime yet.",
+    "Chronology labels remain approximate and review-gated."
+  ],
+  "items": [
+    {
+      "id": "kingdom-period-united-monarchy-skeleton",
+      "recordType": "kingdomPeriod",
+      "title": {
+        "ko": "통일 왕국",
+        "en": "United Monarchy"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "kings-united-monarchy",
+      "accordionGroup": "united-monarchy",
+      "periodType": "kingdomPeriod",
+      "scope": {
+        "ko": "사울-다윗-솔로몬 중심의 왕국 형성 흐름",
+        "en": "Kingdom-formation flow centered on Saul, David, and Solomon"
+      },
+      "startAnchor": {
+        "bookId": "1-samuel",
+        "label": {
+          "ko": "사무엘상 8-10장",
+          "en": "1 Samuel 8-10"
+        },
+        "reference": "1 Samuel 8-10",
+        "scope": "passage"
+      },
+      "endAnchor": {
+        "bookId": "1-kings",
+        "label": {
+          "ko": "열왕기상 11장",
+          "en": "1 Kings 11"
+        },
+        "reference": "1 Kings 11",
+        "scope": "chapter"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 8-10장",
+            "en": "1 Samuel 8-10"
+          },
+          "reference": "1 Samuel 8-10",
+          "scope": "passage"
+        },
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 1-11장",
+            "en": "1 Kings 1-11"
+          },
+          "reference": "1 Kings 1-11",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel", "2-samuel", "1-kings", "1-chronicles", "2-chronicles"],
+      "relatedKingIds": [
+        "king-saul-skeleton",
+        "king-david-skeleton",
+        "king-solomon-skeleton"
+      ],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 왕정 형성 skeleton",
+        "en": "Scripture flow / monarchy-formation skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "성경 흐름 기준 / 연대 세부는 후속 검토",
+        "en": "Scripture-sequence baseline / chronology details need later review"
+      },
+      "cautionNote": {
+        "ko": "이 period row는 구조용 skeleton이며 확정 연대나 완전한 왕 목록을 제시하지 않습니다.",
+        "en": "This period row is a structural skeleton and does not present fixed chronology or a complete king list."
+      }
+    },
+    {
+      "id": "kingdom-united-israel-skeleton",
+      "recordType": "kingdom",
+      "title": {
+        "ko": "통일 이스라엘",
+        "en": "United Israel"
+      },
+      "displayOrder": 2,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "kings-united-monarchy",
+      "accordionGroup": "united-monarchy",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 8-10장",
+            "en": "1 Samuel 8-10"
+          },
+          "reference": "1 Samuel 8-10",
+          "scope": "passage"
+        },
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 11장",
+            "en": "1 Kings 11"
+          },
+          "reference": "1 Kings 11",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["1-samuel", "2-samuel", "1-kings", "1-chronicles", "2-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 통일 왕국 구간 표시",
+        "en": "Scripture flow / united-kingdom segment marker"
+      },
+      "confidenceLabel": {
+        "ko": "대표 구간 표시 / 세부 구획은 후속 검토",
+        "en": "Representative segment marker / finer subdivision needs later review"
+      },
+      "cautionNote": {
+        "ko": "이 row는 통일 왕국 전체를 요약하는 skeleton 표지입니다.",
+        "en": "This row is a summary skeleton marker for the united monarchy."
+      }
+    },
+    {
+      "id": "transition-monarchy-begins-skeleton",
+      "recordType": "transition",
+      "title": {
+        "ko": "왕정 시작",
+        "en": "Monarchy Begins"
+      },
+      "displayOrder": 3,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "kings-united-monarchy",
+      "accordionGroup": "united-monarchy",
+      "previousStateId": "kingdom-period-united-monarchy-skeleton",
+      "nextStateId": "kingdom-united-israel-skeleton",
+      "relatedKingIds": ["king-saul-skeleton"],
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 8-10장",
+            "en": "1 Samuel 8-10"
+          },
+          "reference": "1 Samuel 8-10",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 전환 표지",
+        "en": "Scripture reference / transition marker"
+      },
+      "confidenceLabel": {
+        "ko": "전환 구조는 명확 / 세부 맥락은 후속 검토",
+        "en": "Transition structure is clear / finer context needs later review"
+      },
+      "cautionNote": {
+        "ko": "왕정 시작의 구조만 표시하며 정치·연대 세부 결론은 보류합니다.",
+        "en": "This marks the structural start of monarchy without claiming final political or chronological detail."
+      }
+    },
+    {
+      "id": "king-saul-skeleton",
+      "recordType": "king",
+      "title": {
+        "ko": "사울",
+        "en": "Saul"
+      },
+      "displayOrder": 4,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "kings-united-monarchy",
+      "accordionGroup": "united-monarchy",
+      "kingdomId": "kingdom-united-israel-skeleton",
+      "kingdomName": {
+        "ko": "통일 이스라엘",
+        "en": "United Israel"
+      },
+      "reignLabel": {
+        "ko": "초기 왕정의 첫 대표 왕",
+        "en": "Representative first king of the early monarchy"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함 / 초기 왕정 배경",
+        "en": "Exact years not asserted / early monarchy setting"
+      },
+      "successorId": "king-david-skeleton",
+      "relatedTransitionIds": ["transition-monarchy-begins-skeleton"],
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 9-15장",
+            "en": "1 Samuel 9-15"
+          },
+          "reference": "1 Samuel 9-15",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-samuel", "1-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 대표 왕 skeleton",
+        "en": "Scripture reference / representative king skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "대표 왕 연결은 높음 / 세부 연대는 후속 검토",
+        "en": "Representative king link is high / chronology details need later review"
+      },
+      "cautionNote": {
+        "ko": "사울 row는 통일 왕국 초기 흐름을 위한 최소 표지이며 완전한 생애 연대표가 아닙니다.",
+        "en": "This Saul row is a minimal marker for the early united monarchy and not a full life chronology."
+      }
+    },
+    {
+      "id": "king-david-skeleton",
+      "recordType": "king",
+      "title": {
+        "ko": "다윗",
+        "en": "David"
+      },
+      "displayOrder": 5,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "kings-united-monarchy",
+      "accordionGroup": "united-monarchy",
+      "kingdomId": "kingdom-united-israel-skeleton",
+      "kingdomName": {
+        "ko": "통일 이스라엘",
+        "en": "United Israel"
+      },
+      "reignLabel": {
+        "ko": "다윗 왕조의 대표 왕",
+        "en": "Representative king of the Davidic line"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함 / 통일 왕국 핵심 배경",
+        "en": "Exact years not asserted / central united-monarchy setting"
+      },
+      "predecessorId": "king-saul-skeleton",
+      "successorId": "king-solomon-skeleton",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-samuel",
+          "label": {
+            "ko": "사무엘하 5-7장",
+            "en": "2 Samuel 5-7"
+          },
+          "reference": "2 Samuel 5-7",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-samuel", "1-chronicles", "psalms"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 다윗 왕권 표지",
+        "en": "Scripture reference / Davidic kingship marker"
+      },
+      "confidenceLabel": {
+        "ko": "본문 연결은 높음 / 세부 연대와 배열은 후속 검토",
+        "en": "Textual linkage is high / chronology and arrangement need later review"
+      },
+      "cautionNote": {
+        "ko": "다윗 언약과 왕권의 세부 배열은 후속 curated 단계에서 확장합니다.",
+        "en": "Detailed Davidic covenant and reign sequencing will expand in a later curated phase."
+      }
+    },
+    {
+      "id": "king-solomon-skeleton",
+      "recordType": "king",
+      "title": {
+        "ko": "솔로몬",
+        "en": "Solomon"
+      },
+      "displayOrder": 6,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "kings-united-monarchy",
+      "accordionGroup": "united-monarchy",
+      "kingdomId": "kingdom-united-israel-skeleton",
+      "kingdomName": {
+        "ko": "통일 이스라엘",
+        "en": "United Israel"
+      },
+      "reignLabel": {
+        "ko": "성전 건축과 왕국 확장의 대표 왕",
+        "en": "Representative king for temple building and kingdom expansion"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함 / 통일 왕국 후기 배경",
+        "en": "Exact years not asserted / later united-monarchy setting"
+      },
+      "predecessorId": "king-david-skeleton",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 1-11장",
+            "en": "1 Kings 1-11"
+          },
+          "reference": "1 Kings 1-11",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-chronicles", "proverbs", "ecclesiastes", "song-of-songs"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 통일 왕국 후기 표지",
+        "en": "Scripture reference / later united-monarchy marker"
+      },
+      "confidenceLabel": {
+        "ko": "대표 왕 연결은 높음 / 연대 세부는 후속 검토",
+        "en": "Representative king linkage is high / chronology detail needs later review"
+      },
+      "cautionNote": {
+        "ko": "솔로몬 배경은 성전과 왕국 흐름 중심으로만 표시하며 저작·연대 단정은 하지 않습니다.",
+        "en": "Solomon is marked around temple and kingdom flow only without final authorship or chronology claims."
+      }
+    },
+    {
+      "id": "temple-marker-solomon-temple-skeleton",
+      "recordType": "templeMarker",
+      "title": {
+        "ko": "솔로몬 성전 표지",
+        "en": "Solomon Temple Marker"
+      },
+      "displayOrder": 7,
+      "timelinePeriodId": "united-kingdom",
+      "sectionId": "kings-united-monarchy",
+      "accordionGroup": "united-monarchy",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 6-8장",
+            "en": "1 Kings 6-8"
+          },
+          "reference": "1 Kings 6-8",
+          "scope": "passage"
+        },
+        {
+          "bookId": "2-chronicles",
+          "label": {
+            "ko": "역대하 2-7장",
+            "en": "2 Chronicles 2-7"
+          },
+          "reference": "2 Chronicles 2-7",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-chronicles"],
+      "relatedKingIds": ["king-solomon-skeleton"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 성전 건축 표지",
+        "en": "Scripture reference / temple-construction marker"
+      },
+      "confidenceLabel": {
+        "ko": "본문 표지는 명확 / 세부 연대는 후속 검토",
+        "en": "Textual marker is clear / chronology detail needs later review"
+      },
+      "cautionNote": {
+        "ko": "이 row는 성전 건축의 구조 표지이며 외부 연대 비교를 포함하지 않습니다.",
+        "en": "This row is a structural temple marker and does not include external chronological comparison."
+      }
+    },
+    {
+      "id": "kingdom-period-divided-kingdom-overview-skeleton",
+      "recordType": "kingdomPeriod",
+      "title": {
+        "ko": "분열 왕국 개관",
+        "en": "Divided Kingdom Overview"
+      },
+      "displayOrder": 8,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-divided-overview",
+      "accordionGroup": "divided-kingdom",
+      "periodType": "kingdomPeriod",
+      "scope": {
+        "ko": "북이스라엘과 유다의 분기된 왕국 흐름",
+        "en": "Divergent kingdom flow of Northern Israel and Judah"
+      },
+      "startAnchor": {
+        "bookId": "1-kings",
+        "label": {
+          "ko": "열왕기상 12장",
+          "en": "1 Kings 12"
+        },
+        "reference": "1 Kings 12",
+        "scope": "chapter"
+      },
+      "endAnchor": {
+        "bookId": "2-kings",
+        "label": {
+          "ko": "열왕기하 25장",
+          "en": "2 Kings 25"
+        },
+        "reference": "2 Kings 25",
+        "scope": "chapter"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 12장",
+            "en": "1 Kings 12"
+          },
+          "reference": "1 Kings 12",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 17장",
+            "en": "2 Kings 17"
+          },
+          "reference": "2 Kings 17",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 25장",
+            "en": "2 Kings 25"
+          },
+          "reference": "2 Kings 25",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-kings", "2-chronicles", "isaiah", "jeremiah", "hosea", "amos", "micah"],
+      "relatedKingIds": [
+        "king-jeroboam-i-skeleton",
+        "king-rehoboam-skeleton",
+        "king-hezekiah-skeleton",
+        "king-josiah-skeleton"
+      ],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 분열 왕국 개관 skeleton",
+        "en": "Scripture flow / divided-kingdom overview skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "구간 흐름은 명확 / 동시대 배열은 후속 검토",
+        "en": "Period flow is clear / synchronism details need later review"
+      },
+      "cautionNote": {
+        "ko": "북이스라엘-유다 동시대 배열은 확정 연표가 아니라 review-gated 구조 표지입니다.",
+        "en": "Northern Israel-Judah synchronism is a review-gated structural marker, not a finalized chronology."
+      }
+    },
+    {
+      "id": "transition-kingdom-divided-skeleton",
+      "recordType": "transition",
+      "title": {
+        "ko": "왕국 분열",
+        "en": "Kingdom Divided"
+      },
+      "displayOrder": 9,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-divided-overview",
+      "accordionGroup": "divided-kingdom",
+      "previousStateId": "kingdom-united-israel-skeleton",
+      "nextStateId": "kingdom-period-divided-kingdom-overview-skeleton",
+      "relatedKingIds": ["king-solomon-skeleton", "king-jeroboam-i-skeleton", "king-rehoboam-skeleton"],
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 11-12장",
+            "en": "1 Kings 11-12"
+          },
+          "reference": "1 Kings 11-12",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 왕국 분기 표지",
+        "en": "Scripture reference / kingdom-division marker"
+      },
+      "confidenceLabel": {
+        "ko": "본문 전환은 명확 / 세부 동시대 정리는 후속 검토",
+        "en": "Textual transition is clear / synchronism detail needs later review"
+      },
+      "cautionNote": {
+        "ko": "이 row는 분열 자체를 구조적으로만 표시하며 외부 연대 체계를 채택하지 않습니다.",
+        "en": "This row marks the division structurally and does not adopt an external chronology system."
+      }
+    },
+    {
+      "id": "kingdom-northern-israel-skeleton",
+      "recordType": "kingdom",
+      "title": {
+        "ko": "북이스라엘",
+        "en": "Northern Kingdom / Israel"
+      },
+      "displayOrder": 10,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-northern-israel",
+      "accordionGroup": "northern-israel",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 12장",
+            "en": "1 Kings 12"
+          },
+          "reference": "1 Kings 12",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 17장",
+            "en": "2 Kings 17"
+          },
+          "reference": "2 Kings 17",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-kings", "hosea", "amos"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 북왕국 표지",
+        "en": "Scripture flow / northern kingdom marker"
+      },
+      "confidenceLabel": {
+        "ko": "대표 구간 표시 / 세부 왕 순서는 후속 검토",
+        "en": "Representative segment marker / fuller royal sequence needs later review"
+      },
+      "cautionNote": {
+        "ko": "북이스라엘 row는 최소 왕국 표지이며 전체 왕 목록을 포함하지 않습니다.",
+        "en": "This Northern Israel row is a minimal kingdom marker and does not include the full royal sequence."
+      }
+    },
+    {
+      "id": "kingdom-southern-judah-skeleton",
+      "recordType": "kingdom",
+      "title": {
+        "ko": "남유다",
+        "en": "Southern Kingdom / Judah"
+      },
+      "displayOrder": 11,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-southern-judah",
+      "accordionGroup": "southern-judah",
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 12장",
+            "en": "1 Kings 12"
+          },
+          "reference": "1 Kings 12",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 25장",
+            "en": "2 Kings 25"
+          },
+          "reference": "2 Kings 25",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-kings", "2-chronicles", "isaiah", "jeremiah", "micah"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 유다 왕국 표지",
+        "en": "Scripture flow / Judah kingdom marker"
+      },
+      "confidenceLabel": {
+        "ko": "대표 구간 표시 / 세부 왕 순서는 후속 검토",
+        "en": "Representative segment marker / fuller royal sequence needs later review"
+      },
+      "cautionNote": {
+        "ko": "남유다 row는 최소 왕국 표지이며 전체 왕 계보를 완성하지 않습니다.",
+        "en": "This Judah row is a minimal kingdom marker and does not complete the full royal sequence."
+      }
+    },
+    {
+      "id": "kingdom-period-northern-israel-skeleton",
+      "recordType": "kingdomPeriod",
+      "title": {
+        "ko": "북이스라엘 흐름",
+        "en": "Northern Kingdom Flow"
+      },
+      "displayOrder": 12,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-northern-israel",
+      "accordionGroup": "northern-israel",
+      "periodType": "kingdomPeriod",
+      "scope": {
+        "ko": "분열 이후 북이스라엘의 대표 흐름",
+        "en": "Representative northern-kingdom flow after the division"
+      },
+      "startAnchor": {
+        "bookId": "1-kings",
+        "label": {
+          "ko": "열왕기상 12장",
+          "en": "1 Kings 12"
+        },
+        "reference": "1 Kings 12",
+        "scope": "chapter"
+      },
+      "endAnchor": {
+        "bookId": "2-kings",
+        "label": {
+          "ko": "열왕기하 17장",
+          "en": "2 Kings 17"
+        },
+        "reference": "2 Kings 17",
+        "scope": "chapter"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 12장",
+            "en": "1 Kings 12"
+          },
+          "reference": "1 Kings 12",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 17장",
+            "en": "2 Kings 17"
+          },
+          "reference": "2 Kings 17",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-kings", "hosea", "amos"],
+      "relatedKingIds": ["king-jeroboam-i-skeleton"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 북왕국 구간 skeleton",
+        "en": "Scripture flow / northern-kingdom period skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "구간 흐름은 명확 / 세부 배열은 후속 검토",
+        "en": "Period flow is clear / finer sequencing needs later review"
+      },
+      "cautionNote": {
+        "ko": "북왕국 세부 왕 연속성과 동시대 비교는 후속 검토가 필요합니다.",
+        "en": "Detailed northern royal succession and synchronism need later review."
+      }
+    },
+    {
+      "id": "kingdom-period-southern-judah-skeleton",
+      "recordType": "kingdomPeriod",
+      "title": {
+        "ko": "남유다 흐름",
+        "en": "Southern Kingdom Flow"
+      },
+      "displayOrder": 13,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-southern-judah",
+      "accordionGroup": "southern-judah",
+      "periodType": "kingdomPeriod",
+      "scope": {
+        "ko": "분열 이후 유다 왕국의 대표 흐름",
+        "en": "Representative Judah-kingdom flow after the division"
+      },
+      "startAnchor": {
+        "bookId": "1-kings",
+        "label": {
+          "ko": "열왕기상 12장",
+          "en": "1 Kings 12"
+        },
+        "reference": "1 Kings 12",
+        "scope": "chapter"
+      },
+      "endAnchor": {
+        "bookId": "2-kings",
+        "label": {
+          "ko": "열왕기하 25장",
+          "en": "2 Kings 25"
+        },
+        "reference": "2 Kings 25",
+        "scope": "chapter"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 12장",
+            "en": "1 Kings 12"
+          },
+          "reference": "1 Kings 12",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 25장",
+            "en": "2 Kings 25"
+          },
+          "reference": "2 Kings 25",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-kings", "2-chronicles", "isaiah", "jeremiah", "micah"],
+      "relatedKingIds": [
+        "king-rehoboam-skeleton",
+        "king-hezekiah-skeleton",
+        "king-josiah-skeleton"
+      ],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 유다 왕국 구간 skeleton",
+        "en": "Scripture flow / Judah-kingdom period skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "구간 흐름은 명확 / 세부 배열은 후속 검토",
+        "en": "Period flow is clear / finer sequencing needs later review"
+      },
+      "cautionNote": {
+        "ko": "유다 세부 왕 연속성과 북왕국 동시대 비교는 후속 검토가 필요합니다.",
+        "en": "Detailed Judah succession and synchronism with the north need later review."
+      }
+    },
+    {
+      "id": "king-jeroboam-i-skeleton",
+      "recordType": "king",
+      "title": {
+        "ko": "여로보암 1세",
+        "en": "Jeroboam I"
+      },
+      "displayOrder": 14,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-northern-israel",
+      "accordionGroup": "northern-israel",
+      "kingdomId": "kingdom-northern-israel-skeleton",
+      "kingdomName": {
+        "ko": "북이스라엘",
+        "en": "Northern Kingdom / Israel"
+      },
+      "reignLabel": {
+        "ko": "분열 직후 북왕국 대표 왕",
+        "en": "Representative northern king immediately after the division"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함 / 분열 직후 배경",
+        "en": "Exact years not asserted / immediate post-division setting"
+      },
+      "relatedTransitionIds": ["transition-kingdom-divided-skeleton"],
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 12-14장",
+            "en": "1 Kings 12-14"
+          },
+          "reference": "1 Kings 12-14",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 북왕국 대표 왕 skeleton",
+        "en": "Scripture reference / representative northern king skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "대표 연결은 높음 / 연대 세부는 후속 검토",
+        "en": "Representative linkage is high / chronology detail needs later review"
+      },
+      "cautionNote": {
+        "ko": "이 row는 분열 직후 북왕국의 구조 표지이며 전체 북왕국 왕 목록을 포함하지 않습니다.",
+        "en": "This row is a structural marker for the early northern kingdom and does not include the full northern sequence."
+      }
+    },
+    {
+      "id": "king-rehoboam-skeleton",
+      "recordType": "king",
+      "title": {
+        "ko": "르호보암",
+        "en": "Rehoboam"
+      },
+      "displayOrder": 15,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-southern-judah",
+      "accordionGroup": "southern-judah",
+      "kingdomId": "kingdom-southern-judah-skeleton",
+      "kingdomName": {
+        "ko": "남유다",
+        "en": "Southern Kingdom / Judah"
+      },
+      "reignLabel": {
+        "ko": "분열 직후 유다 대표 왕",
+        "en": "Representative Judah king immediately after the division"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함 / 분열 직후 배경",
+        "en": "Exact years not asserted / immediate post-division setting"
+      },
+      "relatedTransitionIds": ["transition-kingdom-divided-skeleton"],
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 12-14장",
+            "en": "1 Kings 12-14"
+          },
+          "reference": "1 Kings 12-14",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["1-kings", "2-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 유다 대표 왕 skeleton",
+        "en": "Scripture reference / representative Judah king skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "대표 연결은 높음 / 연대 세부는 후속 검토",
+        "en": "Representative linkage is high / chronology detail needs later review"
+      },
+      "cautionNote": {
+        "ko": "이 row는 분열 직후 유다 흐름의 구조 표지이며 전체 유다 왕 목록을 완성하지 않습니다.",
+        "en": "This row is a structural marker for early Judah and does not complete the full Judah sequence."
+      }
+    },
+    {
+      "id": "king-hezekiah-skeleton",
+      "recordType": "king",
+      "title": {
+        "ko": "히스기야",
+        "en": "Hezekiah"
+      },
+      "displayOrder": 16,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-southern-judah",
+      "accordionGroup": "southern-judah",
+      "kingdomId": "kingdom-southern-judah-skeleton",
+      "kingdomName": {
+        "ko": "남유다",
+        "en": "Southern Kingdom / Judah"
+      },
+      "reignLabel": {
+        "ko": "앗수르 위기 배경의 대표 유다 왕",
+        "en": "Representative Judah king in the Assyrian-crisis setting"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함 / 후기 분열 왕국 배경",
+        "en": "Exact years not asserted / later divided-kingdom setting"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 18-20장",
+            "en": "2 Kings 18-20"
+          },
+          "reference": "2 Kings 18-20",
+          "scope": "passage"
+        },
+        {
+          "bookId": "isaiah",
+          "label": {
+            "ko": "이사야 36-39장",
+            "en": "Isaiah 36-39"
+          },
+          "reference": "Isaiah 36-39",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "2-chronicles", "isaiah"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 대표 유다 왕 skeleton",
+        "en": "Scripture reference / representative Judah king skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "본문 연결은 높음 / 동시대 정리는 후속 검토",
+        "en": "Textual linkage is high / synchronism detail needs later review"
+      },
+      "cautionNote": {
+        "ko": "히스기야 row는 분열 왕국 후기의 대표 표지이며 외부 연표 동기화를 확정하지 않습니다.",
+        "en": "This Hezekiah row is a representative later divided-kingdom marker and does not finalize external synchronism."
+      }
+    },
+    {
+      "id": "king-josiah-skeleton",
+      "recordType": "king",
+      "title": {
+        "ko": "요시야",
+        "en": "Josiah"
+      },
+      "displayOrder": 17,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-southern-judah",
+      "accordionGroup": "southern-judah",
+      "kingdomId": "kingdom-southern-judah-skeleton",
+      "kingdomName": {
+        "ko": "남유다",
+        "en": "Southern Kingdom / Judah"
+      },
+      "reignLabel": {
+        "ko": "후기 유다 개혁 배경의 대표 왕",
+        "en": "Representative king in the later Judah reform setting"
+      },
+      "approximateDateLabel": {
+        "ko": "정확한 연도 단정 안 함 / 멸망 직전 유다 배경",
+        "en": "Exact years not asserted / late pre-exilic Judah setting"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 22-23장",
+            "en": "2 Kings 22-23"
+          },
+          "reference": "2 Kings 22-23",
+          "scope": "passage"
+        },
+        {
+          "bookId": "2-chronicles",
+          "label": {
+            "ko": "역대하 34-35장",
+            "en": "2 Chronicles 34-35"
+          },
+          "reference": "2 Chronicles 34-35",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "2-chronicles", "jeremiah"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 후기 유다 대표 왕 skeleton",
+        "en": "Scripture reference / representative later-Judah king skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "본문 연결은 높음 / 연대와 범위는 후속 검토",
+        "en": "Textual linkage is high / chronology and scope need later review"
+      },
+      "cautionNote": {
+        "ko": "요시야 row는 후기 유다 개혁의 대표 표지이며 정확한 연대 결론을 제시하지 않습니다.",
+        "en": "This Josiah row is a representative late-Judah reform marker and does not present fixed chronology."
+      }
+    },
+    {
+      "id": "kingdom-period-exile-fall-markers-skeleton",
+      "recordType": "kingdomPeriod",
+      "title": {
+        "ko": "멸망과 포로 표지",
+        "en": "Fall and Exile Markers"
+      },
+      "displayOrder": 18,
+      "timelinePeriodId": "exile",
+      "sectionId": "kings-exile-markers",
+      "accordionGroup": "exile-markers",
+      "periodType": "exileMarker",
+      "scope": {
+        "ko": "북왕국 멸망과 유다 포로 시작 표지",
+        "en": "Markers for the northern fall and the beginning of Judah's exile"
+      },
+      "startAnchor": {
+        "bookId": "2-kings",
+        "label": {
+          "ko": "열왕기하 17장",
+          "en": "2 Kings 17"
+        },
+        "reference": "2 Kings 17",
+        "scope": "chapter"
+      },
+      "endAnchor": {
+        "bookId": "2-kings",
+        "label": {
+          "ko": "열왕기하 25장",
+          "en": "2 Kings 25"
+        },
+        "reference": "2 Kings 25",
+        "scope": "chapter"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 17장",
+            "en": "2 Kings 17"
+          },
+          "reference": "2 Kings 17",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 25장",
+            "en": "2 Kings 25"
+          },
+          "reference": "2 Kings 25",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "2-chronicles", "jeremiah", "ezekiel"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 흐름 / 멸망·포로 표지 skeleton",
+        "en": "Scripture flow / fall-and-exile marker skeleton"
+      },
+      "confidenceLabel": {
+        "ko": "본문 구간은 명확 / 외부 연표는 후속 검토",
+        "en": "Textual span is clear / external chronology remains for later review"
+      },
+      "cautionNote": {
+        "ko": "이 row는 멸망과 포로의 구조 표지이며 외부 연대 비교를 포함하지 않습니다.",
+        "en": "This row is a structural fall-and-exile marker and does not include external chronological comparison."
+      }
+    },
+    {
+      "id": "exile-marker-northern-kingdom-fall-skeleton",
+      "recordType": "exileMarker",
+      "title": {
+        "ko": "북왕국 멸망 표지",
+        "en": "Northern Kingdom Fall Marker"
+      },
+      "displayOrder": 19,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "kings-exile-markers",
+      "accordionGroup": "exile-markers",
+      "relatedKingdomId": "kingdom-northern-israel-skeleton",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 17장",
+            "en": "2 Kings 17"
+          },
+          "reference": "2 Kings 17",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "hosea"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 북왕국 멸망 표지",
+        "en": "Scripture reference / northern kingdom fall marker"
+      },
+      "confidenceLabel": {
+        "ko": "본문 연결은 높음 / 외부 연대는 후속 검토",
+        "en": "Textual linkage is high / external chronology remains for later review"
+      },
+      "cautionNote": {
+        "ko": "북왕국 멸망은 구조 표지로만 표시하며 세부 제국 연표는 보류합니다.",
+        "en": "The northern fall is marked structurally only and does not settle imperial chronology."
+      }
+    },
+    {
+      "id": "exile-marker-southern-kingdom-exile-skeleton",
+      "recordType": "exileMarker",
+      "title": {
+        "ko": "남유다 포로 표지",
+        "en": "Southern Kingdom Exile Marker"
+      },
+      "displayOrder": 20,
+      "timelinePeriodId": "exile",
+      "sectionId": "kings-exile-markers",
+      "accordionGroup": "exile-markers",
+      "relatedKingdomId": "kingdom-southern-judah-skeleton",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 25장",
+            "en": "2 Kings 25"
+          },
+          "reference": "2 Kings 25",
+          "scope": "chapter"
+        },
+        {
+          "bookId": "jeremiah",
+          "label": {
+            "ko": "예레미야 39장",
+            "en": "Jeremiah 39"
+          },
+          "reference": "Jeremiah 39",
+          "scope": "chapter"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "2-chronicles", "jeremiah", "ezekiel", "lamentations"],
+      "confidence": "medium",
+      "reviewRequired": true,
+      "basisLabel": {
+        "ko": "성경 본문 참조 / 유다 포로 표지",
+        "en": "Scripture reference / Judah exile marker"
+      },
+      "confidenceLabel": {
+        "ko": "본문 연결은 높음 / 연대 세부는 후속 검토",
+        "en": "Textual linkage is high / chronology detail needs later review"
+      },
+      "cautionNote": {
+        "ko": "유다 포로 표지는 성경 본문 anchor 중심이며 외부 역사 연동은 포함하지 않습니다.",
+        "en": "This Judah exile marker stays centered on Scripture anchors and does not add external historical synchronization."
+      }
+    }
+  ]
+}
