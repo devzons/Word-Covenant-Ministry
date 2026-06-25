@@ -15,9 +15,10 @@ Every sample package should use the same envelope shape:
 
 Envelope rules:
 
-- `items` stays empty in the current skeleton phase.
+- `.sample.json` files keep `items` empty in the current skeleton phase.
 - Sample files define shape only.
-- Production Timeline rows are not added in this phase.
+- `books.66-canonical-skeleton.json` is a canonical skeleton package, not a production import package.
+- Production Timeline import rows are not added in this phase.
 
 ## Core principles
 
@@ -41,6 +42,11 @@ Envelope rules:
 - genealogy
 - references
 - cross-links
+
+Current notable package artifacts:
+
+- `books.66-canonical-skeleton.json`
+- `*.sample.json` skeleton shape files
 
 ## Shared row fields for future real data
 
@@ -69,6 +75,7 @@ Envelope rules:
 ## 66-book requirement
 
 - The real books package must eventually include all 66 canonical books.
+- `books.66-canonical-skeleton.json` is the first package-level 66-book skeleton artifact.
 - Do not mark the books package complete until all 66 books have rows with Scripture anchors and basis labels.
 - Authorship and dating labels must use basis categories such as:
   - `Scripture explicit`
@@ -90,6 +97,7 @@ Envelope rules:
 
 - IDs unique
 - all references resolve
+- all 66 canonical book IDs present in `books.66-canonical-skeleton.json`
 - all 66 books present in the real books package
 - no Bible text stored
 - no coordinates in the no-coordinate phase

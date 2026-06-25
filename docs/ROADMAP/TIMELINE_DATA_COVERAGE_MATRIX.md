@@ -34,6 +34,7 @@ Current exported preview collections observed in `timelinePreviewData.ts`:
 | Timeline places lookup | `timelinePreviewData.ts` | 36 | Preview |
 | Timeline events | `timelinePreviewData.ts` | 65 | Expanded Preview |
 | Books / Psalms context rows | `timelinePreviewData.ts` | 12 | Expanded Preview |
+| 66-book context skeleton package | `docs/data-packages/timeline/books.66-canonical-skeleton.json` | 66 | Skeleton package created |
 | Kings / Kingdoms comparison rows | `timelinePreviewData.ts` | 21 | Expanded Preview |
 | Genealogy segments | `timelinePreviewData.ts` | 3 | Preview |
 | Genealogy comparison rows | `timelinePreviewData.ts` | 11 | Preview |
@@ -44,6 +45,7 @@ Notes:
 
 - Counts above are based on the current checked-in fixture file.
 - `passionWeekTimeline.ts` is a compatibility export layer, not a second dataset.
+- `books.66-canonical-skeleton.json` improves package coverage documentation, but it is not frontend runtime data yet.
 - Korean history currently exists only as a collapsed placeholder UI in Events period groups.
 
 ## 3. Coverage Status Legend
@@ -110,7 +112,7 @@ Coverage matrix:
 | --- | --- | --- | --- | --- | --- | --- |
 | Overview | High-level Scripture-first flow summary | `timelinePreviewData.ts` via `TimelinePageShell.tsx` | Preview | Quick period summary using current event set | No standalone overview dataset; depends on event coverage quality | Improve underlying event skeleton first |
 | Events | Primary narrative timeline grouped by period | `passionWeekTimelineEvents` | Expanded Preview | Strongest current view; period grouping; event selection; Scripture Evidence Panel integration | Full Genesis-to-Revelation event skeleton is missing | Build minimal canonical event skeleton |
-| Books / Psalms | Book background and Psalm context | `timelineBookContextRows` | Expanded Preview | Clear book-context cards; some superscription-based Psalms and return/exile books | 66-book coverage is far from complete | Decide whether to expand in TS or move to a data package |
+| Books / Psalms | Book background and Psalm context | `timelineBookContextRows` plus `books.66-canonical-skeleton.json` | Expanded Preview in frontend; skeleton package created in docs/data | Clear book-context cards; package-level 66-book skeleton now exists | Frontend still does not render the 66-book skeleton; Psalms and book intros remain minimal | Keep runtime fixture stable while planning package integration |
 | Kings / Kingdoms | Comparison of rulers, kingdoms, prophets, empires | `timelineKingdomComparisonRows` | Expanded Preview | Strongest non-event supporting table; inspector cross-links exist | Full king sequence and prophet coverage remain incomplete | Add missing sequence policy and fuller kingdom coverage |
 | Genealogy | Matthew-oriented comparison rows | `timelineGenealogySegments`, `timelineGenealogyComparisonRows` | Preview | Clear Matthew 14 / 14 / 14 framing; explicit row linking exists | Luke genealogy and broader OT genealogies are absent | Define wider genealogy coverage model |
 | Places / Schematic Map | Concept-zone place reference without coordinates | `timelineSchematicPlaceRows` | Preview | Schematic concept-zone approach is clear; no coordinate overclaim | Many biblical places missing; no gospel/Acts place spread; no map provider | Expand place coverage only after source policy remains clear |
@@ -119,21 +121,21 @@ Coverage matrix:
 
 ## 6. Canonical Book Context Coverage
 
-This section reflects only currently represented context rows or visible preview linkage, not full-book intros.
+This section reflects current frontend context rows plus the package-level 66-book skeleton, not full-book introductions.
 
 | Canonical Section | Books Currently Represented | Missing / Weak Areas | Recommended Priority |
 | --- | --- | --- | --- |
-| Torah | Event coverage only, no dedicated Torah book rows | No Genesis / Exodus / Leviticus / Numbers / Deuteronomy book-context rows | Medium |
-| Historical Books | Ezra, Nehemiah, Esther; event linkage through Joshua, Judges, Samuel, Kings | Many historical books have no context row | High |
-| Wisdom / Poetry | Job | Proverbs, Ecclesiastes, Song of Songs absent | Medium |
-| Psalms | Psalm 3, Psalm 51, Psalm 90, Psalm 137 | Psalms coverage is selective and not broad | High |
-| Major Prophets | Lamentations, Daniel | Isaiah, Jeremiah, Ezekiel are not represented as context rows | High |
-| Minor Prophets | Haggai, Zechariah | Most minor prophets absent; Hosea/Amos only appear indirectly in kingdom context | High |
-| Gospels | No dedicated gospel book-context rows | Matthew, Mark, Luke, John context layer absent | High |
-| Acts | No dedicated Acts context row | Acts coverage limited to preview events only | High |
-| Pauline Epistles | None | Not represented | Medium |
-| General Epistles | None | Not represented | Medium |
-| Revelation | None | Not represented | Medium |
+| Torah | Canonical skeleton rows now exist for all five books; frontend rows still absent | Frontend does not render the package yet | Medium |
+| Historical Books | Canonical skeleton rows now exist for all historical books; frontend rows remain selective | Runtime book-context view still shows only a small subset | High |
+| Wisdom / Poetry | Canonical skeleton rows now exist; frontend remains selective | Psalms runtime context remains very partial | High |
+| Psalms | Canonical skeleton row exists; selective Psalm-specific preview rows still limited | Not a complete Psalm background dataset | High |
+| Major Prophets | Canonical skeleton rows now exist for all five books | Frontend context rows remain sparse | High |
+| Minor Prophets | Canonical skeleton rows now exist for all twelve books | Runtime context rows remain sparse | High |
+| Gospels | Canonical skeleton rows now exist for Matthew, Mark, Luke, John | Frontend gospel book-context layer is still absent | High |
+| Acts | Canonical skeleton row exists | Frontend Acts context remains event-led only | High |
+| Pauline Epistles | Canonical skeleton rows now exist for all thirteen epistles | No runtime rendering yet | Medium |
+| General Epistles | Canonical skeleton rows now exist for all eight general epistles | No runtime rendering yet | Medium |
+| Revelation | Canonical skeleton row exists | No runtime rendering yet | Medium |
 
 ## 7. Psalms Coverage Matrix
 

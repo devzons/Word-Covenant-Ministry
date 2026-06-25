@@ -8,7 +8,7 @@ Current status:
 - Design-only
 - Not production data
 - No approved import files
-- No canonical 66-book rows yet
+- Canonical 66-book skeleton package now exists in `books.66-canonical-skeleton.json`
 - No world-history or Korean-history content rows yet
 
 Rules:
@@ -16,6 +16,9 @@ Rules:
 - All files in this directory are design or skeleton artifacts.
 - Real data rows may be added only in later approved phases.
 - The books package must eventually cover all 66 canonical books.
+- `books.66-canonical-skeleton.json` is the first canonical 66-book skeleton package.
+- The 66-book skeleton is not imported into the frontend yet.
+- Skeleton rows are not complete book introductions, and no book should be treated as complete yet.
 - Center-column package display must support top-down chronological accordion sections.
 - Scripture anchors are primary.
 - Dates, geography, world history, Korean history, tradition, and authorship labels are supporting layers.
