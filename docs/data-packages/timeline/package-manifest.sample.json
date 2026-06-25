@@ -1,0 +1,36 @@
+{
+  "$schema": "./schema.md",
+  "packageType": "timeline.manifest",
+  "packageVersion": "0.0.0-skeleton",
+  "status": "skeleton-only",
+  "authorityOrder": [
+    "Scripture Anchor",
+    "Internal Biblical Sequence",
+    "Biblical Event / Book / Kingdom / Place Context",
+    "Biblical supporting date / relative year",
+    "World history reference",
+    "Korean history reference"
+  ],
+  "centerColumnPrinciple": "top-down chronological accordion-first",
+  "requiredPackages": [
+    "periods",
+    "sections",
+    "events",
+    "books",
+    "psalms",
+    "kings",
+    "prophets",
+    "empires",
+    "places",
+    "genealogy",
+    "references",
+    "cross-links"
+  ],
+  "notes": [
+    "This manifest is a skeleton design artifact.",
+    "It does not contain production data.",
+    "Books package must eventually cover all 66 canonical books.",
+    "Every center-column view must support top-down chronological accordion sections by default.",
+    "Bible text must not be stored in package files."
+  ]
+}

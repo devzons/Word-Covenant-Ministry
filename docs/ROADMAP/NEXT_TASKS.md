@@ -18,6 +18,8 @@ CR-93A Timeline Data Coverage Matrix is complete as a documentation-only audit. 
 
 CR-93B Timeline Data Package Design is complete as a documentation-only architecture step. `docs/ROADMAP/TIMELINE_DATA_PACKAGE_DESIGN.md` and `docs/data-packages/timeline/` now document the package directory proposal, the 66-book coverage requirement, the accordion-first center-column principle, shared field expectations, package-specific field guidance, and future verifier rules. No real Timeline package rows, code, API, DB, schema, or import work were added.
 
+CR-93B-2 Timeline Data Package Skeleton Files is complete. Skeleton sample package files now exist under `docs/data-packages/timeline/` for manifest, periods, sections, events, books, psalms, kings, prophets, empires, places, genealogy, references, and cross-links. All current sample JSON files remain skeleton-only with empty `items` arrays. No real data rows, code, import, API, DB, or schema work were added.
+
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
 Documentation Gate Proportionality applied to this narrow frontend-only UI step because the work stayed out of architecture, API, database, schema, import, migration, Data Package, and production-impacting scope.
@@ -30,9 +32,9 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93B-2 Timeline Data Package Skeleton Files.
-2. CR-93C Core Biblical Event Skeleton.
-3. CR-93D 66-Book Context Skeleton.
+1. CR-93C Core Biblical Event Skeleton.
+2. CR-93D 66-Book Context Skeleton.
+3. CR-93E Timeline Package Verifier Design.
 4. CR-91C Context Inspector Deep Links.
 5. CR-91D Schematic Flow Highlights.
 6. CR-92C Korean History Pilot Rows after source review.

@@ -1,0 +1,12 @@
+{
+  "$schema": "./schema.md",
+  "packageType": "timeline.psalms",
+  "packageVersion": "0.0.0-skeleton",
+  "status": "skeleton-only",
+  "notes": [
+    "This file defines the package shape only.",
+    "It does not contain production timeline data.",
+    "Bible text must not be stored here."
+  ],
+  "items": []
+}

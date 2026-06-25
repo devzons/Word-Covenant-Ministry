@@ -1,26 +1,24 @@
 # Timeline Data Package
 
-This directory is reserved for future Scripture-first Timeline package design artifacts.
+This directory contains skeleton Timeline data package files.
 
 Current status:
 
+- Skeleton-only
 - Design-only
-- No production data
+- Not production data
 - No approved import files
 - No canonical 66-book rows yet
 - No world-history or Korean-history content rows yet
 
-Goals:
+Rules:
 
-- Support long-term Timeline data maintenance outside `timelinePreviewData.ts`
-- Preserve Scripture-first authority
-- Preserve accordion-first, top-down center-column display
-- Support 66-book context coverage later
-- Support future verifier checks without storing Bible text
-
-Design boundaries:
-
-- Store references and curated metadata, not copied Bible text
-- Keep world and Korean history as supporting reference layers only
-- Do not add coordinates in this phase
-- Do not treat sample files as real data
+- All files in this directory are design or skeleton artifacts.
+- Real data rows may be added only in later approved phases.
+- The books package must eventually cover all 66 canonical books.
+- Center-column package display must support top-down chronological accordion sections.
+- Scripture anchors are primary.
+- Dates, geography, world history, Korean history, tradition, and authorship labels are supporting layers.
+- Bible text must not be stored here.
+- Coordinates must not be added during the no-coordinate phase.
+- Sample files must not be treated as production data.

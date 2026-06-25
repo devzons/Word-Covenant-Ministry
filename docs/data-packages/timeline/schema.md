@@ -2,6 +2,23 @@
 
 This file documents design-only package expectations for future Timeline data files.
 
+## Shared package envelope
+
+Every sample package should use the same envelope shape:
+
+- `$schema`
+- `packageType`
+- `packageVersion`
+- `status`
+- `notes`
+- `items`
+
+Envelope rules:
+
+- `items` stays empty in the current skeleton phase.
+- Sample files define shape only.
+- Production Timeline rows are not added in this phase.
+
 ## Core principles
 
 - Scripture anchors are primary.
@@ -13,8 +30,9 @@ This file documents design-only package expectations for future Timeline data fi
 ## Expected package families
 
 - periods
-- books
+- sections
 - events
+- books
 - psalms
 - kings
 - prophets
@@ -24,24 +42,56 @@ This file documents design-only package expectations for future Timeline data fi
 - references
 - cross-links
 
-## Shared field expectations
+## Shared row fields for future real data
 
 - `id`
 - `timelinePeriodId`
 - `sectionId`
-- `sectionOrder`
 - `displayOrder`
 - `scriptureAnchors`
 - `basisLabel`
 - `confidenceLabel`
 - `cautionNote`
 - `sourceBasisLabel`
+- `relatedEventIds`
+- `relatedBookIds`
+- `relatedPlaceIds`
+- `relatedKingdomIds`
 
-## Design constraints
+## Accordion-first requirements
 
-- The books package must eventually cover all 66 biblical books.
-- Reference-history rows are not events.
-- Korean history rows require source review labeling.
-- Related IDs must resolve.
-- No fuzzy cross-links.
-- No coordinates in this phase.
+- `sectionId` is required for rows that appear in center-column views.
+- `displayOrder` is required for rows displayed in center-column flow.
+- `sectionOrder` is required in the sections package.
+- Center display should be top-down chronological by default.
+- All major views must support collapsed and expanded sections.
+
+## 66-book requirement
+
+- The real books package must eventually include all 66 canonical books.
+- Do not mark the books package complete until all 66 books have rows with Scripture anchors and basis labels.
+- Authorship and dating labels must use basis categories such as:
+  - `Scripture explicit`
+  - `Superscription-based`
+  - `Traditional`
+  - `Textual background`
+  - `Inferred`
+  - `Debated`
+  - `Unknown`
+
+## No-storage and boundary rules
+
+- No Bible text
+- No coordinates during the current phase
+- No external dataset rows without source review
+- Korean history rows require `sourceBasisLabel` and reference-only labeling
+
+## Future verifier requirements
+
+- IDs unique
+- all references resolve
+- all 66 books present in the real books package
+- no Bible text stored
+- no coordinates in the no-coordinate phase
+- Korean reference rows include source basis
+- accordion sections include order fields
