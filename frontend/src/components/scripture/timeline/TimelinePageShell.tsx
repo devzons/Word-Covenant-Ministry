@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils/cn";
@@ -139,16 +140,12 @@ const pageCopy = {
 export function TimelinePageShell({ initialFilters, initialView, locale }: TimelinePageShellProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = pageCopy[activeLocale];
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [activeView, setActiveView] = useState<TimelineView>(initialView);
   const [filters, setFilters] = useState<TimelineFilterState>(initialFilters);
   const [inspectorSelection, setInspectorSelection] = useState<TimelineInspectorSelection>(null);
-  const [clientMounted, setClientMounted] = useState(false);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setClientMounted(true), 0);
-
-    return () => window.clearTimeout(timer);
-  }, []);
 
   const periodCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -275,6 +272,80 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
     [activeLocale, visibleEvents],
   );
 
+  const eventById = useMemo(
+    () => new Map(passionWeekTimelineEvents.map((event) => [event.id, event])),
+    [],
+  );
+  const bookContextById = useMemo(
+    () => new Map(timelineBookContextRows.map((row) => [row.id, row])),
+    [],
+  );
+  const kingdomComparisonById = useMemo(
+    () => new Map(timelineKingdomComparisonRows.map((row) => [row.id, row])),
+    [],
+  );
+  const genealogyComparisonById = useMemo(
+    () => new Map(timelineGenealogyComparisonRows.map((row) => [row.id, row])),
+    [],
+  );
+  const schematicPlaceById = useMemo(
+    () => new Map(timelineSchematicPlaceRows.map((row) => [row.id, row])),
+    [],
+  );
+  const schematicPlaceByPlaceId = useMemo(
+    () => new Map(timelineSchematicPlaceRows.map((row) => [row.placeId, row])),
+    [],
+  );
+
+  function syncViewToUrl(nextView: TimelineView) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("view", nextView);
+    const nextQuery = params.toString();
+
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+  }
+
+  function setTimelineView(nextView: TimelineView, clearSelection = false) {
+    setActiveView(nextView);
+
+    if (clearSelection) {
+      setInspectorSelection(null);
+    }
+
+    syncViewToUrl(nextView);
+  }
+
+  function getViewForSelection(selection: Exclude<TimelineInspectorSelection, null>): TimelineView {
+    switch (selection.type) {
+      case "event":
+        return "events";
+      case "book":
+        return "books";
+      case "kingdom":
+        return "kingdoms";
+      case "genealogy":
+        return "genealogy";
+      case "place":
+        return "places";
+    }
+  }
+
+  function selectInspectorItem(selection: TimelineInspectorSelection, view?: TimelineView) {
+    if (!selection) {
+      setInspectorSelection(null);
+      return;
+    }
+
+    const nextView = view ?? getViewForSelection(selection);
+    setInspectorSelection(selection);
+
+    if (nextView !== activeView) {
+      setActiveView(nextView);
+    }
+
+    syncViewToUrl(nextView);
+  }
+
   const activeViewLabel = getTimelineViewLabel(activeView, activeLocale);
 
   return (
@@ -294,8 +365,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
           activeTab={activeView}
           locale={activeLocale}
           onTabChange={(tabId) => {
-            setActiveView(tabId as TimelineView);
-            setInspectorSelection(null);
+            setTimelineView(tabId as TimelineView, true);
           }}
           tabs={copy.viewTabs}
         />
@@ -360,15 +430,6 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
               visibleCount={previewCounts.visibleCount}
             />
 
-            <RuntimeMarker
-              activeBookId={filters.bookId}
-              activePeriodId={filters.periodId}
-              activePlaceId={filters.placeId}
-              activeView={activeView}
-              clientMounted={clientMounted}
-              locale={activeLocale}
-            />
-
             <div key={activeView} className="min-w-0">
               {activeView === "overview" ? (
                 <OverviewPreviewPanel
@@ -392,7 +453,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
               {activeView === "kingdoms" ? (
                 <KingsKingdomsPreviewPanel
                   locale={activeLocale}
-                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "kingdom" })}
+                  onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "kingdom" })}
                   selectedRowId={inspectorSelection?.type === "kingdom" ? inspectorSelection.id : ""}
                 />
               ) : null}
@@ -402,7 +463,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
                   activeBookId={filters.bookId}
                   activePeriodId={filters.periodId}
                   locale={activeLocale}
-                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "book" })}
+                  onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "book" })}
                   searchTerm={filters.searchTerm}
                   selectedRowId={inspectorSelection?.type === "book" ? inspectorSelection.id : ""}
                 />
@@ -412,7 +473,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
                 <GenealogyComparisonPreviewPanel
                   activePeriodId={filters.periodId}
                   locale={activeLocale}
-                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "genealogy" })}
+                  onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "genealogy" })}
                   searchTerm={filters.searchTerm}
                   selectedRowId={inspectorSelection?.type === "genealogy" ? inspectorSelection.id : ""}
                 />
@@ -421,7 +482,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
               {activeView === "places" ? (
                 <PlacesSchematicMapPreviewPanel
                   locale={activeLocale}
-                  onSelectRow={(rowId) => setInspectorSelection({ id: rowId, type: "place" })}
+                  onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "place" })}
                   searchTerm={filters.searchTerm}
                   selectedRowId={inspectorSelection?.type === "place" ? inspectorSelection.id : ""}
                 />
@@ -434,7 +495,7 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
                     events={visibleEvents}
                     locale={activeLocale}
                     searchTerm={filters.searchTerm}
-                    onSelect={(eventId) => setInspectorSelection({ id: eventId, type: "event" })}
+                    onSelect={(eventId) => selectInspectorItem({ id: eventId, type: "event" })}
                     selectedEventId={selectedEventId}
                   />
                 </div>
@@ -453,7 +514,16 @@ export function TimelinePageShell({ initialFilters, initialView, locale }: Timel
             }
             openInReaderLabel={copy.openInReader}
             relatedStudy={copy.relatedStudy}
+            onSelectInspectorItem={selectInspectorItem}
             selectedLabel={copy.selectedLabel}
+            lookupMaps={{
+              bookContextById,
+              eventById,
+              genealogyComparisonById,
+              kingdomComparisonById,
+              schematicPlaceById,
+              schematicPlaceByPlaceId,
+            }}
           />
         </div>
       </section>
@@ -601,55 +671,6 @@ function OverviewPreviewPanel({
         ))}
       </div>
     </section>
-  );
-}
-
-type RuntimeMarkerProps = {
-  activeBookId: string;
-  activePeriodId: string;
-  activePlaceId: string;
-  activeView: TimelineView;
-  clientMounted: boolean;
-  locale: TimelineLocale;
-};
-
-function RuntimeMarker({
-  activeBookId,
-  activePeriodId,
-  activePlaceId,
-  activeView,
-  clientMounted,
-  locale,
-}: RuntimeMarkerProps) {
-  return (
-    <div
-      data-testid="timeline-runtime-marker"
-      className="rounded-md border border-dashed border-zinc-200 bg-white px-3 py-2 text-[11px] leading-5 text-zinc-500"
-    >
-      <span className="font-semibold text-zinc-700">
-        {locale === "ko" ? "Timeline runtime check: CR-90X-5" : "Timeline runtime check: CR-90X-5"}
-      </span>
-      <span className="mx-2 text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span>{locale === "ko" ? "client mounted" : "client mounted"}: {clientMounted ? "yes" : "no"}</span>
-      <span className="mx-2 text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span>activeView: {activeView}</span>
-      <span className="mx-2 text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span>period: {activePeriodId || "all"}</span>
-      <span className="mx-2 text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span>book: {activeBookId || "all"}</span>
-      <span className="mx-2 text-zinc-300" aria-hidden="true">
-        ·
-      </span>
-      <span>place: {activePlaceId || "all"}</span>
-    </div>
   );
 }
 

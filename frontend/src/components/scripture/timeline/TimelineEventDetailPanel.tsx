@@ -13,7 +13,6 @@ import {
   getTimelinePlace,
   getTimelineReaderHrefFromReader,
   getTimelineText,
-  passionWeekTimelineEvents,
   timelineBookContextRows,
   timelineGenealogyComparisonRows,
   timelineGenealogySegments,
@@ -31,6 +30,8 @@ import {
 import { TimelineDatingNote } from "./TimelineDatingNote";
 
 type TimelineEventDetailPanelProps = {
+  lookupMaps: TimelineEvidenceLookupMaps;
+  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void;
   selection: TimelineInspectorSelection;
   panelHeading: string;
   locale: TimelineLocale;
@@ -43,7 +44,30 @@ type TimelineEventDetailPanelProps = {
 type TimelineInspectorSelectionItem = Exclude<TimelineInspectorSelection, null>;
 type TimelineInspectorSelectionType = TimelineInspectorSelectionItem["type"];
 
+type TimelineEvidenceLookupMaps = {
+  bookContextById: Map<string, TimelineBookContextRow>;
+  eventById: Map<string, PassionWeekTimelineEvent>;
+  genealogyComparisonById: Map<string, TimelineGenealogyComparisonRow>;
+  kingdomComparisonById: Map<string, TimelineKingdomComparisonRow>;
+  schematicPlaceById: Map<string, TimelineSchematicPlaceRow>;
+  schematicPlaceByPlaceId: Map<string, TimelineSchematicPlaceRow>;
+};
+
+const kingdomToGenealogyLinks: Record<string, string[]> = {
+  "comparison-jehoiachin-jeconiah": ["genealogy-josiah-jeconiah", "genealogy-jeconiah-exile"],
+  "comparison-uzziah-azariah": ["genealogy-joram-uzziah", "genealogy-uzziah-azariah"],
+};
+
+const genealogyToKingdomLinks: Record<string, string[]> = {
+  "genealogy-jeconiah-exile": ["comparison-jehoiachin-jeconiah"],
+  "genealogy-josiah-jeconiah": ["comparison-jehoiachin-jeconiah"],
+  "genealogy-joram-uzziah": ["comparison-uzziah-azariah"],
+  "genealogy-uzziah-azariah": ["comparison-uzziah-azariah"],
+};
+
 export function TimelineEventDetailPanel({
+  lookupMaps,
+  onSelectInspectorItem,
   selection,
   panelHeading,
   locale,
@@ -54,20 +78,12 @@ export function TimelineEventDetailPanel({
 }: TimelineEventDetailPanelProps) {
   const selectedType = selection?.type ?? null;
   const selectionId = selection?.id ?? "";
-  const event =
-    selectedType === "event" ? passionWeekTimelineEvents.find((item) => item.id === selectionId) : undefined;
-  const bookRow =
-    selectedType === "book" ? timelineBookContextRows.find((item) => item.id === selectionId) : undefined;
-  const kingdomRow =
-    selectedType === "kingdom"
-      ? timelineKingdomComparisonRows.find((item) => item.id === selectionId)
-      : undefined;
+  const event = selectedType === "event" ? lookupMaps.eventById.get(selectionId) : undefined;
+  const bookRow = selectedType === "book" ? lookupMaps.bookContextById.get(selectionId) : undefined;
+  const kingdomRow = selectedType === "kingdom" ? lookupMaps.kingdomComparisonById.get(selectionId) : undefined;
   const genealogyRow =
-    selectedType === "genealogy"
-      ? timelineGenealogyComparisonRows.find((item) => item.id === selectionId)
-      : undefined;
-  const placeRow =
-    selectedType === "place" ? timelineSchematicPlaceRows.find((item) => item.id === selectionId) : undefined;
+    selectedType === "genealogy" ? lookupMaps.genealogyComparisonById.get(selectionId) : undefined;
+  const placeRow = selectedType === "place" ? lookupMaps.schematicPlaceById.get(selectionId) : undefined;
 
   return (
     <Card className="flex min-w-0 flex-col gap-4 sm:gap-5">
@@ -94,11 +110,21 @@ export function TimelineEventDetailPanel({
         )}
       </div>
 
-      {event ? renderEventEvidencePanel(event, locale, openInReaderLabel, relatedStudy) : null}
-      {bookRow ? renderBookEvidencePanel(bookRow, locale, openInReaderLabel, relatedStudy) : null}
-      {kingdomRow ? renderKingdomEvidencePanel(kingdomRow, locale, openInReaderLabel, relatedStudy) : null}
-      {genealogyRow ? renderGenealogyEvidencePanel(genealogyRow, locale, openInReaderLabel, relatedStudy) : null}
-      {placeRow ? renderPlaceEvidencePanel(placeRow, locale, openInReaderLabel, relatedStudy) : null}
+      {event
+        ? renderEventEvidencePanel(event, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
+        : null}
+      {bookRow
+        ? renderBookEvidencePanel(bookRow, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
+        : null}
+      {kingdomRow
+        ? renderKingdomEvidencePanel(kingdomRow, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
+        : null}
+      {genealogyRow
+        ? renderGenealogyEvidencePanel(genealogyRow, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
+        : null}
+      {placeRow
+        ? renderPlaceEvidencePanel(placeRow, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
+        : null}
     </Card>
   );
 }
@@ -131,6 +157,47 @@ type TagProps = {
 
 function Tag({ children }: TagProps) {
   return <span className="inline-flex rounded-full bg-zinc-100 px-3 py-1 text-sm font-medium text-zinc-700">{children}</span>;
+}
+
+type RelatedItemButtonProps = {
+  active?: boolean;
+  eyebrow: string;
+  label: string;
+  onClick: () => void;
+};
+
+function RelatedItemButton({ active = false, eyebrow, label, onClick }: RelatedItemButtonProps) {
+  return (
+    <button
+      aria-pressed={active}
+      className={cn(
+        "inline-flex cursor-pointer flex-col items-start rounded-md border px-3 py-2 text-left transition-colors",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+        active
+          ? "border-zinc-300 bg-zinc-100 text-zinc-950"
+          : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-zinc-300 hover:bg-white",
+      )}
+      onClick={onClick}
+      type="button"
+    >
+      <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-zinc-500">{eyebrow}</span>
+      <span className="mt-1 text-sm font-medium leading-5">{label}</span>
+    </button>
+  );
+}
+
+type RelatedItemSectionProps = {
+  children: ReactNode;
+  label: string;
+};
+
+function RelatedItemSection({ children, label }: RelatedItemSectionProps) {
+  return (
+    <div className="space-y-1.5">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
+      <div className="flex flex-wrap gap-2">{children}</div>
+    </div>
+  );
 }
 
 type ContextTagGroupProps = {
@@ -229,8 +296,11 @@ function getSelectionTypeLabel(selectionType: TimelineInspectorSelectionType | n
 function renderEventEvidencePanel(
   event: PassionWeekTimelineEvent,
   locale: TimelineLocale,
+  lookupMaps: TimelineEvidenceLookupMaps,
+  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
   openInReaderLabel: string,
   relatedStudy: string,
+  selection: TimelineInspectorSelection,
 ) {
   const datePreview = getTimelineDatePreview(event);
   const primaryBook = getTimelineBook(event.primaryBookId);
@@ -238,6 +308,17 @@ function renderEventEvidencePanel(
     .map((placeId) => getTimelinePlace(placeId))
     .filter((place): place is NonNullable<typeof place> => Boolean(place));
   const relativeYearLabel = event.relativeYearLabel ? getTimelineText(event.relativeYearLabel, locale) : "";
+  const relatedBookRows = timelineBookContextRows.filter((row) => row.relatedEventIds?.includes(event.id));
+  const relatedPlaceRows = dedupeById(
+    [
+      ...event.placeIds
+        .map((placeId) => lookupMaps.schematicPlaceByPlaceId.get(placeId))
+        .filter((row): row is TimelineSchematicPlaceRow => Boolean(row)),
+      ...timelineSchematicPlaceRows.filter((row) => row.relatedEventIds?.includes(event.id)),
+    ],
+  );
+  const relatedKingdomRows = timelineKingdomComparisonRows.filter((row) => row.relatedEventIds?.includes(event.id));
+  const relatedGenealogyRows = timelineGenealogyComparisonRows.filter((row) => row.relatedEventIds?.includes(event.id));
 
   return (
     <div className="space-y-4">
@@ -353,6 +434,63 @@ function renderEventEvidencePanel(
         {event.nameVariantNote ? <SectionNote>{getTimelineText(event.nameVariantNote, locale)}</SectionNote> : null}
       </DetailSection>
 
+      {relatedBookRows.length || relatedPlaceRows.length || relatedKingdomRows.length || relatedGenealogyRows.length ? (
+        <DetailSection label={locale === "ko" ? "관련 항목" : "Related Items"}>
+          {relatedBookRows.length ? (
+            <RelatedItemSection label={locale === "ko" ? "관련 책/시편" : "Related Books / Psalms"}>
+              {relatedBookRows.map((row) => (
+                <RelatedItemButton
+                  active={selection?.type === "book" && selection.id === row.id}
+                  eyebrow={locale === "ko" ? "책 / 시편" : "Book / Psalm"}
+                  key={row.id}
+                  label={getTimelineText(row.title, locale)}
+                  onClick={() => onSelectInspectorItem({ id: row.id, type: "book" })}
+                />
+              ))}
+            </RelatedItemSection>
+          ) : null}
+          {relatedPlaceRows.length ? (
+            <RelatedItemSection label={locale === "ko" ? "관련 장소" : "Related Places"}>
+              {relatedPlaceRows.map((row) => (
+                <RelatedItemButton
+                  active={selection?.type === "place" && selection.id === row.id}
+                  eyebrow={locale === "ko" ? "장소" : "Place"}
+                  key={row.id}
+                  label={getTimelineText(row.title, locale)}
+                  onClick={() => onSelectInspectorItem({ id: row.id, type: "place" })}
+                />
+              ))}
+            </RelatedItemSection>
+          ) : null}
+          {relatedKingdomRows.length ? (
+            <RelatedItemSection label={locale === "ko" ? "관련 왕국/제국" : "Related Kingdoms"}>
+              {relatedKingdomRows.map((row) => (
+                <RelatedItemButton
+                  active={selection?.type === "kingdom" && selection.id === row.id}
+                  eyebrow={locale === "ko" ? "왕국 / 제국" : "Kingdom / Empire"}
+                  key={row.id}
+                  label={getTimelineText(row.sequenceLabel, locale)}
+                  onClick={() => onSelectInspectorItem({ id: row.id, type: "kingdom" })}
+                />
+              ))}
+            </RelatedItemSection>
+          ) : null}
+          {relatedGenealogyRows.length ? (
+            <RelatedItemSection label={locale === "ko" ? "관련 족보" : "Related Genealogy"}>
+              {relatedGenealogyRows.map((row) => (
+                <RelatedItemButton
+                  active={selection?.type === "genealogy" && selection.id === row.id}
+                  eyebrow={locale === "ko" ? "족보" : "Genealogy"}
+                  key={row.id}
+                  label={getTimelineText(row.matthewName, locale)}
+                  onClick={() => onSelectInspectorItem({ id: row.id, type: "genealogy" })}
+                />
+              ))}
+            </RelatedItemSection>
+          ) : null}
+        </DetailSection>
+      ) : null}
+
       <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
     </div>
   );
@@ -361,9 +499,18 @@ function renderEventEvidencePanel(
 function renderBookEvidencePanel(
   row: TimelineBookContextRow,
   locale: TimelineLocale,
+  lookupMaps: TimelineEvidenceLookupMaps,
+  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
   openInReaderLabel: string,
   relatedStudy: string,
+  selection: TimelineInspectorSelection,
 ) {
+  const relatedPlaceRows = dedupeById(
+    (row.relatedPlaces ?? [])
+      .map((placeId) => lookupMaps.schematicPlaceByPlaceId.get(placeId))
+      .filter((place): place is TimelineSchematicPlaceRow => Boolean(place)),
+  );
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -431,6 +578,40 @@ function renderBookEvidencePanel(
           locale={locale}
           tags={row.relatedEmpires}
         />
+        {row.relatedEventIds?.length ? (
+          <RelatedItemSection label={locale === "ko" ? "관련 사건" : "Related Events"}>
+            {row.relatedEventIds.map((eventId) => {
+              const relatedEvent = lookupMaps.eventById.get(eventId);
+
+              if (!relatedEvent) {
+                return null;
+              }
+
+              return (
+                <RelatedItemButton
+                  active={selection?.type === "event" && selection.id === relatedEvent.id}
+                  eyebrow={locale === "ko" ? "사건" : "Event"}
+                  key={`${row.id}-${eventId}`}
+                  label={getTimelineText(relatedEvent.title, locale)}
+                  onClick={() => onSelectInspectorItem({ id: relatedEvent.id, type: "event" })}
+                />
+              );
+            })}
+          </RelatedItemSection>
+        ) : null}
+        {relatedPlaceRows.length ? (
+          <RelatedItemSection label={locale === "ko" ? "관련 장소" : "Related Places"}>
+            {relatedPlaceRows.map((placeRow) => (
+              <RelatedItemButton
+                active={selection?.type === "place" && selection.id === placeRow.id}
+                eyebrow={locale === "ko" ? "장소" : "Place"}
+                key={`${row.id}-${placeRow.id}`}
+                label={getTimelineText(placeRow.title, locale)}
+                onClick={() => onSelectInspectorItem({ id: placeRow.id, type: "place" })}
+              />
+            ))}
+          </RelatedItemSection>
+        ) : null}
       </DetailSection>
 
       <DetailSection label={locale === "ko" ? "주의 / 메모" : "Caution / Note"}>
@@ -444,9 +625,16 @@ function renderBookEvidencePanel(
 function renderKingdomEvidencePanel(
   row: TimelineKingdomComparisonRow,
   locale: TimelineLocale,
+  lookupMaps: TimelineEvidenceLookupMaps,
+  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
   openInReaderLabel: string,
   relatedStudy: string,
+  selection: TimelineInspectorSelection,
 ) {
+  const linkedGenealogyRows = (kingdomToGenealogyLinks[row.id] ?? [])
+    .map((genealogyId) => lookupMaps.genealogyComparisonById.get(genealogyId))
+    .filter((item): item is TimelineGenealogyComparisonRow => Boolean(item));
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -483,6 +671,40 @@ function renderKingdomEvidencePanel(
           locale={locale}
           tags={row.surroundingNationTags}
         />
+        {row.relatedEventIds?.length ? (
+          <RelatedItemSection label={locale === "ko" ? "관련 사건" : "Related Events"}>
+            {row.relatedEventIds.map((eventId) => {
+              const relatedEvent = lookupMaps.eventById.get(eventId);
+
+              if (!relatedEvent) {
+                return null;
+              }
+
+              return (
+                <RelatedItemButton
+                  active={selection?.type === "event" && selection.id === relatedEvent.id}
+                  eyebrow={locale === "ko" ? "사건" : "Event"}
+                  key={`${row.id}-${eventId}`}
+                  label={getTimelineText(relatedEvent.title, locale)}
+                  onClick={() => onSelectInspectorItem({ id: relatedEvent.id, type: "event" })}
+                />
+              );
+            })}
+          </RelatedItemSection>
+        ) : null}
+        {linkedGenealogyRows.length ? (
+          <RelatedItemSection label={locale === "ko" ? "관련 족보" : "Related Genealogy"}>
+            {linkedGenealogyRows.map((genealogyRow) => (
+              <RelatedItemButton
+                active={selection?.type === "genealogy" && selection.id === genealogyRow.id}
+                eyebrow={locale === "ko" ? "족보" : "Genealogy"}
+                key={`${row.id}-${genealogyRow.id}`}
+                label={getTimelineText(genealogyRow.matthewName, locale)}
+                onClick={() => onSelectInspectorItem({ id: genealogyRow.id, type: "genealogy" })}
+              />
+            ))}
+          </RelatedItemSection>
+        ) : null}
       </DetailSection>
 
       {(row.dateLabel || row.dateBasisLabel || row.dateConfidenceLabel || row.nameVariantNote || row.note) ? (
@@ -504,10 +726,16 @@ function renderKingdomEvidencePanel(
 function renderGenealogyEvidencePanel(
   row: TimelineGenealogyComparisonRow,
   locale: TimelineLocale,
+  lookupMaps: TimelineEvidenceLookupMaps,
+  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
   openInReaderLabel: string,
   relatedStudy: string,
+  selection: TimelineInspectorSelection,
 ) {
   const segment = timelineGenealogySegments.find((item) => item.id === row.segmentId);
+  const linkedKingdomRows = (genealogyToKingdomLinks[row.id] ?? [])
+    .map((kingdomId) => lookupMaps.kingdomComparisonById.get(kingdomId))
+    .filter((item): item is TimelineKingdomComparisonRow => Boolean(item));
 
   return (
     <div className="space-y-4">
@@ -577,13 +805,37 @@ function renderGenealogyEvidencePanel(
             </p>
             <div className="flex flex-wrap gap-2">
               {row.relatedEventIds.map((eventId) => {
-                const relatedEvent = passionWeekTimelineEvents.find((item) => item.id === eventId);
+                const relatedEvent = lookupMaps.eventById.get(eventId);
+
+                if (!relatedEvent) {
+                  return null;
+                }
+
                 return (
-                  <Tag key={`${row.id}-${eventId}`}>{relatedEvent ? getTimelineText(relatedEvent.title, locale) : eventId}</Tag>
+                  <RelatedItemButton
+                    active={selection?.type === "event" && selection.id === relatedEvent.id}
+                    eyebrow={locale === "ko" ? "사건" : "Event"}
+                    key={`${row.id}-${eventId}`}
+                    label={getTimelineText(relatedEvent.title, locale)}
+                    onClick={() => onSelectInspectorItem({ id: relatedEvent.id, type: "event" })}
+                  />
                 );
               })}
             </div>
           </div>
+        ) : null}
+        {linkedKingdomRows.length ? (
+          <RelatedItemSection label={locale === "ko" ? "관련 왕국/제국" : "Related Kingdoms"}>
+            {linkedKingdomRows.map((kingdomRow) => (
+              <RelatedItemButton
+                active={selection?.type === "kingdom" && selection.id === kingdomRow.id}
+                eyebrow={locale === "ko" ? "왕국 / 제국" : "Kingdom / Empire"}
+                key={`${row.id}-${kingdomRow.id}`}
+                label={getTimelineText(kingdomRow.sequenceLabel, locale)}
+                onClick={() => onSelectInspectorItem({ id: kingdomRow.id, type: "kingdom" })}
+              />
+            ))}
+          </RelatedItemSection>
         ) : null}
       </DetailSection>
 
@@ -595,8 +847,11 @@ function renderGenealogyEvidencePanel(
 function renderPlaceEvidencePanel(
   row: TimelineSchematicPlaceRow,
   locale: TimelineLocale,
+  lookupMaps: TimelineEvidenceLookupMaps,
+  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
   openInReaderLabel: string,
   relatedStudy: string,
+  selection: TimelineInspectorSelection,
 ) {
   return (
     <div className="space-y-4">
@@ -650,15 +905,24 @@ function renderPlaceEvidencePanel(
         {row.relatedBookContextIds?.length ? (
           <div className="space-y-1.5">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
-              {locale === "ko" ? "관련 책" : "Related Books"}
+              {locale === "ko" ? "관련 책/시편" : "Related Books / Psalms"}
             </p>
             <div className="flex flex-wrap gap-2">
               {row.relatedBookContextIds.map((contextId) => {
-                const relatedBookRow = timelineBookContextRows.find((item) => item.id === contextId);
+                const relatedBookRow = lookupMaps.bookContextById.get(contextId);
+
+                if (!relatedBookRow) {
+                  return null;
+                }
+
                 return (
-                  <Tag key={`${row.id}-${contextId}`}>
-                    {relatedBookRow ? getTimelineText(relatedBookRow.title, locale) : contextId}
-                  </Tag>
+                  <RelatedItemButton
+                    active={selection?.type === "book" && selection.id === relatedBookRow.id}
+                    eyebrow={locale === "ko" ? "책 / 시편" : "Book / Psalm"}
+                    key={`${row.id}-${contextId}`}
+                    label={getTimelineText(relatedBookRow.title, locale)}
+                    onClick={() => onSelectInspectorItem({ id: relatedBookRow.id, type: "book" })}
+                  />
                 );
               })}
             </div>
@@ -671,9 +935,20 @@ function renderPlaceEvidencePanel(
             </p>
             <div className="flex flex-wrap gap-2">
               {row.relatedEventIds.map((eventId) => {
-                const relatedEvent = passionWeekTimelineEvents.find((item) => item.id === eventId);
+                const relatedEvent = lookupMaps.eventById.get(eventId);
+
+                if (!relatedEvent) {
+                  return null;
+                }
+
                 return (
-                  <Tag key={`${row.id}-${eventId}`}>{relatedEvent ? getTimelineText(relatedEvent.title, locale) : eventId}</Tag>
+                  <RelatedItemButton
+                    active={selection?.type === "event" && selection.id === relatedEvent.id}
+                    eyebrow={locale === "ko" ? "사건" : "Event"}
+                    key={`${row.id}-${eventId}`}
+                    label={getTimelineText(relatedEvent.title, locale)}
+                    onClick={() => onSelectInspectorItem({ id: relatedEvent.id, type: "event" })}
+                  />
                 );
               })}
             </div>
@@ -684,4 +959,8 @@ function renderPlaceEvidencePanel(
       <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
     </div>
   );
+}
+
+function dedupeById<T extends { id: string }>(items: T[]) {
+  return Array.from(new Map(items.map((item) => [item.id, item])).values());
 }

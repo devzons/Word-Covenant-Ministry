@@ -10,6 +10,8 @@ CR-90Y Timeline Content Completeness Audit / Content Expansion is complete throu
 
 CR-92A Korean History Reference Layer Design is documented.
 
+CR-91B-2 Context Inspector Cross-Linking is complete through available validation. The Scripture Evidence Panel can now navigate among existing Events, Books / Psalms, Places, and explicitly related Kingdom or Genealogy rows through secondary related-item chips while keeping Scripture anchors as primary Reader links. No API, DB, schema, import, coordinates, map provider, or commentary layer was added. Korean history placeholder remains non-linked and supporting only.
+
 CR-92B Korean History Reference Placeholder UI is complete through available validation. Events view period blocks now include a collapsed Korean history reference placeholder below Scripture event rows. No Korean history rows or chronology data were added. No source import, API, DB, schema, map, or chronology dataset work was added. Korean history remains supporting reference only, source and license review remain required before any real content rows, and Korean history is not a basis for biblical interpretation.
 
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
@@ -24,9 +26,9 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-92C Korean History Pilot Rows after source review.
-2. CR-91B-2 Context Inspector Cross-Linking.
-3. CR-91C Schematic Flow Highlights.
+1. CR-91C Context Inspector Deep Links.
+2. CR-91D Schematic Flow Highlights.
+3. CR-92C Korean History Pilot Rows after source review.
 4. CR-90Y-5 Genealogy Detail Refinement.
 5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
 6. CR-91 Place / Map Preview.
