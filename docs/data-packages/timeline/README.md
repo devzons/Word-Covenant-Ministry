@@ -21,7 +21,7 @@ Rules:
 - The 66-book skeleton is now connected to the Timeline Books / Psalms view as a preview-only frontend read.
 - The core biblical event skeleton is now connected to the Timeline Events view as a preview-only frontend read.
 - Kings / Kingdoms package design is documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md`, and a first skeleton package now exists in `kings-kingdoms.skeleton.json`.
-- The Kings / Kingdoms skeleton is not connected to the frontend runtime yet.
+- The Kings / Kingdoms skeleton is now connected to the Timeline Kings / Kingdoms view as a preview-only frontend read through the route server loader pattern.
 - Kings / Kingdoms verifier fixtures now exist under `docs/data-packages/timeline/fixtures/`.
 - Kings / Kingdoms verifier hardening is now implemented for package-type detection, allowed record types, kingdom/succession/transition link resolution, exact-chronology review gating, and optional reign-label warnings.
 - The frontend preview remains metadata-only and does not render Bible text from package files.

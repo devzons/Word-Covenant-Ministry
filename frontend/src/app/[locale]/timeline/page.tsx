@@ -15,6 +15,11 @@ import {
   normalizeCoreBiblicalEventsPackage,
   type CoreBiblicalEventsPackage,
 } from "@/components/scripture/timeline/timelineEventsPackage";
+import {
+  getKingsKingdomsPreviewStats,
+  normalizeKingsKingdomsPackage,
+  type KingsKingdomsPackage,
+} from "@/components/scripture/timeline/timelineKingsKingdomsPackage";
 
 type TimelinePageProps = {
   params: Promise<{
@@ -38,10 +43,13 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const initialView = parseTimelineView(query.view);
   const canonicalBooksPackage = await loadCanonicalBooksPackage();
   const coreEventsPackage = await loadCoreBiblicalEventsPackage();
+  const kingsKingdomsPackage = await loadKingsKingdomsPackage();
   const canonicalBookRows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
   const canonicalBookStats = getCanonicalBookPreviewStats(canonicalBookRows);
   const coreEventRows = normalizeCoreBiblicalEventsPackage(coreEventsPackage);
   const coreEventStats = getCoreEventPreviewStats(coreEventRows);
+  const kingsKingdomRows = normalizeKingsKingdomsPackage(kingsKingdomsPackage);
+  const kingsKingdomStats = getKingsKingdomsPreviewStats(kingsKingdomRows);
   const initialFilters = {
     bookId: parseFilterValue(query.book),
     periodId: parseFilterValue(query.period),
@@ -58,9 +66,12 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
         coreEventStats={coreEventStats}
         initialFilters={initialFilters}
         initialView={initialView}
+        kingsKingdomRows={kingsKingdomRows}
+        kingsKingdomStats={kingsKingdomStats}
         key={[
           activeLocale,
           canonicalBookStats.totalCount,
+          kingsKingdomStats.totalCount,
           initialView,
           initialFilters.bookId,
           initialFilters.periodId,
@@ -125,4 +136,17 @@ async function loadCoreBiblicalEventsPackage(): Promise<CoreBiblicalEventsPackag
   );
   const raw = await readFile(packagePath, "utf8");
   return JSON.parse(raw) as CoreBiblicalEventsPackage;
+}
+
+async function loadKingsKingdomsPackage(): Promise<KingsKingdomsPackage> {
+  const packagePath = path.join(
+    process.cwd(),
+    "..",
+    "docs",
+    "data-packages",
+    "timeline",
+    "kings-kingdoms.skeleton.json",
+  );
+  const raw = await readFile(packagePath, "utf8");
+  return JSON.parse(raw) as KingsKingdomsPackage;
 }

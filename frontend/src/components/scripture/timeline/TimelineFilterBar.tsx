@@ -44,9 +44,20 @@ type TimelineBookSectionNavigationItem = {
   testament: "OT" | "NT";
 };
 
+type TimelineKingdomSectionNavigationItem = {
+  count: number;
+  sectionId: string;
+  sectionKey: string;
+  label: {
+    en: string;
+    ko: string;
+  };
+};
+
 type TimelineFilterBarProps = {
   activeBookId: string;
   activeBookSectionKey?: string;
+  activeKingdomSectionKey?: string;
   activePeriodId: string;
   activePlaceId: string;
   activeView: TimelineView;
@@ -57,6 +68,12 @@ type TimelineFilterBarProps = {
     oldTestamentCount: number;
     totalCount: number;
   };
+  kingdomSections?: TimelineKingdomSectionNavigationItem[];
+  kingdomsPreviewStats?: {
+    recordTypeCount: Record<string, number>;
+    sectionCount: number;
+    totalCount: number;
+  };
   confidenceLabel: string;
   confidenceNote: string;
   labels: TimelineFilterLabels;
@@ -64,6 +81,7 @@ type TimelineFilterBarProps = {
   onBookChange: (bookId: string) => void;
   onBookSectionSelect?: (sectionKey: string) => void;
   onClearFilters: () => void;
+  onKingdomSectionSelect?: (sectionKey: string) => void;
   onPeriodChange: (periodId: string) => void;
   onPlaceChange: (placeId: string) => void;
   onSearchChange: (value: string) => void;
@@ -78,12 +96,15 @@ type TimelineFilterBarProps = {
 export function TimelineFilterBar({
   activeBookId,
   activeBookSectionKey,
+  activeKingdomSectionKey,
   activePeriodId,
   activePlaceId,
   activeView,
   bookOptions,
   bookSections,
   booksPreviewStats,
+  kingdomSections,
+  kingdomsPreviewStats,
   confidenceLabel,
   confidenceNote,
   labels,
@@ -91,6 +112,7 @@ export function TimelineFilterBar({
   onBookChange,
   onBookSectionSelect,
   onClearFilters,
+  onKingdomSectionSelect,
   onPeriodChange,
   onPlaceChange,
   onSearchChange,
@@ -144,7 +166,15 @@ export function TimelineFilterBar({
           stats={booksPreviewStats}
         />
       ) : null}
-      {activeView === "kingdoms" ? <KingdomsNavigator locale={locale} /> : null}
+      {activeView === "kingdoms" ? (
+        <KingdomsNavigator
+          activeSectionKey={activeKingdomSectionKey}
+          locale={locale}
+          onSectionSelect={onKingdomSectionSelect}
+          sections={kingdomSections}
+          stats={kingdomsPreviewStats}
+        />
+      ) : null}
       {activeView === "genealogy" ? <GenealogyNavigator locale={locale} /> : null}
       {activeView === "places" ? <PlacesNavigator locale={locale} /> : null}
       {activeView === "overview" ? <OverviewNavigator locale={locale} /> : null}
@@ -419,42 +449,99 @@ function BooksNavigator({
   );
 }
 
-function KingdomsNavigator({ locale }: { locale: TimelineLocale }) {
-  const flowItems =
-    locale === "ko"
-      ? ["통일 왕국", "분열 왕국", "유다", "북이스라엘", "포로 직전", "바벨론 / 포로", "바사 / 귀환"]
-      : [
-          "United Kingdom",
-          "Divided Kingdom",
-          "Judah",
-          "Northern Israel",
-          "Pre-exile Judah",
-          "Babylon / Exile",
-          "Persia / Return",
-        ];
+function KingdomsNavigator({
+  activeSectionKey,
+  locale,
+  onSectionSelect,
+  sections,
+  stats,
+}: {
+  activeSectionKey?: string;
+  locale: TimelineLocale;
+  onSectionSelect?: (sectionKey: string) => void;
+  sections?: TimelineKingdomSectionNavigationItem[];
+  stats?: {
+    recordTypeCount: Record<string, number>;
+    sectionCount: number;
+    totalCount: number;
+  };
+}) {
+  const sectionItems = sections ?? [];
 
   return (
     <>
       <NavigatorCard title={locale === "ko" ? "현재 보기: 왕국 / 제국" : "Current view: Kings / Kingdoms"}>
-        <p className="text-sm leading-6 text-zinc-600">
-          {locale === "ko" ? "왕국 흐름" : "Kingdom Flow"}
+        <p className="text-sm leading-6 text-zinc-600">{locale === "ko" ? "왕과 왕국 흐름" : "King and kingdom flow"}</p>
+      </NavigatorCard>
+
+      <NavigatorCard title={locale === "ko" ? "Skeleton package preview" : "Skeleton package preview"}>
+        <div className="flex flex-wrap gap-1.5">
+          <MetaBadge>{locale === "ko" ? "package 기반 preview" : "Package-backed preview"}</MetaBadge>
+          <MetaBadge>
+            {locale === "ko"
+              ? `section ${stats?.sectionCount ?? sectionItems.length}`
+              : `Sections ${stats?.sectionCount ?? sectionItems.length}`}
+          </MetaBadge>
+          <MetaBadge>
+            {locale === "ko" ? `rows ${stats?.totalCount ?? 0}` : `Rows ${stats?.totalCount ?? 0}`}
+          </MetaBadge>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-zinc-600">
+          {locale === "ko"
+            ? "현재 Kings / Kingdoms 보기는 kings-kingdoms skeleton package를 metadata-only preview로 표시합니다."
+            : "The current Kings / Kingdoms view shows the kings-kingdoms skeleton package as a metadata-only preview."}
         </p>
       </NavigatorCard>
 
       <SidebarSection
-        count={flowItems.length}
+        count={sectionItems.length}
         defaultOpen
         label={locale === "ko" ? "왕국 흐름" : "Kingdom Flow"}
-        subtitle={locale === "ko" ? "preview" : "Preview"}
+        subtitle={locale === "ko" ? "package sections" : "Package sections"}
       >
-        <StaticList items={flowItems} />
+        <div className="flex flex-col gap-2">
+          {sectionItems.map((section) => {
+            const isActive = activeSectionKey === section.sectionKey;
+
+            return (
+              <button
+                aria-controls={section.sectionId}
+                aria-pressed={isActive}
+                className={cn(
+                  "flex min-h-11 cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-left transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                  isActive
+                    ? "border-zinc-900 bg-zinc-950 text-white"
+                    : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50",
+                )}
+                key={section.sectionKey}
+                onClick={() => onSectionSelect?.(section.sectionKey)}
+                type="button"
+              >
+                <span className={cn("text-sm font-semibold", isActive ? "text-white" : "text-zinc-900")}>
+                  {section.label[locale]}
+                </span>
+                <span
+                  className={cn(
+                    "inline-flex shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
+                    isActive
+                      ? "border-white/20 bg-white/10 text-white"
+                      : "border-zinc-200 bg-zinc-50 text-zinc-700",
+                  )}
+                >
+                  {section.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </SidebarSection>
 
       <NavigatorCard title={locale === "ko" ? "보조 정보 상태" : "Supporting context status"}>
         <div className="space-y-2 text-sm leading-6 text-zinc-600">
-          <p>{locale === "ko" ? "선지자 연결: preview" : "Prophets: preview"}</p>
-          <p>{locale === "ko" ? "열강 / 제국: 보조 정보" : "Empires: supporting context"}</p>
-          <p>{locale === "ko" ? "외부 연대: 보조 label" : "External dates: supporting labels"}</p>
+          <p>{locale === "ko" ? "성경 근거: reference only" : "Scripture anchors: references only"}</p>
+          <p>{locale === "ko" ? "왕정 관계 / 열강: metadata-only" : "Reign relations / empires: metadata only"}</p>
+          <p>{locale === "ko" ? "연대 정보: review-gated caution" : "Chronology: review-gated caution"}</p>
         </div>
       </NavigatorCard>
     </>

@@ -32,6 +32,7 @@ import {
 import { ScriptureTimelineList } from "./ScriptureTimelineList";
 import { TimelineEventDetailPanel } from "./TimelineEventDetailPanel";
 import { TimelineFilterBar } from "./TimelineFilterBar";
+import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
 import { TimelineViewTabs } from "./TimelineViewTabs";
 
 type TimelinePageShellProps = {
@@ -47,6 +48,12 @@ type TimelinePageShellProps = {
   };
   initialFilters: TimelineFilterState;
   initialView: TimelineView;
+  kingsKingdomRows: TimelineKingsKingdomsPreviewRow[];
+  kingsKingdomStats: {
+    recordTypeCount: Record<string, number>;
+    sectionCount: number;
+    totalCount: number;
+  };
   locale: TimelineLocale;
 };
 
@@ -56,6 +63,13 @@ type TimelineBookSectionNavigationItem = {
   sectionKey: string;
   label: TimelineText;
   testament: "OT" | "NT";
+};
+
+type TimelineKingdomSectionNavigationItem = {
+  count: number;
+  sectionId: string;
+  sectionKey: string;
+  label: TimelineText;
 };
 
 type TimelineView = "overview" | "events" | "books" | "kingdoms" | "genealogy" | "places" | "themes";
@@ -163,6 +177,8 @@ export function TimelinePageShell({
   coreEventStats,
   initialFilters,
   initialView,
+  kingsKingdomRows,
+  kingsKingdomStats,
   locale,
 }: TimelinePageShellProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
@@ -175,15 +191,26 @@ export function TimelinePageShell({
   const [inspectorSelection, setInspectorSelection] = useState<TimelineInspectorSelection>(null);
   const [activeBookSectionKey, setActiveBookSectionKey] = useState<string>("");
   const [expandedBookSectionKeys, setExpandedBookSectionKeys] = useState<string[]>([]);
+  const [activeKingdomSectionKey, setActiveKingdomSectionKey] = useState<string>("");
+  const [expandedKingdomSectionKeys, setExpandedKingdomSectionKeys] = useState<string[]>([]);
   const timelineEvents = coreEventRows;
   const canonicalBookSections = useMemo(
     () => buildCanonicalBookSectionNavigation(canonicalBookRows),
     [canonicalBookRows],
   );
+  const kingsKingdomSections = useMemo(
+    () => buildKingsKingdomSectionNavigation(kingsKingdomRows),
+    [kingsKingdomRows],
+  );
   const resolvedActiveBookSectionKey = canonicalBookSections.some(
     (section) => section.sectionKey === activeBookSectionKey,
   )
     ? activeBookSectionKey
+    : "";
+  const resolvedActiveKingdomSectionKey = kingsKingdomSections.some(
+    (section) => section.sectionKey === activeKingdomSectionKey,
+  )
+    ? activeKingdomSectionKey
     : "";
 
   const periodCounts = useMemo(() => {
@@ -324,8 +351,11 @@ export function TimelinePageShell({
     [canonicalBookRows],
   );
   const kingdomComparisonById = useMemo(
-    () => new Map(timelineKingdomComparisonRows.map((row) => [row.id, row])),
-    [],
+    () =>
+      new Map(
+        [...timelineKingdomComparisonRows, ...kingsKingdomRows].map((row) => [row.id, row]),
+      ),
+    [kingsKingdomRows],
   );
   const genealogyComparisonById = useMemo(
     () => new Map(timelineGenealogyComparisonRows.map((row) => [row.id, row])),
@@ -422,6 +452,37 @@ export function TimelinePageShell({
     );
   }
 
+  function handleKingdomSectionSelect(section: TimelineKingdomSectionNavigationItem) {
+    setActiveKingdomSectionKey(section.sectionKey);
+    setExpandedKingdomSectionKeys((current) =>
+      current.includes(section.sectionKey) ? current : [...current, section.sectionKey],
+    );
+
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const sectionElement = document.getElementById(section.sectionId);
+
+    if (!sectionElement) {
+      return;
+    }
+
+    sectionElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => {
+      sectionElement.focus();
+    }, 150);
+  }
+
+  function handleKingdomSectionToggle(sectionKey: string) {
+    setActiveKingdomSectionKey(sectionKey);
+    setExpandedKingdomSectionKeys((current) =>
+      current.includes(sectionKey)
+        ? current.filter((key) => key !== sectionKey)
+        : [...current, sectionKey],
+    );
+  }
+
   return (
     <Container className="max-w-[96rem] py-12 sm:py-16">
       <section className="flex flex-col gap-6 sm:gap-8">
@@ -457,9 +518,12 @@ export function TimelinePageShell({
             activePeriodId={filters.periodId}
             activePlaceId={filters.placeId}
             activeView={activeView}
+            activeKingdomSectionKey={resolvedActiveKingdomSectionKey}
             bookOptions={bookOptions}
             booksPreviewStats={canonicalBookStats}
             bookSections={canonicalBookSections}
+            kingdomSections={kingsKingdomSections}
+            kingdomsPreviewStats={kingsKingdomStats}
             confidenceLabel={activeLocale === "ko" ? "높은 신뢰도 미리보기" : "High-confidence preview"}
             confidenceNote={
               activeLocale === "ko"
@@ -487,6 +551,17 @@ export function TimelinePageShell({
                 searchTerm: "",
               })
             }
+            onKingdomSectionSelect={(sectionKey) => {
+              const selectedSection = kingsKingdomSections.find(
+                (section) => section.sectionKey === sectionKey,
+              );
+
+              if (!selectedSection) {
+                return;
+              }
+
+              handleKingdomSectionSelect(selectedSection);
+            }}
             onPeriodChange={(periodId) =>
               setFilters((current) => ({ ...current, periodId }))
             }
@@ -541,8 +616,27 @@ export function TimelinePageShell({
 
               {activeView === "kingdoms" ? (
                 <KingsKingdomsPreviewPanel
+                  activeSectionKey={resolvedActiveKingdomSectionKey}
+                  expandedSectionKeys={expandedKingdomSectionKeys}
+                  kingdomSections={kingsKingdomSections}
+                  kingsKingdomRows={kingsKingdomRows}
+                  kingsKingdomStats={kingsKingdomStats}
                   locale={activeLocale}
-                  onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "kingdom" })}
+                  onSectionToggle={handleKingdomSectionToggle}
+                  onSelectRow={(rowId) => {
+                    const selectedRow = kingsKingdomRows.find((row) => row.id === rowId);
+
+                    if (selectedRow?.sectionId) {
+                      setActiveKingdomSectionKey(selectedRow.sectionId);
+                      setExpandedKingdomSectionKeys((current) =>
+                        current.includes(selectedRow.sectionId)
+                          ? current
+                          : [...current, selectedRow.sectionId],
+                      );
+                    }
+
+                    selectInspectorItem({ id: rowId, type: "kingdom" });
+                  }}
                   selectedRowId={inspectorSelection?.type === "kingdom" ? inspectorSelection.id : ""}
                 />
               ) : null}
@@ -1136,158 +1230,204 @@ function getSchematicFlowGroupLabel(
 }
 
 type KingsKingdomsPreviewPanelProps = {
+  activeSectionKey: string;
+  expandedSectionKeys: string[];
+  kingdomSections: TimelineKingdomSectionNavigationItem[];
+  kingsKingdomRows: TimelineKingsKingdomsPreviewRow[];
+  kingsKingdomStats: {
+    recordTypeCount: Record<string, number>;
+    sectionCount: number;
+    totalCount: number;
+  };
   locale: TimelineLocale;
+  onSectionToggle: (sectionKey: string) => void;
   onSelectRow: (rowId: string) => void;
   selectedRowId: string;
 };
 
-function KingsKingdomsPreviewPanel({ locale, onSelectRow, selectedRowId }: KingsKingdomsPreviewPanelProps) {
+function KingsKingdomsPreviewPanel({
+  activeSectionKey,
+  expandedSectionKeys,
+  kingdomSections,
+  kingsKingdomRows,
+  kingsKingdomStats,
+  locale,
+  onSectionToggle,
+  onSelectRow,
+  selectedRowId,
+}: KingsKingdomsPreviewPanelProps) {
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4">
       <div className="flex flex-col gap-1.5 border-b border-zinc-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
-            {locale === "ko" ? "왕국 / 제국 비교표" : "Kings / Kingdoms Comparison"}
+            {locale === "ko" ? "왕국 / 제국 흐름" : "Kings / Kingdoms Flow"}
           </p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "이 표는 성경 근거를 따라 왕국, 열강, 선지자, 보조 연대를 간단히 비교합니다."
-              : "This table compares kingdoms, empires, prophets, and supporting dates while staying anchored to Scripture."}
+              ? "kings-kingdoms skeleton package를 metadata-only preview로 연결한 보기입니다."
+              : "A metadata-only preview backed by the kings-kingdoms skeleton package."}
+          </p>
+          <p className="mt-2 text-xs leading-5 text-zinc-500">
+            {locale === "ko"
+              ? "성경 본문은 저장하거나 표시하지 않습니다. 연대 표기는 review-gated caution으로만 다룹니다."
+              : "Bible text is not stored or rendered here. Chronology labels remain review-gated cautions."}
           </p>
         </div>
-        <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
-          {locale === "ko" ? "미리보기" : "Preview"}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+            {locale === "ko" ? "미리보기" : "Preview"}
+          </span>
+          <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+            {locale === "ko"
+              ? `section ${kingsKingdomStats.sectionCount}`
+              : `${kingsKingdomStats.sectionCount} sections`}
+          </span>
+          <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+            {locale === "ko" ? `총 ${kingsKingdomStats.totalCount} rows` : `${kingsKingdomStats.totalCount} rows`}
+          </span>
+        </div>
       </div>
 
-      <div className="mt-4 overflow-x-auto">
-        <table className="min-w-[88rem] w-full border-separate border-spacing-0">
-          <thead>
-            <tr className="text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "시대 / 흐름" : "Era / Flow"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "통일 왕국" : "United Kingdom"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "유다" : "Judah"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "북이스라엘" : "Northern Israel"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "선지자" : "Prophets"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "열강 / 주변 민족" : "Empires / Nations"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "성경 근거" : "Scripture Anchor"}
-              </th>
-              <th className="border-b border-zinc-200 px-3 py-2">
-                {locale === "ko" ? "보조 연대 / 메모" : "Supporting Date / Note"}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {timelineKingdomComparisonRows.map((row) => {
-              const period = getTimelinePeriod(row.periodId);
-              const isSelected = selectedRowId === row.id;
+      <div className="mt-4 space-y-3">
+        {kingdomSections.map((section) => {
+          const sectionRows = kingsKingdomRows.filter((row) => row.sectionId === section.sectionKey);
+          const isActiveSection = activeSectionKey === section.sectionKey;
+          const isExpanded = expandedSectionKeys.includes(section.sectionKey);
+          const headingId = `${section.sectionId}-heading`;
+          const panelId = `${section.sectionId}-panel`;
+          const periodLabel = sectionRows[0] ? getTimelinePeriod(sectionRows[0].timelinePeriodId) : null;
 
-              return (
-                <tr
-                  className={cn(
-                    "align-top transition-colors",
-                    isSelected
-                      ? "bg-zinc-50/80"
-                      : "cursor-pointer bg-white hover:bg-zinc-50",
-                  )}
-                  key={row.id}
-                  onClick={() => onSelectRow(row.id)}
-                  onKeyDown={(event) => handleSelectableKeyDown(event, () => onSelectRow(row.id))}
-                  role="button"
-                  tabIndex={0}
-                >
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <div className="flex flex-col gap-1.5">
-                      {period ? (
-                        <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
-                          {getTimelineText(period.label, locale)}
+          return (
+            <div
+              aria-labelledby={headingId}
+              className={cn(
+                "space-y-2 scroll-mt-28 rounded-md border border-transparent p-1",
+                isActiveSection ? "border-zinc-200 bg-zinc-50/70" : "",
+              )}
+              id={section.sectionId}
+              key={section.sectionKey}
+              tabIndex={-1}
+            >
+              <button
+                aria-controls={panelId}
+                aria-expanded={isExpanded}
+                className={cn(
+                  "flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-left transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                  isActiveSection
+                    ? "border-zinc-300 bg-white text-zinc-950"
+                    : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50",
+                )}
+                id={headingId}
+                onClick={() => onSectionToggle(section.sectionKey)}
+                type="button"
+              >
+                <span className="flex min-w-0 flex-col">
+                  <span className="text-sm font-semibold text-current">
+                    {`${section.label[locale]} · ${section.count} rows`}
+                  </span>
+                  <span className="text-xs text-zinc-500">
+                    {periodLabel ? getTimelineText(periodLabel.label, locale) : section.sectionKey}
+                  </span>
+                </span>
+                <span className="text-xs font-semibold text-zinc-500">
+                  {isExpanded ? (locale === "ko" ? "접기" : "Collapse") : locale === "ko" ? "펼치기" : "Expand"}
+                </span>
+              </button>
+
+              <div className={cn("space-y-2", !isExpanded ? "hidden" : "")} id={panelId}>
+                {sectionRows.map((row) => {
+                  const selected = selectedRowId === row.id;
+                  const period = getTimelinePeriod(row.timelinePeriodId);
+
+                  return (
+                    <button
+                      aria-pressed={selected}
+                      className={cn(
+                        "w-full rounded-md border px-3 py-3 text-left transition-colors",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
+                        selected
+                          ? "border-zinc-950 bg-white shadow-sm"
+                          : "cursor-pointer border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50",
+                      )}
+                      key={row.id}
+                      onClick={() => onSelectRow(row.id)}
+                      type="button"
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold text-white">
+                          {row.displayOrder}
                         </span>
-                      ) : null}
-                      <span className="text-sm font-semibold text-zinc-950">
-                        {getTimelineText(row.eraLabel, locale)}
-                      </span>
-                      <span className="text-xs font-medium leading-5 text-zinc-500">
-                        {getTimelineText(row.sequenceLabel, locale)}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <ComparisonCellValue value={row.unitedKing} locale={locale} />
-                  </td>
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <ComparisonCellValue value={row.judahKing} locale={locale} />
-                  </td>
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <ComparisonCellValue value={row.northernKing} locale={locale} />
-                  </td>
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <ComparisonTagList tags={row.prophetTags} locale={locale} />
-                  </td>
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <ComparisonTagList
-                      locale={locale}
-                      tags={[...(row.empireTags ?? []), ...(row.surroundingNationTags ?? [])]}
-                    />
-                  </td>
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <div className="flex flex-wrap gap-1.5">
-                      {row.scriptureAnchors.map((anchor) => (
-                        <Link
-                          className={cn(
-                            "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-                          )}
-                          href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
-                          onClick={(event) => event.stopPropagation()}
-                          key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
-                        >
-                          {getTimelineText(anchor.label, locale)}
-                        </Link>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="border-b border-zinc-200 px-3 py-3">
-                    <div className="flex flex-col gap-1.5">
-                      {row.dateLabel ? (
-                        <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[11px] font-semibold text-zinc-700">
-                          {getTimelineText(row.dateLabel, locale)}
+                        <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                          {getKingsRecordTypeLabel(row.recordType, locale)}
                         </span>
+                        {row.reviewRequired ? (
+                          <span className="inline-flex rounded-full border border-zinc-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-800">
+                            {locale === "ko" ? "검토 필요" : "Review required"}
+                          </span>
+                        ) : null}
+                        <span className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</span>
+                        {period ? (
+                          <span className="text-xs font-medium text-zinc-500">
+                            {getTimelineText(period.label, locale)}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-medium text-zinc-600">
+                        <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                          {getTimelineText(row.confidenceLabel, locale)}
+                        </span>
+                        <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                          {locale === "ko" ? "본문 미저장 · reference only" : "No Bible text · references only"}
+                        </span>
+                        {row.reignLabel ? (
+                          <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                            {getTimelineText(row.reignLabel, locale)}
+                          </span>
+                        ) : null}
+                        {row.approximateDateLabel ? (
+                          <span className="rounded-full bg-zinc-100 px-2.5 py-1">
+                            {getTimelineText(row.approximateDateLabel, locale)}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      {!!row.relatedBookIds.length ? (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {row.relatedBookIds.slice(0, 4).map((bookId) => (
+                            <span
+                              className="inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900"
+                              key={`${row.id}-${bookId}`}
+                            >
+                              {getTimelineBook(bookId)
+                                ? getTimelineText(getTimelineBook(bookId)!.label, locale)
+                                : bookId}
+                            </span>
+                          ))}
+                        </div>
                       ) : null}
-                      {row.dateBasisLabel ? (
-                        <p className="text-xs font-medium leading-5 text-zinc-500">
-                          {getTimelineText(row.dateBasisLabel, locale)}
-                        </p>
-                      ) : null}
-                      {row.dateConfidenceLabel ? (
-                        <p className="text-xs leading-5 text-zinc-500">
-                          {getTimelineText(row.dateConfidenceLabel, locale)}
-                        </p>
-                      ) : null}
-                      {row.note ? (
-                        <p className="text-sm leading-6 text-zinc-600">
-                          {getTimelineText(row.note, locale)}
-                        </p>
-                      ) : null}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {row.scriptureAnchors.map((anchor) => (
+                          <span
+                            className="inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900"
+                            key={`${row.id}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
+                          >
+                            {getTimelineText(anchor.label, locale)}
+                          </span>
+                        ))}
+                      </div>
+
+                      <p className="mt-2 text-sm leading-6 text-zinc-600">{getTimelineText(row.cautionNote, locale)}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -1628,6 +1768,61 @@ function buildCanonicalBookSectionNavigation(
   return Array.from(groupedSections.values()).sort((left, right) => {
     return (sectionOrder[left.sectionKey] ?? 999) - (sectionOrder[right.sectionKey] ?? 999);
   });
+}
+
+function createTimelineKingsSectionId(sectionId: string) {
+  return `timeline-kings-section-${sectionId}`;
+}
+
+function buildKingsKingdomSectionNavigation(
+  kingsKingdomRows: TimelineKingsKingdomsPreviewRow[],
+): TimelineKingdomSectionNavigationItem[] {
+  const sectionOrder: Record<string, number> = {
+    "kings-united-monarchy": 1,
+    "kings-divided-overview": 2,
+    "kings-northern-israel": 3,
+    "kings-southern-judah": 4,
+    "kings-exile-markers": 5,
+  };
+  const groupedSections = new Map<string, TimelineKingdomSectionNavigationItem>();
+
+  for (const row of kingsKingdomRows) {
+    if (!groupedSections.has(row.sectionId)) {
+      groupedSections.set(row.sectionId, {
+        count: 0,
+        label: row.title,
+        sectionId: createTimelineKingsSectionId(row.sectionId),
+        sectionKey: row.sectionId,
+      });
+    }
+
+    const current = groupedSections.get(row.sectionId);
+
+    if (current) {
+      current.count += 1;
+    }
+  }
+
+  return Array.from(groupedSections.values()).sort(
+    (left, right) => (sectionOrder[left.sectionKey] ?? 999) - (sectionOrder[right.sectionKey] ?? 999),
+  );
+}
+
+function getKingsRecordTypeLabel(
+  recordType: TimelineKingsKingdomsPreviewRow["recordType"],
+  locale: TimelineLocale,
+) {
+  const labels: Record<TimelineKingsKingdomsPreviewRow["recordType"], TimelineText> = {
+    exileMarker: { en: "Exile Marker", ko: "포로 표지" },
+    king: { en: "King", ko: "왕" },
+    kingdom: { en: "Kingdom", ko: "왕국" },
+    kingdomPeriod: { en: "Kingdom Period", ko: "왕국 구간" },
+    propheticContextMarker: { en: "Prophetic Context", ko: "선지자 문맥" },
+    templeMarker: { en: "Temple Marker", ko: "성전 표지" },
+    transition: { en: "Transition", ko: "전환" },
+  };
+
+  return getTimelineText(labels[recordType], locale);
 }
 
 type GenealogyComparisonPreviewPanelProps = {

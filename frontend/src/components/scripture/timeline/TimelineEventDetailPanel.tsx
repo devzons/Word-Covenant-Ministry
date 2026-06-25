@@ -28,6 +28,7 @@ import {
   type TimelineText,
 } from "./passionWeekTimeline";
 import { TimelineDatingNote } from "./TimelineDatingNote";
+import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
 
 type TimelineEventDetailPanelProps = {
   lookupMaps: TimelineEvidenceLookupMaps;
@@ -44,12 +45,14 @@ type TimelineEventDetailPanelProps = {
 type TimelineInspectorSelectionItem = Exclude<TimelineInspectorSelection, null>;
 type TimelineInspectorSelectionType = TimelineInspectorSelectionItem["type"];
 
+type TimelineKingdomEvidenceRow = TimelineKingdomComparisonRow | TimelineKingsKingdomsPreviewRow;
+
 type TimelineEvidenceLookupMaps = {
   bookContextById: Map<string, TimelineBookContextRow>;
   bookContextByBookId: Map<string, TimelineBookContextRow>;
   eventById: Map<string, PassionWeekTimelineEvent>;
   genealogyComparisonById: Map<string, TimelineGenealogyComparisonRow>;
-  kingdomComparisonById: Map<string, TimelineKingdomComparisonRow>;
+  kingdomComparisonById: Map<string, TimelineKingdomEvidenceRow>;
   schematicPlaceById: Map<string, TimelineSchematicPlaceRow>;
   schematicPlaceByPlaceId: Map<string, TimelineSchematicPlaceRow>;
 };
@@ -719,7 +722,7 @@ function renderBookEvidencePanel(
 }
 
 function renderKingdomEvidencePanel(
-  row: TimelineKingdomComparisonRow,
+  row: TimelineKingdomEvidenceRow,
   locale: TimelineLocale,
   lookupMaps: TimelineEvidenceLookupMaps,
   onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
@@ -727,6 +730,18 @@ function renderKingdomEvidencePanel(
   relatedStudy: string,
   selection: TimelineInspectorSelection,
 ) {
+  if (isKingsPackageEvidenceRow(row)) {
+    return renderKingsPackageEvidencePanel(
+      row,
+      locale,
+      lookupMaps,
+      onSelectInspectorItem,
+      openInReaderLabel,
+      relatedStudy,
+      selection,
+    );
+  }
+
   const linkedGenealogyRows = (kingdomToGenealogyLinks[row.id] ?? [])
     .map((genealogyId) => lookupMaps.genealogyComparisonById.get(genealogyId))
     .filter((item): item is TimelineGenealogyComparisonRow => Boolean(item));
@@ -815,6 +830,156 @@ function renderKingdomEvidencePanel(
           <SectionNote>{relatedStudy}</SectionNote>
         </DetailSection>
       ) : null}
+    </div>
+  );
+}
+
+function isKingsPackageEvidenceRow(
+  row: TimelineKingdomEvidenceRow,
+): row is TimelineKingsKingdomsPreviewRow {
+  return "sourcePackage" in row && row.sourcePackage === "kings-kingdoms-skeleton";
+}
+
+function getKingdomEvidenceLabel(row: TimelineKingdomEvidenceRow, locale: TimelineLocale) {
+  if (isKingsPackageEvidenceRow(row)) {
+    return getTimelineText(row.title, locale);
+  }
+
+  return getTimelineText(row.sequenceLabel, locale);
+}
+
+function renderKingsPackageEvidencePanel(
+  row: TimelineKingsKingdomsPreviewRow,
+  locale: TimelineLocale,
+  lookupMaps: TimelineEvidenceLookupMaps,
+  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
+  _openInReaderLabel: string,
+  relatedStudy: string,
+  selection: TimelineInspectorSelection,
+) {
+  const relatedRows = dedupeById(
+    [
+      row.kingdomId ? lookupMaps.kingdomComparisonById.get(row.kingdomId) : undefined,
+      row.predecessorId ? lookupMaps.kingdomComparisonById.get(row.predecessorId) : undefined,
+      row.successorId ? lookupMaps.kingdomComparisonById.get(row.successorId) : undefined,
+      ...(row.relatedKingIds ?? []).map((id) => lookupMaps.kingdomComparisonById.get(id)),
+      ...(row.relatedTransitionIds ?? []).map((id) => lookupMaps.kingdomComparisonById.get(id)),
+      ...(row.relatedKingdomIds ?? []).map((id) => lookupMaps.kingdomComparisonById.get(id)),
+      ...(row.relatedPeriodIds ?? []).map((id) => lookupMaps.kingdomComparisonById.get(id)),
+      row.previousStateId ? lookupMaps.kingdomComparisonById.get(row.previousStateId) : undefined,
+      row.nextStateId ? lookupMaps.kingdomComparisonById.get(row.nextStateId) : undefined,
+    ].filter((item): item is TimelineKingdomEvidenceRow => Boolean(item)),
+  ).filter((item) => item.id !== row.id);
+
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</h2>
+        <p className="text-sm leading-6 text-zinc-600">
+          {locale === "ko" ? "Kings / Kingdoms skeleton metadata preview" : "Kings / Kingdoms skeleton metadata preview"}
+        </p>
+      </div>
+
+      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
+        <ReferenceOnlyAnchorList anchors={row.scriptureAnchors} locale={locale} />
+        <SectionNote>
+          {locale === "ko"
+            ? "이 package는 성경 본문을 저장하지 않습니다. 왕/왕국 수준 Scripture reference만 표시합니다."
+            : "This package does not store Bible text. It shows king/kingdom-level Scripture references only."}
+        </SectionNote>
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "구조 / 관계" : "Structure / Relations"}>
+        <ContextRow
+          label={locale === "ko" ? "record type" : "Record type"}
+          value={row.recordType}
+        />
+        <ContextRow
+          label={locale === "ko" ? "표시 순서" : "Display order"}
+          value={`${row.displayOrder}`}
+        />
+        <ContextRow
+          label={locale === "ko" ? "section" : "Section"}
+          value={row.sectionId}
+        />
+        {row.kingdomName ? (
+          <ContextRow
+            label={locale === "ko" ? "왕국" : "Kingdom"}
+            value={getTimelineText(row.kingdomName, locale)}
+          />
+        ) : null}
+        {row.reignLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "왕정 라벨" : "Reign label"}
+            value={getTimelineText(row.reignLabel, locale)}
+          />
+        ) : null}
+        {row.scope ? (
+          <ContextRow
+            label={locale === "ko" ? "구간 범위" : "Scope"}
+            value={getTimelineText(row.scope, locale)}
+          />
+        ) : null}
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "연대 / 주의" : "Chronology / Caution"}>
+        {row.approximateDateLabel ? (
+          <ContextRow
+            label={locale === "ko" ? "근사 연대 라벨" : "Approximate date label"}
+            value={getTimelineText(row.approximateDateLabel, locale)}
+          />
+        ) : null}
+        <ContextRow
+          label={locale === "ko" ? "신뢰도" : "Confidence"}
+          value={getTimelineText(row.confidenceLabel, locale)}
+        />
+        {row.reviewRequired ? (
+          <SectionNote>{locale === "ko" ? "이 row는 reviewRequired 상태입니다." : "This row remains review-required."}</SectionNote>
+        ) : null}
+        <SectionNote>{getTimelineText(row.cautionNote, locale)}</SectionNote>
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "관련 책" : "Related Books"}>
+        <div className="flex flex-wrap gap-2">
+          {row.relatedBookIds.map((bookId) => {
+            const bookRow = lookupMaps.bookContextByBookId.get(bookId);
+            const label = bookRow ? getTimelineText(bookRow.title, locale) : getTimelineBook(bookId)?.label ? getTimelineText(getTimelineBook(bookId)!.label, locale) : bookId;
+
+            return <Tag key={`${row.id}-${bookId}`}>{label}</Tag>;
+          })}
+        </div>
+      </DetailSection>
+
+      {relatedRows.length ? (
+        <DetailSection label={locale === "ko" ? "내부 관계" : "Internal Relations"}>
+          <RelatedItemSection label={locale === "ko" ? "관련 왕 / 왕국 / 전환" : "Related Kings / Kingdoms / Transitions"}>
+            {relatedRows.map((relatedRow) => (
+              <RelatedItemButton
+                active={selection?.type === "kingdom" && selection.id === relatedRow.id}
+                eyebrow={locale === "ko" ? "왕국 / 제국" : "Kingdom / Empire"}
+                key={`${row.id}-${relatedRow.id}`}
+                label={getKingdomEvidenceLabel(relatedRow, locale)}
+                onClick={() => onSelectInspectorItem({ id: relatedRow.id, type: "kingdom" })}
+              />
+            ))}
+          </RelatedItemSection>
+        </DetailSection>
+      ) : null}
+
+      <DetailSection label={locale === "ko" ? "패키지 상태" : "Package Status"}>
+        <SectionNote>
+          {locale === "ko"
+            ? "이 패널은 kings-kingdoms skeleton package의 metadata-only preview를 보여 줍니다."
+            : "This panel shows a metadata-only preview from the kings-kingdoms skeleton package."}
+        </SectionNote>
+        <SectionNote>
+          {locale === "ko"
+            ? "연대 정보는 확정 데이터가 아니라 review-gated caution으로만 유지됩니다."
+            : "Chronology information remains review-gated caution rather than finalized data."}
+        </SectionNote>
+      </DetailSection>
+
+      <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
     </div>
   );
 }
