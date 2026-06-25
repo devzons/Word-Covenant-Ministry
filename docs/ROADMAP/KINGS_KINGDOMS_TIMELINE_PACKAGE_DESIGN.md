@@ -50,7 +50,7 @@ Status note:
 
 - `CR-93G-2` added `docs/data-packages/timeline/kings-kingdoms.skeleton.json`.
 - `CR-93G-3` adds the initial Kings / Kingdoms verifier fixture set.
-- `CR-93G-4` remains the step for Kings-specific verifier hardening where current generic rules are still insufficient.
+- `CR-93G-4` hardens the verifier for Kings-specific record types, kingdom/succession/transition relations, and chronology review gating.
 
 Optional later split if needed:
 
@@ -358,7 +358,7 @@ Recommended next sequence:
 
 1. `CR-93G-2 Kings / Kingdoms Skeleton Package`
 2. `CR-93G-3 Kings / Kingdoms Verifier Fixtures`
-3. `CR-93G-4 Kings / Kingdoms Verifier Rule Hardening`, if needed
+3. `CR-93G-4 Kings / Kingdoms Verifier Rule Hardening`
 4. `CR-93G-5 Kings / Kingdoms Frontend Preview Integration`
 5. `CR-93G-6 Kings / Kingdoms Interaction QA`
 

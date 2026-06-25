@@ -107,7 +107,7 @@ Expected result:
 - `invalid/kings-kingdoms-coordinates.invalid.sample.json`
   - Forbidden coordinate field inside a Kings / Kingdoms sample
 - `invalid/kings-kingdoms-exact-chronology-without-review.invalid.sample.json`
-  - Pending CR-93G-4 exact-chronology failure target; current generic verifier does not fail it yet
+  - Exact chronology field without review gating should fail
 
 ### Warnings
 
@@ -130,7 +130,7 @@ Expected result:
 - `warnings/kings-kingdoms-low-confidence-synchronism.warning.sample.json`
   - Low-confidence Kings / Kingdoms synchronism proxy that should warn
 - `warnings/kings-kingdoms-missing-reign-label.warning.sample.json`
-  - Pending CR-93G-4 optional `reignLabel` warning target; current generic verifier does not warn yet
+  - Optional `reignLabel` warning target
 
 ## Kings / Kingdoms Fixture Notes
 
@@ -147,15 +147,18 @@ Current verifier can immediately enforce:
 - forbidden Bible-text-like fields
 - forbidden coordinate or map-provider fields
 - generic cross-link target resolution where explicit `timeline.cross-links` rows are used
-
-Pending `CR-93G-4` hardening targets:
-
-- `kingdomId` resolution inside `timeline.kings-kingdoms` rows
+- allowed Kings / Kingdoms `recordType` values
+- `kingdomId` resolution inside king rows
 - `predecessorId` / `successorId` resolution inside king rows
 - `previousStateId` / `nextStateId` resolution inside transition rows
-- exact chronology without review gating
-- low-confidence synchronism policy beyond cross-link proxies
+- exact chronology field review gating
 - optional `reignLabel` warning behavior
+
+Still-deferred or intentionally conservative Kings / Kingdoms semantics:
+
+- broader kingdom scope taxonomy beyond current fixture/package values
+- deeper synchronism heuristics beyond explicit low-confidence markers
+- any future frontend/runtime integration checks
 
 Guardrails remain unchanged:
 

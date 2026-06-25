@@ -10,16 +10,39 @@
   ],
   "items": [
     {
+      "id": "fixture-kings-warning-judah",
+      "recordType": "kingdom",
+      "title": {
+        "ko": "유다 warning fixture",
+        "en": "Judah warning fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "fixture-kings-warning",
+      "accordionGroup": "fixture-kings",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "reference": "2 Kings 18-20",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "isaiah"],
+      "confidence": "medium",
+      "reviewRequired": true
+    },
+    {
       "id": "fixture-kings-approximate-date-warning",
       "recordType": "king",
       "title": {
         "ko": "대략 연대 경고 fixture",
         "en": "Approximate date warning fixture"
       },
-      "displayOrder": 1,
+      "displayOrder": 2,
       "timelinePeriodId": "divided-kingdom",
       "sectionId": "fixture-kings-warning",
       "accordionGroup": "fixture-kings",
+      "kingdomId": "fixture-kings-warning-judah",
       "scriptureAnchors": [
         {
           "bookId": "2-kings",

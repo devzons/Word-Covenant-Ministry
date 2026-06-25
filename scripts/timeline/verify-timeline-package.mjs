@@ -70,6 +70,7 @@ const CENTER_COLUMN_PACKAGE_TYPES = new Set([
   "timeline.books",
   "timeline.psalms",
   "timeline.kings",
+  "timeline.kings-kingdoms",
   "timeline.prophets",
   "timeline.empires",
   "timeline.places",
@@ -83,9 +84,45 @@ const SCRIPTURE_ROW_PACKAGE_TYPES = new Set([
   "timeline.books",
   "timeline.psalms",
   "timeline.kings",
+  "timeline.kings-kingdoms",
   "timeline.prophets",
   "timeline.places",
   "timeline.genealogy",
+]);
+
+const KINGS_RECORD_TYPES = new Set([
+  "kingdomPeriod",
+  "kingdom",
+  "king",
+  "transition",
+  "exileMarker",
+  "templeMarker",
+  "propheticContextMarker",
+]);
+
+const KINGS_PERIOD_TYPES = new Set([
+  "kingdomPeriod",
+  "exileMarker",
+  "templeMarker",
+  "propheticContextMarker",
+]);
+
+const KINGS_TRANSITION_TARGET_TYPES = new Set([
+  "kingdom",
+  "kingdomPeriod",
+  "transition",
+  "exileMarker",
+  "templeMarker",
+]);
+
+const EXACT_CHRONOLOGY_FIELDS = new Set([
+  "exactYear",
+  "startYear",
+  "endYear",
+  "reignStartYear",
+  "reignEndYear",
+  "chronologyYear",
+  "absoluteYear",
 ]);
 
 const ISSUE = {
@@ -136,6 +173,27 @@ const ISSUE = {
   BOOKS_CANONICAL_TITLE_WARNING: "TLN_BOOKS_CANONICAL_TITLE_WARNING",
   BOOKS_SCRIPTURE_ANCHORS_MISSING: "TLN_BOOKS_SCRIPTURE_ANCHORS_MISSING",
   BOOKS_SKELETON_FLAG_INVALID: "TLN_BOOKS_SKELETON_FLAG_INVALID",
+  KINGS_RECORD_TYPE_INVALID: "TLN_KINGS_RECORD_TYPE_INVALID",
+  KINGS_FIELD_MISSING: "TLN_KINGS_FIELD_MISSING",
+  KINGS_TITLE_MISSING: "TLN_KINGS_TITLE_MISSING",
+  KINGS_KINGDOM_ID_MISSING: "TLN_KINGS_KINGDOM_ID_MISSING",
+  KINGS_KINGDOM_ID_UNRESOLVED: "TLN_KINGS_KINGDOM_ID_UNRESOLVED",
+  KINGS_KINGDOM_ID_TARGET_INVALID: "TLN_KINGS_KINGDOM_ID_TARGET_INVALID",
+  KINGS_PREDECESSOR_UNRESOLVED: "TLN_KINGS_PREDECESSOR_UNRESOLVED",
+  KINGS_SUCCESSOR_UNRESOLVED: "TLN_KINGS_SUCCESSOR_UNRESOLVED",
+  KINGS_SUCCESSION_TARGET_INVALID: "TLN_KINGS_SUCCESSION_TARGET_INVALID",
+  KINGS_SUCCESSION_SELF_REFERENCE: "TLN_KINGS_SUCCESSION_SELF_REFERENCE",
+  KINGS_TRANSITION_TARGET_UNRESOLVED: "TLN_KINGS_TRANSITION_TARGET_UNRESOLVED",
+  KINGS_TRANSITION_TARGET_INVALID: "TLN_KINGS_TRANSITION_TARGET_INVALID",
+  KINGS_RELATED_KING_UNRESOLVED: "TLN_KINGS_RELATED_KING_UNRESOLVED",
+  KINGS_RELATED_KING_TARGET_INVALID: "TLN_KINGS_RELATED_KING_TARGET_INVALID",
+  KINGS_SCOPE_INVALID: "TLN_KINGS_SCOPE_INVALID",
+  KINGS_PERIOD_TYPE_INVALID: "TLN_KINGS_PERIOD_TYPE_INVALID",
+  KINGS_EXACT_CHRONOLOGY_REVIEW_REQUIRED: "TLN_KINGS_EXACT_CHRONOLOGY_REVIEW_REQUIRED",
+  KINGS_EXACT_CHRONOLOGY_CAUTION: "TLN_KINGS_EXACT_CHRONOLOGY_CAUTION",
+  KINGS_APPROXIMATE_DATE_REVIEW: "TLN_KINGS_APPROXIMATE_DATE_REVIEW",
+  KINGS_LOW_CONFIDENCE_SYNCHRONISM: "TLN_KINGS_LOW_CONFIDENCE_SYNCHRONISM",
+  KINGS_REIGN_LABEL_MISSING: "TLN_KINGS_REIGN_LABEL_MISSING",
 };
 
 function main(argv) {
@@ -264,6 +322,23 @@ function buildIdRegistry(files) {
   return ids;
 }
 
+function buildLocalIndex(items) {
+  const counts = new Map();
+  const records = new Map();
+
+  for (const item of items) {
+    if (!item || typeof item !== "object" || typeof item.id !== "string") {
+      continue;
+    }
+    counts.set(item.id, (counts.get(item.id) ?? 0) + 1);
+    if (!records.has(item.id)) {
+      records.set(item.id, item);
+    }
+  }
+
+  return { counts, records };
+}
+
 function validatePackage(filePath, data, registry, issues) {
   if (!data || typeof data !== "object" || Array.isArray(data)) {
     issues.push(makeIssue("error", filePath, null, "Package root must be a JSON object."));
@@ -273,11 +348,12 @@ function validatePackage(filePath, data, registry, issues) {
   validateEnvelope(filePath, data, issues);
   const packageType = data.packageType;
   const items = Array.isArray(data.items) ? data.items : [];
+  const localIndex = buildLocalIndex(items);
 
   const idCounts = new Map();
   items.forEach((item, index) => {
     const rowLabel = item?.id ?? `row#${index + 1}`;
-      validateRow(filePath, data, packageType, data.status, item, rowLabel, registry, issues);
+      validateRow(filePath, data, packageType, data.status, item, rowLabel, registry, localIndex, issues);
       if (item && typeof item === "object" && typeof item.id === "string") {
         idCounts.set(item.id, (idCounts.get(item.id) ?? 0) + 1);
       }
@@ -311,7 +387,7 @@ function validateEnvelope(filePath, data, issues) {
   }
 }
 
-function validateRow(filePath, data, packageType, packageStatus, item, rowLabel, registry, issues) {
+function validateRow(filePath, data, packageType, packageStatus, item, rowLabel, registry, localIndex, issues) {
   if (!item || typeof item !== "object" || Array.isArray(item)) {
     issues.push(makeIssue("error", ISSUE.ROW_NOT_OBJECT, filePath, rowLabel, "Each row must be a JSON object.", { recordId: rowLabel }));
     return;
@@ -332,7 +408,7 @@ function validateRow(filePath, data, packageType, packageStatus, item, rowLabel,
   }
 
   if (requiresTitle(packageType) && !hasLocalizedField(item.title)) {
-    issues.push(makeIssue("error", ISSUE.TITLE_MISSING, filePath, rowLabel, 'Missing required display field "title".', { path: "title", recordId: item.id ?? rowLabel }));
+    issues.push(makeIssue("error", isKingsKingdomsPackageType(packageType) ? ISSUE.KINGS_TITLE_MISSING : ISSUE.TITLE_MISSING, filePath, rowLabel, 'Missing required display field "title".', { path: "title", recordId: item.id ?? rowLabel }));
   }
 
   if (SCRIPTURE_ROW_PACKAGE_TYPES.has(packageType) && !hasNonEmptyArray(item.scriptureAnchors)) {
@@ -353,7 +429,211 @@ function validateRow(filePath, data, packageType, packageStatus, item, rowLabel,
     validateCanonicalBookRow(filePath, item, rowLabel, issues);
   }
 
+  if (isKingsKingdomsPackageType(packageType)) {
+    validateKingsKingdomsRow(filePath, item, rowLabel, localIndex, issues);
+  }
+
   validateWarnings(filePath, packageType, item, rowLabel, issues);
+}
+
+function validateKingsKingdomsRow(filePath, item, rowLabel, localIndex, issues) {
+  const recordId = item.id ?? rowLabel;
+
+  for (const field of ["recordType", "displayOrder", "timelinePeriodId", "confidence", "reviewRequired"]) {
+    if (field === "reviewRequired") {
+      if (typeof item.reviewRequired !== "boolean") {
+        issues.push(makeIssue("error", ISSUE.KINGS_FIELD_MISSING, filePath, rowLabel, `Kings / Kingdoms row must include boolean "${field}".`, { path: field, rowId: recordId, recordType: item.recordType }));
+      }
+      continue;
+    }
+
+    if (!hasNonEmptyValue(item[field])) {
+      issues.push(makeIssue("error", ISSUE.KINGS_FIELD_MISSING, filePath, rowLabel, `Kings / Kingdoms row is missing required field "${field}".`, { path: field, rowId: recordId, recordType: item.recordType }));
+    }
+  }
+
+  if (!hasNonEmptyValue(item.recordType)) {
+    return;
+  }
+
+  if (!KINGS_RECORD_TYPES.has(item.recordType)) {
+    issues.push(makeIssue("error", ISSUE.KINGS_RECORD_TYPE_INVALID, filePath, rowLabel, `Kings / Kingdoms recordType "${item.recordType}" is not allowed.`, {
+      path: "recordType",
+      rowId: recordId,
+      recordType: item.recordType,
+      field: "recordType",
+    }));
+    return;
+  }
+
+  if (typeof item.periodType === "string" && !KINGS_PERIOD_TYPES.has(item.periodType)) {
+    issues.push(makeIssue("error", ISSUE.KINGS_PERIOD_TYPE_INVALID, filePath, rowLabel, `Kings / Kingdoms periodType "${item.periodType}" is not allowed.`, {
+      path: "periodType",
+      rowId: recordId,
+      recordType: item.recordType,
+      field: "periodType",
+    }));
+  }
+
+  const exactChronologyHits = collectExactChronologyFields(item);
+  if (exactChronologyHits.length > 0) {
+    const fieldList = exactChronologyHits.map((hit) => hit.path).join(", ");
+    if (item.reviewRequired !== true) {
+      issues.push(makeIssue("error", ISSUE.KINGS_EXACT_CHRONOLOGY_REVIEW_REQUIRED, filePath, rowLabel, `Kings / Kingdoms exact chronology fields require reviewRequired=true; found ${fieldList}.`, {
+        path: exactChronologyHits[0].path,
+        rowId: recordId,
+        recordType: item.recordType,
+        field: exactChronologyHits[0].field,
+      }));
+    } else {
+      issues.push(makeIssue("warning", ISSUE.KINGS_EXACT_CHRONOLOGY_CAUTION, filePath, rowLabel, `Kings / Kingdoms exact chronology fields should remain caution-gated even when reviewRequired=true; found ${fieldList}.`, {
+        path: exactChronologyHits[0].path,
+        rowId: recordId,
+        recordType: item.recordType,
+        field: exactChronologyHits[0].field,
+      }));
+    }
+  }
+
+  if (item.recordType === "king") {
+    validateKingsKingRow(filePath, item, rowLabel, localIndex, issues);
+  }
+
+  if (item.recordType === "transition") {
+    validateKingsTransitionRow(filePath, item, rowLabel, localIndex, issues);
+  }
+
+  if (item.recordType === "kingdomPeriod") {
+    validateKingsPeriodRow(filePath, item, rowLabel, localIndex, issues);
+  }
+}
+
+function validateKingsKingRow(filePath, item, rowLabel, localIndex, issues) {
+  const recordId = item.id ?? rowLabel;
+
+  if (!hasNonEmptyValue(item.kingdomId)) {
+    issues.push(makeIssue("error", ISSUE.KINGS_KINGDOM_ID_MISSING, filePath, rowLabel, 'King row must include non-empty "kingdomId".', {
+      path: "kingdomId",
+      rowId: recordId,
+      recordType: item.recordType,
+      field: "kingdomId",
+    }));
+  } else {
+    validateKingsTargetReference(filePath, rowLabel, item, "kingdomId", item.kingdomId, ["kingdom"], localIndex, issues, ISSUE.KINGS_KINGDOM_ID_UNRESOLVED, ISSUE.KINGS_KINGDOM_ID_TARGET_INVALID);
+  }
+
+  if (hasNonEmptyValue(item.predecessorId)) {
+    validateKingsSuccessionReference(filePath, rowLabel, item, "predecessorId", item.predecessorId, localIndex, issues, ISSUE.KINGS_PREDECESSOR_UNRESOLVED);
+  }
+
+  if (hasNonEmptyValue(item.successorId)) {
+    validateKingsSuccessionReference(filePath, rowLabel, item, "successorId", item.successorId, localIndex, issues, ISSUE.KINGS_SUCCESSOR_UNRESOLVED);
+  }
+
+  if (Array.isArray(item.relatedTransitionIds)) {
+    item.relatedTransitionIds.forEach((targetId, index) => {
+      validateKingsTargetReference(filePath, rowLabel, item, `relatedTransitionIds[${index}]`, targetId, ["transition"], localIndex, issues, ISSUE.KINGS_TRANSITION_TARGET_UNRESOLVED, ISSUE.KINGS_TRANSITION_TARGET_INVALID);
+    });
+  }
+}
+
+function validateKingsTransitionRow(filePath, item, rowLabel, localIndex, issues) {
+  const transitionFields = [
+    ["previousStateId", item.previousStateId],
+    ["nextStateId", item.nextStateId],
+  ];
+
+  for (const [fieldName, targetId] of transitionFields) {
+    if (!hasNonEmptyValue(targetId)) {
+      continue;
+    }
+    validateKingsTargetReference(filePath, rowLabel, item, fieldName, targetId, [...KINGS_TRANSITION_TARGET_TYPES], localIndex, issues, ISSUE.KINGS_TRANSITION_TARGET_UNRESOLVED, ISSUE.KINGS_TRANSITION_TARGET_INVALID);
+  }
+
+  if (Array.isArray(item.relatedKingIds)) {
+    item.relatedKingIds.forEach((targetId, index) => {
+      validateKingsTargetReference(filePath, rowLabel, item, `relatedKingIds[${index}]`, targetId, ["king"], localIndex, issues, ISSUE.KINGS_RELATED_KING_UNRESOLVED, ISSUE.KINGS_RELATED_KING_TARGET_INVALID);
+    });
+  }
+
+  if (Array.isArray(item.relatedKingdomIds)) {
+    item.relatedKingdomIds.forEach((targetId, index) => {
+      validateKingsTargetReference(filePath, rowLabel, item, `relatedKingdomIds[${index}]`, targetId, ["kingdom"], localIndex, issues, ISSUE.KINGS_TRANSITION_TARGET_UNRESOLVED, ISSUE.KINGS_TRANSITION_TARGET_INVALID);
+    });
+  }
+
+  if (Array.isArray(item.relatedPeriodIds)) {
+    item.relatedPeriodIds.forEach((targetId, index) => {
+      validateKingsTargetReference(filePath, rowLabel, item, `relatedPeriodIds[${index}]`, targetId, ["kingdomPeriod", "exileMarker"], localIndex, issues, ISSUE.KINGS_TRANSITION_TARGET_UNRESOLVED, ISSUE.KINGS_TRANSITION_TARGET_INVALID);
+    });
+  }
+}
+
+function validateKingsPeriodRow(filePath, item, rowLabel, localIndex, issues) {
+  if (!Array.isArray(item.relatedKingIds)) {
+    return;
+  }
+
+  item.relatedKingIds.forEach((targetId, index) => {
+    validateKingsTargetReference(filePath, rowLabel, item, `relatedKingIds[${index}]`, targetId, ["king"], localIndex, issues, ISSUE.KINGS_RELATED_KING_UNRESOLVED, ISSUE.KINGS_RELATED_KING_TARGET_INVALID);
+  });
+}
+
+function validateKingsSuccessionReference(filePath, rowLabel, item, fieldName, targetId, localIndex, issues, unresolvedCode) {
+  if (targetId === item.id) {
+    issues.push(makeIssue("error", ISSUE.KINGS_SUCCESSION_SELF_REFERENCE, filePath, rowLabel, `King ${fieldName} cannot point to itself via "${targetId}".`, {
+      path: fieldName,
+      rowId: item.id ?? rowLabel,
+      recordType: item.recordType,
+      field: fieldName,
+      targetId,
+    }));
+    return;
+  }
+
+  validateKingsTargetReference(filePath, rowLabel, item, fieldName, targetId, ["king"], localIndex, issues, unresolvedCode, ISSUE.KINGS_SUCCESSION_TARGET_INVALID);
+}
+
+function validateKingsTargetReference(filePath, rowLabel, item, fieldName, targetId, allowedRecordTypes, localIndex, issues, unresolvedCode, invalidCode) {
+  if (!hasNonEmptyValue(targetId)) {
+    return;
+  }
+
+  const registryEntry = localIndex.counts.get(targetId);
+  if (!registryEntry) {
+    issues.push(makeIssue("error", unresolvedCode, filePath, rowLabel, `Kings / Kingdoms ${fieldName} "${targetId}" does not resolve within the same package.`, {
+      path: fieldName,
+      rowId: item.id ?? rowLabel,
+      recordType: item.recordType,
+      field: fieldName,
+      targetId,
+    }));
+    return;
+  }
+
+  const targetRecord = localIndex.records.get(targetId);
+  if (!targetRecord || !allowedRecordTypes.includes(targetRecord.recordType)) {
+    issues.push(makeIssue("error", invalidCode, filePath, rowLabel, `Kings / Kingdoms ${fieldName} "${targetId}" must target ${allowedRecordTypes.join(" or ")} rows.`, {
+      path: fieldName,
+      rowId: item.id ?? rowLabel,
+      recordType: item.recordType,
+      field: fieldName,
+      targetId,
+      targetRecordType: targetRecord?.recordType,
+    }));
+    return;
+  }
+
+  if (registryEntry > 1) {
+    issues.push(makeIssue("error", invalidCode, filePath, rowLabel, `Kings / Kingdoms ${fieldName} "${targetId}" is ambiguous because the id appears ${registryEntry} times in the package.`, {
+      path: fieldName,
+      rowId: item.id ?? rowLabel,
+      recordType: item.recordType,
+      field: fieldName,
+      targetId,
+      occurrences: registryEntry,
+    }));
+  }
 }
 
 function validateCrossLinkRow(filePath, item, rowLabel, registry, issues) {
@@ -601,8 +881,38 @@ function validateWarnings(filePath, packageType, item, rowLabel, issues) {
 
   if (packageType === "timeline.cross-links") {
     const crossLinkReviewText = `${flattenText(item.basisLabel)} ${flattenText(item.confidenceLabel)}`.toLowerCase();
-    if (containsAny(crossLinkReviewText, ["low", "낮음", "review required", "검토 필요"])) {
+    if (containsLowConfidenceMarker(crossLinkReviewText) || containsAny(crossLinkReviewText, ["review required", "검토 필요"])) {
       issues.push(makeIssue("warning", ISSUE.WARNING_LOW_CONFIDENCE_CROSS_LINK, filePath, rowLabel, "Cross-link is explicitly low-confidence and should be reviewed.", { recordId: item.id ?? rowLabel }));
+    }
+  }
+
+  if (isKingsKingdomsPackageType(packageType)) {
+    const chronologyText = `${flattenText(item.approximateDateLabel)} ${flattenText(item.reignLabel)} ${flattenText(item.basisLabel)} ${flattenText(item.cautionNote)} ${flattenText(item.confidenceLabel)}`.toLowerCase();
+    const reviewText = `${confidenceText} ${cautionText} ${sourceBasisText}`.toLowerCase();
+
+    if (hasLocalizedField(item.approximateDateLabel) && item.reviewRequired !== true && !containsAny(reviewText, ["review required", "검토 필요", "source review required", "출처 검토 필요"])) {
+      issues.push(makeIssue("warning", ISSUE.KINGS_APPROXIMATE_DATE_REVIEW, filePath, rowLabel, "Kings / Kingdoms approximate chronology should carry reviewRequired or clearer caution labeling.", {
+        path: "approximateDateLabel",
+        rowId: item.id ?? rowLabel,
+        recordType: item.recordType,
+        field: "approximateDateLabel",
+      }));
+    }
+
+    if (item.recordType === "king" && !hasLocalizedField(item.reignLabel)) {
+      issues.push(makeIssue("warning", ISSUE.KINGS_REIGN_LABEL_MISSING, filePath, rowLabel, "King row is missing optional reignLabel and should add one when chronology wording is refined.", {
+        path: "reignLabel",
+        rowId: item.id ?? rowLabel,
+        recordType: item.recordType,
+        field: "reignLabel",
+      }));
+    }
+
+    if (containsAny(chronologyText, ["synchronism", "synchrony", "동시대"]) && containsLowConfidenceMarker(reviewText)) {
+      issues.push(makeIssue("warning", ISSUE.KINGS_LOW_CONFIDENCE_SYNCHRONISM, filePath, rowLabel, "Kings / Kingdoms synchronism remains low-confidence and should stay review-gated.", {
+        rowId: item.id ?? rowLabel,
+        recordType: item.recordType,
+      }));
     }
   }
 }
@@ -651,6 +961,10 @@ function isCanonicalBooksPackage(data, filePath) {
   );
 }
 
+function isKingsKingdomsPackageType(packageType) {
+  return packageType === "timeline.kings-kingdoms";
+}
+
 function requiresTitle(packageType) {
   return !new Set(["timeline.cross-links", "timeline.sections", "timeline.periods", "timeline.manifest"]).has(packageType);
 }
@@ -691,6 +1005,37 @@ function flattenText(value) {
 
 function containsAny(text, needles) {
   return needles.some((needle) => text.includes(needle));
+}
+
+function containsLowConfidenceMarker(text) {
+  return /\blow\b/i.test(text) || text.includes("낮음");
+}
+
+function collectExactChronologyFields(value, basePath = "", hits = [], seen = new Set()) {
+  if (!value || typeof value !== "object") {
+    return hits;
+  }
+  if (seen.has(value)) {
+    return hits;
+  }
+  seen.add(value);
+
+  if (Array.isArray(value)) {
+    value.forEach((entry, index) => {
+      collectExactChronologyFields(entry, `${basePath}[${index}]`, hits, seen);
+    });
+    return hits;
+  }
+
+  for (const [key, nestedValue] of Object.entries(value)) {
+    const currentPath = basePath ? `${basePath}.${key}` : key;
+    if (EXACT_CHRONOLOGY_FIELDS.has(key)) {
+      hits.push({ field: key, path: currentPath });
+    }
+    collectExactChronologyFields(nestedValue, currentPath, hits, seen);
+  }
+
+  return hits;
 }
 
 function isScriptureReferenceLike(value) {

@@ -93,7 +93,7 @@ Phase 8A through later Phase 8 original-language UX, morphology presentation, be
 
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
 
-CR-93G Kings / Kingdoms Timeline Package Design is now documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md` as a docs-only package-design step. CR-93G-2 Kings / Kingdoms Skeleton Package is now complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now provides a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdom rows, representative kings, transitions, exile markers, and a temple marker. CR-93G-3 Kings / Kingdoms Verifier Fixtures is now complete as a docs/data-fixture step. Kings / Kingdoms valid, invalid, and warning fixture files now exist under `docs/data-packages/timeline/fixtures/` to anchor current generic verifier behavior and document pending Kings-specific hardening targets for CR-93G-4. The package stays metadata-only, stores no Bible text, uses no coordinates or map-provider fields, keeps chronology approximate and review-gated, and is not connected to the frontend runtime yet. No verifier logic, frontend integration, API, DB, backend, schema, or runtime import/export work was added in this step.
+CR-93G Kings / Kingdoms Timeline Package Design is now documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md` as a docs-only package-design step. CR-93G-2 Kings / Kingdoms Skeleton Package is now complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now provides a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdom rows, representative kings, transitions, exile markers, and a temple marker. CR-93G-3 Kings / Kingdoms Verifier Fixtures is now complete as a docs/data-fixture step. Kings / Kingdoms valid, invalid, and warning fixture files now exist under `docs/data-packages/timeline/fixtures/`. CR-93G-4 Kings / Kingdoms Verifier Rule Hardening is now complete as a read-only verifier step. The verifier now recognizes `timeline.kings-kingdoms`, validates allowed record types, checks required Kings fields, resolves `kingdomId` and succession links, validates transition and related-king targets, and fails exact chronology fields that bypass review gating while warning on missing optional `reignLabel`. The package stays metadata-only, stores no Bible text, uses no coordinates or map-provider fields, keeps chronology approximate and review-gated, and is not connected to the frontend runtime yet. No frontend integration, API, DB, backend, schema, or runtime import/export work was added in this step.
 ```
 
 Completed phase:
@@ -105,13 +105,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Proceed from the new Kings / Kingdoms fixture baseline into verifier-rule hardening only where the current generic checks remain insufficient, while keeping the current preview layers Scripture-first and metadata-only.
+Proceed from the Kings / Kingdoms verifier baseline into frontend preview integration while keeping the current preview layers Scripture-first and metadata-only.
 ```
 
 Next task:
 
 ```txt
-Proceed to CR-93G-4 Kings / Kingdoms Verifier Rule Hardening, if needed, followed by frontend preview integration only after the data package path is verified.
+Proceed to CR-93G-5 Kings / Kingdoms Frontend Preview Integration now that the package and verifier baseline are in place.
 ```
 
 Blocked items:

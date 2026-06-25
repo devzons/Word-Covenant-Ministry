@@ -22,8 +22,8 @@ Rules:
 - The core biblical event skeleton is now connected to the Timeline Events view as a preview-only frontend read.
 - Kings / Kingdoms package design is documented in `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md`, and a first skeleton package now exists in `kings-kingdoms.skeleton.json`.
 - The Kings / Kingdoms skeleton is not connected to the frontend runtime yet.
-- Kings / Kingdoms verifier fixtures remain deferred to `CR-93G-3`.
-- Kings / Kingdoms verifier rule hardening remains deferred to `CR-93G-4`, if needed.
+- Kings / Kingdoms verifier fixtures now exist under `docs/data-packages/timeline/fixtures/`.
+- Kings / Kingdoms verifier hardening is now implemented for package-type detection, allowed record types, kingdom/succession/transition link resolution, exact-chronology review gating, and optional reign-label warnings.
 - The frontend preview remains metadata-only and does not render Bible text from package files.
 - Skeleton rows are not complete book introductions, and no book should be treated as complete yet.
 - Skeleton event rows are not a complete biblical timeline dataset and should not be treated as final chronology.
@@ -31,7 +31,7 @@ Rules:
 - A minimal read-only verifier CLI now exists at `scripts/timeline/verify-timeline-package.mjs`.
 - A standard wrapper command now exists at `scripts/timeline/verify-timeline-packages.mjs`.
 - The verifier currently covers JSON/package checks, 66-book canonical validation, cross-link resolution, and package guardrails.
-- The wrapper verifies canonical books, core events, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output in one run.
+- The wrapper verifies canonical books, core events, Kings / Kingdoms skeleton, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output in one run.
 - Center-column package display must support top-down chronological accordion sections.
 - Scripture anchors are primary.
 - Dates, geography, world history, Korean history, tradition, and authorship labels are supporting layers.

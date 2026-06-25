@@ -54,6 +54,7 @@ Current wrapper coverage:
 - verifier CLI syntax check
 - `books.66-canonical-skeleton.json` pass
 - `events.core-biblical-skeleton.json` pass
+- `kings-kingdoms.skeleton.json` pass
 - `fixtures/valid` pass
 - `fixtures/invalid` expected fail with exit code `1`
 - `fixtures/warnings` pass with `errorCount === 0` and `warningCount >= 1`
@@ -61,24 +62,26 @@ Current wrapper coverage:
 
 Kings / Kingdoms fixture expectations:
 
-- `timeline.kings-kingdoms` fixtures currently use the implemented verifier envelope shape with `items`
+- `timeline.kings-kingdoms` fixtures use the implemented verifier envelope shape with `items`
 - valid fixtures should show minimal `kingdomPeriod`, `kingdom`, `king`, and `transition` samples with reference-only `scriptureAnchors`
-- invalid fixtures should immediately fail when they use banned Bible-text fields, banned coordinate/map-provider fields, or broken explicit cross-link IDs
-- warning fixtures should cover approximate chronology wording and low-confidence synchronism proxies without failing the overall package check
+- invalid fixtures should immediately fail when they use banned Bible-text fields, banned coordinate/map-provider fields, broken explicit cross-link IDs, unresolved `kingdomId`/succession IDs, or exact chronology fields without review gating
+- warning fixtures should cover approximate chronology wording, low-confidence synchronism proxies, and optional `reignLabel` warnings without failing the overall package check
 
-Pending `CR-93G-4` Kings / Kingdoms verifier rules:
+Implemented `CR-93G-4` Kings / Kingdoms verifier rules:
 
-- `kingdomId` resolution inside `timeline.kings-kingdoms` rows
-- `predecessorId` and `successorId` resolution inside king rows
+- `timeline.kings-kingdoms` package detection for center-column and Scripture-anchor checks
+- allowed `recordType` validation for `kingdomPeriod`, `kingdom`, `king`, `transition`, `exileMarker`, `templeMarker`, and `propheticContextMarker`
+- required Kings / Kingdoms field checks for `recordType`, `displayOrder`, `timelinePeriodId`, `confidence`, and `reviewRequired`
+- `kingdomId` resolution inside king rows, with target-type validation against `kingdom`
+- `predecessorId` and `successorId` resolution inside king rows, including self-reference rejection
 - `previousStateId` and `nextStateId` resolution inside transition rows
-- allowed kingdom scope or kingdom-name validation
-- exact chronology without review gating
-- low-confidence synchronism warning behavior beyond generic cross-link review
-- optional `reignLabel` warning behavior
+- `relatedKingIds` resolution inside transition and kingdom-period rows
+- exact chronology review gating for fields such as `startYear`, `endYear`, and `exactYear`
+- Kings-specific warning behavior for approximate chronology labels and missing optional `reignLabel`
 
 Current implementation note:
 
-- Kings / Kingdoms fixtures are now present, but several Kings-specific semantics remain documentation targets until `CR-93G-4` hardens the CLI.
+- Kings / Kingdoms fixtures and rule hardening are now both present, but broader kingdom-scope taxonomy and deeper synchronism heuristics can still be refined later if needed.
 
 Current cross-link inventory:
 

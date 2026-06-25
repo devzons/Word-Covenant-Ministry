@@ -32,7 +32,9 @@ CR-93G Kings / Kingdoms Timeline Package Design is complete as a docs-only desig
 
 CR-93G-2 Kings / Kingdoms Skeleton Package is complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now adds a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdoms, representative kings, transitions, exile markers, and a temple marker. The package remains frontend-unlinked, stores no Bible text, uses no coordinates or map-provider fields, and keeps chronology approximate and review-gated. Kings / Kingdoms verifier fixtures remain deferred to CR-93G-3, and verifier rule hardening remains deferred to CR-93G-4 if needed.
 
-CR-93G-3 Kings / Kingdoms Verifier Fixtures is complete as a docs/data-fixture step. Kings / Kingdoms valid, invalid, and warning fixture files now exist under `docs/data-packages/timeline/fixtures/` to anchor current generic verifier behavior and to document Kings-specific hardening targets for CR-93G-4. Immediate guardrails now cover Bible-text and coordinate/map-provider violations plus explicit broken cross-link targets. Kings-specific kingdomId, predecessor/successor, transition state, and exact chronology rules remain pending CR-93G-4.
+CR-93G-3 Kings / Kingdoms Verifier Fixtures is complete as a docs/data-fixture step. Kings / Kingdoms valid, invalid, and warning fixture files now exist under `docs/data-packages/timeline/fixtures/` to anchor current generic verifier behavior and to document Kings-specific hardening targets.
+
+CR-93G-4 Kings / Kingdoms Verifier Rule Hardening is complete as a read-only verifier step. The CLI now recognizes `timeline.kings-kingdoms`, validates allowed record types and required Kings fields, resolves `kingdomId` plus predecessor/successor and transition relations, enforces exact chronology review gating, and warns on missing optional `reignLabel`. The Kings / Kingdoms skeleton package still stores no Bible text, uses no coordinates or map-provider fields, remains frontend-unlinked, and required no API, DB, backend, schema, or runtime import/export changes.
 
 CR-93F Timeline Workspace Interaction QA is complete through available validation. The current package-backed Events and Books / Psalms previews, active-view-aware left navigator, and metadata-only right panel were checked through static validation, explicit code-path review, and attempted local route smoke. No required frontend fixes were identified in this pass. Bible text remains unrendered, no coordinates or map-provider fields were introduced, and no API, DB, backend, schema, or package-row changes were added.
 
@@ -64,9 +66,9 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93G-4 Kings / Kingdoms Verifier Rule Hardening, if needed.
-2. CR-93G-5 Kings / Kingdoms Frontend Preview Integration.
-3. CR-93G-6 Kings / Kingdoms Interaction QA.
+1. CR-93G-5 Kings / Kingdoms Frontend Preview Integration.
+2. CR-93G-6 Kings / Kingdoms Interaction QA.
+3. CR-91C Context Inspector Deep Links.
 4. CR-91C Context Inspector Deep Links.
 5. CR-91D Schematic Flow Highlights.
 6. CR-92C Korean History Pilot Rows after source review.

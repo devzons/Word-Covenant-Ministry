@@ -6,10 +6,31 @@
   "status": "draft",
   "notes": [
     "Synthetic verifier fixture.",
-    "Exact-looking chronology without a review flag should become a Kings / Kingdoms verifier failure in CR-93G-4.",
-    "Current generic verifier is expected to pass this file until kings-specific chronology hardening is implemented."
+    "Exact chronology fields without a review flag should fail Kings / Kingdoms verification."
   ],
   "items": [
+    {
+      "id": "fixture-kings-judah-pending",
+      "recordType": "kingdom",
+      "title": {
+        "ko": "유다 pending fixture",
+        "en": "Judah pending fixture"
+      },
+      "displayOrder": 1,
+      "timelinePeriodId": "divided-kingdom",
+      "sectionId": "fixture-kings-pending",
+      "accordionGroup": "fixture-kings",
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "reference": "2 Kings 22-23",
+          "scope": "passage"
+        }
+      ],
+      "relatedBookIds": ["2-kings", "2-chronicles"],
+      "confidence": "medium",
+      "reviewRequired": true
+    },
     {
       "id": "fixture-kings-exact-chronology-pending",
       "recordType": "king",
@@ -17,7 +38,7 @@
         "ko": "정확 연대 pending fixture",
         "en": "Exact chronology pending fixture"
       },
-      "displayOrder": 1,
+      "displayOrder": 2,
       "timelinePeriodId": "divided-kingdom",
       "sectionId": "fixture-kings-pending",
       "accordionGroup": "fixture-kings",
@@ -30,6 +51,8 @@
         }
       ],
       "relatedBookIds": ["2-kings", "2-chronicles"],
+      "startYear": 640,
+      "endYear": 609,
       "confidence": "high",
       "reviewRequired": false,
       "approximateDateLabel": {

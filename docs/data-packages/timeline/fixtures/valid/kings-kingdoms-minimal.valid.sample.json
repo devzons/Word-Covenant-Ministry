@@ -114,7 +114,6 @@
         "ko": "정확한 연도 단정 안 함",
         "en": "Exact years not asserted"
       },
-      "successorId": "fixture-transition-monarchy-begins",
       "scriptureAnchors": [
         {
           "bookId": "1-samuel",
