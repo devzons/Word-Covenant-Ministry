@@ -20,6 +20,16 @@ This feature is intentionally schematic and conceptual:
 
 The design remains Scripture-first and metadata-only.
 
+## Implementation Status
+
+`CR-91D-1` documented the conceptual scope.
+
+`CR-91D-2` now documents the implementation-facing state contract in:
+
+- `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_STATE_CONTRACT.md`
+
+That note defines the allowed inputs, supported item types, reason and strength taxonomy, view-specific derivation rules, fallback behavior, and implementation-facing component impact while keeping the feature metadata-only and no-coordinate.
+
 ## Scope
 
 Included in `CR-91D` design scope:

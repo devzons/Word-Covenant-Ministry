@@ -102,6 +102,8 @@ CR-91C-2 Events / Books / Kings Deep Link Implementation is now complete through
 CR-91C-3 Deep Link QA and Docs Sync is now complete through available validation. `docs/ROADMAP/CONTEXT_INSPECTOR_DEEP_LINKS_QA.md` now records the checked URLs, supported restore matrix, invalid-query fallback behavior, query-replacement interaction policy, regression review, and the confirmed metadata-only guardrails for the current Events, Books / Psalms, and Kings / Kingdoms deep-link flow. No required frontend fixes were identified in this QA pass. Live route smoke remained unavailable from this environment because curl could not connect to the local `:3030` route, so the QA result is based on static validation, successful frontend build checks, and explicit code-path inspection.
 
 CR-91D Schematic Flow Highlights Scope Definition is now documented in `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_DESIGN.md` as a docs-only design step. The new note defines schematic flow highlights as metadata-derived UI emphasis rather than real map behavior, keeps the feature Scripture-first and metadata-only, scopes the first implementation pass to Events, Books / Psalms, and Kings / Kingdoms with a deferred schematic-only Places surface, and records that no coordinates, map-provider state, Bible text rendering, backend calls, or external-history authority elevation are allowed. This step does not add frontend code, data-package rows, verifier changes, API, DB, backend, schema, or runtime import/export behavior.
+
+CR-91D-2 Schematic Highlight Data Contract / UI State Design is now documented in `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_STATE_CONTRACT.md` as a docs-only design step. The new note defines highlight inputs, the metadata-derived UI state shape, supported item types, allowed reason and strength taxonomy, Events / Books / Kings derivation policy, fallback behavior, and future component ownership boundaries. It also records that the earlier React `useEffect` dependency-array-size warning remains an implementation prerequisite or known risk rather than being fixed in this docs-only step. No frontend code, data-package rows, verifier changes, API, DB, backend, schema, or runtime import/export behavior were changed.
 ```
 
 Completed phase:
@@ -113,13 +115,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Use the completed CR-91C deep-link baseline as the stable metadata-only inspector-selection path while defining the next approved Timeline schematic-highlight refinement.
+Use the completed CR-91C deep-link baseline and the new CR-91D-2 state contract as the stable metadata-only foundation for the next approved Timeline highlight implementation step.
 ```
 
 Next task:
 
 ```txt
-Proceed to CR-91D-2 Schematic Highlight Data Contract / UI State Design now that CR-91D scope definition is documented.
+Proceed to CR-91D-3 Events / Books / Kings Highlight Implementation now that the CR-91D state contract is documented.
 ```
 
 Blocked items:
