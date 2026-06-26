@@ -22,6 +22,7 @@ Status note:
 - `CR-91D-3` now applies this contract to the current Events, Books / Psalms, and Kings / Kingdoms package-backed previews.
 - The v1 implementation keeps the existing `view`, `inspectType`, and `inspectId` deep-link baseline unchanged and derives highlight state from that selection.
 - Places / Schematic Map remains deferred.
+- `CR-91D-5` now records QA results in `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_QA.md` without changing the state contract itself.
 
 ## Highlight Input Contract
 

@@ -46,6 +46,8 @@ CR-91C-2 Events / Books / Kings Deep Link Implementation is complete through ava
 
 CR-91C-3 Deep Link QA and Docs Sync is complete through available validation. `docs/ROADMAP/CONTEXT_INSPECTOR_DEEP_LINKS_QA.md` now records the checked URLs for Events, Books / Psalms, and Kings / Kingdoms, confirms invalid and mismatched query fallback behavior, documents query replacement and accordion auto-open expectations, and records the current route-smoke limitation for local `:3030` access. No required frontend fixes were identified in this QA pass. Bible text remains unrendered, Scripture anchors remain reference-only, coordinates and map-provider state remain absent, and no API, DB, backend, schema, verifier, or data-package row change was added.
 
+CR-91D-5 Interaction QA and Docs Sync is complete through available validation. `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_QA.md` now records the checked Events, Books / Psalms, and Kings / Kingdoms highlight behavior, invalid-selection fallback expectations, regression review, accessibility-focused code review, route-smoke limitation, and the code-path review result for the earlier React `useEffect` dependency-array-size warning risk. No required frontend fixes were identified in this QA pass. Schematic highlights remain metadata-derived UI affordances only, with no Bible text rendering, no coordinates, no map-provider state, no geocoding, no exact chronology inference, and no API, DB, backend, schema, verifier, or data-package row change.
+
 CR-93F Timeline Workspace Interaction QA is complete through available validation. The current package-backed Events and Books / Psalms previews, active-view-aware left navigator, and metadata-only right panel were checked through static validation, explicit code-path review, and attempted local route smoke. No required frontend fixes were identified in this pass. Bible text remains unrendered, no coordinates or map-provider fields were introduced, and no API, DB, backend, schema, or package-row changes were added.
 
 CR-91E Timeline Left Navigator Redesign is complete through available validation. The left sidebar is now active-view aware and works as a contextual Timeline Navigator instead of a shared filter surface across all views. Events filters remain functional and are clearly scoped to Events. Books / Psalms navigator now acknowledges and summarizes the active 66-book package preview. Places navigator now makes the schematic-map and no-coordinate boundary explicit. No data rows, API, DB, schema, import, or non-approved package integration were added. Korean history remains placeholder/reference only.
@@ -77,10 +79,9 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 ## Current Priority Order
 
 1. CR-91D-4 Places / Schematic View Placeholder Highlight.
-2. CR-91D-5 Interaction QA and Docs Sync.
-3. CR-92C Korean History Pilot Rows after source review.
-4. CR-90Y-5 Genealogy Detail Refinement.
-5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+2. CR-92C Korean History Pilot Rows after source review.
+3. CR-90Y-5 Genealogy Detail Refinement.
+4. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
 7. CR-91 Place / Map Preview.
 8. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
 10. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.

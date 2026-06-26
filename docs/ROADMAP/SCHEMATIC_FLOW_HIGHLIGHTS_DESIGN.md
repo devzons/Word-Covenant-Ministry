@@ -45,6 +45,16 @@ Still deferred after `CR-91D-3`:
 - Places / Schematic Map highlight behavior in `CR-91D-4`
 - dedicated QA and docs sync in `CR-91D-5`
 
+`CR-91D-5` is now complete as a QA and docs-sync step. The QA record lives in:
+
+- `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_QA.md`
+
+Current QA result:
+
+- no required frontend fixes were identified in this pass
+- the current Events, Books / Psalms, and Kings / Kingdoms highlight flow passed static validation and explicit code-path review
+- live route smoke remained unavailable from this environment
+
 ## Scope
 
 Included in `CR-91D` design scope:
