@@ -221,9 +221,12 @@ Korean history:
 
 - `CR-92A` design is documented.
 - `CR-92B` placeholder UI is implemented.
+- `CR-92C-0` source-review gate is now documented in `KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`.
 - No Korean history rows are present.
 - No chronology dataset, source import, or map layer has been added.
+- No approved source set or finalized citation/source-basis policy is documented yet.
 - Source review is required before any pilot rows.
+- Current pilot-row readiness result is blocked pending source approval.
 - Korean history is not a basis for biblical interpretation.
 
 ## 11. Data Architecture Risk

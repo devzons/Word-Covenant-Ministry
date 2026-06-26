@@ -199,6 +199,12 @@ English labels:
 
 ## 9. Recommended Implementation Phases
 
+Gate note:
+
+- `CR-92C` cannot safely begin until source review and source-basis approval are explicit.
+- `CR-92C-0` now exists as a readiness gate in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`.
+- Current gate result: blocked until an approved source set and citation policy are documented.
+
 ### Phase CR-92A
 
 - Design doc only.
@@ -207,6 +213,13 @@ English labels:
 
 - Add UI labels and empty collapsed `한국사 참조` placeholder only.
 - No data yet.
+
+### Phase CR-92C-0
+
+- Source review gate and readiness check only.
+- Confirm whether an approved source set exists.
+- Confirm citation and source-basis policy.
+- Do not add rows unless the gate is approved.
 
 ### Phase CR-92C
 

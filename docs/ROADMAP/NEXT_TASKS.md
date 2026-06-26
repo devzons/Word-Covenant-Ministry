@@ -14,6 +14,8 @@ CR-91B-2 Context Inspector Cross-Linking is complete through available validatio
 
 CR-92B Korean History Reference Placeholder UI is complete through available validation. Events view period blocks now include a collapsed Korean history reference placeholder below Scripture event rows. No Korean history rows or chronology data were added. No source import, API, DB, schema, map, or chronology dataset work was added. Korean history remains supporting reference only, source and license review remain required before any real content rows, and Korean history is not a basis for biblical interpretation.
 
+CR-92C-0 Korean History Source Review Gate is now documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`. Current gate result: blocked. No approved Korean history source set or finalized citation/source-basis policy is documented yet, so `CR-92C Korean History Pilot Rows after source review` must not start in the current state. Korean history remains supporting-only, non-linked, non-interpretive, and below Scripture authority. No row, package, frontend, verifier, API, DB, backend, schema, or map behavior was added.
+
 CR-93A Timeline Data Coverage Matrix is complete as a documentation-only audit. `docs/ROADMAP/TIMELINE_DATA_COVERAGE_MATRIX.md` now records current Timeline fixture counts, period-level coverage, view-level readiness, canonical book-context gaps, Psalm coverage, kingdom coverage, place coverage, and the current data-architecture risk around continued growth in `timelinePreviewData.ts`. No Timeline data rows, fixture rows, API, DB, schema, import, or world-history / Korean-history dataset work were added.
 
 CR-93B Timeline Data Package Design is complete as a documentation-only architecture step. `docs/ROADMAP/TIMELINE_DATA_PACKAGE_DESIGN.md` and `docs/data-packages/timeline/` now document the package directory proposal, the 66-book coverage requirement, the accordion-first center-column principle, shared field expectations, package-specific field guidance, and future verifier rules. No real Timeline package rows, code, API, DB, schema, or import work were added.
@@ -82,10 +84,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-92C Korean History Pilot Rows after source review.
-2. CR-90Y-5 Genealogy Detail Refinement.
-3. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-4. Continue broader Timeline content expansion after the completed CR-91D final QA branch.
+1. Complete Korean history source review and source-policy approval to unlock `CR-92C`.
+2. CR-92C Korean History Pilot Rows, only if the source gate is explicitly approved.
+3. CR-90Y-5 Genealogy Detail Refinement.
+4. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+5. Continue broader Timeline content expansion after the completed CR-91D final QA branch.
 7. CR-91 Place / Map Preview.
 8. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
 10. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
