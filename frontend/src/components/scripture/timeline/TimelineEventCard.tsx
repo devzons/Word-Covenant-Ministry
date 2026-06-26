@@ -3,6 +3,10 @@
 import { cn } from "@/lib/utils/cn";
 
 import { TimelineConfidenceBadge } from "./TimelineConfidenceBadge";
+import type {
+  TimelineHighlightItem,
+  TimelineHighlightStrength,
+} from "./timelineHighlightState";
 import {
   getTimelineDatePreview,
   getTimelineBook,
@@ -13,6 +17,8 @@ import type { PassionWeekTimelineEvent, TimelineLocale } from "./passionWeekTime
 
 type TimelineEventCardProps = {
   event: PassionWeekTimelineEvent;
+  highlight?: TimelineHighlightItem | null;
+  highlightedBookIds?: Set<string>;
   locale: TimelineLocale;
   onSelect: (eventId: string) => void;
   selected: boolean;
@@ -20,6 +26,8 @@ type TimelineEventCardProps = {
 
 export function TimelineEventCard({
   event,
+  highlight,
+  highlightedBookIds,
   locale,
   onSelect,
   selected,
@@ -36,6 +44,8 @@ export function TimelineEventCard({
   const empireLabels = event.empireTags?.map((tag) => getTimelineText(tag, locale)) ?? [];
   const rulerLabels = event.rulerTags?.map((tag) => getTimelineText(tag, locale)) ?? [];
   const prophetLabels = event.prophetTags?.map((tag) => getTimelineText(tag, locale)) ?? [];
+  const highlightStrength = selected ? "primary" : highlight?.strength ?? null;
+  const relatedHighlightLabel = getRelatedHighlightLabel(highlight, locale);
 
   return (
     <li className="relative">
@@ -51,9 +61,7 @@ export function TimelineEventCard({
         className={cn(
           "w-full cursor-pointer rounded-md border bg-white px-3.5 py-3 text-left transition-colors sm:px-4 sm:py-3.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-          selected
-            ? "border-zinc-950 bg-zinc-50 shadow-sm ring-1 ring-zinc-950"
-            : "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50",
+          getEventCardHighlightClasses(highlightStrength),
         )}
         aria-pressed={selected}
         onClick={() => onSelect(event.id)}
@@ -99,6 +107,18 @@ export function TimelineEventCard({
                     {locale === "ko" ? "선택됨" : "Selected"}
                   </span>
                 ) : null}
+                {!selected && relatedHighlightLabel ? (
+                  <span
+                    className={cn(
+                      "inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-none",
+                      highlightStrength === "caution"
+                        ? "border-amber-300 bg-amber-50 text-amber-800"
+                        : "border-emerald-300 bg-emerald-50 text-emerald-800",
+                    )}
+                  >
+                    {relatedHighlightLabel}
+                  </span>
+                ) : null}
               </div>
 
               <div className="flex flex-wrap items-start justify-between gap-2.5">
@@ -129,9 +149,18 @@ export function TimelineEventCard({
                 {isCoreSkeleton
                   ? event.relatedBookIds.slice(0, 3).map((bookId) => (
                       <span className="rounded-full bg-zinc-100 px-2.5 py-1" key={`${event.id}-${bookId}`}>
-                        {getTimelineBook(bookId)
+                        <span
+                          className={cn(
+                            "rounded-full px-0 py-0",
+                            highlightedBookIds?.has(bookId)
+                              ? "font-semibold text-emerald-800"
+                              : "",
+                          )}
+                        >
+                          {getTimelineBook(bookId)
                           ? getTimelineText(getTimelineBook(bookId)!.label, locale)
                           : bookId}
+                        </span>
                       </span>
                     ))
                   : null}
@@ -174,4 +203,50 @@ export function TimelineEventCard({
 
 export function createTimelineEventRowId(eventId: string) {
   return `timeline-event-row-${eventId}`;
+}
+
+function getEventCardHighlightClasses(
+  strength: TimelineHighlightStrength | null,
+) {
+  if (strength === "primary") {
+    return "border-zinc-950 bg-zinc-50 shadow-sm ring-1 ring-zinc-950";
+  }
+
+  if (strength === "caution") {
+    return "border-amber-300 bg-amber-50/70 hover:border-amber-400 hover:bg-amber-50";
+  }
+
+  if (strength === "related") {
+    return "border-emerald-300 bg-emerald-50/60 hover:border-emerald-400 hover:bg-emerald-50";
+  }
+
+  return "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50";
+}
+
+function getRelatedHighlightLabel(
+  highlight: TimelineHighlightItem | null | undefined,
+  locale: TimelineLocale,
+) {
+  if (!highlight) {
+    return "";
+  }
+
+  switch (highlight.reason) {
+    case "same-period":
+      return locale === "ko" ? "같은 기간" : "Same period";
+    case "same-section":
+      return locale === "ko" ? "같은 구간" : "Same section";
+    case "same-accordion-group":
+      return locale === "ko" ? "같은 흐름" : "Same flow";
+    case "internal-relation":
+      return locale === "ko" ? "명시 관계" : "Explicit relation";
+    default:
+      return highlight.strength === "caution"
+        ? locale === "ko"
+          ? "주의 연결"
+          : "Caution relation"
+        : locale === "ko"
+          ? "관련 항목"
+          : "Related item";
+  }
 }

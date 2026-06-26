@@ -28,9 +28,11 @@ import {
   type TimelineText,
 } from "./passionWeekTimeline";
 import { TimelineDatingNote } from "./TimelineDatingNote";
+import type { TimelineHighlightState } from "./timelineHighlightState";
 import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
 
 type TimelineEventDetailPanelProps = {
+  highlightState?: TimelineHighlightState;
   lookupMaps: TimelineEvidenceLookupMaps;
   onSelectInspectorItem: (selection: TimelineInspectorSelection) => void;
   selection: TimelineInspectorSelection;
@@ -70,6 +72,7 @@ const genealogyToKingdomLinks: Record<string, string[]> = {
 };
 
 export function TimelineEventDetailPanel({
+  highlightState,
   lookupMaps,
   onSelectInspectorItem,
   selection,
@@ -88,6 +91,11 @@ export function TimelineEventDetailPanel({
   const genealogyRow =
     selectedType === "genealogy" ? lookupMaps.genealogyComparisonById.get(selectionId) : undefined;
   const placeRow = selectedType === "place" ? lookupMaps.schematicPlaceById.get(selectionId) : undefined;
+  const hasDerivedHighlights = Boolean(
+    highlightState?.highlightedItems.some((item) => item.reason !== "selected") ||
+      highlightState?.highlightedSections.length ||
+      highlightState?.highlightedBookIds.length,
+  );
 
   return (
     <Card className="flex min-w-0 flex-col gap-4 sm:gap-5">
@@ -103,13 +111,22 @@ export function TimelineEventDetailPanel({
             </p>
           </div>
         ) : (
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
-              {selectedLabel}
-            </span>
-            <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
-              {getSelectionTypeLabel(selectedType, locale)}
-            </span>
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
+                {selectedLabel}
+              </span>
+              <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700">
+                {getSelectionTypeLabel(selectedType, locale)}
+              </span>
+            </div>
+            {hasDerivedHighlights ? (
+              <p className="text-xs leading-5 text-zinc-500">
+                {locale === "ko"
+                  ? "관련 highlight는 package metadata와 현재 선택 상태에서만 파생됩니다. 성경 본문이나 좌표는 사용하지 않습니다."
+                  : "Related highlights are derived only from package metadata and the current selection state. They do not use Bible text or coordinates."}
+              </p>
+            ) : null}
           </div>
         )}
       </div>

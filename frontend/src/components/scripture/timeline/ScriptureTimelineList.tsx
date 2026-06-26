@@ -7,10 +7,16 @@ import {
   type TimelineLocale,
 } from "./passionWeekTimeline";
 import { TimelineEventCard } from "./TimelineEventCard";
+import {
+  createTimelineHighlightItemKey,
+  createTimelineHighlightSectionKey,
+  type TimelineHighlightLookup,
+} from "./timelineHighlightState";
 
 type ScriptureTimelineListProps = {
   events: PassionWeekTimelineEvent[];
   activePeriodId: string;
+  highlightLookup?: TimelineHighlightLookup;
   searchTerm: string;
   locale: TimelineLocale;
   onSelect: (eventId: string) => void;
@@ -20,6 +26,7 @@ type ScriptureTimelineListProps = {
 export function ScriptureTimelineList({
   activePeriodId,
   events,
+  highlightLookup,
   locale,
   searchTerm,
   onSelect,
@@ -65,7 +72,18 @@ export function ScriptureTimelineList({
             : "Korean history references for this period have not been added yet. They will be provided only as supporting historical context, not as a basis for interpreting Scripture.";
 
         return (
-          <details className="group rounded-xl border border-zinc-200 bg-white" key={period.id} open={defaultOpen}>
+          <details
+            className={[
+              "group rounded-xl border bg-white",
+              highlightLookup?.highlightedSections.has(
+                createTimelineHighlightSectionKey("events", period.id),
+              )
+                ? "border-emerald-300 bg-emerald-50/40"
+                : "border-zinc-200",
+            ].join(" ")}
+            key={period.id}
+            open={defaultOpen}
+          >
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3">
               <div className="min-w-0">
                 <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-600">
@@ -85,6 +103,12 @@ export function ScriptureTimelineList({
                 {periodEvents.map((event) => (
                   <TimelineEventCard
                     event={event}
+                    highlight={
+                      highlightLookup?.highlightedItems.get(
+                        createTimelineHighlightItemKey("event", event.id),
+                      ) ?? null
+                    }
+                    highlightedBookIds={highlightLookup?.highlightedBookIds}
                     key={event.id}
                     locale={locale}
                     onSelect={onSelect}

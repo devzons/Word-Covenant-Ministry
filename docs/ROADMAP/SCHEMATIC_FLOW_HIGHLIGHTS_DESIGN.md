@@ -30,6 +30,21 @@ The design remains Scripture-first and metadata-only.
 
 That note defines the allowed inputs, supported item types, reason and strength taxonomy, view-specific derivation rules, fallback behavior, and implementation-facing component impact while keeping the feature metadata-only and no-coordinate.
 
+`CR-91D-3` now implements the first-pass schematic highlight behavior for the current package-backed Events, Books / Psalms, and Kings / Kingdoms previews.
+
+Implemented in this step:
+
+- selection-derived highlight state for supported Timeline views
+- primary selected-row emphasis plus softer related/caution emphasis
+- section-level highlight for active Books and Kings accordion sections
+- same-period event highlighting inside Events
+- no new query parameter; highlight remains derived from the existing Context Inspector selection state
+
+Still deferred after `CR-91D-3`:
+
+- Places / Schematic Map highlight behavior in `CR-91D-4`
+- dedicated QA and docs sync in `CR-91D-5`
+
 ## Scope
 
 Included in `CR-91D` design scope:

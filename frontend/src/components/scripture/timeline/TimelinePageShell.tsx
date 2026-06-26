@@ -33,6 +33,17 @@ import { ScriptureTimelineList } from "./ScriptureTimelineList";
 import { TimelineEventDetailPanel } from "./TimelineEventDetailPanel";
 import { createTimelineEventRowId } from "./TimelineEventCard";
 import { TimelineFilterBar } from "./TimelineFilterBar";
+import {
+  buildTimelineHighlightLookup,
+  createEmptyTimelineHighlightState,
+  createTimelineHighlightItemKey,
+  createTimelineHighlightSectionKey,
+  type TimelineHighlightItem,
+  type TimelineHighlightReason,
+  type TimelineHighlightSection,
+  type TimelineHighlightState,
+  type TimelineHighlightStrength,
+} from "./timelineHighlightState";
 import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
 import { TimelineViewTabs } from "./TimelineViewTabs";
 
@@ -461,6 +472,35 @@ export function TimelinePageShell({
       : ""
   );
   const selectedEventId = inspectorSelection?.type === "event" ? inspectorSelection.id : "";
+  const timelineHighlightState = useMemo(
+    () =>
+      deriveTimelineHighlightState({
+        activeView,
+        canonicalBookRows,
+        inspectorSelection,
+        kingsKingdomRows,
+        timelineEvents,
+      }),
+    [activeView, canonicalBookRows, inspectorSelection, kingsKingdomRows, timelineEvents],
+  );
+  const timelineHighlightLookup = useMemo(
+    () => buildTimelineHighlightLookup(timelineHighlightState),
+    [timelineHighlightState],
+  );
+  const highlightedBookSectionKeys = useMemo(
+    () =>
+      timelineHighlightState.highlightedSections
+        .filter((section) => section.view === "books")
+        .map((section) => getTimelineBooksSectionKeyFromSectionId(section.sectionId)),
+    [timelineHighlightState],
+  );
+  const highlightedKingdomSectionKeys = useMemo(
+    () =>
+      timelineHighlightState.highlightedSections
+        .filter((section) => section.view === "kingdoms")
+        .map((section) => getTimelineKingsSectionKeyFromSectionId(section.sectionId)),
+    [timelineHighlightState],
+  );
 
   const replaceTimelineQuery = useCallback((nextView: TimelineView, selection: TimelineInspectorSelection) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -685,6 +725,8 @@ export function TimelinePageShell({
                 ? "신뢰도는 카드와 상세 패널에 계속 표시됩니다."
                 : "Confidence remains visible on cards and in the detail panel."
             }
+            highlightedBookSectionKeys={highlightedBookSectionKeys}
+            highlightedKingdomSectionKeys={highlightedKingdomSectionKeys}
             labels={copy.sidebar}
             locale={activeLocale}
             activeBookSectionKey={resolvedActiveBookSectionKey}
@@ -773,6 +815,7 @@ export function TimelinePageShell({
                 <KingsKingdomsPreviewPanel
                   activeSectionKey={resolvedActiveKingdomSectionKey}
                   expandedSectionKeys={resolvedExpandedKingdomSectionKeys}
+                  highlightLookup={timelineHighlightLookup}
                   kingdomSections={kingsKingdomSections}
                   kingsKingdomRows={kingsKingdomRows}
                   kingsKingdomStats={kingsKingdomStats}
@@ -803,6 +846,7 @@ export function TimelinePageShell({
                   canonicalBookStats={canonicalBookStats}
                   bookSections={canonicalBookSections}
                   expandedSectionKeys={resolvedExpandedBookSectionKeys}
+                  highlightLookup={timelineHighlightLookup}
                   locale={activeLocale}
                   onSectionToggle={handleBookSectionToggle}
                   onSelectRow={(rowId) => {
@@ -846,6 +890,7 @@ export function TimelinePageShell({
                   <ScriptureTimelineList
                     activePeriodId={filters.periodId}
                     events={visibleEvents}
+                    highlightLookup={timelineHighlightLookup}
                     locale={activeLocale}
                     searchTerm={filters.searchTerm}
                     onSelect={(eventId) => selectInspectorItem({ id: eventId, type: "event" })}
@@ -857,6 +902,7 @@ export function TimelinePageShell({
           </div>
 
           <TimelineEventDetailPanel
+            highlightState={timelineHighlightState}
             selection={inspectorSelection}
             panelHeading={copy.detailHeading}
             locale={activeLocale}
@@ -1445,6 +1491,7 @@ function getSchematicFlowGroupLabel(
 type KingsKingdomsPreviewPanelProps = {
   activeSectionKey: string;
   expandedSectionKeys: string[];
+  highlightLookup: ReturnType<typeof buildTimelineHighlightLookup>;
   kingdomSections: TimelineKingdomSectionNavigationItem[];
   kingsKingdomRows: TimelineKingsKingdomsPreviewRow[];
   kingsKingdomStats: {
@@ -1461,6 +1508,7 @@ type KingsKingdomsPreviewPanelProps = {
 function KingsKingdomsPreviewPanel({
   activeSectionKey,
   expandedSectionKeys,
+  highlightLookup,
   kingdomSections,
   kingsKingdomRows,
   kingsKingdomStats,
@@ -1510,13 +1558,20 @@ function KingsKingdomsPreviewPanel({
           const headingId = `${section.sectionId}-heading`;
           const panelId = `${section.sectionId}-panel`;
           const periodLabel = sectionRows[0] ? getTimelinePeriod(sectionRows[0].timelinePeriodId) : null;
+          const sectionHighlight = highlightLookup.highlightedSections.get(
+            createTimelineHighlightSectionKey("kingdoms", section.sectionId),
+          );
 
           return (
             <div
               aria-labelledby={headingId}
               className={cn(
                 "space-y-2 scroll-mt-28 rounded-md border border-transparent p-1",
-                isActiveSection ? "border-zinc-200 bg-zinc-50/70" : "",
+                isActiveSection
+                  ? "border-zinc-200 bg-zinc-50/70"
+                  : sectionHighlight
+                    ? "border-emerald-200 bg-emerald-50/40"
+                    : "",
               )}
               id={section.sectionId}
               key={section.sectionKey}
@@ -1553,6 +1608,10 @@ function KingsKingdomsPreviewPanel({
                 {sectionRows.map((row) => {
                   const selected = selectedRowId === row.id;
                   const period = getTimelinePeriod(row.timelinePeriodId);
+                  const rowHighlight = highlightLookup.highlightedItems.get(
+                    createTimelineHighlightItemKey(row.recordType, row.id),
+                  );
+                  const rowHighlightStrength = selected ? "primary" : rowHighlight?.strength ?? null;
 
                   return (
                     <button
@@ -1561,9 +1620,8 @@ function KingsKingdomsPreviewPanel({
                       className={cn(
                         "w-full rounded-md border px-3 py-3 text-left transition-colors",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-                        selected
-                          ? "border-zinc-950 bg-white shadow-sm"
-                          : "cursor-pointer border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50",
+                        getTimelineHighlightSurfaceClasses(rowHighlightStrength),
+                        !selected && !rowHighlight ? "cursor-pointer" : "",
                       )}
                       key={row.id}
                       onClick={() => onSelectRow(row.id)}
@@ -1579,6 +1637,18 @@ function KingsKingdomsPreviewPanel({
                         {row.reviewRequired ? (
                           <span className="inline-flex rounded-full border border-zinc-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-800">
                             {locale === "ko" ? "검토 필요" : "Review required"}
+                          </span>
+                        ) : null}
+                        {!selected && rowHighlight ? (
+                          <span
+                            className={cn(
+                              "inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold",
+                              rowHighlightStrength === "caution"
+                                ? "border-amber-300 bg-amber-50 text-amber-800"
+                                : "border-emerald-300 bg-emerald-50 text-emerald-800",
+                            )}
+                          >
+                            {getTimelineHighlightReasonLabel(rowHighlight.reason, locale)}
                           </span>
                         ) : null}
                         <span className="text-sm font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</span>
@@ -1657,6 +1727,7 @@ type BooksContextPreviewPanelProps = {
     totalCount: number;
   };
   expandedSectionKeys: string[];
+  highlightLookup: ReturnType<typeof buildTimelineHighlightLookup>;
   locale: TimelineLocale;
   onSectionToggle: (sectionKey: string) => void;
   onSelectRow: (rowId: string) => void;
@@ -1669,6 +1740,7 @@ function BooksContextPreviewPanel({
   canonicalBookRows,
   canonicalBookStats,
   expandedSectionKeys,
+  highlightLookup,
   locale,
   onSectionToggle,
   onSelectRow,
@@ -1763,6 +1835,9 @@ function BooksContextPreviewPanel({
                   sectionRows[0].canonicalSectionLabel ?? { ko: sectionKey, en: sectionKey },
                   locale,
                 );
+                const sectionHighlight = highlightLookup.highlightedSections.get(
+                  createTimelineHighlightSectionKey("books", sectionId),
+                );
                 const sectionSummary =
                   locale === "ko"
                     ? `${sectionLabel} · ${sectionRows.length}권`
@@ -1773,7 +1848,11 @@ function BooksContextPreviewPanel({
                   aria-labelledby={headingId}
                   className={cn(
                     "space-y-2 scroll-mt-28 rounded-md border border-transparent p-1",
-                    isActiveSection ? "border-zinc-200 bg-white/60" : "",
+                    isActiveSection
+                      ? "border-zinc-200 bg-white/60"
+                      : sectionHighlight
+                        ? "border-emerald-200 bg-emerald-50/40"
+                        : "",
                   )}
                   id={sectionId}
                   key={`${id}-${sectionKey}`}
@@ -1823,6 +1902,10 @@ function BooksContextPreviewPanel({
                   >
                       {sectionRows.map((row) => {
                 const selected = selectedRowId === row.id;
+                const rowHighlight = highlightLookup.highlightedItems.get(
+                  createTimelineHighlightItemKey("book", row.id),
+                );
+                const rowHighlightStrength = selected ? "primary" : rowHighlight?.strength ?? null;
 
                 return (
                   <button
@@ -1831,9 +1914,8 @@ function BooksContextPreviewPanel({
                     className={cn(
                       "w-full rounded-md border px-3 py-3 text-left transition-colors",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-                      selected
-                        ? "border-zinc-950 bg-white shadow-sm"
-                        : "cursor-pointer border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50",
+                      getTimelineHighlightSurfaceClasses(rowHighlightStrength),
+                      !selected && !rowHighlight ? "cursor-pointer" : "",
                     )}
                     key={row.id}
                     onClick={() => onSelectRow(row.id)}
@@ -1851,6 +1933,18 @@ function BooksContextPreviewPanel({
                       {row.testament ? (
                         <span className="text-xs font-medium uppercase tracking-[0.08em] text-zinc-500">
                           {row.testament}
+                        </span>
+                      ) : null}
+                      {!selected && rowHighlight ? (
+                        <span
+                          className={cn(
+                            "inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold",
+                            rowHighlightStrength === "caution"
+                              ? "border-amber-300 bg-amber-50 text-amber-800"
+                              : "border-emerald-300 bg-emerald-50 text-emerald-800",
+                          )}
+                        >
+                          {getTimelineHighlightReasonLabel(rowHighlight.reason, locale)}
                         </span>
                       ) : null}
                       <span className="text-sm font-semibold text-zinc-950">{getTimelineText(row.canonicalLocation, locale)}</span>
@@ -1997,6 +2091,14 @@ function createTimelineKingdomRowId(rowId: string) {
   return `timeline-kingdom-row-${rowId}`;
 }
 
+function getTimelineBooksSectionKeyFromSectionId(sectionId: string) {
+  return sectionId.replace(/^timeline-books-section-/, "");
+}
+
+function getTimelineKingsSectionKeyFromSectionId(sectionId: string) {
+  return sectionId.replace(/^timeline-kings-section-/, "");
+}
+
 function getSelectionTargetId(selection: Exclude<TimelineInspectorSelection, null>) {
   switch (selection.type) {
     case "event":
@@ -2007,6 +2109,50 @@ function getSelectionTargetId(selection: Exclude<TimelineInspectorSelection, nul
       return createTimelineKingdomRowId(selection.id);
     default:
       return null;
+  }
+}
+
+function getTimelineHighlightSurfaceClasses(
+  strength: TimelineHighlightStrength | null,
+) {
+  if (strength === "primary") {
+    return "border-zinc-950 bg-white shadow-sm";
+  }
+
+  if (strength === "caution") {
+    return "border-amber-300 bg-amber-50/70 hover:border-amber-400 hover:bg-amber-50";
+  }
+
+  if (strength === "related") {
+    return "border-emerald-300 bg-emerald-50/60 hover:border-emerald-400 hover:bg-emerald-50";
+  }
+
+  return "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50";
+}
+
+function getTimelineHighlightReasonLabel(
+  reason: TimelineHighlightReason,
+  locale: TimelineLocale,
+) {
+  switch (reason) {
+    case "selected":
+      return locale === "ko" ? "선택됨" : "Selected";
+    case "same-section":
+      return locale === "ko" ? "같은 구간" : "Same section";
+    case "related-book":
+      return locale === "ko" ? "관련 책" : "Related book";
+    case "scripture-anchor-overlap":
+      return locale === "ko" ? "같은 reference" : "Reference overlap";
+    case "internal-relation":
+      return locale === "ko" ? "명시 관계" : "Explicit relation";
+    case "transition-link":
+      return locale === "ko" ? "전환 연결" : "Transition link";
+    case "predecessor-successor":
+      return locale === "ko" ? "전임/후임" : "Predecessor/successor";
+    case "same-period":
+      return locale === "ko" ? "같은 기간" : "Same period";
+    case "same-accordion-group":
+      return locale === "ko" ? "같은 흐름" : "Same flow";
   }
 }
 
@@ -2059,6 +2205,324 @@ function getKingsRecordTypeLabel(
   };
 
   return getTimelineText(labels[recordType], locale);
+}
+
+function deriveTimelineHighlightState({
+  activeView,
+  canonicalBookRows,
+  inspectorSelection,
+  kingsKingdomRows,
+  timelineEvents,
+}: {
+  activeView: TimelineView;
+  canonicalBookRows: TimelineBookContextRow[];
+  inspectorSelection: TimelineInspectorSelection;
+  kingsKingdomRows: TimelineKingsKingdomsPreviewRow[];
+  timelineEvents: TimelineEvent[];
+}): TimelineHighlightState {
+  if (
+    !inspectorSelection ||
+    (activeView !== "events" && activeView !== "books" && activeView !== "kingdoms")
+  ) {
+    return createEmptyTimelineHighlightState();
+  }
+
+  const itemMap = new Map<string, TimelineHighlightItem>();
+  const sectionMap = new Map<string, TimelineHighlightSection>();
+  const bookIds = new Set<string>();
+  const cautionNotes = new Set<string>();
+
+  const addItem = ({
+    id,
+    reason,
+    source,
+    strength,
+    type,
+  }: TimelineHighlightItem) => {
+    const key = createTimelineHighlightItemKey(type, id);
+    const current = itemMap.get(key);
+
+    if (!current || getTimelineHighlightStrengthRank(strength) > getTimelineHighlightStrengthRank(current.strength)) {
+      itemMap.set(key, { id, reason, source, strength, type });
+    }
+  };
+
+  const addSection = (section: TimelineHighlightSection) => {
+    sectionMap.set(
+      createTimelineHighlightSectionKey(section.view, section.sectionId),
+      section,
+    );
+  };
+
+  const addBookIds = (ids: string[]) => {
+    for (const id of ids) {
+      if (id) {
+        bookIds.add(id);
+      }
+    }
+  };
+
+  const addCautionNote = (note?: TimelineText, reviewRequired?: boolean) => {
+    if (reviewRequired && note) {
+      cautionNotes.add(note.ko);
+      cautionNotes.add(note.en);
+    }
+  };
+
+  if (activeView === "events" && inspectorSelection.type === "event") {
+    const selectedEvent = timelineEvents.find((event) => event.id === inspectorSelection.id);
+
+    if (!selectedEvent) {
+      return createEmptyTimelineHighlightState();
+    }
+
+    addItem({
+      id: selectedEvent.id,
+      reason: "selected",
+      source: "selection",
+      strength: "primary",
+      type: "event",
+    });
+    addSection({
+      reason: "same-period",
+      sectionId: selectedEvent.periodId,
+      view: "events",
+    });
+    addBookIds(selectedEvent.relatedBookIds);
+    addCautionNote(selectedEvent.cautionNote, selectedEvent.reviewRequired);
+
+    for (const event of timelineEvents) {
+      if (event.id === selectedEvent.id) {
+        continue;
+      }
+
+      if (event.sectionId && selectedEvent.sectionId && event.sectionId === selectedEvent.sectionId) {
+        addItem({
+          id: event.id,
+          reason: "same-section",
+          source: "metadata",
+          strength: event.reviewRequired ? "caution" : "related",
+          type: "event",
+        });
+        continue;
+      }
+
+      if (
+        event.accordionGroup &&
+        selectedEvent.accordionGroup &&
+        event.accordionGroup === selectedEvent.accordionGroup
+      ) {
+        addItem({
+          id: event.id,
+          reason: "same-accordion-group",
+          source: "metadata",
+          strength: event.reviewRequired ? "caution" : "related",
+          type: "event",
+        });
+        continue;
+      }
+
+      if (event.periodId === selectedEvent.periodId) {
+        addItem({
+          id: event.id,
+          reason: "same-period",
+          source: "metadata",
+          strength: event.reviewRequired ? "caution" : "related",
+          type: "event",
+        });
+      }
+    }
+
+    return {
+      activeItem: { id: selectedEvent.id, type: "event", view: "events" },
+      cautionNotes: Array.from(cautionNotes),
+      highlightedBookIds: Array.from(bookIds),
+      highlightedItems: Array.from(itemMap.values()),
+      highlightedSections: Array.from(sectionMap.values()),
+    };
+  }
+
+  if (activeView === "books" && inspectorSelection.type === "book") {
+    const selectedRow = canonicalBookRows.find((row) => row.id === inspectorSelection.id);
+
+    if (!selectedRow) {
+      return createEmptyTimelineHighlightState();
+    }
+
+    const sectionId = createTimelineBooksSectionId(
+      selectedRow.canonicalSection ?? selectedRow.canonicalSectionLabel?.en ?? "other",
+    );
+
+    addItem({
+      id: selectedRow.id,
+      reason: "selected",
+      source: "selection",
+      strength: "primary",
+      type: "book",
+    });
+    addSection({ reason: "same-section", sectionId, view: "books" });
+    addBookIds([selectedRow.bookId]);
+    addCautionNote(selectedRow.note, false);
+
+    for (const row of canonicalBookRows) {
+      if (row.id === selectedRow.id) {
+        continue;
+      }
+
+      if (
+        row.canonicalSection &&
+        selectedRow.canonicalSection &&
+        row.canonicalSection === selectedRow.canonicalSection
+      ) {
+        addItem({
+          id: row.id,
+          reason: "same-section",
+          source: "metadata",
+          strength: "related",
+          type: "book",
+        });
+      }
+    }
+
+    for (const event of timelineEvents) {
+      if (event.relatedBookIds.includes(selectedRow.bookId) || event.primaryBookId === selectedRow.bookId) {
+        addItem({
+          id: event.id,
+          reason: "related-book",
+          source: "metadata",
+          strength: event.reviewRequired ? "caution" : "related",
+          type: "event",
+        });
+      }
+    }
+
+    for (const row of kingsKingdomRows) {
+      if (row.relatedBookIds.includes(selectedRow.bookId)) {
+        addItem({
+          id: row.id,
+          reason: "related-book",
+          source: "metadata",
+          strength: row.reviewRequired ? "caution" : "related",
+          type: row.recordType,
+        });
+      }
+    }
+
+    return {
+      activeItem: { id: selectedRow.id, type: "book", view: "books" },
+      cautionNotes: Array.from(cautionNotes),
+      highlightedBookIds: Array.from(bookIds),
+      highlightedItems: Array.from(itemMap.values()),
+      highlightedSections: Array.from(sectionMap.values()),
+    };
+  }
+
+  if (activeView === "kingdoms" && inspectorSelection.type === "kingdom") {
+    const selectedRow = kingsKingdomRows.find((row) => row.id === inspectorSelection.id);
+
+    if (!selectedRow) {
+      return createEmptyTimelineHighlightState();
+    }
+
+    addItem({
+      id: selectedRow.id,
+      reason: "selected",
+      source: "selection",
+      strength: "primary",
+      type: selectedRow.recordType,
+    });
+    addSection({
+      reason: "same-section",
+      sectionId: createTimelineKingsSectionId(selectedRow.sectionId),
+      view: "kingdoms",
+    });
+    addBookIds(selectedRow.relatedBookIds);
+    addCautionNote(selectedRow.cautionNote, selectedRow.reviewRequired);
+
+    for (const row of kingsKingdomRows) {
+      if (row.id === selectedRow.id) {
+        continue;
+      }
+
+      if (row.sectionId === selectedRow.sectionId) {
+        addItem({
+          id: row.id,
+          reason: "same-section",
+          source: "metadata",
+          strength: row.reviewRequired ? "caution" : "related",
+          type: row.recordType,
+        });
+      }
+    }
+
+    addRelatedKingsKingdomItem(selectedRow.kingdomId, "internal-relation", kingsKingdomRows, addItem);
+    addRelatedKingsKingdomItem(selectedRow.predecessorId, "predecessor-successor", kingsKingdomRows, addItem);
+    addRelatedKingsKingdomItem(selectedRow.successorId, "predecessor-successor", kingsKingdomRows, addItem);
+    for (const relationId of selectedRow.relatedKingIds ?? []) {
+      addRelatedKingsKingdomItem(relationId, "internal-relation", kingsKingdomRows, addItem);
+    }
+    for (const relationId of selectedRow.relatedTransitionIds ?? []) {
+      addRelatedKingsKingdomItem(relationId, "transition-link", kingsKingdomRows, addItem);
+    }
+    for (const relationId of selectedRow.relatedKingdomIds ?? []) {
+      addRelatedKingsKingdomItem(relationId, "internal-relation", kingsKingdomRows, addItem);
+    }
+    for (const relationId of selectedRow.relatedPeriodIds ?? []) {
+      addRelatedKingsKingdomItem(relationId, "internal-relation", kingsKingdomRows, addItem);
+    }
+    addRelatedKingsKingdomItem(selectedRow.previousStateId, "transition-link", kingsKingdomRows, addItem);
+    addRelatedKingsKingdomItem(selectedRow.nextStateId, "transition-link", kingsKingdomRows, addItem);
+
+    return {
+      activeItem: { id: selectedRow.id, type: "kingdom", view: "kingdoms" },
+      cautionNotes: Array.from(cautionNotes),
+      highlightedBookIds: Array.from(bookIds),
+      highlightedItems: Array.from(itemMap.values()),
+      highlightedSections: Array.from(sectionMap.values()),
+    };
+  }
+
+  return createEmptyTimelineHighlightState();
+}
+
+function addRelatedKingsKingdomItem(
+  relationId: string | undefined,
+  reason: TimelineHighlightReason,
+  rows: TimelineKingsKingdomsPreviewRow[],
+  addItem: (item: TimelineHighlightItem) => void,
+) {
+  if (!relationId) {
+    return;
+  }
+
+  const targetRow = rows.find((row) => row.id === relationId);
+
+  if (!targetRow) {
+    return;
+  }
+
+  addItem({
+    id: targetRow.id,
+    reason,
+    source: "metadata",
+    strength: targetRow.reviewRequired ? "caution" : "related",
+    type: targetRow.recordType,
+  });
+}
+
+function getTimelineHighlightStrengthRank(
+  strength: TimelineHighlightStrength,
+) {
+  switch (strength) {
+    case "primary":
+      return 4;
+    case "caution":
+      return 3;
+    case "related":
+      return 2;
+    case "subdued":
+      return 1;
+  }
 }
 
 type GenealogyComparisonPreviewPanelProps = {

@@ -17,6 +17,12 @@ The highlight system is a metadata-derived UI affordance:
 
 The contract exists to define how the Timeline Workspace can derive stable highlight state from the current Context Inspector selection and already approved package metadata.
 
+Status note:
+
+- `CR-91D-3` now applies this contract to the current Events, Books / Psalms, and Kings / Kingdoms package-backed previews.
+- The v1 implementation keeps the existing `view`, `inspectType`, and `inspectId` deep-link baseline unchanged and derives highlight state from that selection.
+- Places / Schematic Map remains deferred.
+
 ## Highlight Input Contract
 
 The highlight system should derive from the existing Timeline selection model and current package-backed preview data.

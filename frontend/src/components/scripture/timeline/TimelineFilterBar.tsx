@@ -76,6 +76,8 @@ type TimelineFilterBarProps = {
   };
   confidenceLabel: string;
   confidenceNote: string;
+  highlightedBookSectionKeys?: string[];
+  highlightedKingdomSectionKeys?: string[];
   labels: TimelineFilterLabels;
   locale: TimelineLocale;
   onBookChange: (bookId: string) => void;
@@ -107,6 +109,8 @@ export function TimelineFilterBar({
   kingdomsPreviewStats,
   confidenceLabel,
   confidenceNote,
+  highlightedBookSectionKeys,
+  highlightedKingdomSectionKeys,
   labels,
   locale,
   onBookChange,
@@ -160,6 +164,7 @@ export function TimelineFilterBar({
       {activeView === "books" ? (
         <BooksNavigator
           activeSectionKey={activeBookSectionKey}
+          highlightedSectionKeys={highlightedBookSectionKeys}
           locale={locale}
           onSectionSelect={onBookSectionSelect}
           sections={bookSections}
@@ -169,6 +174,7 @@ export function TimelineFilterBar({
       {activeView === "kingdoms" ? (
         <KingdomsNavigator
           activeSectionKey={activeKingdomSectionKey}
+          highlightedSectionKeys={highlightedKingdomSectionKeys}
           locale={locale}
           onSectionSelect={onKingdomSectionSelect}
           sections={kingdomSections}
@@ -351,12 +357,14 @@ function EventsNavigator({
 
 function BooksNavigator({
   activeSectionKey,
+  highlightedSectionKeys,
   locale,
   onSectionSelect,
   sections,
   stats,
 }: {
   activeSectionKey?: string;
+  highlightedSectionKeys?: string[];
   locale: TimelineLocale;
   onSectionSelect?: (sectionKey: string) => void;
   sections?: TimelineBookSectionNavigationItem[];
@@ -367,6 +375,7 @@ function BooksNavigator({
   };
 }) {
   const sectionItems = sections ?? [];
+  const highlightedSections = new Set(highlightedSectionKeys ?? []);
 
   return (
     <>
@@ -401,6 +410,7 @@ function BooksNavigator({
         <div className="flex flex-col gap-2">
           {sectionItems.map((section) => {
             const isActive = activeSectionKey === section.sectionKey;
+            const isHighlighted = highlightedSections.has(section.sectionKey);
             return (
               <button
                 aria-controls={section.sectionId}
@@ -410,6 +420,8 @@ function BooksNavigator({
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
                   isActive
                     ? "border-zinc-900 bg-zinc-950 text-white"
+                    : isHighlighted
+                      ? "border-emerald-300 bg-emerald-50 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-50"
                     : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50",
                 )}
                 key={section.sectionKey}
@@ -435,6 +447,8 @@ function BooksNavigator({
                     "inline-flex shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
                     isActive
                       ? "border-white/20 bg-white/10 text-white"
+                      : isHighlighted
+                        ? "border-emerald-200 bg-white text-emerald-800"
                       : "border-zinc-200 bg-zinc-50 text-zinc-700",
                   )}
                 >
@@ -451,12 +465,14 @@ function BooksNavigator({
 
 function KingdomsNavigator({
   activeSectionKey,
+  highlightedSectionKeys,
   locale,
   onSectionSelect,
   sections,
   stats,
 }: {
   activeSectionKey?: string;
+  highlightedSectionKeys?: string[];
   locale: TimelineLocale;
   onSectionSelect?: (sectionKey: string) => void;
   sections?: TimelineKingdomSectionNavigationItem[];
@@ -467,6 +483,7 @@ function KingdomsNavigator({
   };
 }) {
   const sectionItems = sections ?? [];
+  const highlightedSections = new Set(highlightedSectionKeys ?? []);
 
   return (
     <>
@@ -502,6 +519,7 @@ function KingdomsNavigator({
         <div className="flex flex-col gap-2">
           {sectionItems.map((section) => {
             const isActive = activeSectionKey === section.sectionKey;
+            const isHighlighted = highlightedSections.has(section.sectionKey);
 
             return (
               <button
@@ -512,6 +530,8 @@ function KingdomsNavigator({
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
                   isActive
                     ? "border-zinc-900 bg-zinc-950 text-white"
+                    : isHighlighted
+                      ? "border-emerald-300 bg-emerald-50 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-50"
                     : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50",
                 )}
                 key={section.sectionKey}
@@ -526,6 +546,8 @@ function KingdomsNavigator({
                     "inline-flex shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
                     isActive
                       ? "border-white/20 bg-white/10 text-white"
+                      : isHighlighted
+                        ? "border-emerald-200 bg-white text-emerald-800"
                       : "border-zinc-200 bg-zinc-50 text-zinc-700",
                   )}
                 >

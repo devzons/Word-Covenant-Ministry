@@ -104,6 +104,8 @@ CR-91C-3 Deep Link QA and Docs Sync is now complete through available validation
 CR-91D Schematic Flow Highlights Scope Definition is now documented in `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_DESIGN.md` as a docs-only design step. The new note defines schematic flow highlights as metadata-derived UI emphasis rather than real map behavior, keeps the feature Scripture-first and metadata-only, scopes the first implementation pass to Events, Books / Psalms, and Kings / Kingdoms with a deferred schematic-only Places surface, and records that no coordinates, map-provider state, Bible text rendering, backend calls, or external-history authority elevation are allowed. This step does not add frontend code, data-package rows, verifier changes, API, DB, backend, schema, or runtime import/export behavior.
 
 CR-91D-2 Schematic Highlight Data Contract / UI State Design is now documented in `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_STATE_CONTRACT.md` as a docs-only design step. The new note defines highlight inputs, the metadata-derived UI state shape, supported item types, allowed reason and strength taxonomy, Events / Books / Kings derivation policy, fallback behavior, and future component ownership boundaries. It also records that the earlier React `useEffect` dependency-array-size warning remains an implementation prerequisite or known risk rather than being fixed in this docs-only step. No frontend code, data-package rows, verifier changes, API, DB, backend, schema, or runtime import/export behavior were changed.
+
+CR-91D-3 Events / Books / Kings Highlight Implementation is now complete through available validation. The Timeline Workspace now derives schematic highlight state from the existing Context Inspector selection and current package metadata for the package-backed Events, Books / Psalms, and Kings / Kingdoms previews. Selected rows remain primary, explicit metadata relations now receive softer related or caution emphasis, current Books and Kings accordion sections can reflect section-level highlight state, and the right panel continues to explain the metadata-only basis without rendering Bible text or introducing coordinates. No new highlight query parameter was added; the existing `view`, `inspectType`, and `inspectId` deep-link baseline remains the source of truth. No API, DB, backend, schema, verifier, or data-package row change was required. Places / Schematic Map highlight behavior remains deferred to CR-91D-4.
 ```
 
 Completed phase:
@@ -115,13 +117,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Use the completed CR-91C deep-link baseline and the new CR-91D-2 state contract as the stable metadata-only foundation for the next approved Timeline highlight implementation step.
+Use the completed CR-91D-3 highlight baseline as the stable metadata-only foundation for the next approved Timeline schematic follow-on.
 ```
 
 Next task:
 
 ```txt
-Proceed to CR-91D-3 Events / Books / Kings Highlight Implementation now that the CR-91D state contract is documented.
+Proceed to CR-91D-4 Places / Schematic View Placeholder Highlight, then CR-91D-5 Interaction QA and Docs Sync.
 ```
 
 Blocked items:

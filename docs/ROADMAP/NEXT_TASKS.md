@@ -76,12 +76,11 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-91D-3 Events / Books / Kings Highlight Implementation.
-2. CR-92C Korean History Pilot Rows after source review.
-3. CR-90Y-5 Genealogy Detail Refinement.
-4. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-5. CR-91D-4 Places / Schematic View Placeholder Highlight.
-6. CR-91D-5 Interaction QA and Docs Sync.
+1. CR-91D-4 Places / Schematic View Placeholder Highlight.
+2. CR-91D-5 Interaction QA and Docs Sync.
+3. CR-92C Korean History Pilot Rows after source review.
+4. CR-90Y-5 Genealogy Detail Refinement.
+5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
 7. CR-91 Place / Map Preview.
 8. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
 10. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
