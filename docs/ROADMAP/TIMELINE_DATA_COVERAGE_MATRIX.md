@@ -41,7 +41,7 @@ Current exported preview collections observed in `timelinePreviewData.ts`:
 | Genealogy segments | `timelinePreviewData.ts` | 3 | Preview |
 | Genealogy comparison rows | `timelinePreviewData.ts` | 11 | Preview |
 | Schematic place rows | `timelinePreviewData.ts` | 20 | Preview |
-| Korean history rows | none | 0 | Placeholder only |
+| Korean history rows | `docs/data-packages/timeline/references.korean-pilot.json` | 5 | Pilot package created; supporting-only; not frontend integrated |
 
 Notes:
 
@@ -49,7 +49,7 @@ Notes:
 - `passionWeekTimeline.ts` is a compatibility export layer, not a second dataset.
 - `events.core-biblical-skeleton.json` adds a package-level Scripture-first event baseline and now feeds the frontend Events preview through the Timeline route server loader.
 - `books.66-canonical-skeleton.json` now feeds the frontend Books / Psalms preview through the Timeline route server loader.
-- Korean history currently exists only as a collapsed placeholder UI in Events period groups.
+- Korean history currently exists as a collapsed placeholder UI in Events period groups plus a non-integrated `5`-row supporting-reference pilot package.
 
 ## 3. Coverage Status Legend
 
@@ -224,11 +224,11 @@ Korean history:
 - `CR-92C-0` source-review gate is now documented in `KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`.
 - `CR-92C-1` source and citation policy is documented in `KOREAN_HISTORY_SOURCE_POLICY.md`.
 - `CR-92C-2` approved pilot source set is documented in `KOREAN_HISTORY_APPROVED_SOURCE_SET.md`.
-- No Korean history rows are present.
+- `references.korean-pilot.json` now contains `5` manually curated Korean history supporting-reference pilot rows.
 - No chronology dataset, source import, or map layer has been added.
 - Approved pilot source categories are now documented for a manual `3-5` row pilot.
 - Source review remains required for any expansion beyond the approved pilot boundary.
-- Current pilot-row readiness result is approved for a narrow manual pilot only.
+- Current pilot-row readiness result has been exercised through a narrow manual pilot only.
 - Korean history is not a basis for biblical interpretation.
 
 ## 11. Data Architecture Risk

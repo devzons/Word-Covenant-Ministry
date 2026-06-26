@@ -14,7 +14,7 @@ CR-91B-2 Context Inspector Cross-Linking is complete through available validatio
 
 CR-92B Korean History Reference Placeholder UI is complete through available validation. Events view period blocks now include a collapsed Korean history reference placeholder below Scripture event rows. No Korean history rows or chronology data were added. No source import, API, DB, schema, map, or chronology dataset work was added. Korean history remains supporting reference only, source and license review remain required before any real content rows, and Korean history is not a basis for biblical interpretation.
 
-CR-92C-0 Korean History Source Review Gate is now documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`, `CR-92C-1 Korean History Source Review and Citation Policy` is now documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md`, and `CR-92C-2 Korean History Approved Source Set` is now documented in `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md`. Current gate result: `approved-for-pilot`. Korean history pilot work may now proceed only as a narrow `3-5` row manual pilot using approved source categories, required citation metadata, supporting-only labels, and caution-labeled chronology. Bulk import, copied prose, exact-looking chronology without basis labels, and any elevation of Korean history above Scripture remain prohibited. No row, package, frontend, verifier, API, DB, backend, schema, or map behavior was added in this docs-only approval step.
+CR-92C-0 Korean History Source Review Gate is documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`, `CR-92C-1 Korean History Source Review and Citation Policy` is documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md`, `CR-92C-2 Korean History Approved Source Set` is documented in `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md`, and `CR-92C Korean History Pilot Rows` is now complete as a narrow docs/data pilot. `docs/data-packages/timeline/references.korean-pilot.json` now contains `5` manually curated broad supporting-reference rows with approved source categories, required citation metadata, supporting-only labels, and caution-labeled chronology. Bulk import, copied prose, exact-looking chronology without basis labels, frontend runtime integration, and any elevation of Korean history above Scripture remain prohibited.
 
 CR-93A Timeline Data Coverage Matrix is complete as a documentation-only audit. `docs/ROADMAP/TIMELINE_DATA_COVERAGE_MATRIX.md` now records current Timeline fixture counts, period-level coverage, view-level readiness, canonical book-context gaps, Psalm coverage, kingdom coverage, place coverage, and the current data-architecture risk around continued growth in `timelinePreviewData.ts`. No Timeline data rows, fixture rows, API, DB, schema, import, or world-history / Korean-history dataset work were added.
 
@@ -84,8 +84,8 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-92C Korean History Pilot Rows.
-2. Limit the pilot to `3-5` broad supporting-reference rows with approved source categories only, required citation metadata, supporting-only labels, and no bulk import.
+1. CR-92D Korean History Frontend Reference Preview Integration.
+2. Keep the Korean-history layer limited to the current `5` pilot rows unless a new source-approval or expansion step is documented.
 3. CR-90Y-5 Genealogy Detail Refinement.
 4. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
 5. Continue broader Timeline content expansion after the completed CR-91D final QA branch.

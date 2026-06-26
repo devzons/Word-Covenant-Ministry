@@ -46,6 +46,7 @@ Envelope rules:
 Current notable package artifacts:
 
 - `books.66-canonical-skeleton.json`
+- `references.korean-pilot.json`
 - `*.sample.json` skeleton shape files
 
 ## Shared row fields for future real data
@@ -92,6 +93,7 @@ Current notable package artifacts:
 - No coordinates during the current phase
 - No external dataset rows without source review
 - Korean history rows require `sourceBasisLabel` and reference-only labeling
+- Korean history pilot rows should also carry citation metadata, caution-labeled chronology, and explicit supporting-only authority labels
 
 ## Future verifier requirements
 

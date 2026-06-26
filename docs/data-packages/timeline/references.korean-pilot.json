@@ -1,0 +1,411 @@
+{
+  "$schema": "./schema.md",
+  "packageType": "timeline.references",
+  "packageVersion": "0.1.0-pilot",
+  "status": "pilot",
+  "notes": [
+    "This file contains manually curated Korean history reference pilot rows.",
+    "These rows are supporting references only.",
+    "They are not biblical events and must not be used as a basis for biblical interpretation.",
+    "No Bible text is stored here.",
+    "No coordinates or map-provider data are stored here.",
+    "This file is not imported into the frontend yet."
+  ],
+  "items": [
+    {
+      "id": "korean-prehistoric-bronze-age-reference",
+      "region": "korea",
+      "timelinePeriodId": "reference-prehistoric",
+      "sectionId": "korean-history-pilot-prehistoric",
+      "displayOrder": 10,
+      "accordionGroup": "korean-history-pilot",
+      "title": {
+        "ko": "한국 선사·청동기 시대 배경 참조",
+        "en": "Korean Prehistoric and Bronze Age Background Reference"
+      },
+      "dateLabel": {
+        "ko": "선사·청동기 시대 배경",
+        "en": "Prehistoric and Bronze Age background"
+      },
+      "dateBasisLabel": {
+        "ko": "대략적 시대 / 참조용",
+        "en": "Approximate period / Reference only"
+      },
+      "confidenceLabel": {
+        "ko": "넓은 시대 구분 / 보통 확신",
+        "en": "Broad period framing / Moderate confidence"
+      },
+      "referenceTypeLabel": {
+        "ko": "보조 참조 / 참조용 / 성경 사건 아님",
+        "en": "Supporting reference / Reference only / Not a biblical event"
+      },
+      "sourceBasisLabel": {
+        "ko": "공식 기관 자료 / 보조 참조 / 출처 승인 범위 내 사용",
+        "en": "Official institutional source / Supporting reference / Approved source category only"
+      },
+      "sourceApprovalLevel": "approved-primary",
+      "isSupportingReference": true,
+      "notBasisForBiblicalInterpretation": true,
+      "scriptureInterpretationUse": {
+        "ko": "보조 참조 전용 / 성경 해석 근거 아님",
+        "en": "Supporting reference only / Not a basis for biblical interpretation"
+      },
+      "cautionNote": {
+        "ko": "넓은 시대 배경만 제공하는 보조 참조이며 성경 해석 근거 아님. 성경 연대 증명이나 사건 동기화에 사용하지 않는다.",
+        "en": "This is a supporting background reference only and not a basis for biblical interpretation. It must not be used to prove biblical chronology or synchronize biblical events."
+      },
+      "note": {
+        "ko": "승인된 출처 범주를 바탕으로 수동 작성한 pilot 참조 row이며, 한국 선사·청동기 문화권의 넓은 시대 감각만 제공한다.",
+        "en": "A manually curated pilot reference row based on approved source categories that provides only broad period awareness for Korean prehistoric and Bronze Age context."
+      },
+      "sourceCitations": [
+        {
+          "sourceId": "nikh-overview",
+          "sourceTitle": "국사편찬위원회 한국사 개설 자료",
+          "sourceProvider": "National Institute of Korean History",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level historical overview materials approved in CR-92C-2 Korean History Approved Source Set.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Official institutional source / Supporting reference",
+          "sourceApprovalLevel": "approved-primary",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Broad provider-level citation used for a manual pilot reference row."
+        },
+        {
+          "sourceId": "nmk-cultural-context",
+          "sourceTitle": "국립중앙박물관 선사·고대 문화 맥락 자료",
+          "sourceProvider": "National Museum of Korea",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level museum context materials approved as supporting sources in CR-92C-2.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Supporting institutional context",
+          "sourceApprovalLevel": "approved-supporting",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used only for broad cultural-period context."
+        }
+      ],
+      "relatedBiblicalPeriodIds": [],
+      "relatedEventIds": [],
+      "relatedBookIds": [],
+      "relatedPlaceIds": []
+    },
+    {
+      "id": "korean-gojoseon-traditional-reference",
+      "region": "korea",
+      "timelinePeriodId": "reference-ancient-korea",
+      "sectionId": "korean-history-pilot-ancient",
+      "displayOrder": 20,
+      "accordionGroup": "korean-history-pilot",
+      "title": {
+        "ko": "한국 고조선 전통 기록 참조",
+        "en": "Korean Gojoseon Traditional Record Reference"
+      },
+      "dateLabel": {
+        "ko": "고조선 전통 기록 배경",
+        "en": "Gojoseon traditional-record background"
+      },
+      "dateBasisLabel": {
+        "ko": "전통 연대 / 논의 중 / 참조용",
+        "en": "Traditional date / Debated / Reference only"
+      },
+      "confidenceLabel": {
+        "ko": "논의 중 / 낮은 확신",
+        "en": "Debated / Low confidence"
+      },
+      "referenceTypeLabel": {
+        "ko": "보조 참조 / 참조용 / 성경 사건 아님",
+        "en": "Supporting reference / Reference only / Not a biblical event"
+      },
+      "sourceBasisLabel": {
+        "ko": "전통 기록 / 현대 학계 해석 / 보조 참조 / 출처 승인 범위 내 사용",
+        "en": "Traditional record / Modern scholarly interpretation / Supporting reference / Approved source category only"
+      },
+      "sourceApprovalLevel": "approved-primary",
+      "isSupportingReference": true,
+      "notBasisForBiblicalInterpretation": true,
+      "scriptureInterpretationUse": {
+        "ko": "보조 참조 전용 / 성경 해석 근거 아님",
+        "en": "Supporting reference only / Not a basis for biblical interpretation"
+      },
+      "cautionNote": {
+        "ko": "전통 기록과 현대 해석이 함께 다뤄지는 주제인 보조 참조이며 성경 해석 근거 아님. 성경 연대와 직접 동기화하지 않는다.",
+        "en": "This topic remains a supporting reference only and not a basis for biblical interpretation. It combines traditional records and modern interpretation, so it must not be directly synchronized with biblical chronology."
+      },
+      "note": {
+        "ko": "고조선 관련 연대와 서사는 전통 기록 및 후대 해석이 섞여 있으므로, 넓은 배경 참조로만 남긴다.",
+        "en": "Because Gojoseon chronology and narrative combine traditional records with later interpretation, this row remains a broad background reference only."
+      },
+      "sourceCitations": [
+        {
+          "sourceId": "encykorea-gojoseon",
+          "sourceTitle": "한국민족문화대백과사전 고조선 관련 개설 자료",
+          "sourceProvider": "Academy of Korean Studies / Encyclopedia of Korean Culture",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level encyclopedia materials approved in CR-92C-2 for cautious period-level reference.",
+          "sourceLicenseLabel": "Article rights review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Traditional record / Modern scholarly interpretation",
+          "sourceApprovalLevel": "approved-primary",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used for broad article-level background only."
+        },
+        {
+          "sourceId": "nikh-gojoseon-overview",
+          "sourceTitle": "국사편찬위원회 고대사 개설 자료",
+          "sourceProvider": "National Institute of Korean History",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level ancient-history overview materials approved in CR-92C-2.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Official institutional source / Supporting reference",
+          "sourceApprovalLevel": "approved-primary",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used to keep the pilot row within approved broad-source categories."
+        }
+      ],
+      "relatedBiblicalPeriodIds": [],
+      "relatedEventIds": [],
+      "relatedBookIds": [],
+      "relatedPlaceIds": []
+    },
+    {
+      "id": "korean-han-commanderies-reference",
+      "region": "korea",
+      "timelinePeriodId": "reference-ancient-korea",
+      "sectionId": "korean-history-pilot-ancient",
+      "displayOrder": 30,
+      "accordionGroup": "korean-history-pilot",
+      "title": {
+        "ko": "한국 한사군 배경 참조",
+        "en": "Korean Han Commanderies Background Reference"
+      },
+      "dateLabel": {
+        "ko": "한사군 관련 고대 배경",
+        "en": "Ancient background related to the Han Commanderies"
+      },
+      "dateBasisLabel": {
+        "ko": "사료 기준 / 대략적 시대 / 참조용",
+        "en": "Source-attested period / Approximate period / Reference only"
+      },
+      "confidenceLabel": {
+        "ko": "보통 확신 / 세부 연대 비확정",
+        "en": "Moderate confidence / Fine chronology not finalized"
+      },
+      "referenceTypeLabel": {
+        "ko": "보조 참조 / 참조용 / 성경 사건 아님",
+        "en": "Supporting reference / Reference only / Not a biblical event"
+      },
+      "sourceBasisLabel": {
+        "ko": "공식 기관 자료 / 교육용 개설 자료 / 보조 참조",
+        "en": "Official institutional source / Educational overview / Supporting reference"
+      },
+      "sourceApprovalLevel": "approved-primary",
+      "isSupportingReference": true,
+      "notBasisForBiblicalInterpretation": true,
+      "scriptureInterpretationUse": {
+        "ko": "보조 참조 전용 / 성경 해석 근거 아님",
+        "en": "Supporting reference only / Not a basis for biblical interpretation"
+      },
+      "cautionNote": {
+        "ko": "고대 동아시아 배경을 넓게 가리키는 보조 참조이며 성경 해석 근거 아님. 성경 사건과의 정확한 연동을 주장하지 않는다.",
+        "en": "This is a broad ancient East Asian supporting reference and not a basis for biblical interpretation. It does not assert exact alignment with biblical events."
+      },
+      "note": {
+        "ko": "한사군은 한국 고대사 맥락을 넓게 가리키는 보조 배경으로만 기록하며, 성경 사건과의 직접 동기화는 피한다.",
+        "en": "The Han Commanderies are recorded only as broad supporting background for ancient Korean context, avoiding direct synchronization with biblical events."
+      },
+      "sourceCitations": [
+        {
+          "sourceId": "nikh-ancient-korea-overview",
+          "sourceTitle": "국사편찬위원회 고대 한국사 개설 자료",
+          "sourceProvider": "National Institute of Korean History",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level ancient-history overview materials approved in CR-92C-2.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Official institutional source / Supporting reference",
+          "sourceApprovalLevel": "approved-primary",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used for broad period framing only."
+        },
+        {
+          "sourceId": "aks-educational-overview",
+          "sourceTitle": "한국학중앙연구원 고대사 개설 자료",
+          "sourceProvider": "Academy of Korean Studies",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level Korean studies overview materials approved as supporting references in CR-92C-2.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Educational overview / Supporting reference",
+          "sourceApprovalLevel": "approved-supporting",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used only as a supporting contextual cross-check."
+        }
+      ],
+      "relatedBiblicalPeriodIds": [],
+      "relatedEventIds": [],
+      "relatedBookIds": [],
+      "relatedPlaceIds": []
+    },
+    {
+      "id": "korean-proto-three-kingdoms-samhan-reference",
+      "region": "korea",
+      "timelinePeriodId": "reference-ancient-korea",
+      "sectionId": "korean-history-pilot-ancient",
+      "displayOrder": 40,
+      "accordionGroup": "korean-history-pilot",
+      "title": {
+        "ko": "한국 원삼국·삼한 배경 참조",
+        "en": "Korean Proto-Three-Kingdoms and Samhan Background Reference"
+      },
+      "dateLabel": {
+        "ko": "원삼국·삼한 배경",
+        "en": "Proto-Three-Kingdoms and Samhan background"
+      },
+      "dateBasisLabel": {
+        "ko": "대략적 시대 / 학술 추정 / 참조용",
+        "en": "Approximate period / Scholarly estimate / Reference only"
+      },
+      "confidenceLabel": {
+        "ko": "보통 확신 / 세부 구분 주의",
+        "en": "Moderate confidence / Fine distinctions require caution"
+      },
+      "referenceTypeLabel": {
+        "ko": "보조 참조 / 참조용 / 성경 사건 아님",
+        "en": "Supporting reference / Reference only / Not a biblical event"
+      },
+      "sourceBasisLabel": {
+        "ko": "현대 학계 해석 / 공식 기관 자료 / 보조 참조",
+        "en": "Modern scholarly interpretation / Official institutional source / Supporting reference"
+      },
+      "sourceApprovalLevel": "approved-primary",
+      "isSupportingReference": true,
+      "notBasisForBiblicalInterpretation": true,
+      "scriptureInterpretationUse": {
+        "ko": "보조 참조 전용 / 성경 해석 근거 아님",
+        "en": "Supporting reference only / Not a basis for biblical interpretation"
+      },
+      "cautionNote": {
+        "ko": "시대 구분과 명칭은 학계 설명을 따른 넓은 배경 정리일 뿐인 보조 참조이며 성경 해석 근거 아님. 성경 사건과 정확히 맞추지 않는다.",
+        "en": "This remains a supporting reference only and not a basis for biblical interpretation. The period labels and naming follow broad scholarly framing and are not matched to biblical events with exact precision."
+      },
+      "note": {
+        "ko": "원삼국·삼한은 넓은 문화·정치 배경 참조로만 남기며, 구체적 사건 동기화나 세밀한 연대 비교는 피한다.",
+        "en": "Proto-Three-Kingdoms and Samhan remain broad cultural and political background references only, without detailed event synchronization or fine chronology comparison."
+      },
+      "sourceCitations": [
+        {
+          "sourceId": "encykorea-samhan-overview",
+          "sourceTitle": "한국민족문화대백과사전 삼한·원삼국 관련 개설 자료",
+          "sourceProvider": "Academy of Korean Studies / Encyclopedia of Korean Culture",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level encyclopedia overview materials approved in CR-92C-2.",
+          "sourceLicenseLabel": "Article rights review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Modern scholarly interpretation / Supporting reference",
+          "sourceApprovalLevel": "approved-primary",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used only for broad period framing."
+        },
+        {
+          "sourceId": "nikh-samhan-overview",
+          "sourceTitle": "국사편찬위원회 삼한·고대사 개설 자료",
+          "sourceProvider": "National Institute of Korean History",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level ancient-history overview materials approved in CR-92C-2.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Official institutional source / Supporting reference",
+          "sourceApprovalLevel": "approved-primary",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used to keep the pilot row inside the approved source set."
+        }
+      ],
+      "relatedBiblicalPeriodIds": [],
+      "relatedEventIds": [],
+      "relatedBookIds": [],
+      "relatedPlaceIds": []
+    },
+    {
+      "id": "korean-three-kingdoms-formation-reference",
+      "region": "korea",
+      "timelinePeriodId": "reference-post-biblical",
+      "sectionId": "korean-history-pilot-post-biblical",
+      "displayOrder": 50,
+      "accordionGroup": "korean-history-pilot",
+      "title": {
+        "ko": "한국 삼국 형성기 배경 참조",
+        "en": "Korean Three Kingdoms Formation Background Reference"
+      },
+      "dateLabel": {
+        "ko": "삼국 형성기 배경",
+        "en": "Three Kingdoms formation background"
+      },
+      "dateBasisLabel": {
+        "ko": "대략적 시대 / 사료 기준 / 참조용",
+        "en": "Approximate period / Source-attested period / Reference only"
+      },
+      "confidenceLabel": {
+        "ko": "보통 확신 / 성경 정경 이후 배경",
+        "en": "Moderate confidence / Post-canonical background"
+      },
+      "referenceTypeLabel": {
+        "ko": "보조 참조 / 참조용 / 성경 사건 아님",
+        "en": "Supporting reference / Reference only / Not a biblical event"
+      },
+      "sourceBasisLabel": {
+        "ko": "공식 기관 자료 / 현대 학계 해석 / 보조 참조",
+        "en": "Official institutional source / Modern scholarly interpretation / Supporting reference"
+      },
+      "sourceApprovalLevel": "approved-supporting",
+      "isSupportingReference": true,
+      "notBasisForBiblicalInterpretation": true,
+      "scriptureInterpretationUse": {
+        "ko": "보조 참조 전용 / 성경 해석 근거 아님",
+        "en": "Supporting reference only / Not a basis for biblical interpretation"
+      },
+      "cautionNote": {
+        "ko": "이 row는 성경 정경 사건과 직접 대응하지 않는 후대 보조 참조이며 성경 해석 근거 아님. 한국사 자체를 성경 연대 증명에 사용하지 않는다.",
+        "en": "This row is a later supporting reference and not a basis for biblical interpretation. It does not directly correspond to biblical-canon events and must not be used to prove biblical chronology."
+      },
+      "note": {
+        "ko": "삼국 형성기는 성경 정경 사건 바깥의 후대 한국사 배경으로만 다루며, 보조 참조 레이어에 한정한다.",
+        "en": "The formation of the Three Kingdoms is treated only as later Korean historical background outside biblical-canon event authority and is confined to the supporting-reference layer."
+      },
+      "sourceCitations": [
+        {
+          "sourceId": "nmk-three-kingdoms-context",
+          "sourceTitle": "국립중앙박물관 삼국 형성기 문화 맥락 자료",
+          "sourceProvider": "National Museum of Korea",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level museum context materials approved as supporting sources in CR-92C-2.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Supporting institutional context",
+          "sourceApprovalLevel": "approved-supporting",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used only for broad post-canonical cultural context."
+        },
+        {
+          "sourceId": "khs-heritage-context",
+          "sourceTitle": "국가유산청 계열 고대 한국 문화유산 개설 자료",
+          "sourceProvider": "Korea Heritage Service",
+          "sourceUrl": null,
+          "bibliographicReference": "Provider-level heritage overview materials approved as supporting sources in CR-92C-2.",
+          "sourceLicenseLabel": "Provider terms review required; paraphrase only",
+          "sourceAccessDate": "2026-06-25",
+          "sourceBasisLabel": "Supporting institutional context",
+          "sourceApprovalLevel": "approved-supporting",
+          "quotationPolicy": "No copied prose; citation metadata and paraphrased summary only.",
+          "note": "Used to keep this row within the approved supporting-source boundary."
+        }
+      ],
+      "relatedBiblicalPeriodIds": [],
+      "relatedEventIds": [],
+      "relatedBookIds": [],
+      "relatedPlaceIds": []
+    }
+  ]
+}

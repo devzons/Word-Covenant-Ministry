@@ -10,7 +10,8 @@ Current status:
 - No approved import files
 - Canonical 66-book skeleton package now exists in `books.66-canonical-skeleton.json`
 - Core biblical event skeleton package now exists in `events.core-biblical-skeleton.json`
-- No world-history or Korean-history content rows yet
+- No world-history content rows yet
+- Korean-history pilot supporting-reference rows now exist in `references.korean-pilot.json`
 
 Rules:
 
@@ -31,6 +32,7 @@ Rules:
 - A minimal read-only verifier CLI now exists at `scripts/timeline/verify-timeline-package.mjs`.
 - A standard wrapper command now exists at `scripts/timeline/verify-timeline-packages.mjs`.
 - The verifier currently covers JSON/package checks, 66-book canonical validation, cross-link resolution, and package guardrails.
+- `references.korean-pilot.json` now provides a manual `5`-row Korean-history pilot package with supporting-only labels, required citation metadata, no copied prose, no frontend integration, and no exact biblical synchronization.
 - The wrapper verifies canonical books, core events, Kings / Kingdoms skeleton, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output in one run.
 - Center-column package display must support top-down chronological accordion sections.
 - Scripture anchors are primary.

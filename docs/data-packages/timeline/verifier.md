@@ -60,6 +60,12 @@ Current wrapper coverage:
 - `fixtures/warnings` pass with `errorCount === 0` and `warningCount >= 1`
 - JSON smoke parse for `events.core-biblical-skeleton.json`
 
+Current Korean-history pilot note:
+
+- `references.korean-pilot.json` is a manually curated supporting-reference pilot package
+- current generic verifier rules already apply to it for JSON syntax, envelope fields, duplicate IDs, supporting-reference authority guardrails, and recursive no-Bible-text / no-coordinate checks
+- the standard wrapper command does not yet list this pilot file explicitly, so run the single-file verifier directly when validating Korean-history pilot changes
+
 Kings / Kingdoms fixture expectations:
 
 - `timeline.kings-kingdoms` fixtures use the implemented verifier envelope shape with `items`
