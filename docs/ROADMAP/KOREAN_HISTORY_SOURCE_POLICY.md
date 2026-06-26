@@ -13,6 +13,15 @@ Korean history references are supporting contextual aids, not grounds for interp
 This document does not approve real Korean-history timeline rows by itself.
 It defines the policy that must be explicitly approved before pilot rows are allowed.
 
+CR-92C-1 status boundary:
+
+- source-policy baseline may be approved at this stage
+- citation policy may be approved at this stage
+- source-basis policy may be approved at this stage
+- row-safe metadata policy may be approved at this stage
+- actual approved source set remains a separate step
+- pilot rows remain blocked until that separate source-set approval is completed
+
 ## 2. Authority Position
 
 Authority order:
@@ -114,6 +123,19 @@ Allowed approval levels:
 - `citation-only`
   - may be cited in roadmap or review documentation, but not yet used as a package-data source
 
+Status meaning:
+
+- `approved-primary`
+  - allowed as the main row basis after explicit source-set approval
+- `approved-supporting`
+  - allowed as secondary confirmation after explicit source-set approval
+- `review-required`
+  - identified but not safe for package-row use yet
+- `rejected`
+  - not allowed for package-row use
+- `citation-only`
+  - documentation-visible only, not package-row eligible
+
 Policy:
 
 - pilot rows should use `approved-primary` or `approved-supporting` sources only
@@ -150,6 +172,7 @@ Rules:
 - no row may be approved without a traceable source title and provider
 - citation metadata should identify the source basis, not reproduce protected prose
 - access-date tracking is required for online institutional sources
+- citation metadata approval does not, by itself, approve any actual Korean-history source set
 
 ## 6. Row-Level Source Basis Labels
 
@@ -184,6 +207,7 @@ Policy:
 - every Korean-history row must include a source-basis label
 - every Korean-history row must include a supporting-only / non-interpretive label
 - debated or low-confidence material must not appear without caution labeling
+- no row may proceed while `sourceBasisLabel` policy is defined but the actual source set remains unapproved
 
 ## 7. Chronology Label Policy
 
@@ -218,6 +242,79 @@ Korean equivalents:
 Rules:
 
 - 단군 / 고조선 관련 연대는 반드시 `전통 연대`, `논의 중`, `참조용` 같은 caution labels가 필요하다
+- exact-looking BC/AD chronology must not appear without explicit date-basis and confidence labeling
+- chronology-label approval does not authorize pilot rows without source-set approval
+
+## 8. Row-Safe Metadata Policy
+
+Future Korean-history rows must remain row-safe and package-safe.
+
+Required row-safe metadata policy:
+
+- short factual summary only
+- no copied source prose
+- no Bible text
+- no coordinates
+- no map provider
+- no geocoding
+- no exact biblical event synchronization
+- supporting-only labels required
+- non-interpretive labels required
+- caution metadata required for debated chronology
+
+Minimum row-safe metadata shape for future pilot rows:
+
+- `id`
+- `title.ko`
+- `title.en`
+- `referenceTypeLabel`
+- `sourceBasisLabel`
+- `sourceApprovalLevel`
+- `dateLabel`
+- `dateBasisLabel`
+- `confidenceLabel`
+- `cautionNote`
+- `isSupportingReference`
+- `notBasisForBiblicalInterpretation`
+
+This row-safe metadata policy may be approved before any source set is approved.
+That approval still does not unblock pilot-row creation by itself.
+
+## 9. Pilot Row Eligibility Checklist
+
+Before any pilot row may be added, all of the following must be true:
+
+1. source policy approved
+2. citation policy approved
+3. source-basis policy approved
+4. row-safe metadata policy approved
+5. chronology label policy approved
+6. actual approved source set documented
+7. supporting-only label required
+8. not-a-basis-for-biblical-interpretation label required
+9. no Bible text
+10. no coordinates / map provider / geocoding
+
+Eligibility result for CR-92C-1 alone:
+
+- source policy approved
+- citation policy approved
+- source-basis policy approved
+- row-safe metadata policy approved
+- actual source set pending
+- pilot rows still blocked
+
+## 10. Current CR-92C-1 Conclusion
+
+Current conclusion at the CR-92C-1 stage:
+
+- Source policy approved
+- Citation and source-basis policy approved
+- Row-safe metadata policy approved
+- Actual Korean-history source set pending
+- CR-92C pilot rows still blocked
+
+This document alone must not be read as pilot-row approval.
 - exact BC/AD-style display requires source basis and caution metadata
 - no exact-looking date may appear without `dateBasisLabel` and `confidenceLabel`
 - chronology must remain subordinate to Scripture anchors and biblical sequence
