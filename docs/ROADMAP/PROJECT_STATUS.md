@@ -108,6 +108,8 @@ CR-91D-2 Schematic Highlight Data Contract / UI State Design is now documented i
 CR-91D-3 Events / Books / Kings Highlight Implementation is now complete through available validation. The Timeline Workspace now derives schematic highlight state from the existing Context Inspector selection and current package metadata for the package-backed Events, Books / Psalms, and Kings / Kingdoms previews. Selected rows remain primary, explicit metadata relations now receive softer related or caution emphasis, current Books and Kings accordion sections can reflect section-level highlight state, and the right panel continues to explain the metadata-only basis without rendering Bible text or introducing coordinates. No new highlight query parameter was added; the existing `view`, `inspectType`, and `inspectId` deep-link baseline remains the source of truth. No API, DB, backend, schema, verifier, or data-package row change was required. Places / Schematic Map highlight behavior remains deferred to CR-91D-4.
 
 CR-91D-5 Interaction QA and Docs Sync is now complete through available validation. `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_QA.md` now records the checked Events, Books / Psalms, and Kings / Kingdoms highlight behavior, invalid-selection fallback expectations, regression review, accessibility-focused code review, the current route-smoke limitation for local `:3030` access, and the code-path review result for the earlier React `useEffect` dependency-array-size warning risk. No required frontend fixes were identified in this QA pass. The schematic highlight flow remains metadata-only, adds no Bible text, no coordinates, no map-provider state, no geocoding, no exact chronology inference, and no API, DB, backend, schema, verifier, or data-package row change.
+
+CR-91D-4 Places / Schematic View Placeholder Highlight is now complete through available validation. The Places / Schematic Map view now includes a schematic-only placeholder highlight surface that summarizes the current Context Inspector selection and existing metadata without introducing real-map behavior. The new surface makes the no-coordinate, no-map-provider, no-geocoding, and no-Bible-text guardrails explicit, keeps the existing preview rows and metadata-only right panel intact, and leaves any future Places package integration deferred. No API, DB, backend, schema, verifier, or data-package row change was required.
 ```
 
 Completed phase:
@@ -119,13 +121,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Use the completed CR-91D-3 and CR-91D-5 highlight baseline as the stable metadata-only foundation for the next approved Timeline schematic follow-on.
+Use the completed CR-91D schematic baseline, including the new Places placeholder surface, as the stable metadata-only foundation for the next approved Timeline schematic follow-on.
 ```
 
 Next task:
 
 ```txt
-Proceed to CR-91D-4 Places / Schematic View Placeholder Highlight, then return to the broader Timeline content expansion priorities.
+Return to the broader Timeline content expansion priorities, or run follow-up highlight QA if the Places placeholder surface needs additional validation.
 ```
 
 Blocked items:

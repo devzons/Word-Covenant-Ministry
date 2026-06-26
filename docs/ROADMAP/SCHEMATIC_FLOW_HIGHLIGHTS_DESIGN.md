@@ -55,6 +55,14 @@ Current QA result:
 - the current Events, Books / Psalms, and Kings / Kingdoms highlight flow passed static validation and explicit code-path review
 - live route smoke remained unavailable from this environment
 
+`CR-91D-4` now adds a schematic-only Places / Schematic Map placeholder surface without introducing a real map, coordinates, a map provider, or geocoding.
+
+Implemented in this step:
+
+- Places / Schematic Map now shows a compact highlight-summary surface derived from the current Context Inspector selection and existing metadata only
+- the placeholder explicitly states that no coordinates, no map provider, no geocoding, and no Bible text are used
+- Places package integration remains deferred while the current schematic-only center column stays preview-based
+
 ## Scope
 
 Included in `CR-91D` design scope:

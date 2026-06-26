@@ -878,9 +878,12 @@ export function TimelinePageShell({
 
               {activeView === "places" ? (
                 <PlacesSchematicMapPreviewPanel
+                  bookContextById={bookContextById}
+                  highlightState={timelineHighlightState}
                   locale={activeLocale}
                   onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "place" })}
                   searchTerm={filters.searchTerm}
+                  selection={inspectorSelection}
                   selectedRowId={inspectorSelection?.type === "place" ? inspectorSelection.id : ""}
                 />
               ) : null}
@@ -1228,10 +1231,22 @@ function EventsPreviewPanel({
 }
 
 type PlacesSchematicMapPreviewPanelProps = {
+  bookContextById: Map<string, TimelineBookContextRow>;
+  highlightState: TimelineHighlightState;
   locale: TimelineLocale;
   onSelectRow: (rowId: string) => void;
   searchTerm: string;
+  selection: TimelineInspectorSelection;
   selectedRowId: string;
+};
+
+type PlacesSchematicHighlightSummary = {
+  cautionCount: number;
+  highlightedBookCount: number;
+  highlightedItemCount: number;
+  highlightedSectionCount: number;
+  selectedContextLabel: string;
+  selectedContextTypeLabel: string;
 };
 
 type SchematicFlowSection = {
@@ -1290,9 +1305,12 @@ const schematicFlowSections: SchematicFlowSection[] = [
 ];
 
 function PlacesSchematicMapPreviewPanel({
+  bookContextById,
+  highlightState,
   locale,
   onSelectRow,
   searchTerm,
+  selection,
   selectedRowId,
 }: PlacesSchematicMapPreviewPanelProps) {
   const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -1305,6 +1323,12 @@ function PlacesSchematicMapPreviewPanel({
       section,
     }))
     .filter(({ rows }) => rows.length > 0);
+  const summary = buildPlacesSchematicHighlightSummary({
+    bookContextById,
+    highlightState,
+    locale,
+    selection,
+  });
 
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4">
@@ -1322,6 +1346,68 @@ function PlacesSchematicMapPreviewPanel({
         <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
           {locale === "ko" ? "미리보기" : "Preview"}
         </span>
+      </div>
+
+      <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            {locale === "ko" ? "개념 highlight placeholder" : "Schematic highlight placeholder"}
+          </p>
+          <p className="text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "이 영역은 현재 Context Inspector 선택과 package metadata에서만 파생되는 개념 요약입니다. 실제 지도, 좌표, 지도 제공자, 지오코딩은 사용하지 않습니다."
+              : "This area is a schematic summary derived only from the current Context Inspector selection and package metadata. It does not use a real map, coordinates, a map provider, or geocoding."}
+          </p>
+          <p className="text-xs leading-5 text-zinc-500">
+            {locale === "ko"
+              ? "성경 본문은 저장하거나 표시하지 않으며, Places package integration은 아직 보류 상태입니다."
+              : "Bible text is not stored or rendered here, and Places package integration remains deferred."}
+          </p>
+        </div>
+
+        {summary ? (
+          <div className="mt-3 space-y-3 rounded-md border border-zinc-200 bg-white p-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex rounded-full border border-zinc-900 bg-zinc-950 px-2.5 py-1 text-[11px] font-semibold leading-none text-white">
+                {summary.selectedContextTypeLabel}
+              </span>
+              <span className="text-sm font-medium text-zinc-950">{summary.selectedContextLabel}</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                {locale === "ko"
+                  ? `연결 항목 ${summary.highlightedItemCount}`
+                  : `Linked items ${summary.highlightedItemCount}`}
+              </span>
+              <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                {locale === "ko"
+                  ? `연결 책 ${summary.highlightedBookCount}`
+                  : `Linked books ${summary.highlightedBookCount}`}
+              </span>
+              <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                {locale === "ko"
+                  ? `구간 ${summary.highlightedSectionCount}`
+                  : `Sections ${summary.highlightedSectionCount}`}
+              </span>
+              <span className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-700">
+                {locale === "ko"
+                  ? `주의 ${summary.cautionCount}`
+                  : `Cautions ${summary.cautionCount}`}
+              </span>
+            </div>
+            <p className="text-xs leading-5 text-zinc-500">
+              {locale === "ko"
+                ? "향후 Places highlight는 이 metadata-only 요약을 소비하는 방향으로 확장됩니다."
+                : "Future Places highlights will extend this metadata-only summary surface."}
+            </p>
+          </div>
+        ) : (
+          <div className="mt-3 rounded-md border border-zinc-200 bg-white p-3 text-sm leading-6 text-zinc-600">
+            {locale === "ko"
+              ? "아직 선택된 Context Inspector 항목이 없습니다. 사건, 책, 왕국, 또는 장소 항목을 선택하면 이 영역이 좌표 없이 개념 요약만 표시합니다."
+              : "There is no active Context Inspector selection yet. Select an event, book, kingdom, or place item and this surface will show a coordinate-free schematic summary only."}
+          </div>
+        )}
       </div>
 
       <div className="mt-4 rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-3">
@@ -1464,6 +1550,80 @@ function PlacesSchematicMapPreviewPanel({
       </div>
     </section>
   );
+}
+
+function buildPlacesSchematicHighlightSummary({
+  bookContextById,
+  highlightState,
+  locale,
+  selection,
+}: {
+  bookContextById: Map<string, TimelineBookContextRow>;
+  highlightState: TimelineHighlightState;
+  locale: TimelineLocale;
+  selection: TimelineInspectorSelection;
+}): PlacesSchematicHighlightSummary | null {
+  if (selection?.type === "place") {
+    const placeRow = timelineSchematicPlaceRows.find((row) => row.id === selection.id);
+
+    if (!placeRow) {
+      return null;
+    }
+
+    const relatedBookIds = new Set(
+      (placeRow.relatedBookContextIds ?? [])
+        .map((rowId) => bookContextById.get(rowId)?.bookId)
+        .filter((bookId): bookId is string => Boolean(bookId)),
+    );
+
+    return {
+      cautionCount: placeRow.cautionNote ? 1 : 0,
+      highlightedBookCount: relatedBookIds.size,
+      highlightedItemCount:
+        (placeRow.relatedEventIds?.length ?? 0) + (placeRow.relatedBookContextIds?.length ?? 0),
+      highlightedSectionCount: placeRow.conceptFlowGroup ? 1 : 0,
+      selectedContextLabel: getTimelineText(placeRow.title, locale),
+      selectedContextTypeLabel: locale === "ko" ? "선택된 장소" : "Selected place",
+    };
+  }
+
+  if (!highlightState.activeItem) {
+    return null;
+  }
+
+  return {
+    cautionCount: highlightState.cautionNotes.length,
+    highlightedBookCount: highlightState.highlightedBookIds.length,
+    highlightedItemCount: highlightState.highlightedItems.length,
+    highlightedSectionCount: highlightState.highlightedSections.length,
+    selectedContextLabel: highlightState.activeItem.id,
+    selectedContextTypeLabel: getPlacesSummaryTypeLabel(highlightState.activeItem.type, locale),
+  };
+}
+
+function getPlacesSummaryTypeLabel(
+  type: "event" | "book" | "kingdom",
+  locale: TimelineLocale,
+) {
+  if (locale === "ko") {
+    switch (type) {
+      case "event":
+        return "선택된 사건";
+      case "book":
+        return "선택된 책";
+      case "kingdom":
+        return "선택된 왕국";
+    }
+  }
+
+  switch (type) {
+    case "event":
+      return "Selected event";
+    case "book":
+      return "Selected book";
+    case "kingdom":
+      return "Selected kingdom";
+  }
 }
 
 function getSchematicFlowGroupLabel(
