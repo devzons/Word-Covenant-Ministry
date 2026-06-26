@@ -110,6 +110,8 @@ CR-91D-3 Events / Books / Kings Highlight Implementation is now complete through
 CR-91D-5 Interaction QA and Docs Sync is now complete through available validation. `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_QA.md` now records the checked Events, Books / Psalms, and Kings / Kingdoms highlight behavior, invalid-selection fallback expectations, regression review, accessibility-focused code review, the current route-smoke limitation for local `:3030` access, and the code-path review result for the earlier React `useEffect` dependency-array-size warning risk. No required frontend fixes were identified in this QA pass. The schematic highlight flow remains metadata-only, adds no Bible text, no coordinates, no map-provider state, no geocoding, no exact chronology inference, and no API, DB, backend, schema, verifier, or data-package row change.
 
 CR-91D-4 Places / Schematic View Placeholder Highlight is now complete through available validation. The Places / Schematic Map view now includes a schematic-only placeholder highlight surface that summarizes the current Context Inspector selection and existing metadata without introducing real-map behavior. The new surface makes the no-coordinate, no-map-provider, no-geocoding, and no-Bible-text guardrails explicit, keeps the existing preview rows and metadata-only right panel intact, and leaves any future Places package integration deferred. No API, DB, backend, schema, verifier, or data-package row change was required.
+
+CR-91D-6 Schematic Flow Highlights Final QA / Docs Sync is now complete through available validation. `docs/ROADMAP/SCHEMATIC_FLOW_HIGHLIGHTS_QA.md` now carries a final addendum covering Events, Books / Psalms, Kings / Kingdoms, and the new Places / Schematic Map placeholder surface, plus final regression review for deep links, stale-state fallback, accessibility-oriented code paths, route-smoke limitation, and the earlier React `useEffect` dependency-array-size warning risk. No required frontend fixes were identified in this final pass. The full CR-91D branch now remains metadata-only, adds no Bible text, no coordinates, no map-provider state, no geocoding, no exact chronology inference, and no API, DB, backend, schema, verifier, or data-package row change.
 ```
 
 Completed phase:
@@ -121,13 +123,13 @@ Scripture Foundation, Search Layer, Reader Layer, Reader UX Polish, Phase 5B Ori
 Active objective:
 
 ```txt
-Use the completed CR-91D schematic baseline, including the new Places placeholder surface, as the stable metadata-only foundation for the next approved Timeline schematic follow-on.
+Use the completed CR-91D schematic baseline as closed, validated Timeline UI infrastructure and continue from the broader approved content-expansion roadmap.
 ```
 
 Next task:
 
 ```txt
-Return to the broader Timeline content expansion priorities, or run follow-up highlight QA if the Places placeholder surface needs additional validation.
+Return to the broader Timeline content expansion priorities, starting with the currently documented post-CR-91D roadmap order.
 ```
 
 Blocked items:

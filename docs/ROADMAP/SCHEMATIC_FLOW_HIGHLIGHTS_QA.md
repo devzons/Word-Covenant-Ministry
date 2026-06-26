@@ -204,3 +204,123 @@ Result:
 - route smoke could not verify HTTP responses from the local `:3030` route
 - Places / Schematic Map highlight behavior remains deferred to `CR-91D-4`
 - cross-view relation state is derived for Books selections, but the visible emphasis remains intentionally strongest in the active view rather than introducing a new cross-view surface
+
+## Final QA Addendum
+
+### Date
+
+2026-06-26
+
+### Scope
+
+`CR-91D-6` closes the schematic-flow highlight branch with a final regression pass across:
+
+- Events highlight behavior
+- Books / Psalms highlight behavior
+- Kings / Kingdoms highlight behavior
+- Places / Schematic Map placeholder highlight behavior
+- Context Inspector deep-link regression
+- view-switching and stale-state regression
+- accessibility-focused code review
+- the earlier React `useEffect` dependency-array-size warning risk
+
+### Result
+
+Pass through available validation and explicit code-path inspection.
+
+No required frontend fixes were identified in this final pass.
+
+### Final View Review
+
+#### Events
+
+- selected event remains the primary highlight
+- same-section, same-accordion-group, and same-period relation behavior remains metadata-derived only
+- `relatedBookIds` still feed the highlighted book set
+- deep-link restore remains aligned with the active highlight state
+- Scripture anchors remain reference-only
+
+#### Books / Psalms
+
+- selected book row remains the primary highlight
+- canonical section highlight remains active
+- same-section book rows still receive related highlight
+- book-driven relation derivation toward Events and Kings remains based on explicit `bookId` metadata
+- canonical-section accordion restore remains aligned with deep-link state
+
+#### Kings / Kingdoms
+
+- selected row remains the primary highlight
+- same-section emphasis remains active
+- explicit metadata relations only are used for relation highlighting:
+  - `kingdomId`
+  - `predecessorId`
+  - `successorId`
+  - `relatedKingIds`
+  - `relatedTransitionIds`
+  - `relatedKingdomIds`
+  - `relatedPeriodIds`
+  - `previousStateId`
+  - `nextStateId`
+- chronology remains caution-labeled and review-gated rather than final
+
+#### Places / Schematic Map
+
+- actual query value remains `view=places`
+- the center column now shows a schematic-only placeholder summary surface
+- neutral fallback remains in place when there is no current selection
+- selected-context summary remains count-based only:
+  - linked items
+  - linked books
+  - sections
+  - cautions
+- no coordinates, map-provider state, geocoding, real map, markers, pins, or polylines were introduced
+- Places package integration remains explicitly deferred
+- Bible text remains unrendered and unstored
+
+### Deep-Link / Highlight Regression
+
+- existing URL policy remains unchanged:
+  - `/<locale>/timeline?view=<view>&inspectType=<type>&inspectId=<id>`
+- no new highlight query parameter was added
+- invalid or mismatched inspect state still falls back safely
+- stale right-panel or stale highlight state was not observed in the inspected code paths
+
+### Accessibility / UX Review
+
+- supported highlight flows still use keyboard-accessible controls for Events, Books, and Kings
+- accordion triggers still expose `aria-expanded` and `aria-controls`
+- the current deep-link focus path still uses stable ids
+- highlight meaning continues to be accompanied by labels, pills, and metadata rather than color alone
+- Places preview rows still use the existing `role="button"` plus keyboard-handler pattern rather than a native button; this remains unchanged in this pass and was not expanded into a new architecture issue
+
+### React useEffect Warning Check
+
+- no new `useEffect` was added for Places placeholder behavior
+- the existing deep-link `useEffect` still uses a fixed dependency-array shape
+- no conditional spread or render-dependent dependency count was introduced in this final pass
+
+### Route Smoke Status
+
+Attempted route smoke remained unavailable from this environment for:
+
+- `view=events`
+- `view=books`
+- `view=kingdoms`
+- `view=places`
+
+Both `wordcovenantministry.local:3030` and `127.0.0.1:3030` returned connection failures in this session.
+
+### Final Guardrails Confirmed
+
+- no Bible text rendering
+- no Bible API calls
+- no backend API calls
+- no coordinates
+- no map provider
+- no geocoding
+- no exact chronology inference
+- no data-package row changes
+- no verifier changes
+- no API, DB, backend, or schema changes
+- highlights remain metadata-derived UI affordances, not doctrinal interpretation
