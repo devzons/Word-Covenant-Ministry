@@ -32,7 +32,7 @@ Rules:
 - A minimal read-only verifier CLI now exists at `scripts/timeline/verify-timeline-package.mjs`.
 - A standard wrapper command now exists at `scripts/timeline/verify-timeline-packages.mjs`.
 - The verifier currently covers JSON/package checks, 66-book canonical validation, cross-link resolution, and package guardrails.
-- `references.korean-pilot.json` now provides a manual `5`-row Korean-history pilot package with supporting-only labels, required citation metadata, no copied prose, no frontend integration, and no exact biblical synchronization.
+- `references.korean-pilot.json` now provides a manual `5`-row Korean-history pilot package with supporting-only labels, required citation metadata, no copied prose, a collapsed Events-view preview-only frontend read, and no exact biblical synchronization.
 - The wrapper verifies canonical books, core events, Kings / Kingdoms skeleton, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output in one run.
 - Center-column package display must support top-down chronological accordion sections.
 - Scripture anchors are primary.

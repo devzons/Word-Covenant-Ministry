@@ -14,7 +14,9 @@ CR-91B-2 Context Inspector Cross-Linking is complete through available validatio
 
 CR-92B Korean History Reference Placeholder UI is complete through available validation. Events view period blocks now include a collapsed Korean history reference placeholder below Scripture event rows. No Korean history rows or chronology data were added. No source import, API, DB, schema, map, or chronology dataset work was added. Korean history remains supporting reference only, source and license review remain required before any real content rows, and Korean history is not a basis for biblical interpretation.
 
-CR-92C-0 Korean History Source Review Gate is documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`, `CR-92C-1 Korean History Source Review and Citation Policy` is documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md`, `CR-92C-2 Korean History Approved Source Set` is documented in `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md`, and `CR-92C Korean History Pilot Rows` is now complete as a narrow docs/data pilot. `docs/data-packages/timeline/references.korean-pilot.json` now contains `5` manually curated broad supporting-reference rows with approved source categories, required citation metadata, supporting-only labels, and caution-labeled chronology. Bulk import, copied prose, exact-looking chronology without basis labels, frontend runtime integration, and any elevation of Korean history above Scripture remain prohibited.
+CR-92C-0 Korean History Source Review Gate is documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`, `CR-92C-1 Korean History Source Review and Citation Policy` is documented in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md`, `CR-92C-2 Korean History Approved Source Set` is documented in `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md`, and `CR-92C Korean History Pilot Rows` is now complete as a narrow docs/data pilot. `docs/data-packages/timeline/references.korean-pilot.json` now contains `5` manually curated broad supporting-reference rows with approved source categories, required citation metadata, supporting-only labels, and caution-labeled chronology. Bulk import, copied prose, exact-looking chronology without basis labels, and any elevation of Korean history above Scripture remain prohibited.
+
+CR-92D Korean History Frontend Reference Preview Integration is complete through available validation. Events period blocks now load matching rows from `docs/data-packages/timeline/references.korean-pilot.json` into the existing collapsed Korean-history reference section through the Timeline route server loader path. Korean references remain supporting-only, visually secondary, outside event counts, outside search/filter results, outside the Scripture Evidence Panel, and outside any exact biblical-event synchronization. No new Korean rows, API, DB, backend, schema, import/export, coordinates, map-provider, or geocoding work were added.
 
 CR-93A Timeline Data Coverage Matrix is complete as a documentation-only audit. `docs/ROADMAP/TIMELINE_DATA_COVERAGE_MATRIX.md` now records current Timeline fixture counts, period-level coverage, view-level readiness, canonical book-context gaps, Psalm coverage, kingdom coverage, place coverage, and the current data-architecture risk around continued growth in `timelinePreviewData.ts`. No Timeline data rows, fixture rows, API, DB, schema, import, or world-history / Korean-history dataset work were added.
 
@@ -84,21 +86,22 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-92D Korean History Frontend Reference Preview Integration.
+1. CR-92D-2 Korean Reference Period Assignment Hardening.
 2. Keep the Korean-history layer limited to the current `5` pilot rows unless a new source-approval or expansion step is documented.
-3. CR-90Y-5 Genealogy Detail Refinement.
-4. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-5. Continue broader Timeline content expansion after the completed CR-91D final QA branch.
+3. CR-92E Korean Reference Inspector Policy Design.
+4. CR-90Y-5 Genealogy Detail Refinement.
+5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+6. Continue broader Timeline content expansion after the completed CR-91D final QA branch.
 7. CR-91 Place / Map Preview.
 8. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
-10. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
-11. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
-12. After explicit approval, implement seed migration tracking and release automation support.
-13. Later: Strong detail pages or dedicated Word Study pages.
-14. Later: advanced search.
-15. Later: morphology explorer.
-16. Later: Commentary Layer.
-17. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+9. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+10. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
+11. After explicit approval, implement seed migration tracking and release automation support.
+12. Later: Strong detail pages or dedicated Word Study pages.
+13. Later: advanced search.
+14. Later: morphology explorer.
+15. Later: Commentary Layer.
+16. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 

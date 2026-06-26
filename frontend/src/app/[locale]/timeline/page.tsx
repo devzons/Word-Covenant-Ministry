@@ -20,6 +20,10 @@ import {
   normalizeKingsKingdomsPackage,
   type KingsKingdomsPackage,
 } from "@/components/scripture/timeline/timelineKingsKingdomsPackage";
+import {
+  normalizeKoreanHistoryReferencesPackage,
+  type KoreanHistoryReferencePackage,
+} from "@/components/scripture/timeline/koreanHistoryReferences";
 
 type TimelinePageProps = {
   params: Promise<{
@@ -46,11 +50,15 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const canonicalBooksPackage = await loadCanonicalBooksPackage();
   const coreEventsPackage = await loadCoreBiblicalEventsPackage();
   const kingsKingdomsPackage = await loadKingsKingdomsPackage();
+  const koreanHistoryReferencePackage = await loadKoreanHistoryReferencesPackage();
   const canonicalBookRows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
   const canonicalBookStats = getCanonicalBookPreviewStats(canonicalBookRows);
   const coreEventRows = normalizeCoreBiblicalEventsPackage(coreEventsPackage);
   const coreEventStats = getCoreEventPreviewStats(coreEventRows);
   const kingsKingdomRows = normalizeKingsKingdomsPackage(kingsKingdomsPackage);
+  const koreanHistoryReferenceRows = normalizeKoreanHistoryReferencesPackage(
+    koreanHistoryReferencePackage,
+  );
   const kingsKingdomStats = getKingsKingdomsPreviewStats(kingsKingdomRows);
   const initialFilters = {
     bookId: parseFilterValue(query.book),
@@ -68,6 +76,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
         coreEventStats={coreEventStats}
         initialFilters={initialFilters}
         initialView={initialView}
+        koreanHistoryReferenceRows={koreanHistoryReferenceRows}
         kingsKingdomRows={kingsKingdomRows}
         kingsKingdomStats={kingsKingdomStats}
         key={[
@@ -151,4 +160,17 @@ async function loadKingsKingdomsPackage(): Promise<KingsKingdomsPackage> {
   );
   const raw = await readFile(packagePath, "utf8");
   return JSON.parse(raw) as KingsKingdomsPackage;
+}
+
+async function loadKoreanHistoryReferencesPackage(): Promise<KoreanHistoryReferencePackage> {
+  const packagePath = path.join(
+    process.cwd(),
+    "..",
+    "docs",
+    "data-packages",
+    "timeline",
+    "references.korean-pilot.json",
+  );
+  const raw = await readFile(packagePath, "utf8");
+  return JSON.parse(raw) as KoreanHistoryReferencePackage;
 }

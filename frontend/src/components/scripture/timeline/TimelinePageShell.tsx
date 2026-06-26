@@ -44,6 +44,7 @@ import {
   type TimelineHighlightState,
   type TimelineHighlightStrength,
 } from "./timelineHighlightState";
+import type { TimelineKoreanHistoryReferenceRow } from "./koreanHistoryReferences";
 import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
 import { TimelineViewTabs } from "./TimelineViewTabs";
 
@@ -60,6 +61,7 @@ type TimelinePageShellProps = {
   };
   initialFilters: TimelineFilterState;
   initialView: TimelineView;
+  koreanHistoryReferenceRows: TimelineKoreanHistoryReferenceRow[];
   kingsKingdomRows: TimelineKingsKingdomsPreviewRow[];
   kingsKingdomStats: {
     recordTypeCount: Record<string, number>;
@@ -190,6 +192,7 @@ export function TimelinePageShell({
   coreEventStats,
   initialFilters,
   initialView,
+  koreanHistoryReferenceRows,
   kingsKingdomRows,
   kingsKingdomStats,
   locale,
@@ -894,6 +897,7 @@ export function TimelinePageShell({
                     activePeriodId={filters.periodId}
                     events={visibleEvents}
                     highlightLookup={timelineHighlightLookup}
+                    koreanHistoryReferenceRows={koreanHistoryReferenceRows}
                     locale={activeLocale}
                     searchTerm={filters.searchTerm}
                     onSelect={(eventId) => selectInspectorItem({ id: eventId, type: "event" })}

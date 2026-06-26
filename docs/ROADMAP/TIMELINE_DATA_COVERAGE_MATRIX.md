@@ -41,7 +41,7 @@ Current exported preview collections observed in `timelinePreviewData.ts`:
 | Genealogy segments | `timelinePreviewData.ts` | 3 | Preview |
 | Genealogy comparison rows | `timelinePreviewData.ts` | 11 | Preview |
 | Schematic place rows | `timelinePreviewData.ts` | 20 | Preview |
-| Korean history rows | `docs/data-packages/timeline/references.korean-pilot.json` | 5 | Pilot package created; supporting-only; not frontend integrated |
+| Korean history rows | `docs/data-packages/timeline/references.korean-pilot.json` | 5 | Pilot package created; supporting-only; Events collapsed preview connected |
 
 Notes:
 
@@ -49,7 +49,7 @@ Notes:
 - `passionWeekTimeline.ts` is a compatibility export layer, not a second dataset.
 - `events.core-biblical-skeleton.json` adds a package-level Scripture-first event baseline and now feeds the frontend Events preview through the Timeline route server loader.
 - `books.66-canonical-skeleton.json` now feeds the frontend Books / Psalms preview through the Timeline route server loader.
-- Korean history currently exists as a collapsed placeholder UI in Events period groups plus a non-integrated `5`-row supporting-reference pilot package.
+- Korean history now exists as a collapsed Events-view supporting-reference preview backed by the `5`-row pilot package.
 
 ## 3. Coverage Status Legend
 
@@ -119,7 +119,7 @@ Coverage matrix:
 | Kings / Kingdoms | Comparison of rulers, kingdoms, prophets, empires | `timelineKingdomComparisonRows` plus `kings-kingdoms.skeleton.json` | Expanded frontend preview; skeleton package created; verifier fixtures created; verifier hardening complete; package-backed frontend preview connected; interaction QA completed; schematic highlight baseline connected; QA recorded | Strongest non-event supporting table; inspector cross-links exist; package design, skeleton baseline, fixture baseline, Kings-specific verifier checks, package-backed frontend preview, left section navigation, center accordion behavior, explicit relation highlighting, and caution-gated chronology emphasis are now in place | Full king sequence and prophet coverage remain incomplete; chronology remains intentionally cautious and metadata-only; live route smoke remained unavailable in this environment | Expand data depth cautiously while preserving the current metadata-only and review-gated chronology policy |
 | Genealogy | Matthew-oriented comparison rows | `timelineGenealogySegments`, `timelineGenealogyComparisonRows` | Preview | Clear Matthew 14 / 14 / 14 framing; explicit row linking exists | Luke genealogy and broader OT genealogies are absent | Define wider genealogy coverage model |
 | Places / Schematic Map | Concept-zone place reference without coordinates | `timelineSchematicPlaceRows` | Preview with schematic placeholder highlight; final QA recorded | Schematic concept-zone approach is clear; no coordinate overclaim; the center column now includes a schematic-only placeholder highlight summary derived from current selection and existing metadata; no coordinates, map provider, or geocoding are introduced; final QA addendum is recorded in `SCHEMATIC_FLOW_HIGHLIGHTS_QA.md` | Many biblical places missing; no gospel/Acts place spread; still no package-backed places dataset; placeholder remains summary-only rather than full relation rendering | Keep future highlights schematic-only and metadata-derived before expanding place coverage |
-| Korean History Reference placeholder | Supporting-only reference placeholder under event periods | `ScriptureTimelineList.tsx` placeholder UI | Placeholder | Authority boundary is explicit; default collapsed | No rows, no source review, no chronology, no links | Keep placeholder-only until source review is approved |
+| Korean History Reference placeholder | Supporting-only reference section under event periods | `references.korean-pilot.json` via `ScriptureTimelineList.tsx` | Pilot preview | Authority boundary is explicit; default collapsed; supporting-only pilot rows now render where period mapping exists | Not all pilot rows are assigned to biblical periods; no inspector integration; no search/filter participation | Harden period assignment before any wider Korean-reference expansion |
 | Scripture Evidence Panel / Context Inspector | Right-side contextual evidence and cross-linking | Existing preview collections via lookup maps | Expanded Preview | Can navigate among existing Events, Books / Psalms, Places, Kingdoms, and explicit Genealogy rows; v1 deep-link restore now supports Events, Books / Psalms, and Kings / Kingdoms through `view` plus `inspectType` / `inspectId` query state; QA is documented in `CONTEXT_INSPECTOR_DEEP_LINKS_QA.md`; CR-91D-3 derives schematic highlight state from the same selection baseline without adding new query params; Places now consume that baseline through a schematic-only placeholder summary surface; final CR-91D QA is documented | Quality still depends on sparse underlying data; Genealogy and Places do not yet support deep-link restore; live route smoke remained environment-limited; Places still lack a package-backed dataset and full relation rendering | Keep the no-coordinate / no-Bible-text guardrails while deferring real Places package work |
 
 ## 6. Canonical Book Context Coverage
@@ -225,6 +225,7 @@ Korean history:
 - `CR-92C-1` source and citation policy is documented in `KOREAN_HISTORY_SOURCE_POLICY.md`.
 - `CR-92C-2` approved pilot source set is documented in `KOREAN_HISTORY_APPROVED_SOURCE_SET.md`.
 - `references.korean-pilot.json` now contains `5` manually curated Korean history supporting-reference pilot rows.
+- Matching pilot rows now render in the Events view's collapsed Korean-history reference section where `relatedBiblicalPeriodIds` are assigned.
 - No chronology dataset, source import, or map layer has been added.
 - Approved pilot source categories are now documented for a manual `3-5` row pilot.
 - Source review remains required for any expansion beyond the approved pilot boundary.

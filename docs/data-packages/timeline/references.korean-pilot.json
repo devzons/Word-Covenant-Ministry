@@ -9,7 +9,8 @@
     "They are not biblical events and must not be used as a basis for biblical interpretation.",
     "No Bible text is stored here.",
     "No coordinates or map-provider data are stored here.",
-    "This file is not imported into the frontend yet."
+    "This file now feeds a collapsed supporting-reference preview in the Timeline Events view only.",
+    "These rows are not counted as biblical events and do not drive the Scripture Evidence Panel."
   ],
   "items": [
     {
@@ -86,7 +87,11 @@
           "note": "Used only for broad cultural-period context."
         }
       ],
-      "relatedBiblicalPeriodIds": [],
+      "relatedBiblicalPeriodIds": [
+        "primeval",
+        "patriarchs",
+        "exodus"
+      ],
       "relatedEventIds": [],
       "relatedBookIds": [],
       "relatedPlaceIds": []
@@ -165,7 +170,13 @@
           "note": "Used to keep the pilot row within approved broad-source categories."
         }
       ],
-      "relatedBiblicalPeriodIds": [],
+      "relatedBiblicalPeriodIds": [
+        "conquest",
+        "united-kingdom",
+        "divided-kingdom",
+        "exile",
+        "return"
+      ],
       "relatedEventIds": [],
       "relatedBookIds": [],
       "relatedPlaceIds": []
@@ -244,7 +255,10 @@
           "note": "Used only as a supporting contextual cross-check."
         }
       ],
-      "relatedBiblicalPeriodIds": [],
+      "relatedBiblicalPeriodIds": [
+        "gospel",
+        "acts"
+      ],
       "relatedEventIds": [],
       "relatedBookIds": [],
       "relatedPlaceIds": []
@@ -323,7 +337,10 @@
           "note": "Used to keep the pilot row inside the approved source set."
         }
       ],
-      "relatedBiblicalPeriodIds": [],
+      "relatedBiblicalPeriodIds": [
+        "gospel",
+        "acts"
+      ],
       "relatedEventIds": [],
       "relatedBookIds": [],
       "relatedPlaceIds": []
