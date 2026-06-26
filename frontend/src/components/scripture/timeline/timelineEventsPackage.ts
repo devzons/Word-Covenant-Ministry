@@ -6,8 +6,10 @@ export type CoreBiblicalEventsPackage = {
 
 type CoreBiblicalEventSkeletonRow = {
   id: string;
+  eventId: string;
   recordType: "event";
   title: TimelineText;
+  summary: TimelineText;
   sequence: number;
   timelinePeriodId: string;
   sectionId: string;
@@ -21,12 +23,16 @@ type CoreBiblicalEventSkeletonRow = {
     scope: string;
   }>;
   relatedBookIds: string[];
-  basisLabel: TimelineText;
-  confidenceLabel: TimelineText;
-  cautionNote: TimelineText;
-  relatedEventIds: string[];
   relatedPlaceIds: string[];
   relatedKingdomIds: string[];
+  relatedPeopleLabels: TimelineText[];
+  basisLabel: TimelineText;
+  confidenceLabel: TimelineText;
+  dateLabel: TimelineText;
+  dateBasisLabel: TimelineText;
+  dateConfidenceLabel: TimelineText;
+  cautionNote: TimelineText;
+  relatedEventIds: string[];
   reviewRequired: boolean;
   isSkeleton: true;
 };
@@ -50,10 +56,7 @@ function createReferenceAnchor(
 }
 
 function createEventSummary(row: CoreBiblicalEventSkeletonRow): TimelineText {
-  return {
-    ko: `핵심 사건 skeleton · ${row.periodLabel.ko}`,
-    en: `Core event skeleton · ${row.periodLabel.en}`,
-  };
+  return row.summary;
 }
 
 function createLocationNote(): TimelineText {
@@ -90,6 +93,9 @@ export function normalizeCoreBiblicalEventsPackage(
       basisLabel: row.basisLabel,
       cautionNote: row.cautionNote,
       confidenceLevel: row.confidenceLabel,
+      dateBasisLabel: row.dateBasisLabel,
+      dateConfidenceLabel: row.dateConfidenceLabel,
+      dateLabel: row.dateLabel,
       datingNote: createDatingNote(row),
       displayOrder: row.displayOrder,
       eventType: createEventType(),
@@ -98,8 +104,8 @@ export function normalizeCoreBiblicalEventsPackage(
       locationNote: createLocationNote(),
       periodId: row.timelinePeriodId,
       periodLabel: row.periodLabel,
-      placeIds: [],
-      people: [],
+      placeIds: row.relatedPlaceIds,
+      people: row.relatedPeopleLabels,
       primaryBookId: row.relatedBookIds[0] ?? row.scriptureAnchors[0]?.bookId ?? "genesis",
       reader: createReferenceReader(row.scriptureAnchors[0]?.bookId ?? "genesis"),
       relatedBookIds: row.relatedBookIds,

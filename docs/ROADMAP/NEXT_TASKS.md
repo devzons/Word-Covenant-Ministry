@@ -70,7 +70,7 @@ CR-93E-4 66-Book Validation is complete. The verifier now hardens canonical 66-b
 
 CR-93E-5 Cross-Link and No-Coordinate Guardrail Expansion is complete. The verifier now hardens cross-link target-type checks, rejects Bible-reference-looking IDs when used as package row IDs, fails ambiguous duplicate-target resolution, warns on self-links and missing target types, recursively scans nested objects and arrays for forbidden coordinate or map-provider fields, and tightens supporting-reference authority guardrails for Korean/world reference layers. Additional invalid and warning fixtures now cover these cases. No frontend code, runtime integration, API, DB, schema, import, or real biblical data expansion was added.
 
-CR-93C Core Biblical Event Skeleton is complete. `docs/data-packages/timeline/events.core-biblical-skeleton.json` now contains a minimal Scripture-reference-only event baseline with 34 core rows from Creation through Revelation. The package is read-only, verifier-checked, and now connected to the Timeline Events view through a preview-only route server loader. No Bible text, coordinates, map provider fields, Korean/world historical rows, API, DB, schema migration, or runtime import/export pipeline work were added.
+CR-93C Core Biblical Event Skeleton is complete. `docs/data-packages/timeline/events.core-biblical-skeleton.json` now contains a minimal Scripture-reference-only event baseline with 85 core rows from Creation through Revelation. The package is read-only, verifier-checked, and now connected to the Timeline Events view through a preview-only route server loader. No Bible text, coordinates, map provider fields, Korean/world historical rows, API, DB, schema migration, or runtime import/export pipeline work were added.
 
 CR-93E-6 Verifier CI / Command Wiring is complete. `scripts/timeline/verify-timeline-packages.mjs` now provides a single local wrapper command that checks verifier syntax, the canonical books package, the core events package, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output. No root `package.json`, GitHub Actions workflow, frontend code, runtime integration, API, DB, schema migration, or import behavior was added. Repository CI wiring remains deferred because there is no existing `.github/workflows/` convention in this repository.
 
@@ -86,12 +86,12 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-92D-2 Korean Reference Period Assignment Hardening.
-2. Keep the Korean-history layer limited to the current `5` pilot rows unless a new source-approval or expansion step is documented.
-3. CR-92E Korean Reference Inspector Policy Design.
-4. CR-90Y-5 Genealogy Detail Refinement.
-5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-6. Continue broader Timeline content expansion after the completed CR-91D final QA branch.
+1. CR-93C-3 Core Event Frontend QA.
+2. CR-93D-2 66-Book Frontend Preview Integration follow-up only if new cross-package QA exposes regressions.
+3. CR-92D-2 Korean Reference Period Assignment Hardening.
+4. CR-92E Korean Reference Inspector Policy Design.
+5. CR-90Y-5 Genealogy Detail Refinement.
+6. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
 7. CR-91 Place / Map Preview.
 8. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
 9. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.

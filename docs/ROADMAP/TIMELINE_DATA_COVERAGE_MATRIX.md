@@ -29,11 +29,11 @@ Current exported preview collections observed in `timelinePreviewData.ts`:
 
 | Data Type | Current Source | Approx Row Count | Status |
 | --- | --- | ---: | --- |
-| Timeline periods | `timelinePreviewData.ts` | 10 | Preview |
-| Timeline books lookup | `timelinePreviewData.ts` | 30 | Preview |
+| Timeline periods | `timelinePreviewData.ts` | 12 | Preview |
+| Timeline books lookup | `timelinePreviewData.ts` | 44 | Preview |
 | Timeline places lookup | `timelinePreviewData.ts` | 36 | Preview |
 | Timeline events | `timelinePreviewData.ts` | 65 | Expanded Preview |
-| Core biblical event skeleton package | `docs/data-packages/timeline/events.core-biblical-skeleton.json` | 34 | Skeleton package created; frontend preview connected |
+| Core biblical event skeleton package | `docs/data-packages/timeline/events.core-biblical-skeleton.json` | 85 | Expanded core skeleton package; frontend preview connected |
 | Books / Psalms context rows | `timelinePreviewData.ts` | 12 | Expanded Preview |
 | 66-book context skeleton package | `docs/data-packages/timeline/books.66-canonical-skeleton.json` | 66 | Skeleton package created |
 | Kings / Kingdoms comparison rows | `timelinePreviewData.ts` | 21 | Expanded Preview |
@@ -79,16 +79,18 @@ Confidence / basis labels currently visible or implied in the preview model:
 
 Current event-row distribution by implemented Timeline period:
 
-- `primeval`: 8 events
-- `patriarchs`: 10 events
-- `exodus`: 11 events
-- `conquest`: 10 events
+- `primeval`: 5 events
+- `patriarchs`: 8 events
+- `exodus`: 10 events
+- `conquest`: 9 events
 - `united-kingdom`: 5 events
-- `divided-kingdom`: 4 events
-- `exile`: 1 event
-- `return`: 2 events
-- `gospel`: 10 events
-- `acts`: 4 events
+- `divided-kingdom`: 10 events
+- `exile`: 4 events
+- `return`: 7 events
+- `gospel`: 13 events
+- `acts`: 10 events
+- `epistles`: 2 events
+- `revelation`: 2 events
 
 Coverage matrix:
 
@@ -114,7 +116,7 @@ Coverage matrix:
 | View | Current Purpose | Data Source | Current Coverage | Strengths | Gaps | Next Data Work |
 | --- | --- | --- | --- | --- | --- | --- |
 | Overview | High-level Scripture-first flow summary | `timelinePreviewData.ts` via `TimelinePageShell.tsx` | Preview | Quick period summary using current event set | No standalone overview dataset; depends on event coverage quality | Improve underlying event skeleton first |
-| Events | Primary narrative timeline grouped by period | `events.core-biblical-skeleton.json` via `TimelinePageShell.tsx` route loader | Expanded Preview in frontend; core event package preview connected; schematic highlight baseline connected; QA recorded | Period grouping, event selection, Scripture Evidence Panel integration, a 34-row package-backed event baseline, same-period/section highlight derived from current selection, and documented fallback behavior for invalid selection state | Many periods still need finer curation, denser related links, and richer supporting metadata | Expand event-package depth while keeping the current preview metadata-only |
+| Events | Primary narrative timeline grouped by period | `events.core-biblical-skeleton.json` via `TimelinePageShell.tsx` route loader | Expanded Preview in frontend; 85-row core event package preview connected; schematic highlight baseline connected; QA recorded | Period grouping, event selection, Scripture Evidence Panel integration, a package-backed Genesis-to-Revelation baseline, same-period/section highlight derived from current selection, and documented fallback behavior for invalid selection state | Detailed sub-event coverage, denser relation metadata, and deeper contextual labels still remain future work | Continue package hardening and QA while keeping the preview metadata-only |
 | Books / Psalms | Book background and Psalm context | `timelineBookContextRows` plus `books.66-canonical-skeleton.json` | Expanded Preview in frontend; 66-book package preview connected; schematic highlight baseline connected; QA recorded | Clear book-context cards; package-level 66-book skeleton now renders as a metadata-only preview; left canonical section guide now targets stable center sections; center canonical sections now behave as accordion panels with collapsed-by-default first load and open/focus wiring from the navigator; selected-book state can now drive section-level schematic highlight without new query params; current QA confirms highlight and accordion restore do not conflict in the inspected code paths | Psalms and book intros remain minimal; package-backed preview is still metadata-only and not a full contextual database | Keep runtime fixture stable while planning deeper package integration |
 | Kings / Kingdoms | Comparison of rulers, kingdoms, prophets, empires | `timelineKingdomComparisonRows` plus `kings-kingdoms.skeleton.json` | Expanded frontend preview; skeleton package created; verifier fixtures created; verifier hardening complete; package-backed frontend preview connected; interaction QA completed; schematic highlight baseline connected; QA recorded | Strongest non-event supporting table; inspector cross-links exist; package design, skeleton baseline, fixture baseline, Kings-specific verifier checks, package-backed frontend preview, left section navigation, center accordion behavior, explicit relation highlighting, and caution-gated chronology emphasis are now in place | Full king sequence and prophet coverage remain incomplete; chronology remains intentionally cautious and metadata-only; live route smoke remained unavailable in this environment | Expand data depth cautiously while preserving the current metadata-only and review-gated chronology policy |
 | Genealogy | Matthew-oriented comparison rows | `timelineGenealogySegments`, `timelineGenealogyComparisonRows` | Preview | Clear Matthew 14 / 14 / 14 framing; explicit row linking exists | Luke genealogy and broader OT genealogies are absent | Define wider genealogy coverage model |

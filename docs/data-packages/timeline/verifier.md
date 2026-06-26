@@ -38,6 +38,7 @@ Current supported checks:
 - duplicate row IDs
 - center-column required fields
 - cross-link field presence, ID resolution, target-type validation, Bible-reference-as-id rejection, and duplicate-target ambiguity detection
+- core biblical event skeleton validation
 - canonical 66-book skeleton validation
 - exact 66-row count for canonical-skeleton book packages
 - non-empty unique `bookId` values for canonical-skeleton book packages
@@ -53,12 +54,20 @@ Current wrapper coverage:
 
 - verifier CLI syntax check
 - `books.66-canonical-skeleton.json` pass
-- `events.core-biblical-skeleton.json` pass
+- `events.core-biblical-skeleton.json` pass with 85 rows and unique `eventId` values
 - `kings-kingdoms.skeleton.json` pass
 - `fixtures/valid` pass
 - `fixtures/invalid` expected fail with exit code `1`
 - `fixtures/warnings` pass with `errorCount === 0` and `warningCount >= 1`
 - JSON smoke parse for `events.core-biblical-skeleton.json`
+
+Current core-events note:
+
+- `events.core-biblical-skeleton.json` is now a frontend-connected package-backed Events baseline
+- the verifier now expects exactly `85` rows for this package
+- the verifier now expects a non-empty string `eventId` on every row and `85` unique `eventId` values
+- required row fields now include `summary`, `dateLabel`, `dateBasisLabel`, `dateConfidenceLabel`, and `relatedPeopleLabels`
+- epistles and Revelation rows remain caution-labeled witness or vision context rather than fixed external chronology
 
 Current Korean-history pilot note:
 

@@ -157,6 +157,11 @@ const ISSUE = {
   WARNING_CHRONOLOGY_REVIEW: "TLN_WARNING_CHRONOLOGY_REVIEW",
   WARNING_OPTIONAL_DISPLAY_LABEL: "TLN_WARNING_OPTIONAL_DISPLAY_LABEL",
   WARNING_LOW_CONFIDENCE_CROSS_LINK: "TLN_CROSS_LINK_LOW_CONFIDENCE_REVIEW",
+  EVENTS_COUNT_MISMATCH: "TLN_EVENTS_COUNT_MISMATCH",
+  EVENTS_EVENT_ID_MISSING: "TLN_EVENTS_EVENT_ID_MISSING",
+  EVENTS_EVENT_ID_EMPTY: "TLN_EVENTS_EVENT_ID_EMPTY",
+  EVENTS_EVENT_ID_DUPLICATE: "TLN_EVENTS_EVENT_ID_DUPLICATE",
+  EVENTS_FIELD_MISSING: "TLN_EVENTS_FIELD_MISSING",
   BOOKS_COUNT_MISMATCH: "TLN_BOOKS_COUNT_MISMATCH",
   BOOKS_BOOK_ID_MISSING: "TLN_BOOKS_BOOK_ID_MISSING",
   BOOKS_BOOK_ID_EMPTY: "TLN_BOOKS_BOOK_ID_EMPTY",
@@ -367,6 +372,10 @@ function validatePackage(filePath, data, registry, issues) {
 
   if (isCanonicalBooksPackage(data, filePath)) {
     validateCanonicalBooks(filePath, data, items, issues);
+  }
+
+  if (isCoreBiblicalEventsPackage(data, filePath)) {
+    validateCoreBiblicalEvents(filePath, data, items, issues);
   }
 }
 
@@ -778,6 +787,74 @@ function validateCanonicalBookRow(filePath, item, rowLabel, issues) {
   }
 }
 
+function validateCoreBiblicalEvents(filePath, data, items, issues) {
+  const packageIdentifier = data.packageId ?? path.basename(filePath);
+
+  if (items.length !== 85) {
+    issues.push(makeIssue("error", ISSUE.EVENTS_COUNT_MISMATCH, filePath, null, `Core biblical events package must contain exactly 85 rows; expected 85 and found ${items.length}.`, {
+      packageId: packageIdentifier,
+      expected: 85,
+      actual: items.length,
+    }));
+  }
+
+  const eventIds = new Map();
+
+  for (const item of items) {
+    const rowLabel = item?.id ?? "unknown-event-row";
+
+    if (item?.eventId === undefined || item?.eventId === null) {
+      issues.push(makeIssue("error", ISSUE.EVENTS_EVENT_ID_MISSING, filePath, rowLabel, 'Core event row is missing "eventId".', { path: "eventId", recordId: rowLabel }));
+    } else if (typeof item.eventId !== "string" || item.eventId.trim().length === 0) {
+      issues.push(makeIssue("error", ISSUE.EVENTS_EVENT_ID_EMPTY, filePath, rowLabel, 'Core event row must use a non-empty string "eventId".', { path: "eventId", recordId: rowLabel }));
+    } else {
+      eventIds.set(item.eventId, (eventIds.get(item.eventId) ?? 0) + 1);
+    }
+
+    for (const field of [
+      "summary",
+      "dateLabel",
+      "dateBasisLabel",
+      "dateConfidenceLabel",
+      "relatedPeopleLabels",
+    ]) {
+      if (!hasNonEmptyValue(item?.[field])) {
+        issues.push(makeIssue("error", ISSUE.EVENTS_FIELD_MISSING, filePath, rowLabel, `Core event row is missing required field "${field}".`, {
+          path: field,
+          recordId: rowLabel,
+          eventId: item?.eventId,
+        }));
+      }
+    }
+
+    if (item?.recordType !== "event") {
+      issues.push(makeIssue("error", ISSUE.EVENTS_FIELD_MISSING, filePath, rowLabel, 'Core event row must set recordType to "event".', {
+        path: "recordType",
+        recordId: rowLabel,
+        eventId: item?.eventId,
+      }));
+    }
+
+    if (item?.isSkeleton !== true) {
+      issues.push(makeIssue("error", ISSUE.EVENTS_FIELD_MISSING, filePath, rowLabel, 'Core event row must set "isSkeleton" to true.', {
+        path: "isSkeleton",
+        recordId: rowLabel,
+        eventId: item?.eventId,
+      }));
+    }
+  }
+
+  for (const [eventId, count] of eventIds.entries()) {
+    if (count > 1) {
+      issues.push(makeIssue("error", ISSUE.EVENTS_EVENT_ID_DUPLICATE, filePath, eventId, `Duplicate core eventId "${eventId}" (${count} occurrences).`, {
+        path: "eventId",
+        eventId,
+        occurrences: count,
+      }));
+    }
+  }
+}
+
 function validateCanonicalBooks(filePath, data, items, issues) {
   const packageIdentifier = data.packageId ?? path.basename(filePath);
 
@@ -958,6 +1035,22 @@ function isCanonicalBooksPackage(data, filePath) {
     packageId === "timeline.books.66-canonical-skeleton" ||
     packageId === "timeline.books.66-canonical-fixture" ||
     status === "canonical-skeleton"
+  );
+}
+
+function isCoreBiblicalEventsPackage(data, filePath) {
+  if (data?.packageType !== "timeline.events") {
+    return false;
+  }
+
+  const basename = path.basename(filePath);
+  const packageId = typeof data?.packageId === "string" ? data.packageId : "";
+  const status = typeof data?.status === "string" ? data.status : "";
+
+  return (
+    basename === "events.core-biblical-skeleton.json" ||
+    packageId === "timeline.events.core-biblical-skeleton" ||
+    status === "core-biblical-skeleton"
   );
 }
 

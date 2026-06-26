@@ -46,6 +46,7 @@ Envelope rules:
 Current notable package artifacts:
 
 - `books.66-canonical-skeleton.json`
+- `events.core-biblical-skeleton.json`
 - `references.korean-pilot.json`
 - `*.sample.json` skeleton shape files
 
@@ -64,6 +65,42 @@ Current notable package artifacts:
 - `relatedBookIds`
 - `relatedPlaceIds`
 - `relatedKingdomIds`
+
+## Core biblical event skeleton package notes
+
+`events.core-biblical-skeleton.json` now serves as a frontend-connected package-backed Events baseline.
+
+Current row-level expectations for this package include:
+
+- `id`
+- `eventId`
+- `recordType: event`
+- `title`
+- `summary`
+- `timelinePeriodId`
+- `sectionId`
+- `displayOrder`
+- `accordionGroup`
+- `scriptureAnchors`
+- `basisLabel`
+- `confidenceLabel`
+- `dateLabel`
+- `dateBasisLabel`
+- `dateConfidenceLabel`
+- `cautionNote`
+- `relatedBookIds`
+- `relatedPlaceIds`
+- `relatedKingdomIds`
+- `relatedPeopleLabels`
+- `isSkeleton: true`
+
+Current verifier-targeted expectations for this package:
+
+- exactly `85` rows
+- exactly `85` unique `eventId` values
+- no Bible text fields
+- no coordinates or map-provider fields
+- epistles and Revelation rows must stay caution-labeled as witness/vision context, not fixed external chronology
 
 ## Accordion-first requirements
 

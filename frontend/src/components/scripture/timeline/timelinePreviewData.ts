@@ -221,8 +221,10 @@ export const timelinePeriods: TimelinePeriod[] = [
   },
   { id: "exile", order: 7, label: { en: "Exile", ko: "포로기" } },
   { id: "return", order: 8, label: { en: "Return", ko: "귀환" } },
-  { id: "gospel", order: 9, label: { en: "Gospel", ko: "복음서" } },
+  { id: "gospel", order: 9, label: { en: "Gospels", ko: "복음서" } },
   { id: "acts", order: 10, label: { en: "Acts / Early Church", ko: "사도행전 / 초기 교회" } },
+  { id: "epistles", order: 11, label: { en: "Epistles / Apostolic Witness", ko: "서신 / 사도적 증언" } },
+  { id: "revelation", order: 12, label: { en: "Revelation", ko: "요한계시록" } },
 ];
 
 export const timelineBooks: TimelineBook[] = [
@@ -233,6 +235,7 @@ export const timelineBooks: TimelineBook[] = [
   { id: "deuteronomy", label: { en: "Deuteronomy", ko: "신명기" } },
   { id: "joshua", label: { en: "Joshua", ko: "여호수아" } },
   { id: "judges", label: { en: "Judges", ko: "사사기" } },
+  { id: "ruth", label: { en: "Ruth", ko: "룻기" } },
   { id: "1-samuel", label: { en: "1 Samuel", ko: "사무엘상" } },
   { id: "2-samuel", label: { en: "2 Samuel", ko: "사무엘하" } },
   { id: "1-kings", label: { en: "1 Kings", ko: "열왕기상" } },
@@ -242,6 +245,7 @@ export const timelineBooks: TimelineBook[] = [
   { id: "esther", label: { en: "Esther", ko: "에스더" } },
   { id: "isaiah", label: { en: "Isaiah", ko: "이사야" } },
   { id: "jeremiah", label: { en: "Jeremiah", ko: "예레미야" } },
+  { id: "ezekiel", label: { en: "Ezekiel", ko: "에스겔" } },
   { id: "matthew", label: { en: "Matthew", ko: "마태복음" } },
   { id: "mark", label: { en: "Mark", ko: "마가복음" } },
   { id: "luke", label: { en: "Luke", ko: "누가복음" } },
@@ -251,6 +255,8 @@ export const timelineBooks: TimelineBook[] = [
   { id: "romans", label: { en: "Romans", ko: "로마서" } },
   { id: "1-corinthians", label: { en: "1 Corinthians", ko: "고린도전서" } },
   { id: "galatians", label: { en: "Galatians", ko: "갈라디아서" } },
+  { id: "james", label: { en: "James", ko: "야고보서" } },
+  { id: "jude", label: { en: "Jude", ko: "유다서" } },
   { id: "joel", label: { en: "Joel", ko: "요엘" } },
   { id: "ephesians", label: { en: "Ephesians", ko: "에베소서" } },
   { id: "philippians", label: { en: "Philippians", ko: "빌립보서" } },
