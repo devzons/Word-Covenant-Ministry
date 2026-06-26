@@ -282,14 +282,14 @@ Cautions:
 
 Current policy status after this step:
 
-- `gate-ready-for-user-approval`
+- policy baseline approved and in use for the current pilot source-set approval
 
 Meaning:
 
 - the policy draft exists
 - source categories, citation metadata, row-level source-basis labels, and chronology label policy are now defined
-- `CR-92C` is still not automatically open
-- explicit user or project approval of selected sources is still required before pilot rows begin
+- selected source categories are now approved separately in `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md`
+- any pilot rows must still remain manually curated, supporting-only, and within the approved pilot boundary
 
 ## 12. Non-goals
 

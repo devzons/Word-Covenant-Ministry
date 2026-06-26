@@ -203,7 +203,8 @@ Gate note:
 
 - `CR-92C` cannot safely begin until source review and source-basis approval are explicit.
 - `CR-92C-0` now exists as a readiness gate in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_REVIEW_GATE.md`.
-- Current gate result: blocked until an approved source set and citation policy are documented.
+- `CR-92C-1` now defines the source and citation policy.
+- `CR-92C-2` now documents an approved pilot source set for a narrow manual pilot.
 
 ### Phase CR-92A
 

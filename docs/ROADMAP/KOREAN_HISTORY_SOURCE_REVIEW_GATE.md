@@ -35,6 +35,7 @@ Current design and roadmap references also state:
 
 Primary source-policy references:
 
+- `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md`
 - `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md`
 - `docs/ROADMAP/KOREAN_HISTORY_REFERENCE_LAYER_DESIGN.md`
 - `docs/ROADMAP/TIMELINE_DATA_COVERAGE_MATRIX.md`
@@ -63,14 +64,15 @@ No document currently fixes:
 
 Current source approval status:
 
-- `gate-ready-for-user-approval`
+- `approved-for-pilot`
 
 Reason:
 
 - source review is explicitly required before real Korean history content rows
 - `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md` now defines source categories, citation metadata, source-basis labels, and chronology label policy
-- explicit user or project approval of selected sources still has not been recorded
-- no Korean history pilot rows are approved automatically by this policy draft
+- `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md` now records an approved pilot source set
+- approval remains limited to manually curated broad pilot rows only
+- bulk import and copied prose remain prohibited
 
 ## Current Policy Baseline
 
@@ -105,8 +107,9 @@ Pilot rows may proceed only when all of the following are true:
 
 Current result:
 
-- the policy-definition portion is now satisfied
-- explicit source selection and approval is still pending
+- the policy-definition portion is satisfied
+- approved source set is now documented for the pilot scope
+- pilot remains limited and manual
 
 ## Proposed Pilot Row Shape
 
@@ -156,7 +159,7 @@ Before pilot rows are approved, the project should document at least:
 Current finding:
 
 - these expectations are now defined in `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md`
-- explicit source selection and approval still remain pending
+- approved pilot source categories are now documented in `docs/ROADMAP/KOREAN_HISTORY_APPROVED_SOURCE_SET.md`
 
 ## Guardrail Checklist
 
@@ -177,28 +180,29 @@ Mandatory guardrails for future Korean history pilot rows:
 
 Decision:
 
-- the Korean-history source-policy gate is now ready for explicit user or project approval
-- `CR-92C` pilot rows still must not start automatically
+- the Korean-history source gate is now approved for a narrow pilot
+- `CR-92C` may proceed only for `3-5` manually curated broad supporting-reference rows
+- automated import remains out of scope
 
 Current readiness result:
 
-- source and citation policy is now documented
-- no approved source set has been explicitly selected yet
-- no row creation should proceed until explicit approval is recorded
+- source and citation policy is documented
+- approved source categories are documented
+- row creation may proceed only within the limited pilot boundary
 
 ## Recommended Next Step
 
 Recommended next step:
 
-1. Review and explicitly approve one or more Korean-history source categories and concrete sources from `docs/ROADMAP/KOREAN_HISTORY_SOURCE_POLICY.md`.
-2. Record that approval in roadmap status.
-3. Only then start `CR-92C Korean History Pilot Rows`.
+1. Start `CR-92C Korean History Pilot Rows`.
+2. Limit the first pass to `3-5` broad supporting-reference rows.
+3. Keep all rows source-labeled, caution-labeled, and non-interpretive.
 
 If a future task wants to unlock `CR-92C`, it should first document:
 
-- approved source list
-- source approval level per selected source
-- row-safe metadata policy
+- approved source list updates
+- source approval level changes
+- any expansion beyond the current pilot boundary
 - review-required handling for debated chronology
 
 ## Out Of Scope
