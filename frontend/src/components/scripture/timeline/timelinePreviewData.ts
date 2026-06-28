@@ -72,6 +72,8 @@ export type TimelineEvent = {
   reviewRequired?: boolean;
   basisLabel?: TimelineText;
   cautionNote?: TimelineText;
+  relatedEventIds?: string[];
+  relatedKingdomIds?: string[];
   periodLabel?: TimelineText;
   sectionId?: string;
   accordionGroup?: string;
@@ -132,6 +134,10 @@ export type TimelineBookContextRow = {
   dateLabel?: TimelineText;
   dateBasisLabel?: TimelineText;
   dateConfidenceLabel?: TimelineText;
+  basisLabel?: TimelineText;
+  confidenceLabel?: TimelineText;
+  relatedBookIds?: string[];
+  relatedKingdomIds?: string[];
   note: TimelineText;
   sourcePackage?: "preview-fixture" | "canonical-66-skeleton";
   scriptureReferencesOnly?: boolean;

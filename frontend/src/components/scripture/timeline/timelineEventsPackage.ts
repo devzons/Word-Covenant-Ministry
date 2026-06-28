@@ -109,6 +109,8 @@ export function normalizeCoreBiblicalEventsPackage(
       primaryBookId: row.relatedBookIds[0] ?? row.scriptureAnchors[0]?.bookId ?? "genesis",
       reader: createReferenceReader(row.scriptureAnchors[0]?.bookId ?? "genesis"),
       relatedBookIds: row.relatedBookIds,
+      relatedEventIds: row.relatedEventIds,
+      relatedKingdomIds: row.relatedKingdomIds,
       reviewRequired: row.reviewRequired,
       scriptureAnchors: row.scriptureAnchors.map(createReferenceAnchor),
       scriptureReferencesOnly: true,
