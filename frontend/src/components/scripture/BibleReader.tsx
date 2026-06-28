@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
+import { BibleReaderContextPanel } from "@/components/scripture/BibleReaderContextPanel";
 import { CrossReferencePanel } from "@/components/scripture/CrossReferencePanel";
 import { InterlinearVerse } from "@/components/scripture/InterlinearVerse";
 import { PassageInsightPanel } from "@/components/scripture/PassageInsightPanel";
@@ -17,6 +18,7 @@ import {
   type ScriptureResearchReferenceRange,
 } from "@/components/scripture/ScriptureResearchWorkspaceContext";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
+import type { TimelineBookContextRow } from "@/components/scripture/timeline/passionWeekTimeline";
 import { cn } from "@/lib/utils/cn";
 import type { BibleBookMetadata, BibleChapterResponse } from "@/types/bible";
 import type {
@@ -25,6 +27,7 @@ import type {
 } from "@/types/original-language";
 
 type BibleReaderProps = {
+  bookContext?: TimelineBookContextRow | null;
   bookMetadata: BibleBookMetadata;
   chapter: BibleChapterResponse;
   initialSearchQuery?: string;
@@ -123,6 +126,7 @@ const bibleReaderCopy = {
       interlinear: "Interlinear",
     },
     workspaceSections: {
+      context: "Context",
       search: "Search",
       insight: "Insight",
       "cross-reference": "Related Passages",
@@ -149,6 +153,7 @@ const bibleReaderCopy = {
       interlinear: "행간",
     },
     workspaceSections: {
+      context: "문맥",
       search: "검색",
       insight: "통찰",
       "cross-reference": "관련 구절",
@@ -157,6 +162,7 @@ const bibleReaderCopy = {
 };
 
 export function BibleReader({
+  bookContext = null,
   bookMetadata,
   chapter,
   initialSearchQuery = "",
@@ -462,6 +468,7 @@ export function BibleReader({
 
         <BibleReaderResearchPanel
           bookLabel={currentBook?.label[activeLocale] ?? bookMetadata.name}
+          bookContext={bookContext}
           initialSearchQuery={initialSearchQuery}
           selectedVerse={activeStudyVerse}
           studyPanelLabel={copy.studyPanel}
@@ -475,6 +482,7 @@ export function BibleReader({
 
 type BibleReaderResearchPanelProps = {
   bookLabel: string;
+  bookContext: TimelineBookContextRow | null;
   initialSearchQuery: string;
   selectedVerse: number | null;
   studyPanelLabel: string;
@@ -483,6 +491,7 @@ type BibleReaderResearchPanelProps = {
 
 function BibleReaderResearchPanel({
   bookLabel,
+  bookContext,
   initialSearchQuery,
   selectedVerse,
   studyPanelLabel,
@@ -541,6 +550,15 @@ function BibleReaderResearchPanel({
           locale={locale}
           mode={mode}
           translation={version}
+        />
+      ) : null}
+
+      {activeResearchSection === "context" ? (
+        <BibleReaderContextPanel
+          bookContext={bookContext}
+          chapter={chapter}
+          locale={locale}
+          selectedVerse={selectedVerse}
         />
       ) : null}
 

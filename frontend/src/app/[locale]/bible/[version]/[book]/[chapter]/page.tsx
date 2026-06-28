@@ -1,7 +1,15 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 import type { Metadata } from "next";
 
 import { SiteShell } from "@/components/layout/SiteShell";
 import { BibleReader } from "@/components/scripture/BibleReader";
+import {
+  normalizeCanonicalBooksPackage,
+  type CanonicalBooksPackage,
+} from "@/components/scripture/timeline/timelineBooksPackage";
+import type { TimelineBookContextRow } from "@/components/scripture/timeline/passionWeekTimeline";
 import { Container } from "@/components/ui/Container";
 import { getBibleBookMetadata, getBibleChapter } from "@/lib/api/bible";
 import { createMetadata } from "@/lib/seo/metadata";
@@ -42,6 +50,7 @@ export default async function BibleReaderPage({
 
   let bibleChapter: BibleChapterResponse | null = null;
   let bookMetadata: BibleBookMetadata | null = null;
+  let bookContext: TimelineBookContextRow | null = null;
   let errorMessage = "";
   let isChapterOutOfRange = false;
 
@@ -52,6 +61,7 @@ export default async function BibleReaderPage({
       isChapterOutOfRange = true;
     } else {
       bibleChapter = await getBibleChapter(version, book, chapterNumber);
+      bookContext = await loadBookContext(book);
     }
   } catch {
     errorMessage = readerPageCopy[activeLocale].chapterLoadError;
@@ -69,6 +79,7 @@ export default async function BibleReaderPage({
     <SiteShell locale={locale}>
       <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <BibleReader
+          bookContext={bookContext}
           bookMetadata={bookMetadata}
           chapter={bibleChapter}
           initialSearchQuery={query.q ?? ""}
@@ -111,4 +122,24 @@ function BibleReaderError({ locale, message }: { locale: string; message: string
       </Container>
     </SiteShell>
   );
+}
+
+async function loadBookContext(bookId: string): Promise<TimelineBookContextRow | null> {
+  try {
+    const packagePath = path.join(
+      process.cwd(),
+      "..",
+      "docs",
+      "data-packages",
+      "timeline",
+      "books.66-canonical-skeleton.json",
+    );
+    const raw = await readFile(packagePath, "utf8");
+    const canonicalBooksPackage = JSON.parse(raw) as CanonicalBooksPackage;
+    const rows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
+
+    return rows.find((row) => row.bookId === bookId) ?? null;
+  } catch {
+    return null;
+  }
 }
