@@ -4,30 +4,23 @@ import { Card } from "@/components/ui/Card";
 
 import {
   getTimelineBook,
-  getTimelineDatePreview,
-  getTimelinePlace,
   getTimelineText,
-  timelineBookContextRows,
-  timelineGenealogyComparisonRows,
   timelineGenealogySegments,
-  timelineKingdomComparisonRows,
-  timelineSchematicPlaceRows,
-  type PassionWeekTimelineEvent,
-  type TimelineBookContextRow,
   type TimelineGenealogyComparisonRow,
   type TimelineInspectorSelection,
   type TimelineKingdomComparisonRow,
   type TimelineLocale,
   type TimelineSchematicPlaceRow,
-  type TimelineText,
 } from "./passionWeekTimeline";
-import { TimelineDatingNote } from "./TimelineDatingNote";
 import type { TimelineHighlightState } from "./timelineHighlightState";
 import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
+import { BookEvidencePanel } from "./timeline-detail-panel/BookEvidencePanel";
 import { ContextRow } from "./timeline-detail-panel/ContextRow";
 import { ContextTagGroup } from "./timeline-detail-panel/ContextTagGroup";
+import { EventEvidencePanel } from "./timeline-detail-panel/EventEvidencePanel";
 import { PanelSection } from "./timeline-detail-panel/PanelSection";
 import { previewLimitationCopy } from "./timeline-detail-panel/panelCopy";
+import { dedupeById, getKingdomEvidenceLabel, isKingsPackageEvidenceRow } from "./timeline-detail-panel/panelHelpers";
 import { RelatedItemButton } from "./timeline-detail-panel/RelatedItemButton";
 import { RelatedItemSection } from "./timeline-detail-panel/RelatedItemSection";
 import { ScriptureAnchorsSection } from "./timeline-detail-panel/ScriptureAnchorsSection";
@@ -125,12 +118,28 @@ export function TimelineEventDetailPanel({
         )}
       </div>
 
-      {event
-        ? renderEventEvidencePanel(event, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
-        : null}
-      {bookRow
-        ? renderBookEvidencePanel(bookRow, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
-        : null}
+      {event ? (
+        <EventEvidencePanel
+          event={event}
+          locale={locale}
+          lookupMaps={lookupMaps}
+          onSelectInspectorItem={onSelectInspectorItem}
+          openInReaderLabel={openInReaderLabel}
+          relatedStudy={relatedStudy}
+          selection={selection}
+        />
+      ) : null}
+      {bookRow ? (
+        <BookEvidencePanel
+          row={bookRow}
+          locale={locale}
+          lookupMaps={lookupMaps}
+          onSelectInspectorItem={onSelectInspectorItem}
+          openInReaderLabel={openInReaderLabel}
+          relatedStudy={relatedStudy}
+          selection={selection}
+        />
+      ) : null}
       {kingdomRow
         ? renderKingdomEvidencePanel(kingdomRow, locale, lookupMaps, onSelectInspectorItem, openInReaderLabel, relatedStudy, selection)
         : null}
@@ -161,515 +170,6 @@ function getSelectionTypeLabel(selectionType: TimelineInspectorSelectionType | n
     default:
       return locale === "ko" ? "선택됨" : "Selected";
   }
-}
-
-function renderEventEvidencePanel(
-  event: PassionWeekTimelineEvent,
-  locale: TimelineLocale,
-  lookupMaps: TimelineEvidenceLookupMaps,
-  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
-  openInReaderLabel: string,
-  relatedStudy: string,
-  selection: TimelineInspectorSelection,
-) {
-  const datePreview = getTimelineDatePreview(event);
-  const hasExplicitDateMetadata = Boolean(event.dateLabel || event.dateBasisLabel || event.dateConfidenceLabel);
-  const primaryBook = getTimelineBook(event.primaryBookId);
-  const placeLabels = event.placeIds
-    .map((placeId) => getTimelinePlace(placeId))
-    .filter((place): place is NonNullable<typeof place> => Boolean(place));
-  const relativeYearLabel = event.relativeYearLabel ? getTimelineText(event.relativeYearLabel, locale) : "";
-  const relatedBookRows = timelineBookContextRows.filter((row) => row.relatedEventIds?.includes(event.id));
-  const relatedPackageBookRows = dedupeById(
-    event.relatedBookIds
-      .map((bookId) => lookupMaps.bookContextByBookId.get(bookId))
-      .filter((row): row is TimelineBookContextRow => Boolean(row)),
-  );
-  const relatedPlaceRows = dedupeById(
-    [
-      ...event.placeIds
-        .map((placeId) => lookupMaps.schematicPlaceByPlaceId.get(placeId))
-        .filter((row): row is TimelineSchematicPlaceRow => Boolean(row)),
-      ...timelineSchematicPlaceRows.filter((row) => row.relatedEventIds?.includes(event.id)),
-    ],
-  );
-  const relatedKingdomRows = dedupeById(
-    [
-      ...timelineKingdomComparisonRows.filter((row) => row.relatedEventIds?.includes(event.id)),
-      ...(event.relatedKingdomIds ?? [])
-        .map((id) => lookupMaps.kingdomComparisonById.get(id))
-        .filter((row): row is TimelineKingdomEvidenceRow => Boolean(row)),
-    ],
-  );
-  const relatedEventRows = dedupeById(
-    (event.relatedEventIds ?? [])
-      .map((eventId) => lookupMaps.eventById.get(eventId))
-      .filter((row): row is PassionWeekTimelineEvent => row !== undefined && row.id !== event.id),
-  );
-  const relatedGenealogyRows = timelineGenealogyComparisonRows.filter((row) => row.relatedEventIds?.includes(event.id));
-
-  return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(event.title, locale)}</h2>
-        <p className="text-sm leading-6 text-zinc-600">{getTimelineText(event.summary, locale)}</p>
-      </div>
-
-      <ScriptureAnchorsSection
-        anchors={event.scriptureAnchors}
-        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
-        locale={locale}
-        openInReaderLabel={openInReaderLabel}
-        referenceOnly={event.scriptureReferencesOnly}
-        referenceOnlyDescription={
-          event.scriptureReferencesOnly
-            ? locale === "ko"
-              ? "이 package는 성경 본문을 저장하지 않습니다. 사건 수준 Scripture reference만 표시합니다."
-              : "This package does not store Bible text. It shows event-level Scripture references only."
-            : undefined
-        }
-        rowId={event.id}
-      />
-
-      <DetailSection label={locale === "ko" ? "배경 / 요약" : "Background / Summary"}>
-        <SectionNote>{getTimelineText(event.locationNote, locale)}</SectionNote>
-        {event.sequenceLabel ? (
-          <ContextRow
-            label={locale === "ko" ? "사건 순서" : "Sequence"}
-            value={getTimelineText(event.sequenceLabel, locale)}
-          />
-        ) : null}
-        <ContextRow
-          label={locale === "ko" ? "이벤트 유형" : "Event Type"}
-          value={getTimelineText(event.eventType, locale)}
-        />
-        {primaryBook ? (
-          <ContextRow
-            label={locale === "ko" ? "관련 책" : "Related Book"}
-            value={getTimelineText(primaryBook.label, locale)}
-          />
-        ) : null}
-        {event.basisLabel ? (
-          <ContextRow
-            label={locale === "ko" ? "패키지 기준" : "Package basis"}
-            value={getTimelineText(event.basisLabel, locale)}
-          />
-        ) : null}
-        <ContextRow
-          label={locale === "ko" ? "근거 신뢰" : "Evidence confidence"}
-          value={getTimelineText(event.confidenceLevel, locale)}
-        />
-      </DetailSection>
-
-      {(hasExplicitDateMetadata || !event.scriptureReferencesOnly) && datePreview ? (
-        <DetailSection label={locale === "ko" ? "보조 연대 / 연대 근거" : "Supporting Date / Basis"}>
-          <ContextRow label={locale === "ko" ? "연대 표기" : "Date label"} value={getTimelineText(datePreview.dateLabel, locale)} />
-          <ContextRow
-            label={locale === "ko" ? "연대 근거" : "Date basis"}
-            value={getTimelineText(datePreview.dateBasisLabel, locale)}
-          />
-          <ContextRow
-            label={locale === "ko" ? "연대 신뢰" : "Date confidence"}
-            value={getTimelineText(datePreview.dateConfidenceLabel, locale)}
-          />
-          <TimelineDatingNote
-            label={locale === "ko" ? "보조 연대 메모" : "Supporting date note"}
-            locale={locale}
-            note={getTimelineText(event.datingNote, locale)}
-          />
-          {event.scriptureReferencesOnly ? (
-            <SectionNote>
-              {locale === "ko"
-                ? "이 연대 표기는 성경 본문이 아니라 package metadata에서 온 보조 참고 정보이며, 정확한 chronology proof로 사용하지 않습니다."
-                : "This date metadata comes from the package as supporting reference only and is not used as exact chronology proof."}
-            </SectionNote>
-          ) : null}
-        </DetailSection>
-      ) : null}
-
-      {!event.scriptureReferencesOnly && (relativeYearLabel || event.relativeYearBasisLabel || event.relativeYearCalculationNote) ? (
-        <DetailSection label={locale === "ko" ? "성경 내부 연수" : "Scripture-Derived Relative Year"}>
-          {relativeYearLabel ? (
-            <ContextRow label={locale === "ko" ? "연수 표기" : "Relative year"} value={relativeYearLabel} />
-          ) : null}
-          {event.relativeYearBasisLabel ? (
-            <ContextRow
-              label={locale === "ko" ? "기준" : "Basis"}
-              value={getTimelineText(event.relativeYearBasisLabel, locale)}
-            />
-          ) : null}
-          {event.relativeYearCalculationNote ? (
-            <SectionNote>{getTimelineText(event.relativeYearCalculationNote, locale)}</SectionNote>
-          ) : null}
-        </DetailSection>
-      ) : null}
-
-      <DetailSection label={locale === "ko" ? "인물 / 장소 / 문맥" : "People / Places / Context"}>
-        <ContextTagGroup
-          label={locale === "ko" ? "인물" : "People"}
-          locale={locale}
-          tags={event.people}
-        />
-        <ContextTagGroup
-          label={locale === "ko" ? "장소" : "Places"}
-          locale={locale}
-          tags={placeLabels.map((place) => place.label)}
-        />
-        <ContextTagGroup
-          label={locale === "ko" ? "왕국" : "Kingdoms"}
-          locale={locale}
-          tags={event.kingdomTags}
-        />
-        <ContextTagGroup
-          label={locale === "ko" ? "열강" : "Empires"}
-          locale={locale}
-          tags={event.empireTags}
-        />
-        <ContextTagGroup
-          label={locale === "ko" ? "선지자" : "Prophets"}
-          locale={locale}
-          tags={event.prophetTags}
-        />
-        {event.prophetTags?.length ? (
-          <SectionNote>
-            {locale === "ko"
-              ? "선지자 표시는 선택 가능한 별도 엔티티가 아니라 현재 사건을 돕는 보조 문맥 태그입니다."
-              : "Prophet labels remain supporting context tags for the current event, not selectable standalone entities."}
-          </SectionNote>
-        ) : null}
-        <ContextTagGroup
-          label={locale === "ko" ? "주변 민족" : "Surrounding Nations"}
-          locale={locale}
-          tags={event.surroundingNationTags}
-        />
-        {event.synchronismNote ? <SectionNote>{getTimelineText(event.synchronismNote, locale)}</SectionNote> : null}
-        {event.worldContextNote ? <SectionNote>{getTimelineText(event.worldContextNote, locale)}</SectionNote> : null}
-        {event.worldContextBasisLabel ? (
-          <SectionNote>{getTimelineText(event.worldContextBasisLabel, locale)}</SectionNote>
-        ) : null}
-        {event.worldContextConfidenceLabel ? (
-          <SectionNote>{getTimelineText(event.worldContextConfidenceLabel, locale)}</SectionNote>
-        ) : null}
-        {event.nameVariantNote ? <SectionNote>{getTimelineText(event.nameVariantNote, locale)}</SectionNote> : null}
-        {event.cautionNote ? <SectionNote>{getTimelineText(event.cautionNote, locale)}</SectionNote> : null}
-      </DetailSection>
-
-      {relatedBookRows.length || relatedPackageBookRows.length || relatedPlaceRows.length || relatedKingdomRows.length || relatedEventRows.length || relatedGenealogyRows.length || event.sourcePackage === "core-biblical-skeleton" ? (
-        <DetailSection label={locale === "ko" ? "관련 항목" : "Related Items"}>
-          {relatedBookRows.length || relatedPackageBookRows.length ? (
-            <RelatedItemSection label={locale === "ko" ? "관련 책/시편" : "Related Books / Psalms"}>
-              {dedupeById([...relatedBookRows, ...relatedPackageBookRows]).map((row) => (
-                <RelatedItemButton
-                  active={selection?.type === "book" && selection.id === row.id}
-                  eyebrow={locale === "ko" ? "책 / 시편" : "Book / Psalm"}
-                  key={row.id}
-                  label={getTimelineText(row.title, locale)}
-                  onClick={() => onSelectInspectorItem({ id: row.id, type: "book" })}
-                />
-              ))}
-            </RelatedItemSection>
-          ) : null}
-          {relatedPlaceRows.length ? (
-            <RelatedItemSection label={locale === "ko" ? "관련 장소" : "Related Places"}>
-              {relatedPlaceRows.map((row) => (
-                <RelatedItemButton
-                  active={selection?.type === "place" && selection.id === row.id}
-                  eyebrow={locale === "ko" ? "장소" : "Place"}
-                  key={row.id}
-                  label={getTimelineText(row.title, locale)}
-                  onClick={() => onSelectInspectorItem({ id: row.id, type: "place" })}
-                />
-              ))}
-            </RelatedItemSection>
-          ) : null}
-          {relatedKingdomRows.length ? (
-            <RelatedItemSection label={locale === "ko" ? "관련 왕국/제국" : "Related Kingdoms"}>
-              {relatedKingdomRows.map((row) => (
-                <RelatedItemButton
-                  active={selection?.type === "kingdom" && selection.id === row.id}
-                  eyebrow={locale === "ko" ? "왕국 / 제국" : "Kingdom / Empire"}
-                  key={row.id}
-                  label={getKingdomEvidenceLabel(row, locale)}
-                  onClick={() => onSelectInspectorItem({ id: row.id, type: "kingdom" })}
-                />
-              ))}
-            </RelatedItemSection>
-          ) : null}
-          {relatedEventRows.length ? (
-            <RelatedItemSection label={locale === "ko" ? "관련 사건" : "Related Events"}>
-              {relatedEventRows.map((row) => (
-                <RelatedItemButton
-                  active={selection?.type === "event" && selection.id === row.id}
-                  eyebrow={locale === "ko" ? "사건" : "Event"}
-                  key={row.id}
-                  label={getTimelineText(row.title, locale)}
-                  onClick={() => onSelectInspectorItem({ id: row.id, type: "event" })}
-                />
-              ))}
-            </RelatedItemSection>
-          ) : null}
-          {relatedGenealogyRows.length ? (
-            <RelatedItemSection label={locale === "ko" ? "관련 족보" : "Related Genealogy"}>
-              {relatedGenealogyRows.map((row) => (
-                <RelatedItemButton
-                  active={selection?.type === "genealogy" && selection.id === row.id}
-                  eyebrow={locale === "ko" ? "족보" : "Genealogy"}
-                  key={row.id}
-                  label={getTimelineText(row.matthewName, locale)}
-                  onClick={() => onSelectInspectorItem({ id: row.id, type: "genealogy" })}
-                />
-              ))}
-            </RelatedItemSection>
-          ) : null}
-          {!relatedBookRows.length &&
-          !relatedPackageBookRows.length &&
-          !relatedPlaceRows.length &&
-          !relatedKingdomRows.length &&
-          !relatedEventRows.length &&
-          !relatedGenealogyRows.length ? (
-            <SectionNote>{getTimelineText(previewLimitationCopy.relatedItemsPending, locale)}</SectionNote>
-          ) : null}
-        </DetailSection>
-      ) : null}
-
-      {event.sourcePackage === "core-biblical-skeleton" ? (
-        <DetailSection label={locale === "ko" ? "패키지 상태" : "Package Status"}>
-          <SectionNote>
-            {locale === "ko"
-              ? "이 패널은 core biblical event skeleton package의 metadata-only preview를 보여 줍니다."
-              : "This panel shows a metadata-only preview from the core biblical event skeleton package."}
-          </SectionNote>
-          {event.reviewRequired ? (
-            <SectionNote>
-              {locale === "ko" ? "후속 검토 필요 상태로 유지됩니다." : "This row remains marked for further review."}
-            </SectionNote>
-          ) : null}
-        </DetailSection>
-      ) : null}
-
-      <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
-    </div>
-  );
-}
-
-function renderBookEvidencePanel(
-  row: TimelineBookContextRow,
-  locale: TimelineLocale,
-  lookupMaps: TimelineEvidenceLookupMaps,
-  onSelectInspectorItem: (selection: TimelineInspectorSelection) => void,
-  openInReaderLabel: string,
-  relatedStudy: string,
-  selection: TimelineInspectorSelection,
-) {
-  const relatedPlaceRows = dedupeById(
-    (row.relatedPlaces ?? [])
-      .map((placeId) => lookupMaps.schematicPlaceByPlaceId.get(placeId))
-      .filter((place): place is TimelineSchematicPlaceRow => Boolean(place)),
-  );
-  const relatedBookRows = dedupeById(
-    (row.relatedBookIds ?? [])
-      .map((bookId) => lookupMaps.bookContextByBookId.get(bookId))
-      .filter((bookRow): bookRow is TimelineBookContextRow => bookRow !== undefined && bookRow.id !== row.id),
-  );
-  const relatedKingdomRows = dedupeById(
-    (row.relatedKingdomIds ?? [])
-      .map((kingdomId) => lookupMaps.kingdomComparisonById.get(kingdomId))
-      .filter((kingdomRow): kingdomRow is TimelineKingdomEvidenceRow => Boolean(kingdomRow)),
-  );
-
-  return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-zinc-950">{getTimelineText(row.title, locale)}</h2>
-        <p className="text-sm leading-6 text-zinc-600">{getTimelineText(row.canonicalLocation, locale)}</p>
-      </div>
-
-      <ScriptureAnchorsSection
-        anchors={row.scriptureAnchors}
-        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
-        locale={locale}
-        openInReaderLabel={openInReaderLabel}
-        referenceOnly={row.scriptureReferencesOnly}
-        referenceOnlyDescription={
-          row.scriptureReferencesOnly
-            ? locale === "ko"
-              ? "이 package는 성경 본문을 저장하지 않습니다. 책 수준 Scripture reference만 표시합니다."
-              : "This package does not store Bible text. It shows book-level Scripture references only."
-            : undefined
-        }
-        rowId={row.id}
-      />
-
-      <DetailSection label={locale === "ko" ? "정경 위치" : "Canonical Location"}>
-        <ContextRow label={locale === "ko" ? "정경 위치" : "Canonical location"} value={getTimelineText(row.canonicalLocation, locale)} />
-        {row.canonicalOrder ? (
-          <ContextRow
-            label={locale === "ko" ? "정경 순서" : "Canonical order"}
-            value={`${row.canonicalOrder}`}
-          />
-        ) : null}
-        {row.testament ? (
-          <ContextRow
-            label={locale === "ko" ? "구분" : "Testament"}
-            value={row.testament === "OT" ? (locale === "ko" ? "구약" : "Old Testament") : locale === "ko" ? "신약" : "New Testament"}
-          />
-        ) : null}
-        {row.canonicalSectionLabel ? (
-          <ContextRow
-            label={locale === "ko" ? "정경 구간" : "Canonical section"}
-            value={getTimelineText(row.canonicalSectionLabel, locale)}
-          />
-        ) : null}
-        {row.historicalSettingLabel ? (
-          <ContextRow
-            label={locale === "ko" ? "배경 연결" : "Background connection"}
-            value={getTimelineText(row.historicalSettingLabel, locale)}
-          />
-        ) : null}
-      </DetailSection>
-
-      <DetailSection label={locale === "ko" ? "저자 / 근거" : "Authorship / Basis"}>
-        {row.authorshipLabel ? (
-          <ContextRow label={locale === "ko" ? "저자" : "Authorship"} value={getTimelineText(row.authorshipLabel, locale)} />
-        ) : null}
-        {row.authorshipBasisLabel ? (
-          <SectionNote>{getTimelineText(row.authorshipBasisLabel, locale)}</SectionNote>
-        ) : null}
-      </DetailSection>
-
-      <DetailSection label={locale === "ko" ? "배경 근거" : "Background Basis"}>
-        <SectionNote>{getTimelineText(row.backgroundBasisLabel, locale)}</SectionNote>
-        {row.basisLabel ? (
-          <ContextRow
-            label={locale === "ko" ? "패키지 기준" : "Package basis"}
-            value={getTimelineText(row.basisLabel, locale)}
-          />
-        ) : null}
-        {row.confidenceLabel ? (
-          <ContextRow
-            label={locale === "ko" ? "근거 신뢰" : "Evidence confidence"}
-            value={getTimelineText(row.confidenceLabel, locale)}
-          />
-        ) : null}
-        {row.dateLabel || row.dateBasisLabel || row.dateConfidenceLabel ? (
-          <div className="space-y-3">
-            {row.dateLabel ? (
-              <ContextRow label={locale === "ko" ? "연대 표기" : "Date label"} value={getTimelineText(row.dateLabel, locale)} />
-            ) : null}
-            {row.dateBasisLabel ? (
-              <ContextRow label={locale === "ko" ? "기준" : "Basis"} value={getTimelineText(row.dateBasisLabel, locale)} />
-            ) : null}
-            {row.dateConfidenceLabel ? (
-              <ContextRow
-                label={locale === "ko" ? "신뢰" : "Confidence"}
-                value={getTimelineText(row.dateConfidenceLabel, locale)}
-              />
-            ) : null}
-          </div>
-        ) : null}
-      </DetailSection>
-
-      <DetailSection label={locale === "ko" ? "인물 / 장소" : "People / Places"}>
-        <ContextTagGroup label={locale === "ko" ? "인물" : "People"} locale={locale} tags={row.relatedPeople} />
-        <ContextTagGroup
-          label={locale === "ko" ? "장소" : "Places"}
-          locale={locale}
-          tags={row.relatedPlaces?.map((placeId) => getTimelinePlace(placeId)?.label).filter((value): value is TimelineText => Boolean(value))}
-        />
-        <ContextTagGroup
-          label={locale === "ko" ? "왕국" : "Kingdoms"}
-          locale={locale}
-          tags={row.relatedKingdoms}
-        />
-        <ContextTagGroup
-          label={locale === "ko" ? "열강" : "Empires"}
-          locale={locale}
-          tags={row.relatedEmpires}
-        />
-        {!row.relatedPeople?.length ? (
-          <SectionNote>{getTimelineText(previewLimitationCopy.bookPeoplePending, locale)}</SectionNote>
-        ) : null}
-        {row.relatedEventIds?.length ? (
-          <RelatedItemSection label={locale === "ko" ? "관련 사건" : "Related Events"}>
-            {row.relatedEventIds.map((eventId) => {
-              const relatedEvent = lookupMaps.eventById.get(eventId);
-
-              if (!relatedEvent) {
-                return null;
-              }
-
-              return (
-                <RelatedItemButton
-                  active={selection?.type === "event" && selection.id === relatedEvent.id}
-                  eyebrow={locale === "ko" ? "사건" : "Event"}
-                  key={`${row.id}-${eventId}`}
-                  label={getTimelineText(relatedEvent.title, locale)}
-                  onClick={() => onSelectInspectorItem({ id: relatedEvent.id, type: "event" })}
-                />
-              );
-            })}
-          </RelatedItemSection>
-        ) : null}
-        {relatedPlaceRows.length ? (
-          <RelatedItemSection label={locale === "ko" ? "관련 장소" : "Related Places"}>
-            {relatedPlaceRows.map((placeRow) => (
-              <RelatedItemButton
-                active={selection?.type === "place" && selection.id === placeRow.id}
-                eyebrow={locale === "ko" ? "장소" : "Place"}
-                key={`${row.id}-${placeRow.id}`}
-                label={getTimelineText(placeRow.title, locale)}
-                onClick={() => onSelectInspectorItem({ id: placeRow.id, type: "place" })}
-              />
-            ))}
-          </RelatedItemSection>
-        ) : null}
-        {relatedBookRows.length ? (
-          <RelatedItemSection label={locale === "ko" ? "관련 책/시편" : "Related Books / Psalms"}>
-            {relatedBookRows.map((bookRow) => (
-              <RelatedItemButton
-                active={selection?.type === "book" && selection.id === bookRow.id}
-                eyebrow={locale === "ko" ? "책 / 시편" : "Book / Psalm"}
-                key={`${row.id}-${bookRow.id}`}
-                label={getTimelineText(bookRow.title, locale)}
-                onClick={() => onSelectInspectorItem({ id: bookRow.id, type: "book" })}
-              />
-            ))}
-          </RelatedItemSection>
-        ) : null}
-        {relatedKingdomRows.length ? (
-          <RelatedItemSection label={locale === "ko" ? "관련 왕국/제국" : "Related Kingdoms"}>
-            {relatedKingdomRows.map((kingdomRow) => (
-              <RelatedItemButton
-                active={selection?.type === "kingdom" && selection.id === kingdomRow.id}
-                eyebrow={locale === "ko" ? "왕국 / 제국" : "Kingdom / Empire"}
-                key={`${row.id}-${kingdomRow.id}`}
-                label={getKingdomEvidenceLabel(kingdomRow, locale)}
-                onClick={() => onSelectInspectorItem({ id: kingdomRow.id, type: "kingdom" })}
-              />
-            ))}
-          </RelatedItemSection>
-        ) : null}
-        {!row.relatedEventIds?.length &&
-        !relatedPlaceRows.length &&
-        !relatedBookRows.length &&
-        !relatedKingdomRows.length ? (
-          <SectionNote>{getTimelineText(previewLimitationCopy.relatedItemsPending, locale)}</SectionNote>
-        ) : null}
-      </DetailSection>
-
-      <DetailSection label={locale === "ko" ? "주의 / 메모" : "Caution / Note"}>
-        <SectionNote>{getTimelineText(row.note, locale)}</SectionNote>
-        {row.sourcePackage === "canonical-66-skeleton" ? (
-          <SectionNote>
-            {locale === "ko"
-              ? "이 패널은 66권 canonical skeleton package의 metadata-only preview를 보여 줍니다."
-              : "This panel shows a metadata-only preview from the canonical 66-book skeleton package."}
-          </SectionNote>
-        ) : null}
-        <SectionNote>{relatedStudy}</SectionNote>
-      </DetailSection>
-    </div>
-  );
 }
 
 function renderKingdomEvidencePanel(
@@ -798,20 +298,6 @@ function renderKingdomEvidencePanel(
       ) : null}
     </div>
   );
-}
-
-function isKingsPackageEvidenceRow(
-  row: TimelineKingdomEvidenceRow,
-): row is TimelineKingsKingdomsPreviewRow {
-  return "sourcePackage" in row && row.sourcePackage === "kings-kingdoms-skeleton";
-}
-
-function getKingdomEvidenceLabel(row: TimelineKingdomEvidenceRow, locale: TimelineLocale) {
-  if (isKingsPackageEvidenceRow(row)) {
-    return getTimelineText(row.title, locale);
-  }
-
-  return getTimelineText(row.sequenceLabel, locale);
 }
 
 function renderKingsPackageEvidencePanel(
@@ -1203,7 +689,7 @@ function renderPlaceEvidencePanel(
               {locale === "ko" ? "관련 책/시편" : "Related Books / Psalms"}
             </p>
             <div className="flex flex-wrap gap-2">
-              {row.relatedBookContextIds.map((contextId) => {
+              {row.relatedBookContextIds.map((contextId: string) => {
                 const relatedBookRow = lookupMaps.bookContextById.get(contextId);
 
                 if (!relatedBookRow) {
@@ -1229,7 +715,7 @@ function renderPlaceEvidencePanel(
               {locale === "ko" ? "관련 사건" : "Related Events"}
             </p>
             <div className="flex flex-wrap gap-2">
-              {row.relatedEventIds.map((eventId) => {
+              {row.relatedEventIds.map((eventId: string) => {
                 const relatedEvent = lookupMaps.eventById.get(eventId);
 
                 if (!relatedEvent) {
@@ -1261,8 +747,4 @@ function renderPlaceEvidencePanel(
       <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
     </div>
   );
-}
-
-function dedupeById<T extends { id: string }>(items: T[]) {
-  return Array.from(new Map(items.map((item) => [item.id, item])).values());
 }
