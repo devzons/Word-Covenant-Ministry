@@ -172,6 +172,8 @@ Local commit-readiness reconciliation is now complete. The current worktree is c
 
 `Scripture Context Atlas Redesign Scope` is now documented in `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_REDESIGN_SCOPE.md` as a docs-only design step. The current Timeline workspace is being reframed as a future Scripture-reading-first context atlas in which Bible text remains primary, existing Timeline package/runtime metadata is reused as right-panel context supply, schematic map policy remains no-coordinate and no-provider, original-language and paja work remain subordinate to Scripture context, and Korean/world-history layers remain supporting-only. Implementation is deferred. The next required step before any prototype is a right-panel completeness audit.
 
+`Scripture Evidence Panel Modular Triage Plan` is now documented in `docs/ROADMAP/SCRIPTURE_EVIDENCE_PANEL_MODULAR_TRIAGE_PLAN.md` as a docs-only planning step. The current right-panel audit has now been split into rendering gaps, normalizer gaps, source-data gaps, intentional preview limitations, and approval-required expansion categories so that future implementation can stay narrow and modular. The current direction is to treat the Scripture Evidence Panel as the future modular right-side context surface for the broader Scripture Context Atlas while deferring implementation, data expansion, media/editorial work, and all approval-gated external-reference or map work.
+
 Current phase boundary:
 
 ```txt
