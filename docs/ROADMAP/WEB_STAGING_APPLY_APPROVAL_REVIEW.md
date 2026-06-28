@@ -26,8 +26,8 @@ Current boundary:
 ```txt
 Local WEB apply: complete
 Staging readiness review: complete
-Staging WEB apply: not approved by this document
-Production WEB apply: not approved
+Staging WEB apply: not approved / blocked
+Production WEB apply: not approved / blocked
 ```
 
 ## 1. Staging Environment Audit
@@ -47,7 +47,7 @@ The staging readiness review establishes that local evidence is strong enough to
 Staging environment verdict:
 
 ```txt
-insufficient
+not approved / blocked
 ```
 
 Reason:
@@ -90,26 +90,31 @@ Evidence:
 Staging gate status:
 
 ```txt
-not yet passed
+not approved / blocked
 ```
 
 Missing approval prerequisites:
 
 1. Staging target environment details.
-2. Staging backup command and storage path.
-3. Staging backup verification method.
-4. Staging restore command.
-5. Rollback owner.
-6. Expected recovery time.
-7. Staging dry-run command and report location.
-8. Staging post-apply validation checklist ownership.
+2. Staging WordPress host/path.
+3. Staging DB access / WP-CLI context.
+4. Staging API base URL.
+5. Staging frontend URL and API binding.
+6. Staging backup command and storage path.
+7. Staging backup verification method.
+8. Staging restore command.
+9. Rollback owner.
+10. Expected recovery time and rollback window.
+11. Staging dry-run command and report location.
+12. Staging browser/runtime smoke owner.
+13. Staging post-apply validation checklist ownership.
 
 ### Production Gate
 
 Production gate status:
 
 ```txt
-blocked
+not approved / blocked
 ```
 
 Production remains blocked until a separately approved staging apply succeeds and staging QA is recorded.
@@ -117,7 +122,7 @@ Production remains blocked until a separately approved staging apply succeeds an
 Promotion audit verdict:
 
 ```txt
-Local gate passed; staging gate requires operational details before apply approval.
+Local gate passed; staging gate remains not approved / blocked until the missing operational facts are recorded.
 ```
 
 ## 3. Backup Audit
@@ -157,7 +162,7 @@ test -s /path/outside/git/wcm_staging_web_pre_apply_YYYYMMDD_HHMMSS.sql
 Backup audit verdict:
 
 ```txt
-insufficient for staging apply approval
+not approved / blocked
 ```
 
 Reason:
@@ -206,7 +211,7 @@ Not recorded
 Rollback audit verdict:
 
 ```txt
-insufficient for staging apply approval
+not approved / blocked
 ```
 
 Reason:
@@ -231,7 +236,7 @@ Local runtime evidence from the local apply report:
 Runtime audit verdict:
 
 ```txt
-ready for staging smoke checklist definition, not yet sufficient for staging apply approval
+not approved / blocked
 ```
 
 Reason:
@@ -297,10 +302,33 @@ Mitigation:
 
 ## 7. Approval Gate
 
+### Secret Handling Boundary
+
+The staging gate may record only non-secret operational identifiers.
+
+Allowed:
+
+- host label
+- environment identifier
+- command pattern
+- path pattern
+- owner role
+- report path pattern
+- backup storage category
+
+Forbidden:
+
+- DB passwords
+- tokens
+- API secrets
+- private keys
+- raw credentials
+- unprotected backup URLs
+
 Final approval gate verdict:
 
 ```txt
-Ready With Conditions
+Not Approved / Blocked
 ```
 
 Conditions required before actual staging apply:
@@ -316,7 +344,7 @@ Conditions required before actual staging apply:
 9. Post-apply validation confirms WEB counts, approved omissions, duplicates, KRV preservation, and original-language preservation.
 10. Staging runtime smoke checks pass before any production review.
 
-This document does not approve staging apply. It records that the project is close enough to request staging apply only after the listed operational conditions are satisfied.
+This document does not approve staging apply. It records that staging apply remains blocked until the listed operational facts are documented without secrets and a later explicit approval step is completed.
 
 ## Explicit Non-Actions
 

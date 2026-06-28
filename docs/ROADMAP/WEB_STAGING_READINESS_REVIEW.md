@@ -27,8 +27,8 @@ Current boundary:
 
 ```txt
 Local WEB apply: complete
-Staging WEB apply: not approved
-Production WEB apply: not approved
+Staging WEB apply: not approved / blocked
+Production WEB apply: not approved / blocked
 ```
 
 ## 1. Source Audit
@@ -250,6 +250,45 @@ Required before staging apply:
    - original terms unchanged.
    - original occurrences unchanged.
 8. Reader, search, original text, interlinear, word study, cross reference, and gospel harmony smoke checks pass.
+
+### Missing Operational Facts To Be Provided Before Approval
+
+The following staging facts still need to be documented before staging approval can be considered:
+
+1. staging WordPress host/path
+2. staging DB access / WP-CLI context
+3. staging API base URL
+4. staging frontend URL / API binding
+5. staging backup command
+6. backup storage location/category
+7. restore command
+8. rollback owner
+9. recovery time / rollback window
+10. staging dry-run command
+11. staging dry-run report location
+12. staging browser/runtime smoke owner
+13. staging post-apply validation checklist owner
+
+These items may be recorded only in non-secret form.
+
+Allowed examples:
+
+- host label
+- environment identifier
+- command pattern
+- path pattern
+- owner role
+- report path pattern
+- backup storage category
+
+Forbidden examples:
+
+- DB passwords
+- tokens
+- API secrets
+- private keys
+- raw credentials
+- unprotected backup URLs
 
 ### Production Gate
 
