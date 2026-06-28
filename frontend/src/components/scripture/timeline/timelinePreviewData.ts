@@ -3732,8 +3732,8 @@ export const timelineGenealogySegments: TimelineGenealogySegment[] = [
     basisLabel: { en: "Matthew's textual structure", ko: "마태복음 본문 구조" },
     id: "matthew-genealogy-abraham-to-david",
     note: {
-      en: "Matthew presents Christ's genealogy with Abraham and David as major textual markers.",
-      ko: "마태복음은 아브라함과 다윗을 중심 표지로 삼아 그리스도의 족보를 제시합니다.",
+      en: "Matthew presents Christ's genealogy with Abraham and David as major textual markers. This preview follows Matthew 1's literary grouping and does not claim exact chronology.",
+      ko: "마태복음은 아브라함과 다윗을 중심 표지로 삼아 그리스도의 족보를 제시합니다. 이 미리보기는 마태복음 1장의 문학적 구성을 따르며 정확한 연대를 주장하지 않습니다.",
     },
     rangeLabel: { en: "First fourteen generations", ko: "첫 번째 14대" },
     scriptureAnchors: [
@@ -3756,8 +3756,8 @@ export const timelineGenealogySegments: TimelineGenealogySegment[] = [
     basisLabel: { en: "Matthew compared with Old Testament royal genealogy", ko: "마태복음과 구약 왕계보 비교" },
     id: "matthew-genealogy-david-to-exile",
     note: {
-      en: "This section follows the Davidic royal line toward the Babylonian deportation. Matthew uses a selective genealogical arrangement.",
-      ko: "이 구간은 다윗 왕계보와 바벨론 포로를 향한 흐름을 보여 줍니다. 마태복음은 선택적으로 배열된 족보 구조를 사용합니다.",
+      en: "This section follows the Davidic royal line toward the Babylonian deportation as Matthew arranges it. The comparison is observational and does not attempt an exhaustive royal chronology.",
+      ko: "이 구간은 마태복음이 배열한 방식대로 다윗 왕계보와 바벨론 포로를 향한 흐름을 보여 줍니다. 이 비교는 관찰용이며 완전한 왕계보 연대 재구성을 시도하지 않습니다.",
     },
     rangeLabel: { en: "Second fourteen generations", ko: "두 번째 14대" },
     scriptureAnchors: [
@@ -3784,8 +3784,8 @@ export const timelineGenealogySegments: TimelineGenealogySegment[] = [
     basisLabel: { en: "Matthew's textual structure", ko: "마태복음 본문 구조" },
     id: "matthew-genealogy-exile-to-christ",
     note: {
-      en: "Matthew gathers the post-deportation line toward Christ.",
-      ko: "마태복음은 바벨론 포로 이후의 흐름을 그리스도에게로 모읍니다.",
+      en: "Matthew gathers the post-deportation line toward Christ in a compact textual arrangement. This preview remains limited to Matthew 1's structure.",
+      ko: "마태복음은 바벨론 포로 이후의 흐름을 압축된 본문 구조 안에서 그리스도에게로 모읍니다. 이 미리보기는 마태복음 1장의 구조 안에만 머뭅니다.",
     },
     rangeLabel: { en: "Third fourteen generations", ko: "세 번째 14대" },
     scriptureAnchors: [
@@ -3823,8 +3823,8 @@ export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] =
     ],
     segmentId: "matthew-genealogy-abraham-to-david",
     note: {
-      en: "Matthew presents Christ's genealogy with Abraham and David as major textual markers.",
-      ko: "마태복음은 아브라함과 다윗을 중심 표지로 삼아 그리스도의 족보를 제시합니다.",
+      en: "Matthew presents Christ's genealogy with Abraham and David as major textual markers. This preview follows Matthew 1's textual structure rather than proving exact chronology.",
+      ko: "마태복음은 아브라함과 다윗을 중심 표지로 삼아 그리스도의 족보를 제시합니다. 이 미리보기는 정확한 연대를 증명하기보다 마태복음 1장의 본문 구조를 따릅니다.",
     },
   },
   {
@@ -3914,8 +3914,8 @@ export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] =
     ],
     segmentId: "matthew-genealogy-abraham-to-david",
     note: {
-      en: "Matthew's genealogy gathers Ruth and Boaz into the Davidic line.",
-      ko: "마태복음 족보는 보아스와 룻을 다윗 계통 안에 모읍니다.",
+      en: "Matthew's genealogy gathers Ruth and Boaz into the Davidic line as part of its textual arrangement. This preview keeps the connection at the level of Scripture-reference comparison.",
+      ko: "마태복음 족보는 본문 배열 안에서 보아스와 룻을 다윗 계통 안에 모읍니다. 이 미리보기는 이 연결을 성경 참조 비교 수준에만 머물게 합니다.",
     },
   },
   {
@@ -3940,8 +3940,8 @@ export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] =
     ],
     segmentId: "matthew-genealogy-abraham-to-david",
     note: {
-      en: "The Davidic covenant connects the kingdom flow to the messianic promise.",
-      ko: "다윗 언약은 왕국 흐름을 메시아 약속과 연결합니다.",
+      en: "David functions here as a major kingship marker in Matthew's genealogy. This preview does not attempt a full dynastic chronology beyond the selected Scripture anchors.",
+      ko: "여기서 다윗은 마태복음 족보 안의 주요 왕권 표지로 기능합니다. 이 미리보기는 선택된 성경 근거를 넘어 완전한 왕조 연대를 재구성하지 않습니다.",
     },
   },
   {
@@ -3990,8 +3990,8 @@ export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] =
     ],
     segmentId: "matthew-genealogy-david-to-exile",
     omissionNote: {
-      en: "Matthew 1:8 moves from Joram to Uzziah, while Chronicles and Kings show Ahaziah, Joash, and Amaziah between them. This preview marks the difference as a selective genealogical arrangement.",
-      ko: "마태복음 1:8은 요람에서 웃시야로 이어지지만, 역대상과 열왕기 계보를 함께 보면 아하시야, 요아스, 아마샤가 그 사이에 나타납니다. 이 미리보기는 이를 선택적 족보 배열로 표시합니다.",
+      en: "Matthew 1:8 moves from Joram to Uzziah, while Chronicles and Kings show Ahaziah, Joash, and Amaziah between them. This preview marks the difference as a selective genealogical arrangement rather than an exact chronology problem to solve.",
+      ko: "마태복음 1:8은 요람에서 웃시야로 이어지지만, 역대상과 열왕기 계보를 함께 보면 아하시야, 요아스, 아마샤가 그 사이에 나타납니다. 이 미리보기는 이를 해결해야 할 정확한 연대 문제라기보다 선택적 족보 배열 관찰로 표시합니다.",
     },
     nameVariantNote: {
       en: "Uzziah is also associated with the name Azariah in the Old Testament royal accounts.",
@@ -4062,8 +4062,8 @@ export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] =
     ],
     segmentId: "matthew-genealogy-david-to-exile",
     omissionNote: {
-      en: "Matthew 1:11 presents the royal line around the deportation in compressed form. Chronicles and Kings show Jehoiakim between Josiah and Jeconiah.",
-      ko: "마태복음 1:11은 포로기 전후의 왕계보를 압축해서 제시합니다. 역대상과 열왕기를 함께 보면 여호야김이 요시야와 여고냐 사이에 나타납니다.",
+      en: "Matthew 1:11 presents the royal line around the deportation in compressed form. Chronicles and Kings show Jehoiakim between Josiah and Jeconiah, so this preview keeps the observation cautious rather than treating it as exact chronology proof.",
+      ko: "마태복음 1:11은 포로기 전후의 왕계보를 압축해서 제시합니다. 역대상과 열왕기를 함께 보면 여호야김이 요시야와 여고냐 사이에 나타나므로, 이 미리보기는 이를 정확한 연대 증명으로 취급하지 않고 조심스러운 관찰로만 남깁니다.",
     },
     nameVariantNote: {
       en: "Jeconiah is associated with the names Jehoiachin and Coniah.",
@@ -4118,8 +4118,8 @@ export const timelineGenealogyComparisonRows: TimelineGenealogyComparisonRow[] =
     ],
     segmentId: "matthew-genealogy-exile-to-christ",
     note: {
-      en: "Matthew gathers the genealogy to Christ. This preview is limited to showing Matthew 1's structure.",
-      ko: "마태복음은 족보를 그리스도께로 모읍니다. 이 미리보기는 마태복음 1장의 구조를 보여 주는 데 제한됩니다.",
+      en: "Matthew gathers the genealogy to Christ. This preview remains limited to Matthew 1's structure and selected Scripture-reference observations.",
+      ko: "마태복음은 족보를 그리스도께로 모읍니다. 이 미리보기는 마태복음 1장의 구조와 선택된 성경 참조 관찰에만 머뭅니다.",
     },
   },
 ];

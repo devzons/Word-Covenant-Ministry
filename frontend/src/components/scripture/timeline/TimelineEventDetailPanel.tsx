@@ -1022,6 +1022,11 @@ function renderGenealogyEvidencePanel(
         <p className="text-sm leading-6 text-zinc-600">
           {segment ? `${getTimelineText(segment.title, locale)} · ${getTimelineText(segment.rangeLabel, locale)}` : getTimelineText(row.comparisonLabel, locale)}
         </p>
+        <p className="text-sm leading-6 text-zinc-500">
+          {locale === "ko"
+            ? "이 패널은 마태복음 1장의 구조와 선택된 성경 비교 표지만 요약합니다. 완전한 족보 재구성이나 정확한 연대 증명을 시도하지 않습니다."
+            : "This panel summarizes Matthew 1's structure with selected Scripture comparison markers only. It does not attempt exhaustive genealogy reconstruction or exact chronology proof."}
+        </p>
       </div>
 
       <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
@@ -1049,6 +1054,11 @@ function renderGenealogyEvidencePanel(
             <SectionNote>{getTimelineText(segment.note, locale)}</SectionNote>
           </>
         ) : null}
+        <SectionNote>
+          {locale === "ko"
+            ? "이 관찰은 본문 구조와 이름 비교를 요약한 metadata-only preview이며, 누락이나 이름 차이를 외부 전승이나 확정 연대로 해결하려 하지 않습니다."
+            : "These observations stay metadata-only and summarize textual structure plus name comparison without resolving omissions or variants through external tradition or exact chronology claims."}
+        </SectionNote>
       </DetailSection>
 
       <DetailSection label={locale === "ko" ? "이름 차이 / 생략 관찰" : "Name Variant / Omission Observation"}>

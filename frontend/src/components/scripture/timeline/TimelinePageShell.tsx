@@ -1020,7 +1020,7 @@ function getCompactStatusNote(
     case "kingdoms":
       return locale === "ko" ? "왕국 비교 preview rows" : "Kingdom comparison preview rows";
     case "genealogy":
-      return locale === "ko" ? "마태복음 1장 preview" : "Matthew 1 preview";
+      return locale === "ko" ? "마태복음 1장 구조 preview" : "Matthew 1 structural preview";
     case "places":
       return locale === "ko" ? "좌표 없는 개념지도 preview" : "Non-coordinate schematic preview";
     case "themes":
@@ -2729,8 +2729,8 @@ function GenealogyComparisonPreviewPanel({
           </p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "14 / 14 / 14 구조와 구약 족보 비교를 간단히 보여 주는 미리보기입니다."
-              : "A compact preview of Matthew's 14 / 14 / 14 structure compared with the Old Testament genealogy."}
+              ? "마태복음 1장의 14 / 14 / 14 구조와 선택된 구약 족보 비교를 간단히 보여 주는 metadata-only 미리보기입니다. 완전한 족보 재구성이나 정확한 연대 증명을 시도하지 않습니다."
+              : "A compact metadata-only preview of Matthew 1's 14 / 14 / 14 structure with selected Old Testament genealogy comparisons. It does not attempt exhaustive genealogy reconstruction or exact chronology proof."}
           </p>
         </div>
         <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
