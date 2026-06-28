@@ -3111,8 +3111,8 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
     northernKing: { en: "Omri / Ahab", ko: "오므리 / 아합" },
     prophetTags: [{ en: "Elijah", ko: "엘리야" }],
     note: {
-      en: "Omri's dynasty and Ahab are major textual markers in Northern Israel.",
-      ko: "오므리 왕조와 아합은 북이스라엘 흐름의 중요한 본문 표지입니다.",
+      en: "Omri's dynasty and Ahab remain major textual markers in Northern Israel, while Elijah is kept here only as supporting prophetic context.",
+      ko: "오므리 왕조와 아합은 북이스라엘 흐름의 중요한 본문 표지로 남아 있으며, 엘리야는 여기서 보조적 선지자 문맥으로만 표시됩니다.",
     },
   },
   {
@@ -3133,8 +3133,8 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
     northernKing: { en: "Jehu", ko: "예후" },
     prophetTags: [{ en: "Elisha", ko: "엘리사" }],
     note: {
-      en: "Jehu marks a dynastic transition in Northern Israel connected with Elisha's prophetic circle.",
-      ko: "예후는 엘리사의 선지자 제자와 연결되어 북이스라엘 왕조 전환을 보여 줍니다.",
+      en: "Jehu marks a dynastic transition in Northern Israel, with Elisha retained here as supporting prophetic context rather than a separate prophet row.",
+      ko: "예후는 북이스라엘의 왕조 전환을 보여 주며, 엘리사는 별도 선지자 row가 아니라 보조적 선지자 문맥으로만 유지됩니다.",
     },
   },
   {
@@ -3164,8 +3164,8 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
     ],
     dateLabel: { en: "Biblical royal sequence", ko: "성경 내부 왕정 순서" },
     note: {
-      en: "Jeroboam II's reign connects with the superscription settings of Hosea and Amos.",
-      ko: "여로보암 2세 시대는 호세아와 아모스의 표제 배경과 연결됩니다.",
+      en: "Jeroboam II's reign connects with the superscription settings of Hosea and Amos, which are shown here as supporting context tags rather than standalone prophet entries.",
+      ko: "여로보암 2세 시대는 호세아와 아모스의 표제 배경과 연결되며, 이 선지자들은 별도 항목이 아니라 보조 문맥 태그로만 표시됩니다.",
     },
   },
   {
@@ -3192,7 +3192,10 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
       en: "2 Kings uses Azariah, while 2 Chronicles and Isaiah's superscription use Uzziah.",
       ko: "열왕기하에서는 아사랴, 역대하와 이사야 표제에서는 웃시야 이름이 사용됩니다.",
     },
-    note: { en: "Uzziah's reign connects with Isaiah's superscription setting.", ko: "웃시야 시대는 이사야 표제의 왕정 배경과 연결됩니다." },
+    note: {
+      en: "Uzziah's reign connects with Isaiah's superscription setting and remains a metadata-only bridge to the selected genealogy comparison rows.",
+      ko: "웃시야 시대는 이사야 표제의 왕정 배경과 연결되며, 선택된 족보 비교 row로 이어지는 metadata-only 연결점으로만 유지됩니다.",
+    },
     prophetTags: [{ en: "Isaiah", ko: "이사야" }],
   },
   {
@@ -3218,8 +3221,8 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
       { en: "Northern Israel", ko: "북이스라엘" },
     ],
     note: {
-      en: "Ahaz's reign connects with the Aram-Ephraim crisis in Isaiah 7.",
-      ko: "아하스 시대는 이사야 7장의 아람-에브라임 위기와 연결됩니다.",
+      en: "Ahaz's reign connects with the Aram-Ephraim crisis in Isaiah 7, with Isaiah shown only as supporting prophetic context.",
+      ko: "아하스 시대는 이사야 7장의 아람-에브라임 위기와 연결되며, 이사야는 보조적 선지자 문맥으로만 표시됩니다.",
     },
   },
   {
@@ -3325,8 +3328,8 @@ export const timelineKingdomComparisonRows: TimelineKingdomComparisonRow[] = [
       ko: "여호야긴은 여고냐, 고니야와 연결되는 이름입니다.",
     },
     note: {
-      en: "Jehoiachin/Jeconiah forms a connection between the deportation and Matthew's genealogy.",
-      ko: "여호야긴/여고냐는 포로기와 마태복음 족보의 연결점입니다.",
+      en: "Jehoiachin/Jeconiah forms a metadata-only connection between the deportation context and Matthew's genealogy comparison rows.",
+      ko: "여호야긴/여고냐는 포로기 문맥과 마태복음 족보 비교 row 사이의 metadata-only 연결점입니다.",
     },
   },
 ];

@@ -482,6 +482,13 @@ function renderEventEvidencePanel(
           locale={locale}
           tags={event.prophetTags}
         />
+        {event.prophetTags?.length ? (
+          <SectionNote>
+            {locale === "ko"
+              ? "선지자 표시는 선택 가능한 별도 엔티티가 아니라 현재 사건을 돕는 보조 문맥 태그입니다."
+              : "Prophet labels remain supporting context tags for the current event, not selectable standalone entities."}
+          </SectionNote>
+        ) : null}
         <ContextTagGroup
           label={locale === "ko" ? "주변 민족" : "Surrounding Nations"}
           locale={locale}
@@ -784,8 +791,19 @@ function renderKingdomEvidencePanel(
         ) : null}
       </DetailSection>
 
-      <DetailSection label={locale === "ko" ? "선지자" : "Prophets"}>
-        <ContextTagGroup label={locale === "ko" ? "선지자" : "Prophets"} locale={locale} tags={row.prophetTags} />
+      <DetailSection label={locale === "ko" ? "선지자 문맥" : "Prophetic Context"}>
+        <ContextTagGroup
+          label={locale === "ko" ? "선지자 태그" : "Prophet tags"}
+          locale={locale}
+          tags={row.prophetTags}
+        />
+        {row.prophetTags?.length ? (
+          <SectionNote>
+            {locale === "ko"
+              ? "이 태그들은 별도 선지자 row나 선택 타입이 아니라, 현재 왕국 흐름을 돕는 보조 문맥 표지입니다."
+              : "These labels remain supporting context markers for the current kingdom flow, not separate prophet rows or a selectable inspector type."}
+          </SectionNote>
+        ) : null}
       </DetailSection>
 
       <DetailSection label={locale === "ko" ? "열강 / 주변 민족" : "Empires / Nations"}>
@@ -988,6 +1006,11 @@ function renderKingsPackageEvidencePanel(
           {locale === "ko"
             ? "이 패널은 kings-kingdoms skeleton package의 metadata-only preview를 보여 줍니다."
             : "This panel shows a metadata-only preview from the kings-kingdoms skeleton package."}
+        </SectionNote>
+        <SectionNote>
+          {locale === "ko"
+            ? "선지자 확장 row는 아직 추가하지 않았으며, 현재 cross-link는 기존 사건 / 왕국 / 족보 metadata 안에서만 동작합니다."
+            : "No prophet-expansion rows have been added here; the current cross-links stay within existing event, kingdom, and genealogy metadata."}
         </SectionNote>
         <SectionNote>
           {locale === "ko"

@@ -40,6 +40,8 @@ CR-92E Korean Reference Inspector Policy Design is now documented in `docs/ROADM
 
 CR-90Y-5 Genealogy Detail Refinement is now complete through available validation. The current genealogy preview remains runtime fixture-backed through `timelineGenealogySegments` and `timelineGenealogyComparisonRows` in `timelinePreviewData.ts`, with no package migration and no new package rows. The Matthew 1 `14 / 14 / 14` preview copy and the genealogy right-panel metadata copy were refined to make the scope more cautious: the current surface now presents Matthew 1 textual structure plus selected Old Testament comparison markers without claiming exhaustive genealogy reconstruction or exact chronology proof. Omission and name-variant observations remain explicit, but they are now framed as selective textual/genealogical observations rather than chronology problems to solve. No Luke genealogy expansion, broader Old Testament genealogy expansion, deep-link support, API, DB, backend, schema, runtime import/export, Bible-text rendering, coordinates, map-provider fields, or geocoding work were added.
 
+CR-90Y-4B Kings / Prophets Cross-Link Refinement is now complete through available validation. The current change stayed within existing metadata-only navigation boundaries across the runtime kingdom comparison rows, the package-backed Kings / Kingdoms preview, and the right-panel related chips. Existing runtime kingdom row copy now makes prophet labels read more clearly as supporting context tags rather than standalone prophet rows, existing package-backed kingdom detail now exposes related event chips from existing metadata, and right-panel wording now makes explicit that prophet labels are not a selectable primary entity. No kings package rows, prophet rows, prophetic-context rows, deep-link support, inspector selection types, API, DB, backend, schema, runtime import/export, Bible-text rendering, coordinates, map-provider fields, or geocoding work were added.
+
 CR-93G Kings / Kingdoms Timeline Package Design is complete as a docs-only design step. `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md` now defines a future `timeline.kings-kingdoms` package envelope, record types for kingdom flow and king rows, cautious chronology and synchronism policy, Scripture-anchor-only rules, cross-link expectations, accordion-first center-column structure, and future verifier/fixture implications. No kings skeleton JSON, frontend integration, verifier change, API, DB, backend, schema, or runtime import/export work was added.
 
 CR-93G-2 Kings / Kingdoms Skeleton Package is complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now adds a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdoms, representative kings, transitions, exile markers, and a temple marker. The package remains frontend-unlinked, stores no Bible text, uses no coordinates or map-provider fields, and keeps chronology approximate and review-gated. Kings / Kingdoms verifier fixtures remain deferred to CR-93G-3, and verifier rule hardening remains deferred to CR-93G-4 if needed.
@@ -96,9 +98,9 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-2. CR-91 Place / Map Preview.
-3. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
+1. CR-91 Place / Map Preview.
+2. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
+3. Later: fuller prophet-context expansion only after separate approval and row-level review.
 4. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
 5. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
 6. After explicit approval, implement seed migration tracking and release automation support.

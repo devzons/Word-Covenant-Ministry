@@ -1698,6 +1698,11 @@ function KingsKingdomsPreviewPanel({
               ? "성경 본문은 저장하거나 표시하지 않습니다. 연대 표기는 review-gated caution으로만 다룹니다."
               : "Bible text is not stored or rendered here. Chronology labels remain review-gated cautions."}
           </p>
+          <p className="mt-2 text-xs leading-5 text-zinc-500">
+            {locale === "ko"
+              ? "선지자 표시는 보조 문맥 태그로만 유지되며, 별도 선지자 row나 선택 타입으로 확장하지 않습니다."
+              : "Prophet labels remain supporting context tags only and are not expanded into standalone prophet rows or a separate selection type."}
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
