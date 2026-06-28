@@ -268,17 +268,44 @@ export function TimelinePageShell({
     [activeLocale, periodCounts],
   );
 
+  const canonicalBookOrderById = useMemo(
+    () =>
+      new Map(
+        canonicalBookRows
+          .filter((row) => typeof row.canonicalOrder === "number")
+          .map((row) => [row.bookId, row.canonicalOrder as number]),
+      ),
+    [canonicalBookRows],
+  );
+
+  const fallbackTimelineBookOrderById = useMemo(
+    () => new Map(timelineBooks.map((book, index) => [book.id, index])),
+    [],
+  );
+
   const bookOptions = useMemo<TimelineOption[]>(
     () => [
       { id: "all", label: activeLocale === "ko" ? "모든 책" : "All books" },
       ...timelineBooks
         .filter((book) => bookCounts.has(book.id))
+        .sort((left, right) => {
+          const leftCanonicalOrder =
+            canonicalBookOrderById.get(left.id) ??
+            fallbackTimelineBookOrderById.get(left.id) ??
+            Number.MAX_SAFE_INTEGER;
+          const rightCanonicalOrder =
+            canonicalBookOrderById.get(right.id) ??
+            fallbackTimelineBookOrderById.get(right.id) ??
+            Number.MAX_SAFE_INTEGER;
+
+          return leftCanonicalOrder - rightCanonicalOrder;
+        })
         .map((book) => ({
           id: book.id,
           label: `${getTimelineText(book.label, activeLocale)} (${bookCounts.get(book.id) ?? 0})`,
         })),
     ],
-    [activeLocale, bookCounts],
+    [activeLocale, bookCounts, canonicalBookOrderById, fallbackTimelineBookOrderById],
   );
 
   const placeOptions = useMemo<TimelineOption[]>(
