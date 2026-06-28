@@ -1290,6 +1290,14 @@ function renderPlaceEvidencePanel(
             value={getTimelineText(row.placeTypeLabel, locale)}
           />
         ) : null}
+        <ContextRow
+          label={locale === "ko" ? "지도 범위" : "Map scope"}
+          value={
+            locale === "ko"
+              ? "좌표 없는 schematic preview"
+              : "Coordinate-free schematic preview"
+          }
+        />
         <SectionNote>
           {locale === "ko"
             ? "이 단계에서는 좌표, 지도 provider, 지오코딩, 경로 재구성을 제공하지 않습니다. 오늘날 지명은 보조 표기입니다."
@@ -1302,9 +1310,18 @@ function renderPlaceEvidencePanel(
         </SectionNote>
       </DetailSection>
 
-      <DetailSection label={locale === "ko" ? "위치 근거 / 주의" : "Location Basis / Caution"}>
-        <SectionNote>{getTimelineText(row.locationBasisLabel, locale)}</SectionNote>
-        <SectionNote>{getTimelineText(row.locationConfidenceLabel, locale)}</SectionNote>
+      <DetailSection label={locale === "ko" ? "위치 근거 / 신뢰" : "Location Basis / Confidence"}>
+        <ContextRow
+          label={locale === "ko" ? "위치 근거" : "Location basis"}
+          value={getTimelineText(row.locationBasisLabel, locale)}
+        />
+        <ContextRow
+          label={locale === "ko" ? "위치 신뢰" : "Location confidence"}
+          value={getTimelineText(row.locationConfidenceLabel, locale)}
+        />
+      </DetailSection>
+
+      <DetailSection label={locale === "ko" ? "주의 / 메모" : "Caution / Note"}>
         {row.cautionNote ? <SectionNote>{getTimelineText(row.cautionNote, locale)}</SectionNote> : null}
         <SectionNote>{getTimelineText(row.note, locale)}</SectionNote>
         <SectionNote>
