@@ -4,12 +4,26 @@ import { ContextRow } from "@/components/scripture/timeline/timeline-detail-pane
 import { PanelSection } from "@/components/scripture/timeline/timeline-detail-panel/PanelSection";
 import { ScriptureAnchorsSection } from "@/components/scripture/timeline/timeline-detail-panel/ScriptureAnchorsSection";
 import { SectionNote } from "@/components/scripture/timeline/timeline-detail-panel/SectionNote";
-import { getTimelineText, type TimelineBookContextRow, type TimelineLocale } from "@/components/scripture/timeline/passionWeekTimeline";
+import { Tag } from "@/components/scripture/timeline/timeline-detail-panel/Tag";
+import { getTimelineText, type TimelineBookContextRow, type TimelineLocale, type TimelineText } from "@/components/scripture/timeline/passionWeekTimeline";
+
+export type BibleReaderRelatedMetadataPreviewItem = {
+  id: string;
+  label: TimelineText;
+};
+
+export type BibleReaderRelatedMetadataPreview = {
+  books: BibleReaderRelatedMetadataPreviewItem[];
+  events: BibleReaderRelatedMetadataPreviewItem[];
+  kingdoms: BibleReaderRelatedMetadataPreviewItem[];
+  places: BibleReaderRelatedMetadataPreviewItem[];
+};
 
 type BibleReaderContextPanelProps = {
   bookContext: TimelineBookContextRow | null;
   chapter: number;
   locale: string;
+  relatedMetadata: BibleReaderRelatedMetadataPreview;
   selectedVerse?: number | null;
 };
 
@@ -25,6 +39,15 @@ const bibleReaderContextCopy = {
     scriptureAnchors: "Scripture Anchors",
     packageBasis: "Package basis",
     evidenceConfidence: "Evidence confidence",
+    relatedMetadata: "Related metadata preview",
+    relatedMetadataNote:
+      "Related metadata is derived from current book-level preview data only.",
+    relatedMetadataBoundary:
+      "This does not mean the selected verse has been entity-tagged.",
+    relatedEvents: "Related events",
+    relatedPlaces: "Related places",
+    relatedKingdoms: "Related kingdoms",
+    relatedBooks: "Related books",
     authorshipLabel: "Authorship",
     authorshipBasis: "Authorship basis",
     backgroundSetting: "Background setting",
@@ -39,6 +62,8 @@ const bibleReaderContextCopy = {
       "Context metadata for the current book is not yet connected.",
     missingNote:
       "For now this reader surface can only show book-level metadata when a package-backed context row is available.",
+    noRelatedMetadata:
+      "No related preview metadata is connected yet.",
     referenceOnly:
       "These Scripture anchors are shown as reference-only metadata. Bible text remains in the reader column.",
   },
@@ -53,6 +78,15 @@ const bibleReaderContextCopy = {
     scriptureAnchors: "성경 근거",
     packageBasis: "패키지 기준",
     evidenceConfidence: "근거 신뢰",
+    relatedMetadata: "관련 metadata 미리보기",
+    relatedMetadataNote:
+      "관련 항목은 현재 책 기준 preview metadata에서만 가져온 것입니다.",
+    relatedMetadataBoundary:
+      "이 표시는 선택 절에 사람/장소/왕국 태그가 붙었다는 뜻이 아닙니다.",
+    relatedEvents: "관련 사건",
+    relatedPlaces: "관련 장소",
+    relatedKingdoms: "관련 왕국",
+    relatedBooks: "관련 책",
     authorshipLabel: "저자",
     authorshipBasis: "저자 근거",
     backgroundSetting: "배경 연결",
@@ -67,6 +101,8 @@ const bibleReaderContextCopy = {
       "현재 책의 context metadata가 아직 연결되지 않았습니다.",
     missingNote:
       "현재 reader surface는 package-backed 책 문맥 row가 있을 때만 책 수준 metadata를 표시할 수 있습니다.",
+    noRelatedMetadata:
+      "연결된 관련 preview metadata가 아직 없습니다.",
     referenceOnly:
       "이 성경 근거는 reference-only metadata로만 표시됩니다. 성경 본문은 reader 영역에 남아 있습니다.",
   },
@@ -76,10 +112,16 @@ export function BibleReaderContextPanel({
   bookContext,
   chapter,
   locale,
+  relatedMetadata,
   selectedVerse,
 }: BibleReaderContextPanelProps) {
   const activeLocale: TimelineLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderContextCopy[activeLocale];
+  const hasRelatedMetadata =
+    relatedMetadata.events.length > 0 ||
+    relatedMetadata.places.length > 0 ||
+    relatedMetadata.kingdoms.length > 0 ||
+    relatedMetadata.books.length > 0;
 
   return (
     <div className="flex min-w-0 flex-col gap-4">
@@ -124,6 +166,45 @@ export function BibleReaderContextPanel({
             referenceOnlyDescription={copy.referenceOnly}
             rowId={bookContext.id}
           />
+
+          <PanelSection label={copy.relatedMetadata}>
+            {hasRelatedMetadata ? (
+              <>
+                {relatedMetadata.events.length > 0 ? (
+                  <MetadataPreviewTagGroup
+                    items={relatedMetadata.events}
+                    label={copy.relatedEvents}
+                    locale={activeLocale}
+                  />
+                ) : null}
+                {relatedMetadata.places.length > 0 ? (
+                  <MetadataPreviewTagGroup
+                    items={relatedMetadata.places}
+                    label={copy.relatedPlaces}
+                    locale={activeLocale}
+                  />
+                ) : null}
+                {relatedMetadata.kingdoms.length > 0 ? (
+                  <MetadataPreviewTagGroup
+                    items={relatedMetadata.kingdoms}
+                    label={copy.relatedKingdoms}
+                    locale={activeLocale}
+                  />
+                ) : null}
+                {relatedMetadata.books.length > 0 ? (
+                  <MetadataPreviewTagGroup
+                    items={relatedMetadata.books}
+                    label={copy.relatedBooks}
+                    locale={activeLocale}
+                  />
+                ) : null}
+              </>
+            ) : (
+              <SectionNote>{copy.noRelatedMetadata}</SectionNote>
+            )}
+            <SectionNote>{copy.relatedMetadataNote}</SectionNote>
+            <SectionNote>{copy.relatedMetadataBoundary}</SectionNote>
+          </PanelSection>
 
           <PanelSection label={copy.authorship}>
             {bookContext.authorshipLabel ? (
@@ -183,6 +264,27 @@ export function BibleReaderContextPanel({
           </PanelSection>
         </>
       )}
+    </div>
+  );
+}
+
+function MetadataPreviewTagGroup({
+  items,
+  label,
+  locale,
+}: {
+  items: BibleReaderRelatedMetadataPreviewItem[];
+  label: string;
+  locale: TimelineLocale;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
+      <div className="flex flex-wrap gap-2">
+        {items.map((item) => (
+          <Tag key={`${label}-${item.id}`}>{getTimelineText(item.label, locale)}</Tag>
+        ))}
+      </div>
     </div>
   );
 }

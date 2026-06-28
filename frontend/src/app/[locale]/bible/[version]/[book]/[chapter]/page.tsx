@@ -5,11 +5,24 @@ import type { Metadata } from "next";
 
 import { SiteShell } from "@/components/layout/SiteShell";
 import { BibleReader } from "@/components/scripture/BibleReader";
+import type { BibleReaderRelatedMetadataPreview } from "@/components/scripture/BibleReaderContextPanel";
 import {
   normalizeCanonicalBooksPackage,
   type CanonicalBooksPackage,
 } from "@/components/scripture/timeline/timelineBooksPackage";
-import type { TimelineBookContextRow } from "@/components/scripture/timeline/passionWeekTimeline";
+import {
+  normalizeCoreBiblicalEventsPackage,
+  type CoreBiblicalEventsPackage,
+} from "@/components/scripture/timeline/timelineEventsPackage";
+import {
+  normalizeKingsKingdomsPackage,
+  type KingsKingdomsPackage,
+} from "@/components/scripture/timeline/timelineKingsKingdomsPackage";
+import {
+  timelineSchematicPlaceRows,
+  type TimelineBookContextRow,
+  type TimelineText,
+} from "@/components/scripture/timeline/passionWeekTimeline";
 import { Container } from "@/components/ui/Container";
 import { getBibleBookMetadata, getBibleChapter } from "@/lib/api/bible";
 import { createMetadata } from "@/lib/seo/metadata";
@@ -51,6 +64,7 @@ export default async function BibleReaderPage({
   let bibleChapter: BibleChapterResponse | null = null;
   let bookMetadata: BibleBookMetadata | null = null;
   let bookContext: TimelineBookContextRow | null = null;
+  let relatedMetadata: BibleReaderRelatedMetadataPreview = emptyRelatedMetadataPreview();
   let errorMessage = "";
   let isChapterOutOfRange = false;
 
@@ -61,7 +75,9 @@ export default async function BibleReaderPage({
       isChapterOutOfRange = true;
     } else {
       bibleChapter = await getBibleChapter(version, book, chapterNumber);
-      bookContext = await loadBookContext(book);
+      const bookContextData = await loadBookContextData(book);
+      bookContext = bookContextData.bookContext;
+      relatedMetadata = bookContextData.relatedMetadata;
     }
   } catch {
     errorMessage = readerPageCopy[activeLocale].chapterLoadError;
@@ -85,6 +101,7 @@ export default async function BibleReaderPage({
           initialSearchQuery={query.q ?? ""}
           locale={locale}
           mode={mode}
+          relatedMetadata={relatedMetadata}
         />
       </div>
     </SiteShell>
@@ -124,22 +141,106 @@ function BibleReaderError({ locale, message }: { locale: string; message: string
   );
 }
 
-async function loadBookContext(bookId: string): Promise<TimelineBookContextRow | null> {
+async function loadBookContextData(bookId: string): Promise<{
+  bookContext: TimelineBookContextRow | null;
+  relatedMetadata: BibleReaderRelatedMetadataPreview;
+}> {
   try {
-    const packagePath = path.join(
+    const timelinePackageDirectory = path.join(
       process.cwd(),
       "..",
       "docs",
       "data-packages",
       "timeline",
-      "books.66-canonical-skeleton.json",
     );
-    const raw = await readFile(packagePath, "utf8");
-    const canonicalBooksPackage = JSON.parse(raw) as CanonicalBooksPackage;
-    const rows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
+    const [booksRaw, eventsRaw, kingdomsRaw] = await Promise.all([
+      readFile(path.join(timelinePackageDirectory, "books.66-canonical-skeleton.json"), "utf8"),
+      readFile(path.join(timelinePackageDirectory, "events.core-biblical-skeleton.json"), "utf8"),
+      readFile(path.join(timelinePackageDirectory, "kings-kingdoms.skeleton.json"), "utf8"),
+    ]);
 
-    return rows.find((row) => row.bookId === bookId) ?? null;
+    const canonicalBooks = normalizeCanonicalBooksPackage(
+      JSON.parse(booksRaw) as CanonicalBooksPackage,
+    );
+    const coreEvents = normalizeCoreBiblicalEventsPackage(
+      JSON.parse(eventsRaw) as CoreBiblicalEventsPackage,
+    );
+    const kingdoms = normalizeKingsKingdomsPackage(
+      JSON.parse(kingdomsRaw) as KingsKingdomsPackage,
+    );
+    const bookContext = canonicalBooks.find((row) => row.bookId === bookId) ?? null;
+
+    return {
+      bookContext,
+      relatedMetadata: bookContext
+        ? createRelatedMetadataPreview({ bookContext, canonicalBooks, coreEvents, kingdoms })
+        : emptyRelatedMetadataPreview(),
+    };
   } catch {
-    return null;
+    return {
+      bookContext: null,
+      relatedMetadata: emptyRelatedMetadataPreview(),
+    };
   }
+}
+
+function emptyRelatedMetadataPreview(): BibleReaderRelatedMetadataPreview {
+  return {
+    books: [],
+    events: [],
+    kingdoms: [],
+    places: [],
+  };
+}
+
+function createRelatedMetadataPreview({
+  bookContext,
+  canonicalBooks,
+  coreEvents,
+  kingdoms,
+}: {
+  bookContext: TimelineBookContextRow;
+  canonicalBooks: TimelineBookContextRow[];
+  coreEvents: Array<{ id: string; title: TimelineText }>;
+  kingdoms: Array<{ id: string; title: TimelineText }>;
+}): BibleReaderRelatedMetadataPreview {
+  const booksById = new Map(canonicalBooks.map((row) => [row.bookId, { id: row.bookId, label: row.title }]));
+  const eventsById = new Map(coreEvents.map((row) => [row.id, { id: row.id, label: row.title }]));
+  const kingdomsById = new Map(kingdoms.map((row) => [row.id, { id: row.id, label: row.title }]));
+  const placesById = new Map(
+    timelineSchematicPlaceRows.flatMap((row) => [
+      [row.placeId, { id: row.placeId, label: row.title }] as const,
+      [row.id, { id: row.id, label: row.title }] as const,
+    ]),
+  );
+
+  return {
+    books: dedupePreviewItems((bookContext.relatedBookIds ?? []).map((id) => booksById.get(id)).filter(isDefined)),
+    events: dedupePreviewItems((bookContext.relatedEventIds ?? []).map((id) => eventsById.get(id)).filter(isDefined)),
+    kingdoms: dedupePreviewItems(
+      [
+        ...(bookContext.relatedKingdomIds ?? []).map((id) => kingdomsById.get(id)).filter(isDefined),
+        ...(bookContext.relatedKingdoms ?? []).map((label, index) => ({
+          id: `${bookContext.id}-related-kingdom-${index}`,
+          label,
+        })),
+      ],
+    ),
+    places: dedupePreviewItems((bookContext.relatedPlaces ?? []).map((id) => placesById.get(id)).filter(isDefined)),
+  };
+}
+
+function dedupePreviewItems<T extends { id: string }>(items: T[]): T[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    if (seen.has(item.id)) {
+      return false;
+    }
+    seen.add(item.id);
+    return true;
+  });
+}
+
+function isDefined<T>(value: T | undefined): value is T {
+  return value !== undefined;
 }

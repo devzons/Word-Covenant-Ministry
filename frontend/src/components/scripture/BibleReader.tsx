@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
-import { BibleReaderContextPanel } from "@/components/scripture/BibleReaderContextPanel";
+import {
+  BibleReaderContextPanel,
+  type BibleReaderRelatedMetadataPreview,
+} from "@/components/scripture/BibleReaderContextPanel";
 import { CrossReferencePanel } from "@/components/scripture/CrossReferencePanel";
 import { InterlinearVerse } from "@/components/scripture/InterlinearVerse";
 import { PassageInsightPanel } from "@/components/scripture/PassageInsightPanel";
@@ -33,6 +36,7 @@ type BibleReaderProps = {
   initialSearchQuery?: string;
   locale: string;
   mode: OriginalLanguageReaderMode;
+  relatedMetadata?: BibleReaderRelatedMetadataPreview;
 };
 
 const bookOptions = [
@@ -168,6 +172,7 @@ export function BibleReader({
   initialSearchQuery = "",
   locale,
   mode,
+  relatedMetadata = { books: [], events: [], kingdoms: [], places: [] },
 }: BibleReaderProps) {
   const router = useRouter();
   const activeLocale = locale === "en" ? "en" : "ko";
@@ -470,6 +475,7 @@ export function BibleReader({
           bookLabel={currentBook?.label[activeLocale] ?? bookMetadata.name}
           bookContext={bookContext}
           initialSearchQuery={initialSearchQuery}
+          relatedMetadata={relatedMetadata}
           selectedVerse={activeStudyVerse}
           studyPanelLabel={copy.studyPanel}
           verseCount={chapter.verses.length}
@@ -484,6 +490,7 @@ type BibleReaderResearchPanelProps = {
   bookLabel: string;
   bookContext: TimelineBookContextRow | null;
   initialSearchQuery: string;
+  relatedMetadata: BibleReaderRelatedMetadataPreview;
   selectedVerse: number | null;
   studyPanelLabel: string;
   verseCount: number;
@@ -493,6 +500,7 @@ function BibleReaderResearchPanel({
   bookLabel,
   bookContext,
   initialSearchQuery,
+  relatedMetadata,
   selectedVerse,
   studyPanelLabel,
   verseCount,
@@ -558,6 +566,7 @@ function BibleReaderResearchPanel({
           bookContext={bookContext}
           chapter={chapter}
           locale={locale}
+          relatedMetadata={relatedMetadata}
           selectedVerse={selectedVerse}
         />
       ) : null}
