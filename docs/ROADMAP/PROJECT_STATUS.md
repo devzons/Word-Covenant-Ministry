@@ -170,6 +170,8 @@ WEB staging and production promotion remain explicitly not approved / blocked. E
 
 Local commit-readiness reconciliation is now complete. The current worktree is clean, no pending local commit remains for the earlier Scripture UX / Word Study / Cross Reference / Gospel Harmony / roadmap commit reminder, and the relevant local work has already been recorded in recent commits. The next operational concern is push / release readiness reconciliation rather than another local commit.
 
+`Scripture Context Atlas Redesign Scope` is now documented in `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_REDESIGN_SCOPE.md` as a docs-only design step. The current Timeline workspace is being reframed as a future Scripture-reading-first context atlas in which Bible text remains primary, existing Timeline package/runtime metadata is reused as right-panel context supply, schematic map policy remains no-coordinate and no-provider, original-language and paja work remain subordinate to Scripture context, and Korean/world-history layers remain supporting-only. Implementation is deferred. The next required step before any prototype is a right-panel completeness audit.
+
 Current phase boundary:
 
 ```txt
