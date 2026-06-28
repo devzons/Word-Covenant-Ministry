@@ -72,6 +72,8 @@ CR-93E-5 Cross-Link and No-Coordinate Guardrail Expansion is complete. The verif
 
 CR-93C Core Biblical Event Skeleton is complete. `docs/data-packages/timeline/events.core-biblical-skeleton.json` now contains a minimal Scripture-reference-only event baseline with 85 core rows from Creation through Revelation. The package is read-only, verifier-checked, and now connected to the Timeline Events view through a preview-only route server loader. No Bible text, coordinates, map provider fields, Korean/world historical rows, API, DB, schema migration, or runtime import/export pipeline work were added.
 
+CR-93C-3 Core Event Frontend QA is now complete through available validation. `docs/ROADMAP/CORE_EVENT_FRONTEND_QA.md` now records the Events package loader path, normalization flow, event-card `aria-pressed` selection behavior, right-panel metadata-only flow, no-Bible-text guardrail, no-coordinate / no-map-provider / no-geocoding guardrails, verifier-wrapper coverage, available frontend validation results, and the current local route-smoke limitation. No required frontend fixes were identified in this QA pass. `node scripts/timeline/verify-timeline-packages.mjs`, `npm run typecheck`, and `npm run lint` passed. `npm run build` remained environment-limited in this session because Next.js Turbopack failed while creating a new process and binding to a port, so that result is recorded as an environment constraint rather than a confirmed Events-preview code defect. No data-package row, API, DB, backend, schema, or runtime import/export change was added.
+
 CR-93E-6 Verifier CI / Command Wiring is complete. `scripts/timeline/verify-timeline-packages.mjs` now provides a single local wrapper command that checks verifier syntax, the canonical books package, the core events package, valid fixtures, invalid expected-fail fixtures, warning-only fixtures, and JSON smoke output. No root `package.json`, GitHub Actions workflow, frontend code, runtime integration, API, DB, schema migration, or import behavior was added. Repository CI wiring remains deferred because there is no existing `.github/workflows/` convention in this repository.
 
 Future world-history or Korean-history reference layers remain deferred. If they are introduced later, they must stay reference-only and source-labeled rather than becoming interpretive authority over Scripture.
@@ -86,22 +88,21 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-93C-3 Core Event Frontend QA.
-2. CR-93D-2 66-Book Frontend Preview Integration follow-up only if new cross-package QA exposes regressions.
-3. CR-92D-2 Korean Reference Period Assignment Hardening.
-4. CR-92E Korean Reference Inspector Policy Design.
-5. CR-90Y-5 Genealogy Detail Refinement.
-6. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-7. CR-91 Place / Map Preview.
-8. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
-9. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
-10. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
-11. After explicit approval, implement seed migration tracking and release automation support.
-12. Later: Strong detail pages or dedicated Word Study pages.
-13. Later: advanced search.
-14. Later: morphology explorer.
-15. Later: Commentary Layer.
-16. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+1. CR-93D-2 66-Book Frontend Preview Integration follow-up only if new cross-package QA exposes regressions.
+2. CR-92D-2 Korean Reference Period Assignment Hardening.
+3. CR-92E Korean Reference Inspector Policy Design.
+4. CR-90Y-5 Genealogy Detail Refinement.
+5. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+6. CR-91 Place / Map Preview.
+7. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
+8. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+9. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
+10. After explicit approval, implement seed migration tracking and release automation support.
+11. Later: Strong detail pages or dedicated Word Study pages.
+12. Later: advanced search.
+13. Later: morphology explorer.
+14. Later: Commentary Layer.
+15. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 
