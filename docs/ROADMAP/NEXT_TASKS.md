@@ -100,7 +100,7 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
+1. `Kings / Kingdoms Deeper Expansion Scope Definition` is now documented in `docs/ROADMAP/KINGS_KINGDOMS_DEEPER_EXPANSION_SCOPE.md`. The current package-backed Kings / Kingdoms baseline remains `20` rows in `docs/data-packages/timeline/kings-kingdoms.skeleton.json` with a `5 / 3 / 2 / 7 / 1 / 2` distribution across `kingdomPeriod`, `kingdom`, `transition`, `king`, `templeMarker`, and `exileMarker`. The current frontend remains mixed because package-backed Kings / Kingdoms preview now coexists with runtime `timelineKingdomComparisonRows` supporting comparison data. Existing verifier coverage already enforces Bible-text and coordinate/map-provider guardrails, relation validation, and exact-chronology review gating. This scope-definition CR does not authorize row additions, runtime-to-package promotion, prophet-package work, or prophetic-context expansion. The next required step is row-level authorization review before any deeper data expansion starts.
 2. Later: fuller prophet-context expansion only after separate approval and row-level review.
 3. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
 4. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
