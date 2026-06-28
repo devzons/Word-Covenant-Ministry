@@ -53,7 +53,7 @@ export function ResearchPanelNavigation({
       </h2>
       <nav
         aria-label={copy.title}
-        className="grid gap-1 rounded-md border border-zinc-200 bg-white p-1 sm:grid-cols-4"
+        className="grid grid-cols-2 gap-1 rounded-md border border-zinc-200 bg-white p-1 sm:grid-cols-4"
       >
         {visibleResearchSections.map((section) => (
           <button

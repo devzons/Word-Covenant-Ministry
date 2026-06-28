@@ -31,7 +31,7 @@ const bibleReaderContextCopy = {
   en: {
     title: "Context",
     description:
-      "This panel shows book-level preview metadata only. It does not infer verse-level entities from the current chapter text.",
+      "This panel shows book-level preview metadata only for the current book. It does not infer verse-level entities from the current chapter text.",
     bookScope: "Current book context",
     canonical: "Canonical location",
     authorship: "Authorship / Basis",
@@ -57,20 +57,20 @@ const bibleReaderContextCopy = {
     caution: "Caution",
     selectedVerse: "Current selected verse",
     verseFuture:
-      "Verse-level entity tagging remains a future phase. The current panel does not infer people, places, kingdoms, or names from this verse automatically.",
+      "This verse reference is shown only as a reader-state hint. Verse-level people, places, kingdoms, names, and maps remain future phases.",
     missing:
       "Context metadata for the current book is not yet connected.",
     missingNote:
-      "For now this reader surface can only show book-level metadata when a package-backed context row is available.",
+      "For now this reader panel can only show book-level metadata when a package-backed context row is available.",
     noRelatedMetadata:
-      "No related preview metadata is connected yet.",
+      "No related preview metadata is connected for this book yet.",
     referenceOnly:
       "These Scripture anchors are shown as reference-only metadata. Bible text remains in the reader column.",
   },
   ko: {
     title: "문맥",
     description:
-      "이 패널은 현재 책 기준의 preview metadata만 표시합니다. 현재 장 본문에서 절 단위 엔티티를 자동 해석하지 않습니다.",
+      "이 패널은 현재 책 기준의 preview metadata만 표시합니다. 현재 장 본문을 절 단위 entity로 자동 분석하지 않습니다.",
     bookScope: "현재 책 문맥",
     canonical: "정경 위치",
     authorship: "저자 / 근거",
@@ -96,13 +96,13 @@ const bibleReaderContextCopy = {
     caution: "주의",
     selectedVerse: "현재 선택 절",
     verseFuture:
-      "절 단위 entity tagging은 future phase로 남아 있습니다. 현재 패널은 이 절에서 사람, 장소, 왕국, 이름을 자동 인식하지 않습니다.",
+      "이 절 표시는 reader 상태를 보여 주는 참고 표시일 뿐입니다. 절 단위 인물, 장소, 왕국, 이름, 지도 연결은 이후 단계입니다.",
     missing:
       "현재 책의 context metadata가 아직 연결되지 않았습니다.",
     missingNote:
-      "현재 reader surface는 package-backed 책 문맥 row가 있을 때만 책 수준 metadata를 표시할 수 있습니다.",
+      "현재 reader 패널은 package-backed 책 문맥 row가 있을 때만 책 수준 metadata를 표시할 수 있습니다.",
     noRelatedMetadata:
-      "연결된 관련 preview metadata가 아직 없습니다.",
+      "이 책에 연결된 관련 preview metadata가 아직 없습니다.",
     referenceOnly:
       "이 성경 근거는 reference-only metadata로만 표시됩니다. 성경 본문은 reader 영역에 남아 있습니다.",
   },
