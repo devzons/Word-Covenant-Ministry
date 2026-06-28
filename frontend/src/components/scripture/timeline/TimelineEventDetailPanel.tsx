@@ -1,17 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
-
-import Link from "next/link";
-
 import { Card } from "@/components/ui/Card";
-import { cn } from "@/lib/utils/cn";
 
 import {
   getTimelineBook,
   getTimelineDatePreview,
   getTimelinePlace,
-  getTimelineReaderHrefFromReader,
   getTimelineText,
   timelineBookContextRows,
   timelineGenealogyComparisonRows,
@@ -30,6 +24,20 @@ import {
 import { TimelineDatingNote } from "./TimelineDatingNote";
 import type { TimelineHighlightState } from "./timelineHighlightState";
 import type { TimelineKingsKingdomsPreviewRow } from "./timelineKingsKingdomsPackage";
+import { ContextRow } from "./timeline-detail-panel/ContextRow";
+import { ContextTagGroup } from "./timeline-detail-panel/ContextTagGroup";
+import { PanelSection } from "./timeline-detail-panel/PanelSection";
+import { previewLimitationCopy } from "./timeline-detail-panel/panelCopy";
+import { RelatedItemButton } from "./timeline-detail-panel/RelatedItemButton";
+import { RelatedItemSection } from "./timeline-detail-panel/RelatedItemSection";
+import { ScriptureAnchorsSection } from "./timeline-detail-panel/ScriptureAnchorsSection";
+import { SectionNote } from "./timeline-detail-panel/SectionNote";
+import { Tag } from "./timeline-detail-panel/Tag";
+import type {
+  TimelineEvidenceLookupMaps,
+  TimelineInspectorSelectionType,
+  TimelineKingdomEvidenceRow,
+} from "./timeline-detail-panel/panelTypes";
 
 type TimelineEventDetailPanelProps = {
   highlightState?: TimelineHighlightState;
@@ -44,21 +52,6 @@ type TimelineEventDetailPanelProps = {
   selectedLabel: string;
 };
 
-type TimelineInspectorSelectionItem = Exclude<TimelineInspectorSelection, null>;
-type TimelineInspectorSelectionType = TimelineInspectorSelectionItem["type"];
-
-type TimelineKingdomEvidenceRow = TimelineKingdomComparisonRow | TimelineKingsKingdomsPreviewRow;
-
-type TimelineEvidenceLookupMaps = {
-  bookContextById: Map<string, TimelineBookContextRow>;
-  bookContextByBookId: Map<string, TimelineBookContextRow>;
-  eventById: Map<string, PassionWeekTimelineEvent>;
-  genealogyComparisonById: Map<string, TimelineGenealogyComparisonRow>;
-  kingdomComparisonById: Map<string, TimelineKingdomEvidenceRow>;
-  schematicPlaceById: Map<string, TimelineSchematicPlaceRow>;
-  schematicPlaceByPlaceId: Map<string, TimelineSchematicPlaceRow>;
-};
-
 const kingdomToGenealogyLinks: Record<string, string[]> = {
   "comparison-jehoiachin-jeconiah": ["genealogy-josiah-jeconiah", "genealogy-jeconiah-exile"],
   "comparison-uzziah-azariah": ["genealogy-joram-uzziah", "genealogy-uzziah-azariah"],
@@ -70,33 +63,6 @@ const genealogyToKingdomLinks: Record<string, string[]> = {
   "genealogy-joram-uzziah": ["comparison-uzziah-azariah"],
   "genealogy-uzziah-azariah": ["comparison-uzziah-azariah"],
 };
-
-const previewLimitationCopy = {
-  noSelection: {
-    en: "For now this panel shows Scripture anchors and connected preview metadata only.",
-    ko: "현재 이 패널은 성경 근거와 연결된 preview metadata만 표시합니다.",
-  },
-  relatedItemsPending: {
-    en: "This item's broader related links are still limited to the metadata currently connected in the preview.",
-    ko: "이 항목의 더 넓은 관련 연결은 현재 preview에 연결된 metadata 범위 안에서만 표시됩니다.",
-  },
-  bookPeoplePending: {
-    en: "Richer people-level context for this book is not yet connected in the current preview.",
-    ko: "이 책의 더 풍부한 인물 문맥 연결은 현재 preview에서 아직 연결되지 않았습니다.",
-  },
-  kingdomRelationsPending: {
-    en: "This package-backed row is still limited to the kingdom relations currently connected in the preview.",
-    ko: "이 package-backed row는 현재 preview에 연결된 왕국 관계 범위 안에서만 표시됩니다.",
-  },
-  genealogyDeferred: {
-    en: "Luke and broader Old Testament genealogy expansion remain deferred beyond this preview.",
-    ko: "누가복음 및 더 넓은 구약 족보 확장은 이 preview 바깥의 보류 범위로 남아 있습니다.",
-  },
-  placeRelationsPending: {
-    en: "This place currently shows only the event, book, and kingdom links already connected in the schematic preview.",
-    ko: "이 장소는 현재 schematic preview에 이미 연결된 사건, 책, 왕국 링크만 표시합니다.",
-  },
-} as const;
 
 export function TimelineEventDetailPanel({
   highlightState,
@@ -178,173 +144,7 @@ export function TimelineEventDetailPanel({
   );
 }
 
-type DetailSectionProps = {
-  children: ReactNode;
-  label: string;
-};
-
-function DetailSection({ children, label }: DetailSectionProps) {
-  return (
-    <div className="rounded-md border border-zinc-200 bg-white p-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
-      <div className="mt-3 space-y-3">{children}</div>
-    </div>
-  );
-}
-
-type SectionNoteProps = {
-  children: ReactNode;
-};
-
-function SectionNote({ children }: SectionNoteProps) {
-  return <p className="text-sm leading-6 text-zinc-600">{children}</p>;
-}
-
-type TagProps = {
-  children: ReactNode;
-};
-
-function Tag({ children }: TagProps) {
-  return <span className="inline-flex rounded-full bg-zinc-100 px-3 py-1 text-sm font-medium text-zinc-700">{children}</span>;
-}
-
-type RelatedItemButtonProps = {
-  active?: boolean;
-  eyebrow: string;
-  label: string;
-  onClick: () => void;
-};
-
-function RelatedItemButton({ active = false, eyebrow, label, onClick }: RelatedItemButtonProps) {
-  return (
-    <button
-      aria-pressed={active}
-      className={cn(
-        "inline-flex cursor-pointer flex-col items-start rounded-md border px-3 py-2 text-left transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-        active
-          ? "border-zinc-300 bg-zinc-100 text-zinc-950"
-          : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-zinc-300 hover:bg-white",
-      )}
-      onClick={onClick}
-      type="button"
-    >
-      <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-zinc-500">{eyebrow}</span>
-      <span className="mt-1 text-sm font-medium leading-5">{label}</span>
-    </button>
-  );
-}
-
-type RelatedItemSectionProps = {
-  children: ReactNode;
-  label: string;
-};
-
-function RelatedItemSection({ children, label }: RelatedItemSectionProps) {
-  return (
-    <div className="space-y-1.5">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
-      <div className="flex flex-wrap gap-2">{children}</div>
-    </div>
-  );
-}
-
-type ContextTagGroupProps = {
-  label: string;
-  locale: TimelineLocale;
-  tags?: TimelineText[];
-};
-
-function ContextTagGroup({ label, locale, tags }: ContextTagGroupProps) {
-  if (!tags?.length) {
-    return null;
-  }
-
-  return (
-    <div className="space-y-1.5">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
-      <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <Tag key={`${label}-${tag.en}-${tag.ko}`}>{getTimelineText(tag, locale)}</Tag>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-type ContextRowProps = {
-  label: string;
-  value: string;
-};
-
-function ContextRow({ label, value }: ContextRowProps) {
-  return (
-    <div className="space-y-1.5">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
-      <p className="text-sm leading-6 text-zinc-600">{value}</p>
-    </div>
-  );
-}
-
-type ScriptureAnchorListProps = {
-  anchors: PassionWeekTimelineEvent["scriptureAnchors"];
-  locale: TimelineLocale;
-  openInReaderLabel: string;
-  rowId: string;
-};
-
-function ScriptureAnchorList({ anchors, locale, openInReaderLabel, rowId }: ScriptureAnchorListProps) {
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {anchors.map((anchor) => (
-        <Link
-          className={cn(
-            "inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-900 transition-colors hover:border-zinc-300 hover:bg-zinc-50",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-          )}
-          href={getTimelineReaderHrefFromReader(anchor.reader, locale)}
-          onClick={(event) => event.stopPropagation()}
-          key={`${rowId}-${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
-        >
-          {getTimelineText(anchor.label, locale)}
-        </Link>
-      ))}
-      {anchors.length ? (
-        <Link
-          className={cn(
-            "ml-1 inline-flex min-h-8 items-center rounded-full border border-dashed border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-500 transition-colors hover:border-zinc-300 hover:bg-white",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
-          )}
-          href={getTimelineReaderHrefFromReader(anchors[0].reader, locale)}
-          onClick={(event) => event.stopPropagation()}
-        >
-          {openInReaderLabel}
-        </Link>
-      ) : null}
-    </div>
-  );
-}
-
-function ReferenceOnlyAnchorList({
-  anchors,
-  locale,
-}: {
-  anchors: PassionWeekTimelineEvent["scriptureAnchors"];
-  locale: TimelineLocale;
-}) {
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {anchors.map((anchor) => (
-        <span
-          className="inline-flex min-h-8 items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold leading-none text-zinc-700"
-          key={`${anchor.label.en}-${anchor.reader.book}-${anchor.reader.chapter}-${anchor.reader.verse}`}
-        >
-          {getTimelineText(anchor.label, locale)}
-        </span>
-      ))}
-    </div>
-  );
-}
+const DetailSection = PanelSection;
 
 function getSelectionTypeLabel(selectionType: TimelineInspectorSelectionType | null, locale: TimelineLocale) {
   switch (selectionType) {
@@ -415,25 +215,21 @@ function renderEventEvidencePanel(
         <p className="text-sm leading-6 text-zinc-600">{getTimelineText(event.summary, locale)}</p>
       </div>
 
-      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        {event.scriptureReferencesOnly ? (
-          <>
-            <ReferenceOnlyAnchorList anchors={event.scriptureAnchors} locale={locale} />
-            <SectionNote>
-              {locale === "ko"
-                ? "이 package는 성경 본문을 저장하지 않습니다. 사건 수준 Scripture reference만 표시합니다."
-                : "This package does not store Bible text. It shows event-level Scripture references only."}
-            </SectionNote>
-          </>
-        ) : (
-          <ScriptureAnchorList
-            anchors={event.scriptureAnchors}
-            locale={locale}
-            openInReaderLabel={openInReaderLabel}
-            rowId={event.id}
-          />
-        )}
-      </DetailSection>
+      <ScriptureAnchorsSection
+        anchors={event.scriptureAnchors}
+        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
+        locale={locale}
+        openInReaderLabel={openInReaderLabel}
+        referenceOnly={event.scriptureReferencesOnly}
+        referenceOnlyDescription={
+          event.scriptureReferencesOnly
+            ? locale === "ko"
+              ? "이 package는 성경 본문을 저장하지 않습니다. 사건 수준 Scripture reference만 표시합니다."
+              : "This package does not store Bible text. It shows event-level Scripture references only."
+            : undefined
+        }
+        rowId={event.id}
+      />
 
       <DetailSection label={locale === "ko" ? "배경 / 요약" : "Background / Summary"}>
         <SectionNote>{getTimelineText(event.locationNote, locale)}</SectionNote>
@@ -688,20 +484,21 @@ function renderBookEvidencePanel(
         <p className="text-sm leading-6 text-zinc-600">{getTimelineText(row.canonicalLocation, locale)}</p>
       </div>
 
-      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        {row.scriptureReferencesOnly ? (
-          <>
-            <ReferenceOnlyAnchorList anchors={row.scriptureAnchors} locale={locale} />
-            <SectionNote>
-              {locale === "ko"
-                ? "이 package는 성경 본문을 저장하지 않습니다. 책 수준 Scripture reference만 표시합니다."
-                : "This package does not store Bible text. It shows book-level Scripture references only."}
-            </SectionNote>
-          </>
-        ) : (
-          <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
-        )}
-      </DetailSection>
+      <ScriptureAnchorsSection
+        anchors={row.scriptureAnchors}
+        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
+        locale={locale}
+        openInReaderLabel={openInReaderLabel}
+        referenceOnly={row.scriptureReferencesOnly}
+        referenceOnlyDescription={
+          row.scriptureReferencesOnly
+            ? locale === "ko"
+              ? "이 package는 성경 본문을 저장하지 않습니다. 책 수준 Scripture reference만 표시합니다."
+              : "This package does not store Bible text. It shows book-level Scripture references only."
+            : undefined
+        }
+        rowId={row.id}
+      />
 
       <DetailSection label={locale === "ko" ? "정경 위치" : "Canonical Location"}>
         <ContextRow label={locale === "ko" ? "정경 위치" : "Canonical location"} value={getTimelineText(row.canonicalLocation, locale)} />
@@ -907,9 +704,13 @@ function renderKingdomEvidencePanel(
         <p className="text-sm leading-6 text-zinc-600">{getTimelineText(row.sequenceLabel, locale)}</p>
       </div>
 
-      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
-      </DetailSection>
+      <ScriptureAnchorsSection
+        anchors={row.scriptureAnchors}
+        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
+        locale={locale}
+        openInReaderLabel={openInReaderLabel}
+        rowId={row.id}
+      />
 
       <DetailSection label={locale === "ko" ? "왕국 흐름" : "Kingdom Flow"}>
         <ContextRow label={locale === "ko" ? "시대 / 흐름" : "Era / flow"} value={getTimelineText(row.eraLabel, locale)} />
@@ -1045,14 +846,19 @@ function renderKingsPackageEvidencePanel(
         </p>
       </div>
 
-      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        <ReferenceOnlyAnchorList anchors={row.scriptureAnchors} locale={locale} />
-        <SectionNote>
-          {locale === "ko"
+      <ScriptureAnchorsSection
+        anchors={row.scriptureAnchors}
+        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
+        locale={locale}
+        openInReaderLabel=""
+        referenceOnly
+        referenceOnlyDescription={
+          locale === "ko"
             ? "이 package는 성경 본문을 저장하지 않습니다. 왕/왕국 수준 Scripture reference만 표시합니다."
-            : "This package does not store Bible text. It shows king/kingdom-level Scripture references only."}
-        </SectionNote>
-      </DetailSection>
+            : "This package does not store Bible text. It shows king/kingdom-level Scripture references only."
+        }
+        rowId={row.id}
+      />
 
       <DetailSection label={locale === "ko" ? "구조 / 관계" : "Structure / Relations"}>
         <ContextRow
@@ -1190,9 +996,13 @@ function renderGenealogyEvidencePanel(
         </p>
       </div>
 
-      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
-      </DetailSection>
+      <ScriptureAnchorsSection
+        anchors={row.scriptureAnchors}
+        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
+        locale={locale}
+        openInReaderLabel={openInReaderLabel}
+        rowId={row.id}
+      />
 
       <DetailSection label={locale === "ko" ? "관찰" : "Observation"}>
         <ContextRow label={locale === "ko" ? "마태복음" : "Matthew"} value={getTimelineText(row.matthewName, locale)} />
@@ -1310,9 +1120,13 @@ function renderPlaceEvidencePanel(
         <p className="text-sm leading-6 text-zinc-600">{getTimelineText(row.conceptRegionLabel, locale)}</p>
       </div>
 
-      <DetailSection label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}>
-        <ScriptureAnchorList anchors={row.scriptureAnchors} locale={locale} openInReaderLabel={openInReaderLabel} rowId={row.id} />
-      </DetailSection>
+      <ScriptureAnchorsSection
+        anchors={row.scriptureAnchors}
+        label={locale === "ko" ? "성경 근거" : "Scripture Anchors"}
+        locale={locale}
+        openInReaderLabel={openInReaderLabel}
+        rowId={row.id}
+      />
 
       <DetailSection label={locale === "ko" ? "장소 / 개념지도" : "Place / Schematic Map"}>
         <ContextRow label={locale === "ko" ? "장소" : "Place"} value={getTimelineText(row.title, locale)} />
