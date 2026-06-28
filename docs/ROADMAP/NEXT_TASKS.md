@@ -34,6 +34,8 @@ CR-93D-4 Books Center Canonical Section Accordion UI is complete through availab
 
 CR-93D-2 66-Book Frontend Preview Integration follow-up QA gate is now complete through available validation. A same-session cross-package regression check reviewed the Books / Psalms package loader, the `books.66-canonical-skeleton.json` route-loader connection, the Books normalization path, canonical section grouping, accordion behavior, row selection flow, right-panel metadata-only behavior, and the coexistence of the Events, Books, and Kings / Kingdoms package loaders in the shared Timeline route. No regression evidence was found. `node scripts/timeline/verify-timeline-packages.mjs`, `npm run typecheck`, and `npm run lint` passed. Local route smoke remained unavailable from this environment. Because no regression was found, CR-93D-2 follow-up implementation is not needed and the next local source-of-truth priority moves to `CR-92D-2 Korean Reference Period Assignment Hardening`. No frontend, backend, API, DB, schema, runtime import/export, Bible-text, coordinate, map-provider, or geocoding change was added.
 
+CR-92D-2 Korean Reference Period Assignment Hardening is now complete through available validation. The `5` current Korean pilot rows were reviewed against the existing per-period Events rendering path. `4` rows remain broadly assigned through `relatedBiblicalPeriodIds`, while `korean-three-kingdoms-formation-reference` remains intentionally unassigned to biblical periods because it is a post-biblical supporting reference rather than a biblical-period synchronism target. The collapsed Korean-history placeholder wording now distinguishes intentionally unlinked post-biblical references from actual assignment-review gaps. No new Korean rows, approved source/citation/provenance changes, exact synchronism claims, Bible-text rendering, coordinates, map-provider fields, geocoding, API, DB, backend, schema, or runtime import/export work were added.
+
 CR-93G Kings / Kingdoms Timeline Package Design is complete as a docs-only design step. `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md` now defines a future `timeline.kings-kingdoms` package envelope, record types for kingdom flow and king rows, cautious chronology and synchronism policy, Scripture-anchor-only rules, cross-link expectations, accordion-first center-column structure, and future verifier/fixture implications. No kings skeleton JSON, frontend integration, verifier change, API, DB, backend, schema, or runtime import/export work was added.
 
 CR-93G-2 Kings / Kingdoms Skeleton Package is complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now adds a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdoms, representative kings, transitions, exile markers, and a temple marker. The package remains frontend-unlinked, stores no Bible text, uses no coordinates or map-provider fields, and keeps chronology approximate and review-gated. Kings / Kingdoms verifier fixtures remain deferred to CR-93G-3, and verifier rule hardening remains deferred to CR-93G-4 if needed.
@@ -90,20 +92,19 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-92D-2 Korean Reference Period Assignment Hardening.
-2. CR-92E Korean Reference Inspector Policy Design.
-3. CR-90Y-5 Genealogy Detail Refinement.
-4. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
-5. CR-91 Place / Map Preview.
-6. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
-7. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
-8. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
-9. After explicit approval, implement seed migration tracking and release automation support.
-10. Later: Strong detail pages or dedicated Word Study pages.
-11. Later: advanced search.
-12. Later: morphology explorer.
-13. Later: Commentary Layer.
-14. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+1. CR-92E Korean Reference Inspector Policy Design.
+2. CR-90Y-5 Genealogy Detail Refinement.
+3. CR-90Y-4B Kings / Prophets Cross-Link Refinement.
+4. CR-91 Place / Map Preview.
+5. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
+6. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+7. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
+8. After explicit approval, implement seed migration tracking and release automation support.
+9. Later: Strong detail pages or dedicated Word Study pages.
+10. Later: advanced search.
+11. Later: morphology explorer.
+12. Later: Commentary Layer.
+13. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 

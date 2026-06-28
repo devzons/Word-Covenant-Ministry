@@ -14,6 +14,7 @@ import {
 } from "./timelineHighlightState";
 import {
   getKoreanHistoryReferenceLabel,
+  getIntentionallyUnlinkedPostBiblicalKoreanHistoryReferences,
   getKoreanHistoryReferencesForPeriod,
   getUnassignedKoreanHistoryReferences,
   type TimelineKoreanHistoryReferenceRow,
@@ -62,6 +63,8 @@ export function ScriptureTimelineList({
   const unassignedKoreanHistoryReferences = getUnassignedKoreanHistoryReferences(
     koreanHistoryReferenceRows,
   );
+  const intentionallyUnlinkedPostBiblicalReferences =
+    getIntentionallyUnlinkedPostBiblicalKoreanHistoryReferences(koreanHistoryReferenceRows);
 
   return (
     <div className="flex flex-col gap-5">
@@ -253,11 +256,19 @@ export function ScriptureTimelineList({
                   ) : (
                     <>
                       <p className="mt-3 text-sm leading-6 text-zinc-600">{historyPlaceholderBody}</p>
-                      {unassignedKoreanHistoryReferences.length > 0 ? (
+                      {intentionallyUnlinkedPostBiblicalReferences.length > 0 ? (
                         <p className="mt-2 text-xs leading-5 text-zinc-500">
                           {locale === "ko"
-                            ? `승인된 pilot 참조 ${unassignedKoreanHistoryReferences.length}개가 있지만, 이 구간에는 아직 period assignment가 연결되지 않았습니다.`
-                            : `${unassignedKoreanHistoryReferences.length} approved pilot references exist, but no period assignment has been linked to this section yet.`}
+                            ? `승인된 pilot 참조 ${intentionallyUnlinkedPostBiblicalReferences.length}개는 post-biblical supporting reference로 유지되며, 현재 biblical period에는 직접 연결하지 않습니다.`
+                            : `${intentionallyUnlinkedPostBiblicalReferences.length} approved pilot reference remains a post-biblical supporting reference and is not directly linked to the current biblical period.`}
+                        </p>
+                      ) : null}
+                      {unassignedKoreanHistoryReferences.length >
+                      intentionallyUnlinkedPostBiblicalReferences.length ? (
+                        <p className="mt-2 text-xs leading-5 text-zinc-500">
+                          {locale === "ko"
+                            ? `승인된 pilot 참조 일부는 아직 이 구간과 직접 연결되지 않았습니다. 누락처럼 확정하지 말고 period assignment 검토 대상으로만 취급하세요.`
+                            : `Some approved pilot references are not yet directly linked to this section. Treat them as period-assignment review items rather than confirmed missing data.`}
                         </p>
                       ) : null}
                       <p className="mt-2 text-xs leading-5 text-zinc-500">

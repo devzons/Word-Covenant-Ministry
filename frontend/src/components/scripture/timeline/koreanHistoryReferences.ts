@@ -97,6 +97,14 @@ export function getUnassignedKoreanHistoryReferences(
   });
 }
 
+export function getIntentionallyUnlinkedPostBiblicalKoreanHistoryReferences(
+  rows: TimelineKoreanHistoryReferenceRow[],
+) {
+  return getUnassignedKoreanHistoryReferences(rows).filter(
+    (row) => row.timelinePeriodId === "reference-post-biblical",
+  );
+}
+
 export function getKoreanHistoryReferenceLabel(
   text: TimelineText,
   locale: TimelineLocale,
