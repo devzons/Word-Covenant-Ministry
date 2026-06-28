@@ -174,6 +174,8 @@ Local commit-readiness reconciliation is now complete. The current worktree is c
 
 `Scripture Evidence Panel Modular Triage Plan` is now documented in `docs/ROADMAP/SCRIPTURE_EVIDENCE_PANEL_MODULAR_TRIAGE_PLAN.md` as a docs-only planning step. The current right-panel audit has now been split into rendering gaps, normalizer gaps, source-data gaps, intentional preview limitations, and approval-required expansion categories so that future implementation can stay narrow and modular. The current direction is to treat the Scripture Evidence Panel as the future modular right-side context surface for the broader Scripture Context Atlas while deferring implementation, data expansion, media/editorial work, and all approval-gated external-reference or map work.
 
+`Scripture Evidence Panel Safe Completeness Fix Plan` is now documented in `docs/ROADMAP/SCRIPTURE_EVIDENCE_PANEL_SAFE_COMPLETENESS_FIX_PLAN.md` as a docs-only implementation-planning step. The current safe-fix boundary now limits the next implementation CR to frontend-only and normalizer-only carry-through work using fields that already exist in current package or preview sources. The first recommended implementation CR should cover only Events, Books / Psalms, and Kings / Kingdoms panel completeness fixes, while Places panel clarity and broader wording standardization remain deferred to later small CRs.
+
 Current phase boundary:
 
 ```txt
