@@ -1343,8 +1343,8 @@ function PlacesSchematicMapPreviewPanel({
           </p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "이 지도는 성경 본문 흐름을 돕는 개념지도입니다. 정확한 좌표 지도가 아니며, 오늘날 지명은 보조 표기로만 표시됩니다. 중앙 컬럼은 시대순 위→아래 흐름을 우선합니다."
-              : "This map is a schematic aid for following the biblical textual flow. It is not a coordinate map, and modern place labels are shown only as supporting references. The center column defaults to a top-to-bottom chronological flow."}
+              ? "이 보기 는 성경 본문 흐름을 돕는 schematic preview입니다. 실제 지도, 경로 재구성, 정확한 좌표 지도가 아니며, 오늘날 지명은 보조 표기로만 표시됩니다. 중앙 컬럼은 시대순 위→아래 흐름을 우선합니다."
+              : "This view is a schematic preview for following the biblical textual flow. It is not a real map, route reconstruction, or coordinate map, and modern place labels are shown only as supporting references. The center column defaults to a top-to-bottom chronological flow."}
           </p>
         </div>
         <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
@@ -1359,13 +1359,13 @@ function PlacesSchematicMapPreviewPanel({
           </p>
           <p className="text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "이 영역은 현재 Context Inspector 선택과 package metadata에서만 파생되는 개념 요약입니다. 실제 지도, 좌표, 지도 제공자, 지오코딩은 사용하지 않습니다."
-              : "This area is a schematic summary derived only from the current Context Inspector selection and package metadata. It does not use a real map, coordinates, a map provider, or geocoding."}
+              ? "이 영역은 현재 Context Inspector 선택과 existing metadata에서만 파생되는 개념 요약입니다. 실제 지도, 좌표, 지도 제공자, 지오코딩, 경로 재구성은 사용하지 않습니다."
+              : "This area is a schematic summary derived only from the current Context Inspector selection and existing metadata. It does not use a real map, coordinates, a map provider, geocoding, or route reconstruction."}
           </p>
           <p className="text-xs leading-5 text-zinc-500">
             {locale === "ko"
-              ? "성경 본문은 저장하거나 표시하지 않으며, Places package integration은 아직 보류 상태입니다."
-              : "Bible text is not stored or rendered here, and Places package integration remains deferred."}
+              ? "성경 본문은 저장하거나 표시하지 않으며, Places package integration과 실제 map integration은 모두 아직 보류 상태입니다."
+              : "Bible text is not stored or rendered here, and both Places package integration and real map integration remain deferred."}
           </p>
         </div>
 
@@ -1401,14 +1401,14 @@ function PlacesSchematicMapPreviewPanel({
             </div>
             <p className="text-xs leading-5 text-zinc-500">
               {locale === "ko"
-                ? "향후 Places highlight는 이 metadata-only 요약을 소비하는 방향으로 확장됩니다."
-                : "Future Places highlights will extend this metadata-only summary surface."}
+                ? "향후 Places highlight도 이 metadata-only 요약을 소비하는 방향으로만 확장되며, 좌표나 지도 provider를 전제하지 않습니다."
+                : "Future Places highlights will extend this metadata-only summary surface only and do not assume coordinates or a map provider."}
             </p>
           </div>
         ) : (
           <div className="mt-3 rounded-md border border-zinc-200 bg-white p-3 text-sm leading-6 text-zinc-600">
             {locale === "ko"
-              ? "아직 선택된 Context Inspector 항목이 없습니다. 사건, 책, 왕국, 또는 장소 항목을 선택하면 이 영역이 좌표 없이 개념 요약만 표시합니다."
+              ? "아직 선택된 Context Inspector 항목이 없습니다. 사건, 책, 왕국, 또는 장소 항목을 선택하면 이 영역이 좌표 없는 schematic summary만 표시합니다."
               : "There is no active Context Inspector selection yet. Select an event, book, kingdom, or place item and this surface will show a coordinate-free schematic summary only."}
           </div>
         )}

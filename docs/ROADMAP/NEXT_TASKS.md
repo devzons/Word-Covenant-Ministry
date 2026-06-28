@@ -42,6 +42,8 @@ CR-90Y-5 Genealogy Detail Refinement is now complete through available validatio
 
 CR-90Y-4B Kings / Prophets Cross-Link Refinement is now complete through available validation. The current change stayed within existing metadata-only navigation boundaries across the runtime kingdom comparison rows, the package-backed Kings / Kingdoms preview, and the right-panel related chips. Existing runtime kingdom row copy now makes prophet labels read more clearly as supporting context tags rather than standalone prophet rows, existing package-backed kingdom detail now exposes related event chips from existing metadata, and right-panel wording now makes explicit that prophet labels are not a selectable primary entity. No kings package rows, prophet rows, prophetic-context rows, deep-link support, inspector selection types, API, DB, backend, schema, runtime import/export, Bible-text rendering, coordinates, map-provider fields, or geocoding work were added.
 
+CR-91 Place / Map Preview is now complete through available validation as a runtime fixture-backed schematic/no-coordinate refinement step. The current Places / Schematic Map surface remains driven by `timelineSchematicPlaceRows` rather than a package-backed places dataset. Preview copy and place-detail copy now make the current boundary more explicit: the surface is a metadata-only schematic summary for following biblical textual flow, not a real map, route reconstruction, coordinate layer, map-provider integration, or geocoding feature. Existing place-row notes were refined only for wording clarity within the current `20` runtime rows. No places package integration, coordinates, latitude/longitude fields, map-provider state, geocoding, external map API, deep-link support, API, DB, backend, schema, runtime import/export, or Bible-text rendering work were added.
+
 CR-93G Kings / Kingdoms Timeline Package Design is complete as a docs-only design step. `docs/ROADMAP/KINGS_KINGDOMS_TIMELINE_PACKAGE_DESIGN.md` now defines a future `timeline.kings-kingdoms` package envelope, record types for kingdom flow and king rows, cautious chronology and synchronism policy, Scripture-anchor-only rules, cross-link expectations, accordion-first center-column structure, and future verifier/fixture implications. No kings skeleton JSON, frontend integration, verifier change, API, DB, backend, schema, or runtime import/export work was added.
 
 CR-93G-2 Kings / Kingdoms Skeleton Package is complete as a docs/data package step. `docs/data-packages/timeline/kings-kingdoms.skeleton.json` now adds a minimal Scripture-reference-only skeleton baseline for kingdom periods, kingdoms, representative kings, transitions, exile markers, and a temple marker. The package remains frontend-unlinked, stores no Bible text, uses no coordinates or map-provider fields, and keeps chronology approximate and review-gated. Kings / Kingdoms verifier fixtures remain deferred to CR-93G-3, and verifier rule hardening remains deferred to CR-93G-4 if needed.
@@ -98,17 +100,16 @@ docs/ROADMAP/ORIGINAL_LANGUAGE_FOUNDATION_PLAN.md
 
 ## Current Priority Order
 
-1. CR-91 Place / Map Preview.
-2. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
-3. Later: fuller prophet-context expansion only after separate approval and row-level review.
-4. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
-5. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
-6. After explicit approval, implement seed migration tracking and release automation support.
-7. Later: Strong detail pages or dedicated Word Study pages.
-8. Later: advanced search.
-9. Later: morphology explorer.
-10. Later: Commentary Layer.
-11. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
+1. Later: deeper Kings / Kingdoms data expansion after current preview baseline.
+2. Later: fuller prophet-context expansion only after separate approval and row-level review.
+3. Phase 9 English Bible support: WEB Source/License Review, WEB Import Readiness Review, WEB Import Execution Spec, WEB Dry Run Checklist, WEB Empty Verse Policy, WEB Dry Run Report, WEB Local Apply Readiness Review, and WEB Local Apply Report are documented. WEB local apply passed in the local development database. Staging apply and production apply remain unapproved.
+4. Commit the completed Scripture UX, Word Study, Cross Reference, Gospel Harmony, and roadmap/status documentation when approved.
+5. After explicit approval, implement seed migration tracking and release automation support.
+6. Later: Strong detail pages or dedicated Word Study pages.
+7. Later: advanced search.
+8. Later: morphology explorer.
+9. Later: Commentary Layer.
+10. Future, after original-language MVP stabilization and separate approval: Phase 10 Hebrew-Greek Bridge and Revelation Lexicon Foundation.
 
 Phase 9 English Bible support planning is documented in:
 

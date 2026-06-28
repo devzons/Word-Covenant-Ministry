@@ -1199,7 +1199,16 @@ function renderPlaceEvidencePanel(
             value={getTimelineText(row.placeTypeLabel, locale)}
           />
         ) : null}
-        <SectionNote>{locale === "ko" ? "이 단계에서는 좌표를 제공하지 않습니다. 오늘날 지명은 보조 표기입니다." : "This phase does not provide coordinates. Modern place labels are supporting references."}</SectionNote>
+        <SectionNote>
+          {locale === "ko"
+            ? "이 단계에서는 좌표, 지도 provider, 지오코딩, 경로 재구성을 제공하지 않습니다. 오늘날 지명은 보조 표기입니다."
+            : "This phase does not provide coordinates, a map provider, geocoding, or route reconstruction. Modern place labels are supporting references."}
+        </SectionNote>
+        <SectionNote>
+          {locale === "ko"
+            ? "이 place panel은 실제 지도가 아니라 성경 본문 흐름을 돕는 metadata-only schematic summary입니다."
+            : "This place panel is a metadata-only schematic summary for following the biblical textual flow, not a real map."}
+        </SectionNote>
       </DetailSection>
 
       <DetailSection label={locale === "ko" ? "위치 근거 / 주의" : "Location Basis / Caution"}>
@@ -1207,6 +1216,11 @@ function renderPlaceEvidencePanel(
         <SectionNote>{getTimelineText(row.locationConfidenceLabel, locale)}</SectionNote>
         {row.cautionNote ? <SectionNote>{getTimelineText(row.cautionNote, locale)}</SectionNote> : null}
         <SectionNote>{getTimelineText(row.note, locale)}</SectionNote>
+        <SectionNote>
+          {locale === "ko"
+            ? "위치 설명은 Scripture anchor와 existing metadata에 근거한 개념 요약이며, exact geography claim으로 확장하지 않습니다."
+            : "Location notes remain conceptual summaries derived from Scripture anchors and existing metadata and do not expand into exact geography claims."}
+        </SectionNote>
       </DetailSection>
 
       <DetailSection label={locale === "ko" ? "관련 인물 / 문맥" : "Related People / Context"}>

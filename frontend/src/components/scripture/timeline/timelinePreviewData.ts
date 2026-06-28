@@ -4153,8 +4153,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
     relatedEventIds: ["terah-house", "call-of-abraham"],
     relatedPeople: [{ en: "Abram", ko: "아브람" }],
     note: {
-      en: "Ur marks the starting point of Abraham's movement before the call is traced into Canaan.",
-      ko: "우르는 아브라함의 이동 시작점으로, 부르심이 가나안으로 이어지기 전의 출발점입니다.",
+      en: "Ur marks the starting point of Abraham's movement before the call is traced into Canaan. The modern label remains a supporting regional reference, not a coordinate claim.",
+      ko: "우르는 아브라함의 이동 시작점으로, 부르심이 가나안으로 이어지기 전의 출발점입니다. 현대 지명 표기는 좌표 확정이 아닌 보조 지역 참조로만 유지됩니다.",
     },
   },
   {
@@ -4216,8 +4216,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
       { en: "The exiles", ko: "포로 된 자들" },
     ],
     note: {
-      en: "Babylon is connected with Judah's exile, Daniel, and Psalm 137.",
-      ko: "바벨론은 유다 포로기와 다니엘, 시편 137편의 배경과 연결됩니다.",
+      en: "Babylon is connected with Judah's exile, Daniel, and Psalm 137. This remains a textual setting summary rather than a mapped reconstruction.",
+      ko: "바벨론은 유다 포로기와 다니엘, 시편 137편의 배경과 연결됩니다. 이는 지도 재구성이 아니라 본문 배경 요약으로만 유지됩니다.",
     },
   },
   {
@@ -4245,8 +4245,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
     relatedBookContextIds: ["book-context-esther", "book-context-nehemiah"],
     relatedEmpires: [persiaEmpireTag],
     note: {
-      en: "Susa is shown as a textual setting for Esther and Nehemiah.",
-      ko: "수산은 에스더와 느헤미야의 본문 배경으로 표시됩니다.",
+      en: "Susa is shown as a textual setting for Esther and Nehemiah, with the modern label kept as a supporting reference only.",
+      ko: "수산은 에스더와 느헤미야의 본문 배경으로 표시되며, 현대 지명 표기는 보조 참조로만 유지됩니다.",
     },
   },
   {
@@ -4313,8 +4313,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
       { en: "Sennacherib", ko: "산헤립" },
     ],
     note: {
-      en: "Assyria functions as a major imperial setting in the divided kingdom period.",
-      ko: "앗수르는 분열 왕국 시기의 중요한 제국 배경으로 기능합니다.",
+      en: "Assyria functions as a major imperial setting in the divided kingdom period. The preview summarizes imperial context without introducing coordinates or route geometry.",
+      ko: "앗수르는 분열 왕국 시기의 중요한 제국 배경으로 기능합니다. 이 미리보기는 좌표나 이동 경로 없이 제국 배경만 요약합니다.",
     },
   },
   {
@@ -4352,8 +4352,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
       { en: "Jeremiah", ko: "예레미야" },
     ],
     note: {
-      en: "Jerusalem is a key biblical place connected with David's kingdom, the temple, and exile events.",
-      ko: "예루살렘은 다윗 왕국, 성전, 포로기 사건과 연결되는 핵심 성경 장소입니다.",
+      en: "Jerusalem is a key biblical place connected with David's kingdom, the temple, and exile events. The modern city label remains supporting context rather than an exact-geography claim.",
+      ko: "예루살렘은 다윗 왕국, 성전, 포로기 사건과 연결되는 핵심 성경 장소입니다. 현대 도시 표기는 exact geography claim이 아니라 보조 문맥으로만 유지됩니다.",
     },
   },
   {
@@ -4572,8 +4572,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
       { en: "Israel's children", ko: "이스라엘 자손" },
     ],
     note: {
-      en: "Sinai connects with covenant, the wilderness flow, and the Mosaic setting of Psalm 90.",
-      ko: "시내산은 언약과 광야 시대 흐름, 시편 90편의 모세 배경과 연결됩니다.",
+      en: "Sinai connects with covenant, the wilderness flow, and the Mosaic setting of Psalm 90. Traditional modern identification is kept cautious and non-coordinate in this preview.",
+      ko: "시내산은 언약과 광야 시대 흐름, 시편 90편의 모세 배경과 연결됩니다. 전통적 현대 위치 연결은 이 미리보기에서 조심스럽고 비좌표적으로만 유지됩니다.",
     },
     cautionNote: {
       en: "Modern coordinates or exact mountain identification are not asserted in this phase.",
@@ -4665,8 +4665,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
       { en: "Israel's children", ko: "이스라엘 자손" },
     ],
     note: {
-      en: "Egypt is shown as the starting setting of the Exodus.",
-      ko: "애굽은 출애굽 사건의 시작 배경으로 표시됩니다.",
+      en: "Egypt is shown as the starting setting of the Exodus. This is a textual-flow setting summary, not a route reconstruction.",
+      ko: "애굽은 출애굽 사건의 시작 배경으로 표시됩니다. 이는 이동 경로 재구성이 아니라 본문 흐름 배경 요약입니다.",
     },
   },
   {
@@ -4794,8 +4794,8 @@ export const timelineSchematicPlaceRows: TimelineSchematicPlaceRow[] = [
       { en: "David", ko: "다윗" },
     ],
     note: {
-      en: "Bethlehem marks the Davidic line in Ruth's genealogy.",
-      ko: "베들레헴은 룻기의 족보에서 다윗 계보를 표시합니다.",
+      en: "Bethlehem marks the Davidic line in Ruth's genealogy. The place label remains a supporting textual marker rather than a mapped proof-point.",
+      ko: "베들레헴은 룻기의 족보에서 다윗 계보를 표시합니다. 이 장소 표기는 지도상 증명점이 아니라 보조 본문 표지로만 유지됩니다.",
     },
   },
 ];
