@@ -71,6 +71,33 @@ const genealogyToKingdomLinks: Record<string, string[]> = {
   "genealogy-uzziah-azariah": ["comparison-uzziah-azariah"],
 };
 
+const previewLimitationCopy = {
+  noSelection: {
+    en: "For now this panel shows Scripture anchors and connected preview metadata only.",
+    ko: "현재 이 패널은 성경 근거와 연결된 preview metadata만 표시합니다.",
+  },
+  relatedItemsPending: {
+    en: "This item's broader related links are still limited to the metadata currently connected in the preview.",
+    ko: "이 항목의 더 넓은 관련 연결은 현재 preview에 연결된 metadata 범위 안에서만 표시됩니다.",
+  },
+  bookPeoplePending: {
+    en: "Richer people-level context for this book is not yet connected in the current preview.",
+    ko: "이 책의 더 풍부한 인물 문맥 연결은 현재 preview에서 아직 연결되지 않았습니다.",
+  },
+  kingdomRelationsPending: {
+    en: "This package-backed row is still limited to the kingdom relations currently connected in the preview.",
+    ko: "이 package-backed row는 현재 preview에 연결된 왕국 관계 범위 안에서만 표시됩니다.",
+  },
+  genealogyDeferred: {
+    en: "Luke and broader Old Testament genealogy expansion remain deferred beyond this preview.",
+    ko: "누가복음 및 더 넓은 구약 족보 확장은 이 preview 바깥의 보류 범위로 남아 있습니다.",
+  },
+  placeRelationsPending: {
+    en: "This place currently shows only the event, book, and kingdom links already connected in the schematic preview.",
+    ko: "이 장소는 현재 schematic preview에 이미 연결된 사건, 책, 왕국 링크만 표시합니다.",
+  },
+} as const;
+
 export function TimelineEventDetailPanel({
   highlightState,
   lookupMaps,
@@ -109,6 +136,7 @@ export function TimelineEventDetailPanel({
                 ? "연대, 장소, 전통 정보는 성경 본문 아래의 보조 정보로 표시됩니다."
                 : "Dates, places, and tradition labels are shown as supporting information under the biblical text."}
             </p>
+            <p className="text-xs leading-5 text-zinc-500">{getTimelineText(previewLimitationCopy.noSelection, locale)}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -530,7 +558,7 @@ function renderEventEvidencePanel(
         {event.cautionNote ? <SectionNote>{getTimelineText(event.cautionNote, locale)}</SectionNote> : null}
       </DetailSection>
 
-      {relatedBookRows.length || relatedPackageBookRows.length || relatedPlaceRows.length || relatedKingdomRows.length || relatedEventRows.length || relatedGenealogyRows.length ? (
+      {relatedBookRows.length || relatedPackageBookRows.length || relatedPlaceRows.length || relatedKingdomRows.length || relatedEventRows.length || relatedGenealogyRows.length || event.sourcePackage === "core-biblical-skeleton" ? (
         <DetailSection label={locale === "ko" ? "관련 항목" : "Related Items"}>
           {relatedBookRows.length || relatedPackageBookRows.length ? (
             <RelatedItemSection label={locale === "ko" ? "관련 책/시편" : "Related Books / Psalms"}>
@@ -596,6 +624,14 @@ function renderEventEvidencePanel(
                 />
               ))}
             </RelatedItemSection>
+          ) : null}
+          {!relatedBookRows.length &&
+          !relatedPackageBookRows.length &&
+          !relatedPlaceRows.length &&
+          !relatedKingdomRows.length &&
+          !relatedEventRows.length &&
+          !relatedGenealogyRows.length ? (
+            <SectionNote>{getTimelineText(previewLimitationCopy.relatedItemsPending, locale)}</SectionNote>
           ) : null}
         </DetailSection>
       ) : null}
@@ -753,6 +789,9 @@ function renderBookEvidencePanel(
           locale={locale}
           tags={row.relatedEmpires}
         />
+        {!row.relatedPeople?.length ? (
+          <SectionNote>{getTimelineText(previewLimitationCopy.bookPeoplePending, locale)}</SectionNote>
+        ) : null}
         {row.relatedEventIds?.length ? (
           <RelatedItemSection label={locale === "ko" ? "관련 사건" : "Related Events"}>
             {row.relatedEventIds.map((eventId) => {
@@ -812,6 +851,12 @@ function renderBookEvidencePanel(
               />
             ))}
           </RelatedItemSection>
+        ) : null}
+        {!row.relatedEventIds?.length &&
+        !relatedPlaceRows.length &&
+        !relatedBookRows.length &&
+        !relatedKingdomRows.length ? (
+          <SectionNote>{getTimelineText(previewLimitationCopy.relatedItemsPending, locale)}</SectionNote>
         ) : null}
       </DetailSection>
 
@@ -1076,8 +1121,8 @@ function renderKingsPackageEvidencePanel(
         </div>
       </DetailSection>
 
-      {relatedRows.length ? (
-        <DetailSection label={locale === "ko" ? "내부 관계" : "Internal Relations"}>
+      <DetailSection label={locale === "ko" ? "내부 관계" : "Internal Relations"}>
+        {relatedRows.length ? (
           <RelatedItemSection label={locale === "ko" ? "관련 왕 / 왕국 / 전환" : "Related Kings / Kingdoms / Transitions"}>
             {relatedRows.map((relatedRow) => (
               <RelatedItemButton
@@ -1089,8 +1134,10 @@ function renderKingsPackageEvidencePanel(
               />
             ))}
           </RelatedItemSection>
-        </DetailSection>
-      ) : null}
+        ) : (
+          <SectionNote>{getTimelineText(previewLimitationCopy.kingdomRelationsPending, locale)}</SectionNote>
+        )}
+      </DetailSection>
 
       <DetailSection label={locale === "ko" ? "패키지 상태" : "Package Status"}>
         <SectionNote>
@@ -1239,6 +1286,7 @@ function renderGenealogyEvidencePanel(
             ))}
           </RelatedItemSection>
         ) : null}
+        <SectionNote>{getTimelineText(previewLimitationCopy.genealogyDeferred, locale)}</SectionNote>
       </DetailSection>
 
       <p className="text-sm leading-6 text-zinc-500">{relatedStudy}</p>
@@ -1386,6 +1434,13 @@ function renderPlaceEvidencePanel(
               })}
             </div>
           </div>
+        ) : null}
+        {!row.relatedPeople?.length &&
+        !row.relatedKingdoms?.length &&
+        !row.relatedEmpires?.length &&
+        !row.relatedBookContextIds?.length &&
+        !row.relatedEventIds?.length ? (
+          <SectionNote>{getTimelineText(previewLimitationCopy.placeRelationsPending, locale)}</SectionNote>
         ) : null}
       </DetailSection>
 
