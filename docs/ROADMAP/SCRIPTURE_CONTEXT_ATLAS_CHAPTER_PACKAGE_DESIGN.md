@@ -998,55 +998,78 @@ Future verifier integration notes:
 - current verifier does not yet implement chapter-context-specific rules
 - verifier implementation should remain a separate CR after fixture design approval and, preferably, after fixture files exist
 
+`CR-BR-CTX-29` implementation result:
+
+- chapter-context package recognition is now implemented
+- chapter-context envelope validation is now implemented for `packageId`, `scope`, and deterministic-envelope exclusions
+- approved `status: "skeleton"` plus `items: []` handling is now implemented
+- minimum chapter-row baseline is now implemented for:
+  - required fields
+  - integer `chapter`
+  - canonical `bookId`
+  - chapter-bounds validation
+  - bilingual label presence on key label fields
+  - boolean `isSkeleton`
+  - duplicate `chapterContextId`
+  - duplicate `bookId + chapter`
+- existing generic guardrails continue to enforce Bible-text, coordinate/map-provider, and verse-tagging invalid cases
+- deep relationship-id validation is still deferred
+- expanded chapter-context wording warnings are still deferred
+
+Observed post-implementation boundary:
+
+- valid empty skeleton fixture now passes directly
+- valid minimal reviewed-row fixture now passes directly
+- `chapter-context-invalid-related-id.invalid.sample.json` still passes individually because deep relationship-id validation remains deferred in this CR
+- `chapter-context-overconfident-wording.warning.sample.json` still reports zero warnings individually because chapter-context wording warnings remain deferred in this CR
+- wrapper-level regression still passes because the current valid / invalid / warning directory-level expectations remain satisfied
+
 ## Recommended Next CR
 
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-29 Chapter Context Verifier Package Recognition and Envelope Rules
+CR-BR-CTX-30 Chapter Context Verifier Relationship and Warning Rule Readiness
 ```
 
 Objective:
 
-- implement the smallest safe first verifier slice for `scripture-context-atlas.chapter-context`
+- audit the remaining chapter-context enforcement gaps before deeper verifier logic is implemented
 
 Scope:
 
-- verifier code only
-- add chapter-context package recognition
-- add chapter-context envelope validation
-- preserve the approved `status: "skeleton"` plus `items: []` special case
-- add the minimum reviewed-row baseline required-field checks that do not yet require deeper wording or relationship logic
+- docs-only
+- compare the post-CR-BR-CTX-29 verifier behavior against the chapter-context fixtures
+- decide whether relationship-id validation can be added without overreaching beyond the approved scope
+- decide whether chapter-context wording warnings should remain generic or gain package-specific rules
+- confirm whether current directory-level wrapper expectations remain sufficient
 
 Files likely touched:
 
-- `scripts/timeline/verify-timeline-package.mjs`
-- `scripts/timeline/verify-timeline-packages.mjs`
 - `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_CHAPTER_PACKAGE_DESIGN.md`
 - `docs/ROADMAP/PROJECT_STATUS.md`
 - `docs/ROADMAP/NEXT_TASKS.md`
 
 Explicitly not included:
 
+- no verifier code changes
 - no real chapter rows
 - no Reader or Timeline runtime hookup
-- no package loader/runtime integration
 - no API / backend / DB / schema work
 - no verse-level tagging model
 - no person / paja / map implementation
-- no deep relationship validation beyond the minimum safe baseline
-- no warning-wording expansion beyond what existing generic guardrails already support
+- no direct relationship-rule implementation yet
+- no warning-wording implementation yet
 
 Validation plan:
 
 - `git diff --check`
 - `git diff --stat`
 - `git status --short`
-- `node scripts/timeline/verify-timeline-packages.mjs`
 
 Risk level:
 
-- low to moderate
+- low
 
 Browser QA needed:
 
@@ -1056,4 +1079,6 @@ Browser QA needed:
 
 The chapter-level context problem is currently a data-contract and skeleton-policy problem, not a UI problem.
 
-The next safe step is to compare these fixture inputs against the existing verifier architecture before any chapter-context implementation starts.
+The current verifier can now recognize chapter-context packages and enforce the smallest safe envelope/baseline slice without runtime integration.
+
+The next safe step is to audit the remaining relationship-id and wording-warning gaps before a broader second implementation slice begins.

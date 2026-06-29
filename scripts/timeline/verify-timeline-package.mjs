@@ -125,6 +125,102 @@ const EXACT_CHRONOLOGY_FIELDS = new Set([
   "absoluteYear",
 ]);
 
+const CHAPTER_CONTEXT_FORBIDDEN_ENVELOPE_FIELDS = new Set([
+  "generatedAt",
+  "createdAt",
+  "runtimeLoader",
+  "runtimeLoaderHint",
+  "readerLoader",
+  "timelineLoader",
+  "frontendLoader",
+  "environment",
+  "env",
+  "runtimeEnv",
+  "translationScope",
+  "translationScoped",
+  "translationSpecific",
+  "localeScope",
+  "localeSpecific",
+]);
+
+const CHAPTER_CONTEXT_REVIEW_STATUSES = new Set([
+  "skeleton",
+  "draft",
+  "review-required",
+  "reviewed",
+  "blocked",
+  "deprecated",
+]);
+
+const CANONICAL_BOOK_CHAPTERS = {
+  genesis: 50,
+  exodus: 40,
+  leviticus: 27,
+  numbers: 36,
+  deuteronomy: 34,
+  joshua: 24,
+  judges: 21,
+  ruth: 4,
+  "1-samuel": 31,
+  "2-samuel": 24,
+  "1-kings": 22,
+  "2-kings": 25,
+  "1-chronicles": 29,
+  "2-chronicles": 36,
+  ezra: 10,
+  nehemiah: 13,
+  esther: 10,
+  job: 42,
+  psalms: 150,
+  proverbs: 31,
+  ecclesiastes: 12,
+  "song-of-songs": 8,
+  isaiah: 66,
+  jeremiah: 52,
+  lamentations: 5,
+  ezekiel: 48,
+  daniel: 12,
+  hosea: 14,
+  joel: 3,
+  amos: 9,
+  obadiah: 1,
+  jonah: 4,
+  micah: 7,
+  nahum: 3,
+  habakkuk: 3,
+  zephaniah: 3,
+  haggai: 2,
+  zechariah: 14,
+  malachi: 4,
+  matthew: 28,
+  mark: 16,
+  luke: 24,
+  john: 21,
+  acts: 28,
+  romans: 16,
+  "1-corinthians": 16,
+  "2-corinthians": 13,
+  galatians: 6,
+  ephesians: 6,
+  philippians: 4,
+  colossians: 4,
+  "1-thessalonians": 5,
+  "2-thessalonians": 3,
+  "1-timothy": 6,
+  "2-timothy": 4,
+  titus: 3,
+  philemon: 1,
+  hebrews: 13,
+  james: 5,
+  "1-peter": 5,
+  "2-peter": 3,
+  "1-john": 5,
+  "2-john": 1,
+  "3-john": 1,
+  jude: 1,
+  revelation: 22,
+};
+
 const ISSUE = {
   JSON_INVALID: "TLN_JSON_INVALID",
   FILE_UNREADABLE: "TLN_FILE_UNREADABLE",
@@ -199,6 +295,12 @@ const ISSUE = {
   KINGS_APPROXIMATE_DATE_REVIEW: "TLN_KINGS_APPROXIMATE_DATE_REVIEW",
   KINGS_LOW_CONFIDENCE_SYNCHRONISM: "TLN_KINGS_LOW_CONFIDENCE_SYNCHRONISM",
   KINGS_REIGN_LABEL_MISSING: "TLN_KINGS_REIGN_LABEL_MISSING",
+  CHAPTER_CONTEXT_ENVELOPE_INVALID: "TLN_CHAPTER_CONTEXT_ENVELOPE_INVALID",
+  CHAPTER_CONTEXT_FIELD_MISSING: "TLN_CHAPTER_CONTEXT_FIELD_MISSING",
+  CHAPTER_CONTEXT_FIELD_INVALID: "TLN_CHAPTER_CONTEXT_FIELD_INVALID",
+  CHAPTER_CONTEXT_LABEL_INVALID: "TLN_CHAPTER_CONTEXT_LABEL_INVALID",
+  CHAPTER_CONTEXT_ID_DUPLICATE: "TLN_CHAPTER_CONTEXT_ID_DUPLICATE",
+  CHAPTER_CONTEXT_BOOK_CHAPTER_DUPLICATE: "TLN_CHAPTER_CONTEXT_BOOK_CHAPTER_DUPLICATE",
 };
 
 function main(argv) {
@@ -377,6 +479,10 @@ function validatePackage(filePath, data, registry, issues) {
   if (isCoreBiblicalEventsPackage(data, filePath)) {
     validateCoreBiblicalEvents(filePath, data, items, issues);
   }
+
+  if (isChapterContextPackageType(packageType)) {
+    validateChapterContextPackage(filePath, data, items, issues);
+  }
 }
 
 function validateEnvelope(filePath, data, issues) {
@@ -442,7 +548,203 @@ function validateRow(filePath, data, packageType, packageStatus, item, rowLabel,
     validateKingsKingdomsRow(filePath, item, rowLabel, localIndex, issues);
   }
 
+  if (isChapterContextPackageType(packageType)) {
+    validateChapterContextRow(filePath, packageStatus, item, rowLabel, issues);
+  }
+
   validateWarnings(filePath, packageType, item, rowLabel, issues);
+}
+
+function validateChapterContextPackage(filePath, data, items, issues) {
+  validateChapterContextEnvelope(filePath, data, issues);
+
+  const chapterContextIds = new Map();
+  const bookChapterPairs = new Map();
+
+  for (const item of items) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) {
+      continue;
+    }
+
+    if (typeof item.chapterContextId === "string" && item.chapterContextId.trim().length > 0) {
+      chapterContextIds.set(item.chapterContextId, (chapterContextIds.get(item.chapterContextId) ?? 0) + 1);
+    }
+
+    if (typeof item.bookId === "string" && item.bookId.trim().length > 0 && Number.isInteger(item.chapter)) {
+      const key = `${item.bookId}::${item.chapter}`;
+      bookChapterPairs.set(key, (bookChapterPairs.get(key) ?? 0) + 1);
+    }
+  }
+
+  for (const [chapterContextId, count] of chapterContextIds.entries()) {
+    if (count > 1) {
+      issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_ID_DUPLICATE, filePath, chapterContextId, `Duplicate chapterContextId "${chapterContextId}" (${count} occurrences).`, {
+        path: "chapterContextId",
+        chapterContextId,
+        occurrences: count,
+      }));
+    }
+  }
+
+  for (const [pair, count] of bookChapterPairs.entries()) {
+    if (count > 1) {
+      const [bookId, chapter] = pair.split("::");
+      issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_BOOK_CHAPTER_DUPLICATE, filePath, pair, `Duplicate chapter-context pair "${bookId} ${chapter}" (${count} occurrences).`, {
+        path: "bookId",
+        bookId,
+        chapter: Number(chapter),
+        occurrences: count,
+      }));
+    }
+  }
+}
+
+function validateChapterContextEnvelope(filePath, data, issues) {
+  for (const field of ["packageId", "scope"]) {
+    if (!hasNonEmptyValue(data[field])) {
+      issues.push(makeIssue("error", ISSUE.ENVELOPE_MISSING_FIELD, filePath, null, `Missing required chapter-context envelope field "${field}".`, {
+        path: field,
+      }));
+    }
+  }
+
+  if (hasNonEmptyValue(data.scope) && data.scope !== "chapter-level-preview-metadata") {
+    issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_ENVELOPE_INVALID, filePath, null, `Chapter-context package scope must be "chapter-level-preview-metadata"; received "${data.scope}".`, {
+      path: "scope",
+      scope: data.scope,
+    }));
+  }
+
+  for (const field of CHAPTER_CONTEXT_FORBIDDEN_ENVELOPE_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(data, field)) {
+      issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_ENVELOPE_INVALID, filePath, null, `Forbidden chapter-context envelope field "${field}" is present.`, {
+        path: field,
+        field,
+      }));
+    }
+  }
+
+  if (data.status === "skeleton" && Array.isArray(data.items) && data.items.length === 0) {
+    return;
+  }
+}
+
+function validateChapterContextRow(filePath, packageStatus, item, rowLabel, issues) {
+  const requiredFields = [
+    "chapterContextId",
+    "bookId",
+    "chapter",
+    "title",
+    "summary",
+    "chapterScopeLabel",
+    "scriptureAnchors",
+    "basisLabel",
+    "confidenceLabel",
+    "cautionNote",
+    "reviewStatus",
+    "sourceBasisLabel",
+    "relatedBookIds",
+    "relatedEventIds",
+    "relatedKingdomIds",
+    "relatedPlaceIds",
+    "relatedThemeLabels",
+    "isSkeleton",
+  ];
+
+  for (const field of requiredFields) {
+    if (item[field] === undefined || item[field] === null) {
+      issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_MISSING, filePath, rowLabel, `Chapter-context row is missing required field "${field}".`, {
+        path: field,
+        recordId: item.id ?? rowLabel,
+      }));
+    }
+  }
+
+  for (const field of ["title", "summary", "chapterScopeLabel", "basisLabel", "confidenceLabel", "cautionNote", "sourceBasisLabel"]) {
+    if (item[field] !== undefined && !hasLocalizedField(item[field])) {
+      issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_LABEL_INVALID, filePath, rowLabel, `Chapter-context field "${field}" must provide non-empty "ko" and "en" labels.`, {
+        path: field,
+        recordId: item.id ?? rowLabel,
+        field,
+      }));
+    }
+  }
+
+  if (item.chapter !== undefined && !Number.isInteger(item.chapter)) {
+    issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_INVALID, filePath, rowLabel, `Chapter-context field "chapter" must be an integer; received "${item.chapter}".`, {
+      path: "chapter",
+      recordId: item.id ?? rowLabel,
+      field: "chapter",
+    }));
+  }
+
+  if (hasNonEmptyValue(item.bookId)) {
+    if (!Object.prototype.hasOwnProperty.call(CANONICAL_BOOK_CHAPTERS, item.bookId)) {
+      issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_INVALID, filePath, rowLabel, `Chapter-context bookId "${item.bookId}" is not a recognized canonical book id.`, {
+        path: "bookId",
+        recordId: item.id ?? rowLabel,
+        bookId: item.bookId,
+        field: "bookId",
+      }));
+    } else if (Number.isInteger(item.chapter)) {
+      const maxChapter = CANONICAL_BOOK_CHAPTERS[item.bookId];
+      if (item.chapter < 1 || item.chapter > maxChapter) {
+        issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_INVALID, filePath, rowLabel, `Chapter-context chapter "${item.chapter}" is out of bounds for "${item.bookId}" (1..${maxChapter}).`, {
+          path: "chapter",
+          recordId: item.id ?? rowLabel,
+          bookId: item.bookId,
+          chapter: item.chapter,
+          field: "chapter",
+        }));
+      }
+    }
+  }
+
+  if (item.reviewStatus !== undefined && !CHAPTER_CONTEXT_REVIEW_STATUSES.has(item.reviewStatus)) {
+    issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_INVALID, filePath, rowLabel, `Chapter-context reviewStatus "${item.reviewStatus}" is not allowed.`, {
+      path: "reviewStatus",
+      recordId: item.id ?? rowLabel,
+      field: "reviewStatus",
+    }));
+  }
+
+  for (const field of ["relatedBookIds", "relatedEventIds", "relatedKingdomIds", "relatedPlaceIds", "relatedThemeLabels"]) {
+    if (item[field] !== undefined && !Array.isArray(item[field])) {
+      issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_INVALID, filePath, rowLabel, `Chapter-context field "${field}" must be an array.`, {
+        path: field,
+        recordId: item.id ?? rowLabel,
+        field,
+      }));
+    }
+  }
+
+  if (item.scriptureAnchors !== undefined && !Array.isArray(item.scriptureAnchors)) {
+    issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_INVALID, filePath, rowLabel, 'Chapter-context field "scriptureAnchors" must be an array.', {
+      path: "scriptureAnchors",
+      recordId: item.id ?? rowLabel,
+      field: "scriptureAnchors",
+    }));
+  }
+
+  if (Array.isArray(item.relatedThemeLabels)) {
+    item.relatedThemeLabels.forEach((label, index) => {
+      if (!hasLocalizedField(label)) {
+        issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_LABEL_INVALID, filePath, rowLabel, `Chapter-context relatedThemeLabels[${index}] must provide non-empty "ko" and "en" labels.`, {
+          path: `relatedThemeLabels[${index}]`,
+          recordId: item.id ?? rowLabel,
+          field: "relatedThemeLabels",
+        }));
+      }
+    });
+  }
+
+  if (item.isSkeleton !== undefined && typeof item.isSkeleton !== "boolean") {
+    issues.push(makeIssue("error", ISSUE.CHAPTER_CONTEXT_FIELD_INVALID, filePath, rowLabel, 'Chapter-context field "isSkeleton" must be a boolean.', {
+      path: "isSkeleton",
+      recordId: item.id ?? rowLabel,
+      field: "isSkeleton",
+    }));
+  }
 }
 
 function validateKingsKingdomsRow(filePath, item, rowLabel, localIndex, issues) {
@@ -1056,6 +1358,10 @@ function isCoreBiblicalEventsPackage(data, filePath) {
 
 function isKingsKingdomsPackageType(packageType) {
   return packageType === "timeline.kings-kingdoms";
+}
+
+function isChapterContextPackageType(packageType) {
+  return packageType === "scripture-context-atlas.chapter-context";
 }
 
 function requiresTitle(packageType) {
