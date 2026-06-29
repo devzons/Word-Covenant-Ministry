@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { ContextRow } from "@/components/scripture/timeline/timeline-detail-panel/ContextRow";
 import { PanelSection } from "@/components/scripture/timeline/timeline-detail-panel/PanelSection";
 import { ScriptureAnchorsSection } from "@/components/scripture/timeline/timeline-detail-panel/ScriptureAnchorsSection";
@@ -10,6 +12,7 @@ import { getTimelineText, type TimelineBookContextRow, type TimelineLocale, type
 export type BibleReaderRelatedMetadataPreviewItem = {
   id: string;
   label: TimelineText;
+  timelineHref?: string;
 };
 
 export type BibleReaderRelatedMetadataPreview = {
@@ -44,10 +47,15 @@ const bibleReaderContextCopy = {
       "Related metadata is derived from current book-level preview data only.",
     relatedMetadataBoundary:
       "This does not mean the selected verse has been entity-tagged.",
+    relatedMetadataTimeline:
+      "This opens current book-level preview metadata in the Timeline validation view.",
+    relatedMetadataTimelineSurface:
+      "Timeline remains an advanced study and validation surface.",
     relatedEvents: "Related events",
     relatedPlaces: "Related places",
     relatedKingdoms: "Related kingdoms",
     relatedBooks: "Related books",
+    openInTimeline: "Open in advanced Timeline",
     authorshipLabel: "Authorship",
     authorshipBasis: "Authorship basis",
     backgroundSetting: "Background setting",
@@ -83,10 +91,15 @@ const bibleReaderContextCopy = {
       "관련 항목은 현재 책 기준 preview metadata에서만 가져온 것입니다.",
     relatedMetadataBoundary:
       "이 표시는 선택 절에 사람/장소/왕국 태그가 붙었다는 뜻이 아닙니다.",
+    relatedMetadataTimeline:
+      "이 링크는 현재 책 기준 preview metadata를 Timeline 검증 화면에서 엽니다.",
+    relatedMetadataTimelineSurface:
+      "Timeline은 고급 연구/검증 화면입니다.",
     relatedEvents: "관련 사건",
     relatedPlaces: "관련 장소",
     relatedKingdoms: "관련 왕국",
     relatedBooks: "관련 책",
+    openInTimeline: "고급 Timeline에서 보기",
     authorshipLabel: "저자",
     authorshipBasis: "저자 근거",
     backgroundSetting: "배경 연결",
@@ -175,6 +188,7 @@ export function BibleReaderContextPanel({
                     items={relatedMetadata.events}
                     label={copy.relatedEvents}
                     locale={activeLocale}
+                    openInTimelineLabel={copy.openInTimeline}
                   />
                 ) : null}
                 {relatedMetadata.places.length > 0 ? (
@@ -182,6 +196,7 @@ export function BibleReaderContextPanel({
                     items={relatedMetadata.places}
                     label={copy.relatedPlaces}
                     locale={activeLocale}
+                    openInTimelineLabel={copy.openInTimeline}
                   />
                 ) : null}
                 {relatedMetadata.kingdoms.length > 0 ? (
@@ -189,6 +204,7 @@ export function BibleReaderContextPanel({
                     items={relatedMetadata.kingdoms}
                     label={copy.relatedKingdoms}
                     locale={activeLocale}
+                    openInTimelineLabel={copy.openInTimeline}
                   />
                 ) : null}
                 {relatedMetadata.books.length > 0 ? (
@@ -196,6 +212,7 @@ export function BibleReaderContextPanel({
                     items={relatedMetadata.books}
                     label={copy.relatedBooks}
                     locale={activeLocale}
+                    openInTimelineLabel={copy.openInTimeline}
                   />
                 ) : null}
               </>
@@ -204,6 +221,8 @@ export function BibleReaderContextPanel({
             )}
             <SectionNote>{copy.relatedMetadataNote}</SectionNote>
             <SectionNote>{copy.relatedMetadataBoundary}</SectionNote>
+            <SectionNote>{copy.relatedMetadataTimeline}</SectionNote>
+            <SectionNote>{copy.relatedMetadataTimelineSurface}</SectionNote>
           </PanelSection>
 
           <PanelSection label={copy.authorship}>
@@ -272,17 +291,32 @@ function MetadataPreviewTagGroup({
   items,
   label,
   locale,
+  openInTimelineLabel,
 }: {
   items: BibleReaderRelatedMetadataPreviewItem[];
   label: string;
   locale: TimelineLocale;
+  openInTimelineLabel: string;
 }) {
   return (
     <div className="space-y-1.5">
       <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
-          <Tag key={`${label}-${item.id}`}>{getTimelineText(item.label, locale)}</Tag>
+          <div
+            className="flex flex-wrap items-center gap-2"
+            key={`${label}-${item.id}`}
+          >
+            <Tag>{getTimelineText(item.label, locale)}</Tag>
+            {item.timelineHref ? (
+              <Link
+                className="text-xs font-semibold text-zinc-600 underline decoration-zinc-300 underline-offset-2 transition-colors hover:text-zinc-900 hover:decoration-zinc-500"
+                href={item.timelineHref}
+              >
+                {openInTimelineLabel}
+              </Link>
+            ) : null}
+          </div>
         ))}
       </div>
     </div>

@@ -75,7 +75,7 @@ export default async function BibleReaderPage({
       isChapterOutOfRange = true;
     } else {
       bibleChapter = await getBibleChapter(version, book, chapterNumber);
-      const bookContextData = await loadBookContextData(book);
+      const bookContextData = await loadBookContextData(book, locale);
       bookContext = bookContextData.bookContext;
       relatedMetadata = bookContextData.relatedMetadata;
     }
@@ -141,7 +141,7 @@ function BibleReaderError({ locale, message }: { locale: string; message: string
   );
 }
 
-async function loadBookContextData(bookId: string): Promise<{
+async function loadBookContextData(bookId: string, locale: string): Promise<{
   bookContext: TimelineBookContextRow | null;
   relatedMetadata: BibleReaderRelatedMetadataPreview;
 }> {
@@ -173,7 +173,13 @@ async function loadBookContextData(bookId: string): Promise<{
     return {
       bookContext,
       relatedMetadata: bookContext
-        ? createRelatedMetadataPreview({ bookContext, canonicalBooks, coreEvents, kingdoms })
+        ? createRelatedMetadataPreview({
+            bookContext,
+            canonicalBooks,
+            coreEvents,
+            kingdoms,
+            locale,
+          })
         : emptyRelatedMetadataPreview(),
     };
   } catch {
@@ -198,15 +204,45 @@ function createRelatedMetadataPreview({
   canonicalBooks,
   coreEvents,
   kingdoms,
+  locale,
 }: {
   bookContext: TimelineBookContextRow;
   canonicalBooks: TimelineBookContextRow[];
   coreEvents: Array<{ id: string; title: TimelineText }>;
   kingdoms: Array<{ id: string; title: TimelineText }>;
+  locale: string;
 }): BibleReaderRelatedMetadataPreview {
-  const booksById = new Map(canonicalBooks.map((row) => [row.bookId, { id: row.bookId, label: row.title }]));
-  const eventsById = new Map(coreEvents.map((row) => [row.id, { id: row.id, label: row.title }]));
-  const kingdomsById = new Map(kingdoms.map((row) => [row.id, { id: row.id, label: row.title }]));
+  const timelineLocale = locale === "en" ? "en" : "ko";
+  const booksById = new Map(
+    canonicalBooks.map((row) => [
+      row.bookId,
+      {
+        id: row.bookId,
+        label: row.title,
+        timelineHref: createTimelineHref(timelineLocale, "books", "book", row.bookId),
+      },
+    ]),
+  );
+  const eventsById = new Map(
+    coreEvents.map((row) => [
+      row.id,
+      {
+        id: row.id,
+        label: row.title,
+        timelineHref: createTimelineHref(timelineLocale, "events", "event", row.id),
+      },
+    ]),
+  );
+  const kingdomsById = new Map(
+    kingdoms.map((row) => [
+      row.id,
+      {
+        id: row.id,
+        label: row.title,
+        timelineHref: createTimelineHref(timelineLocale, "kingdoms", "kingdom", row.id),
+      },
+    ]),
+  );
   const placesById = new Map(
     timelineSchematicPlaceRows.flatMap((row) => [
       [row.placeId, { id: row.placeId, label: row.title }] as const,
@@ -243,4 +279,19 @@ function dedupePreviewItems<T extends { id: string }>(items: T[]): T[] {
 
 function isDefined<T>(value: T | undefined): value is T {
   return value !== undefined;
+}
+
+function createTimelineHref(
+  locale: "en" | "ko",
+  view: "events" | "books" | "kingdoms",
+  inspectType: "event" | "book" | "kingdom",
+  inspectId: string,
+) {
+  const params = new URLSearchParams({
+    inspectId,
+    inspectType,
+    view,
+  });
+
+  return `/${locale}/timeline?${params.toString()}`;
 }
