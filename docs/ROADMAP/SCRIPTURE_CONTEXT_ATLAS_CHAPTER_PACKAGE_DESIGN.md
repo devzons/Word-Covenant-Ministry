@@ -74,9 +74,30 @@ type ScriptureContextAtlasChapterPackage = {
   packageType: "scripture-context-atlas.chapter-context";
   packageVersion: string;
   status: "skeleton" | "pilot" | "reviewed";
+  scope: "chapter-level-preview-metadata";
   notes: string[];
   items: ScriptureContextAtlasChapterRow[];
 };
+```
+
+Recommended JSON-oriented envelope:
+
+```json
+{
+  "$schema": "./schema.md",
+  "packageId": "scripture-context-atlas.chapter-context",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.1.0-skeleton",
+  "status": "skeleton",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "This file is a chapter-level context skeleton only.",
+    "It does not store Bible text.",
+    "It does not perform verse-level tagging.",
+    "It is not connected to the Reader yet."
+  ],
+  "items": []
+}
 ```
 
 Recommended row identity:
@@ -111,6 +132,77 @@ Canonical/display ordering policy:
 - a dedicated `displayOrder` field is not required if deterministic sort can be derived from `bookId + chapter`
 - if added later, `displayOrder` must remain derived and not become an independent chronology claim
 
+Envelope-field policy:
+
+- `$schema`
+  - allowed and recommended for consistency with current timeline package files
+- `packageId`
+  - recommended because existing package files already use stable package identifiers
+- `packageType`
+  - required
+- `packageVersion`
+  - required
+  - recommended SemVer-like skeleton value such as `0.1.0-skeleton`
+- `status`
+  - required
+  - initial file should use `skeleton`
+- `scope`
+  - required
+  - should remain explicit that this package is chapter-level preview metadata only
+- `notes`
+  - recommended
+  - should state major guardrails in plain language
+- `items`
+  - required
+
+Envelope-field exclusions:
+
+- do not add `generatedAt`
+- do not add `createdAt`
+- do not add environment-specific metadata
+- do not add runtime-loader hints
+- do not add translation-scoped envelope flags in v1
+
+## Skeleton File Policy
+
+Recommended skeleton file path:
+
+```txt
+docs/data-packages/timeline/chapter-context.skeleton.json
+```
+
+Recommended initial-file policy:
+
+- do not create real chapter rows in the first skeleton file
+- start with `items: []`
+- keep the first file schema-oriented and contract-oriented
+- do not include illustrative sample rows in the production skeleton file
+- if examples are needed later, prefer dedicated verifier fixtures rather than mixed-purpose production skeleton rows
+
+Current decision:
+
+- this CR does not create the file
+- the next CR may create an empty skeleton file only
+- any non-empty `items` rows require a later separate approval step
+
+Frontend connection policy:
+
+- do not connect chapter-context package loading to the Reader yet
+- keep the file docs/data-only until a separate CR approves both file creation and Reader fallback behavior
+- package-row creation and frontend connection are separate decisions
+
+Naming convention policy:
+
+- use `chapter-context.skeleton.json` for the first package file
+- future non-skeleton variants should preserve the same root name and change only maturity suffixes or versioning policy if later approved
+- do not introduce parallel names such as `reader-chapter-context.json` or `chapter-context-preview.json` unless separately approved
+
+Deterministic-diff policy:
+
+- avoid generated timestamps such as `generatedAt`
+- avoid writer-specific metadata
+- prefer stable envelope metadata that does not change on every save
+
 ## Recommended Minimum Row Shape
 
 Recommended minimum row shape:
@@ -132,7 +224,7 @@ type ScriptureContextAtlasChapterRow = {
   basisLabel: TimelineText;
   confidenceLabel: TimelineText;
   cautionNote: TimelineText;
-  reviewStatus: "skeleton" | "draft" | "review-required" | "reviewed";
+  reviewStatus: "skeleton" | "draft" | "review-required" | "reviewed" | "blocked" | "deprecated";
   sourceBasisLabel: TimelineText;
   relatedBookIds: string[];
   relatedEventIds: string[];
@@ -142,6 +234,60 @@ type ScriptureContextAtlasChapterRow = {
   isSkeleton: boolean;
 };
 ```
+
+Required-field policy:
+
+- required
+  - `chapterContextId`
+  - `bookId`
+  - `chapter`
+  - `title`
+  - `summary`
+  - `chapterScopeLabel`
+  - `scriptureAnchors`
+  - `basisLabel`
+  - `confidenceLabel`
+  - `cautionNote`
+  - `reviewStatus`
+  - `sourceBasisLabel`
+  - `relatedBookIds`
+  - `relatedEventIds`
+  - `relatedKingdomIds`
+  - `relatedPlaceIds`
+  - `relatedThemeLabels`
+  - `isSkeleton`
+
+Optional-field policy:
+
+- no additional operational fields are recommended in the first contract
+- later optional fields must be separately approved
+
+Label-shape policy:
+
+```ts
+type TimelineText = {
+  ko: string;
+  en: string;
+};
+```
+
+- all end-user-facing labels should use `{ ko, en }`
+- do not allow single-language strings for UI-facing row labels in the main package contract
+
+`scriptureAnchors` policy:
+
+```ts
+type ChapterContextScriptureAnchor = {
+  bookId: string;
+  label: TimelineText;
+  reference: string;
+  scope: "chapter" | "passage";
+};
+```
+
+- at least one anchor is required
+- anchor scope must remain `chapter` or `passage`
+- do not allow `verse` scope in the chapter-level contract
 
 Field purpose:
 
@@ -160,15 +306,15 @@ Field purpose:
 - `scriptureAnchors`
   - chapter-level or bounded-passage references only
 - `basisLabel`
-  - why the row exists
+  - immediate contextual reason for the row
 - `confidenceLabel`
-  - how cautious or reviewed the row is
+  - cautious or reviewed display state
 - `cautionNote`
   - no-overclaim language
 - `reviewStatus`
   - explicit readiness state
 - `sourceBasisLabel`
-  - Scripture / curation / package-review basis
+  - Scripture / curation / package-review basis behind the row
 - `relatedBookIds`
   - canonical book ids only
 - `relatedEventIds`
@@ -181,6 +327,42 @@ Field purpose:
   - optional label-only helper, not doctrinal taxonomy
 - `isSkeleton`
   - package maturity marker
+
+Confidence-level policy:
+
+- keep `confidenceLabel` as required display text
+- do not add a normalized machine enum in the first contract
+- preferred wording remains:
+  - `skeleton preview`
+  - `review required`
+  - `cautious contextual grouping`
+  - `reviewed chapter summary`
+
+Relation-array policy:
+
+- empty arrays are allowed for:
+  - `relatedBookIds`
+  - `relatedEventIds`
+  - `relatedKingdomIds`
+  - `relatedPlaceIds`
+  - `relatedThemeLabels`
+- empty arrays must not be interpreted as proof that no relation exists
+- they mean only that no reviewed relation has been attached in the current package
+
+`basisLabel` vs `sourceBasisLabel` policy:
+
+- `basisLabel`
+  - explains the immediate contextual reason for the row
+  - example: `Scripture anchor grouping / chapter-level preview`
+- `sourceBasisLabel`
+  - explains the curation/source basis behind the row
+  - example: `Scripture-first manual curation / review required`
+
+`cautionNote` policy:
+
+- required for every row
+- must use no-overclaim wording
+- should explain uncertainty, preview scope, or review limits when relevant
 
 ## Explicit Exclusions
 
@@ -285,13 +467,6 @@ Recommended caution policy:
 - avoid inference language that sounds like automated extraction
 - avoid doctrinal overclaim
 
-Recommended review states:
-
-- `skeleton`
-- `draft`
-- `review-required`
-- `reviewed`
-
 No-overclaim rules:
 
 - do not say `this chapter means`
@@ -302,6 +477,40 @@ No-overclaim rules:
   - `chapter-scope context`
   - `review-required`
   - `related metadata at chapter scope`
+
+## Review-State Rules
+
+Recommended allowed values:
+
+- `skeleton`
+- `draft`
+- `review-required`
+- `reviewed`
+- `blocked`
+- `deprecated`
+
+Recommended meaning:
+
+- `skeleton`
+  - schema and placeholder maturity only
+  - not for normal Reader display
+- `draft`
+  - authored but not yet ready for user-facing display
+- `review-required`
+  - preview-capable only if a later CR explicitly allows preview display
+- `reviewed`
+  - eligible for future Reader display
+- `blocked`
+  - insufficient basis or policy conflict
+  - must not display
+- `deprecated`
+  - replaced or withdrawn
+  - must not display
+
+Recommended first-file policy:
+
+- keep file-level `status: "skeleton"` for the empty initial package
+- row-level `reviewStatus` becomes relevant only after later approved row creation
 
 ## Relationship Policy
 
@@ -349,11 +558,13 @@ EN:
 
 - `Chapter-level atlas metadata is not connected for this chapter yet.`
 - `The current panel is still using book-level preview metadata only.`
+- `Verse-level people, places, and kingdom tagging remain future reviewed phases.`
 
 KO:
 
 - `이 장에 대한 chapter-level atlas metadata는 아직 연결되지 않았습니다.`
 - `현재 패널은 계속 책 수준 preview metadata만 사용하고 있습니다.`
+- `절 단위 인물, 장소, 왕국 태깅은 이후 검토 단계입니다.`
 
 Selected-verse boundary copy direction:
 
@@ -364,6 +575,18 @@ EN:
 KO:
 
 - `장 수준 문맥은 선택 절 상태와 별개입니다.`
+
+Fallback-copy guidance:
+
+- do not say:
+  - `This chapter has no related context.`
+  - `이 장에는 관련 문맥이 없습니다.`
+  - `All context for this chapter is shown here.`
+  - `이 장의 모든 문맥이 여기에 표시됩니다.`
+- prefer:
+  - `Chapter-level Context Atlas data is not connected yet.`
+  - `The current context is book-level preview metadata.`
+  - `Verse-level people, places, and kingdom tagging remain future reviewed phases.`
 
 ## Future Verifier Guardrails
 
@@ -392,41 +615,62 @@ Recommended future verifier checks:
 - duplicate row detection
 - unsupported exact-claim warning
 
+Recommended fail conditions:
+
+- fail on Bible text fields
+- fail on coordinates / geocoding / map-provider fields
+- fail on verse-level tagging fields
+- fail on `selectedVerse`, `startVerse`, or `endVerse`
+- fail on invalid `bookId`
+- fail on invalid chapter bounds
+- fail on duplicate `chapterContextId`
+- fail on duplicate `bookId + chapter`
+- fail on invalid related ids
+- fail on missing `basisLabel`
+- fail on missing `confidenceLabel`
+- fail on missing `cautionNote`
+- fail on missing `reviewStatus`
+
 Recommended warning policy:
 
 - warn if wording implies exact chronology
 - warn if wording implies auto-extracted entity resolution
 - warn if summary becomes commentary-like prose instead of metadata summary
+- warn if wording is overconfident relative to weak basis
+- warn if empty `scriptureAnchors` appear in draft-like rows
+- warn if `relatedPlaceIds` wording implies real-map claims
+- warn if person/paja/name-like fields appear before approval
 
 ## Recommended Next CR
 
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-23 Chapter Context Package Skeleton Design Note
+CR-BR-CTX-24 Chapter Context Skeleton File Creation
 ```
 
 Objective:
 
-- finalize the chapter-level package contract and file-level skeleton policy before any future package skeleton file or Reader UI work starts
+- create the first empty chapter-context skeleton file using the approved contract and envelope wording without adding any real rows
 
 Scope:
 
-- docs-only
-- refine field definitions
-- confirm identity policy
-- confirm verifier expectations
-- confirm fallback copy boundary
+- docs/data-only
+- create `docs/data-packages/timeline/chapter-context.skeleton.json`
+- keep `items: []`
+- align envelope wording with current design note
+- do not connect to Reader or Timeline runtime yet
 
 Files likely touched:
 
+- `docs/data-packages/timeline/chapter-context.skeleton.json`
 - `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_CHAPTER_PACKAGE_DESIGN.md`
 - `docs/ROADMAP/PROJECT_STATUS.md`
 - `docs/ROADMAP/NEXT_TASKS.md`
 
 Explicitly not included:
 
-- no JSON rows
+- no real chapter rows
 - no package loader code
 - no Reader UI implementation
 - no API / backend / DB / schema work
@@ -449,6 +693,6 @@ Browser QA needed:
 
 ## Overall Verdict
 
-The chapter-level context problem is currently a data-contract problem, not a UI problem.
+The chapter-level context problem is currently a data-contract and skeleton-policy problem, not a UI problem.
 
-The next safe step is to define the chapter-level package contract clearly enough that future skeleton files, verifier rules, and Reader UI can be added without drifting into verse-level tagging or commentary behavior.
+The next safe step is to create an empty skeleton file that encodes this contract without drifting into verse-level tagging, commentary behavior, or premature runtime integration.
