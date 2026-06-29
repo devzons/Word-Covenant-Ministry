@@ -762,24 +762,252 @@ Fixture-design recommendation:
   - warning empty scripture anchors
   - warning commentary-like summary
 
+## Future Verifier Fixture Design
+
+Fixture taxonomy:
+
+- `valid`
+  - fixtures that must pass with `errorCount === 0`
+- `invalid`
+  - fixtures that must fail with one or more errors
+- `warnings`
+  - fixtures that must pass with `errorCount === 0` and one or more warnings
+
+Each fixture category should document:
+
+- fixture purpose
+- expected verifier result
+- rule covered
+- why it matters
+- whether the file should be created in the next CR
+
+Required fixture category candidates:
+
+- `valid empty skeleton envelope`
+  - expected result: pass
+  - rule covered: skeleton package recognition, empty `items` allowance for `status: "skeleton"`
+  - why it matters: protects the current package baseline
+  - next-CR creation: yes
+- `valid minimal reviewed row`
+  - expected result: pass
+  - rule covered: minimum reviewed row contract
+  - why it matters: proves the chapter-context contract can describe one valid chapter row without drifting into verse-level semantics
+  - next-CR creation: yes
+- `invalid missing envelope field`
+  - expected result: fail
+  - rule covered: required envelope-field enforcement
+  - why it matters: prevents incomplete package files from silently passing
+  - next-CR creation: yes
+- `invalid wrong packageType`
+  - expected result: fail
+  - rule covered: package recognition policy
+  - why it matters: prevents chapter fixtures from being misclassified as existing timeline package types
+  - next-CR creation: yes
+- `invalid Bible text field`
+  - expected result: fail
+  - rule covered: Bible-text exclusion
+  - why it matters: protects the no-Bible-text package boundary
+  - next-CR creation: yes
+- `invalid coordinate / map-provider field`
+  - expected result: fail
+  - rule covered: no-coordinate / no-map-provider boundary
+  - why it matters: keeps chapter-context distinct from map/entity infrastructure
+  - next-CR creation: yes
+- `invalid verse-level tagging field`
+  - expected result: fail
+  - rule covered: verse-level tagging exclusion
+  - why it matters: protects the chapter-level vs verse-level boundary
+  - next-CR creation: yes
+- `invalid runtime UI state field`
+  - expected result: fail
+  - rule covered: no Reader runtime-state fields
+  - why it matters: prevents package files from drifting into app-state serialization
+  - next-CR creation: yes
+- `invalid duplicate chapterContextId`
+  - expected result: fail
+  - rule covered: row identity uniqueness
+  - why it matters: keeps row identity stable and deterministic
+  - next-CR creation: yes
+- `invalid duplicate bookId + chapter row`
+  - expected result: fail
+  - rule covered: canonical chapter uniqueness
+  - why it matters: prevents ambiguous chapter context selection
+  - next-CR creation: yes
+- `invalid related id`
+  - expected result: fail
+  - rule covered: relation-id resolution
+  - why it matters: prevents broken cross-package references
+  - next-CR creation: yes
+- `invalid reviewStatus`
+  - expected result: fail
+  - rule covered: review-state enum enforcement
+  - why it matters: keeps review/display policy machine-checkable
+  - next-CR creation: yes
+- `invalid missing basis/confidence/caution`
+  - expected result: fail
+  - rule covered: required row metadata
+  - why it matters: protects no-overclaim and review labeling
+  - next-CR creation: yes
+- `warning overconfident wording`
+  - expected result: warn
+  - rule covered: confidence-language caution
+  - why it matters: overclaim is one of the highest theological/UX risks
+  - next-CR creation: yes
+- `warning exact chronology language`
+  - expected result: warn
+  - rule covered: chronology caution policy
+  - why it matters: exact-sounding timeline language can exceed reviewed basis even without explicit year fields
+  - next-CR creation: yes
+- `warning empty scriptureAnchors`
+  - expected result: warn
+  - rule covered: weak anchor hygiene
+  - why it matters: helps distinguish structurally valid but weak rows from fully grounded rows
+  - next-CR creation: yes
+- `warning commentary-like summary`
+  - expected result: warn
+  - rule covered: metadata-only summary boundary
+  - why it matters: chapter context must not drift into commentary prose
+  - next-CR creation: yes
+- `warning sermon/application-like wording`
+  - expected result: warn
+  - rule covered: no sermon/application prose boundary
+  - why it matters: keeps the atlas descriptive rather than exhortational
+  - next-CR creation: yes
+- `warning exhaustive wording`
+  - expected result: warn
+  - rule covered: no exhaustive-claim wording
+  - why it matters: phrases like `all context` or `complete context` overstate review coverage
+  - next-CR creation: yes
+- `warning relatedPlaceIds wording that implies real-map claims`
+  - expected result: warn
+  - rule covered: schematic-place-only boundary
+  - why it matters: prevents chapter-context from implying coordinate-backed place resolution
+  - next-CR creation: yes
+
+Fixture naming convention:
+
+- keep fixture files under:
+  - `docs/data-packages/timeline/fixtures/valid/`
+  - `docs/data-packages/timeline/fixtures/invalid/`
+  - `docs/data-packages/timeline/fixtures/warnings/`
+- follow the current repository fixture convention:
+  - `<name>.valid.sample.json`
+  - `<name>.invalid.sample.json`
+  - `<name>.warning.sample.json`
+- recommended chapter-context examples:
+  - `chapter-context-empty-skeleton.valid.sample.json`
+  - `chapter-context-minimal-reviewed-row.valid.sample.json`
+  - `chapter-context-missing-envelope-field.invalid.sample.json`
+  - `chapter-context-wrong-package-type.invalid.sample.json`
+  - `chapter-context-bible-text.invalid.sample.json`
+  - `chapter-context-coordinate-field.invalid.sample.json`
+  - `chapter-context-verse-tagging-field.invalid.sample.json`
+  - `chapter-context-runtime-ui-state.invalid.sample.json`
+  - `chapter-context-duplicate-id.invalid.sample.json`
+  - `chapter-context-duplicate-book-chapter.invalid.sample.json`
+  - `chapter-context-invalid-related-id.invalid.sample.json`
+  - `chapter-context-invalid-review-status.invalid.sample.json`
+  - `chapter-context-missing-basis-confidence-caution.invalid.sample.json`
+  - `chapter-context-overconfident-wording.warning.sample.json`
+  - `chapter-context-exact-chronology.warning.sample.json`
+  - `chapter-context-empty-scripture-anchors.warning.sample.json`
+  - `chapter-context-commentary-like-summary.warning.sample.json`
+  - `chapter-context-sermon-like-summary.warning.sample.json`
+  - `chapter-context-exhaustive-wording.warning.sample.json`
+  - `chapter-context-related-place-map-implication.warning.sample.json`
+
+Fixture content policy:
+
+- fixtures must remain minimal and rule-focused
+- invalid fixtures may include forbidden fields only for test purposes and must remain clearly invalid
+- fixtures must not include generated timestamps or environment-specific metadata
+- fixtures must preserve deterministic diffs
+- fixtures are not production rows
+- fixtures must never be loaded by Reader runtime
+- fixtures must remain under `docs/data-packages/timeline/fixtures/`
+
+Valid fixture design:
+
+- `valid empty skeleton envelope`
+  - package status: `skeleton`
+  - `items: []`
+  - expected pass
+- `valid minimal reviewed row`
+  - one minimal `reviewed` row
+  - no Bible text
+  - no verse-level fields
+  - no coordinates
+  - minimal safe relationships only
+  - expected pass
+- relation-target policy for valid fixtures:
+  - prefer existing canonical `bookId`
+  - prefer existing real package ids for `relatedEventIds` and `relatedKingdomIds` when practical
+  - if fixture-local ids are ever introduced later, that needs explicit verifier-fixture policy and should not be assumed by default
+
+Invalid fixture design:
+
+- `invalid Bible text field`
+  - include one forbidden Bible-text field only
+- `invalid coordinate field`
+  - include one coordinate or map-provider field only
+- `invalid verse-tagging field`
+  - include one verse-level field such as `verse` or `selectedVerse`
+- `invalid duplicate bookId + chapter`
+  - include two rows sharing the same canonical chapter identity
+- `invalid related id`
+  - include at least one unresolved related id
+- `invalid missing required field`
+  - omit exactly one required field for clarity
+- `invalid reviewStatus`
+  - use one unsupported `reviewStatus` value
+- `invalid wrong packageType`
+  - keep the rest of the envelope valid so package recognition failure is isolated
+
+Warning fixture design:
+
+- `warning overconfident wording`
+  - should warn, not fail, because wording can exceed caution policy without breaking structure
+- `warning exact chronology language`
+  - should warn, not fail, unless unsupported exact-year fields are also introduced
+- `warning empty scriptureAnchors`
+  - should warn, not fail, when used to test weak-yet-parseable row content
+- `warning commentary-like summary`
+  - should warn, not fail, because the issue is tone/scope drift rather than missing structure
+- `warning sermon/application-like wording`
+  - should warn, not fail, because it tests descriptive-vs-exhortational copy boundaries
+- `warning exhaustive wording`
+  - should warn, not fail, because it tests overclaim language rather than schema invalidity
+- `warning relatedPlaceIds real-map implication`
+  - should warn, not fail, because the issue is claim inflation around places, not broken ids
+
+Future verifier integration notes:
+
+- future wrapper coverage should add chapter-context fixtures to the same three buckets:
+  - valid fixtures must pass
+  - invalid fixtures must fail
+  - warning fixtures must pass with warnings
+- future JSON smoke should eventually include the chapter-context package itself
+- current verifier does not yet implement chapter-context-specific rules
+- verifier implementation should remain a separate CR after fixture design approval and, preferably, after fixture files exist
+
 ## Recommended Next CR
 
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-26 Chapter Context Verifier Fixtures Design
+CR-BR-CTX-27 Chapter Context Verifier Fixture Files
 ```
 
 Objective:
 
-- define the fixture plan for chapter-context verifier coverage before any verifier implementation starts
+- create the first chapter-context fixture files for valid / invalid / warning categories without touching verifier code
 
 Scope:
 
-- docs-only
-- define valid / invalid / warning fixture categories
-- map each fixture category to the approved fail/warn contract
-- keep verifier implementation and fixture-file creation deferred
+- docs/data-only
+- add chapter-context fixture files under existing `valid/invalid/warnings` directories
+- keep fixtures minimal and deterministic
+- do not change verifier implementation yet
 
 Files likely touched:
 
@@ -790,7 +1018,6 @@ Files likely touched:
 Explicitly not included:
 
 - no verifier code changes
-- no fixture file creation
 - no real chapter rows
 - no package loader code
 - no Reader UI implementation
