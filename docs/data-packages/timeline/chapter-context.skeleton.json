@@ -1,0 +1,15 @@
+{
+  "$schema": "./schema.md",
+  "packageId": "scripture-context-atlas.chapter-context",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.1.0-skeleton",
+  "status": "skeleton",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Skeleton envelope only.",
+    "No chapter context rows are approved yet.",
+    "This package is not connected to runtime yet.",
+    "It does not store Bible text or perform verse-level tagging."
+  ],
+  "items": []
+}

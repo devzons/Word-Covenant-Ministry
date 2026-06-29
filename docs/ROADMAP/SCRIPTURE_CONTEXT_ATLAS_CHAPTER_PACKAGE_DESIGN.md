@@ -181,8 +181,8 @@ Recommended initial-file policy:
 
 Current decision:
 
-- this CR does not create the file
-- the next CR may create an empty skeleton file only
+- this CR now creates the empty skeleton file only
+- the created file remains envelope-only with `items: []`
 - any non-empty `items` rows require a later separate approval step
 
 Frontend connection policy:
@@ -190,6 +190,15 @@ Frontend connection policy:
 - do not connect chapter-context package loading to the Reader yet
 - keep the file docs/data-only until a separate CR approves both file creation and Reader fallback behavior
 - package-row creation and frontend connection are separate decisions
+
+Current file state:
+
+- `docs/data-packages/timeline/chapter-context.skeleton.json` now exists
+- it contains envelope metadata only
+- it contains no sample rows
+- it contains no real rows
+- it is not connected to Reader or Timeline runtime
+- verifier implementation support remains a separate future step
 
 Naming convention policy:
 
@@ -646,30 +655,29 @@ Recommended warning policy:
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-24 Chapter Context Skeleton File Creation
+CR-BR-CTX-25 Chapter Context Verifier Rule Design
 ```
 
 Objective:
 
-- create the first empty chapter-context skeleton file using the approved contract and envelope wording without adding any real rows
+- define the future verifier-rule contract for chapter-context packages without changing verifier code yet
 
 Scope:
 
-- docs/data-only
-- create `docs/data-packages/timeline/chapter-context.skeleton.json`
-- keep `items: []`
-- align envelope wording with current design note
-- do not connect to Reader or Timeline runtime yet
+- docs-only
+- define fail/warn expectation wording for `scripture-context-atlas.chapter-context`
+- align future verifier behavior with current chapter package contract
+- keep verifier implementation deferred
 
 Files likely touched:
 
-- `docs/data-packages/timeline/chapter-context.skeleton.json`
 - `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_CHAPTER_PACKAGE_DESIGN.md`
 - `docs/ROADMAP/PROJECT_STATUS.md`
 - `docs/ROADMAP/NEXT_TASKS.md`
 
 Explicitly not included:
 
+- no verifier code changes
 - no real chapter rows
 - no package loader code
 - no Reader UI implementation
@@ -695,4 +703,4 @@ Browser QA needed:
 
 The chapter-level context problem is currently a data-contract and skeleton-policy problem, not a UI problem.
 
-The next safe step is to create an empty skeleton file that encodes this contract without drifting into verse-level tagging, commentary behavior, or premature runtime integration.
+The next safe step is to define the future verifier rule contract for this empty skeleton package without drifting into runtime integration, row authoring, verse-level tagging, or commentary behavior.
