@@ -1003,49 +1003,50 @@ Future verifier integration notes:
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-28 Chapter Context Verifier Implementation Readiness
+CR-BR-CTX-29 Chapter Context Verifier Package Recognition and Envelope Rules
 ```
 
 Objective:
 
-- audit whether existing verifier structure, wrapper expectations, and new chapter-context fixtures are aligned enough to begin implementation safely
+- implement the smallest safe first verifier slice for `scripture-context-atlas.chapter-context`
 
 Scope:
 
-- docs-only
-- review the new fixture files against current verifier architecture
-- identify exact implementation entry points and regression risks
-- keep verifier implementation for a later CR unless readiness is clearly established
+- verifier code only
+- add chapter-context package recognition
+- add chapter-context envelope validation
+- preserve the approved `status: "skeleton"` plus `items: []` special case
+- add the minimum reviewed-row baseline required-field checks that do not yet require deeper wording or relationship logic
 
 Files likely touched:
 
-- `docs/data-packages/timeline/fixtures/valid/`
-- `docs/data-packages/timeline/fixtures/invalid/`
-- `docs/data-packages/timeline/fixtures/warnings/`
+- `scripts/timeline/verify-timeline-package.mjs`
+- `scripts/timeline/verify-timeline-packages.mjs`
 - `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_CHAPTER_PACKAGE_DESIGN.md`
 - `docs/ROADMAP/PROJECT_STATUS.md`
 - `docs/ROADMAP/NEXT_TASKS.md`
 
 Explicitly not included:
 
-- no verifier code changes
-- no verifier code changes
 - no real chapter rows
-- no package loader code
-- no Reader UI implementation
+- no Reader or Timeline runtime hookup
+- no package loader/runtime integration
 - no API / backend / DB / schema work
 - no verse-level tagging model
 - no person / paja / map implementation
+- no deep relationship validation beyond the minimum safe baseline
+- no warning-wording expansion beyond what existing generic guardrails already support
 
 Validation plan:
 
 - `git diff --check`
 - `git diff --stat`
 - `git status --short`
+- `node scripts/timeline/verify-timeline-packages.mjs`
 
 Risk level:
 
-- low
+- low to moderate
 
 Browser QA needed:
 
