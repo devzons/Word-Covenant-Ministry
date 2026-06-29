@@ -983,6 +983,14 @@ Warning fixture design:
 Future verifier integration notes:
 
 - future wrapper coverage should add chapter-context fixtures to the same three buckets:
+- `CR-BR-CTX-27` now adds the first chapter-context fixture sample files under:
+  - `docs/data-packages/timeline/fixtures/valid/`
+  - `docs/data-packages/timeline/fixtures/invalid/`
+  - `docs/data-packages/timeline/fixtures/warnings/`
+- these fixtures are docs/data-only verifier samples and must never be treated as production chapter rows
+- Reader runtime and Timeline runtime must not load chapter-context fixture files
+- current verifier still does not implement chapter-context-specific rules; the new files only establish fixture inputs for a later implementation step
+- future wrapper coverage should add chapter-context fixtures to the same three buckets:
   - valid fixtures must pass
   - invalid fixtures must fail
   - warning fixtures must pass with warnings
@@ -995,28 +1003,32 @@ Future verifier integration notes:
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-27 Chapter Context Verifier Fixture Files
+CR-BR-CTX-28 Chapter Context Verifier Implementation Readiness
 ```
 
 Objective:
 
-- create the first chapter-context fixture files for valid / invalid / warning categories without touching verifier code
+- audit whether existing verifier structure, wrapper expectations, and new chapter-context fixtures are aligned enough to begin implementation safely
 
 Scope:
 
-- docs/data-only
-- add chapter-context fixture files under existing `valid/invalid/warnings` directories
-- keep fixtures minimal and deterministic
-- do not change verifier implementation yet
+- docs-only
+- review the new fixture files against current verifier architecture
+- identify exact implementation entry points and regression risks
+- keep verifier implementation for a later CR unless readiness is clearly established
 
 Files likely touched:
 
+- `docs/data-packages/timeline/fixtures/valid/`
+- `docs/data-packages/timeline/fixtures/invalid/`
+- `docs/data-packages/timeline/fixtures/warnings/`
 - `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_CHAPTER_PACKAGE_DESIGN.md`
 - `docs/ROADMAP/PROJECT_STATUS.md`
 - `docs/ROADMAP/NEXT_TASKS.md`
 
 Explicitly not included:
 
+- no verifier code changes
 - no verifier code changes
 - no real chapter rows
 - no package loader code
@@ -1043,4 +1055,4 @@ Browser QA needed:
 
 The chapter-level context problem is currently a data-contract and skeleton-policy problem, not a UI problem.
 
-The next safe step is to define the fixture plan that will later exercise this verifier contract without drifting into runtime integration, row authoring, verse-level tagging, or commentary behavior.
+The next safe step is to compare these fixture inputs against the existing verifier architecture before any chapter-context implementation starts.

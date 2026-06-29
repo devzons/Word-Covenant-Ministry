@@ -1,0 +1,118 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.invalid.duplicate-book-chapter",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "reviewed",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Invalid fixture: duplicate bookId + chapter pair."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-duplicate-book-chapter-fixture-a",
+      "chapterContextId": "chapter-context-dup-a",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "중복 A",
+        "en": "Duplicate A"
+      },
+      "summary": {
+        "ko": "중복 chapter identity 검사용 fixture A입니다.",
+        "en": "Fixture A for duplicate chapter identity validation."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "fixture basis",
+        "en": "Fixture basis"
+      },
+      "confidenceLabel": {
+        "ko": "fixture confidence",
+        "en": "Fixture confidence"
+      },
+      "cautionNote": {
+        "ko": "중복 identity 검사용 invalid fixture입니다.",
+        "en": "Invalid fixture for duplicate identity testing."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-duplicate-book-chapter-fixture-b",
+      "chapterContextId": "chapter-context-dup-b",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "중복 B",
+        "en": "Duplicate B"
+      },
+      "summary": {
+        "ko": "중복 chapter identity 검사용 fixture B입니다.",
+        "en": "Fixture B for duplicate chapter identity validation."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "fixture basis",
+        "en": "Fixture basis"
+      },
+      "confidenceLabel": {
+        "ko": "fixture confidence",
+        "en": "Fixture confidence"
+      },
+      "cautionNote": {
+        "ko": "중복 identity 검사용 invalid fixture입니다.",
+        "en": "Invalid fixture for duplicate identity testing."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false
+    }
+  ]
+}

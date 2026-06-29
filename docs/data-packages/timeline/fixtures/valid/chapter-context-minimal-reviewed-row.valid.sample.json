@@ -1,0 +1,71 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.valid.minimal-reviewed-row",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "reviewed",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Valid fixture: minimal reviewed chapter-context row.",
+    "Not runtime data."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-minimal-reviewed-row-fixture-1",
+      "chapterContextId": "chapter-context-genesis-1-fixture",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "창세기 1장 fixture",
+        "en": "Genesis 1 fixture"
+      },
+      "summary": {
+        "ko": "검증용 최소 장 문맥 fixture입니다.",
+        "en": "A minimal chapter-context verifier fixture."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 anchor grouping",
+        "en": "Scripture anchor grouping"
+      },
+      "confidenceLabel": {
+        "ko": "검토 완료 fixture",
+        "en": "Reviewed fixture"
+      },
+      "cautionNote": {
+        "ko": "실제 production row가 아닌 verifier fixture입니다.",
+        "en": "This is a verifier fixture, not a production row."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first fixture",
+        "en": "Scripture-first fixture"
+      },
+      "relatedBookIds": [
+        "genesis"
+      ],
+      "relatedEventIds": [
+        "event-creation-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false
+    }
+  ]
+}

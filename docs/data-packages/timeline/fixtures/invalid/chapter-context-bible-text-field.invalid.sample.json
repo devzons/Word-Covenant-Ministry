@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.invalid.bible-text-field",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "reviewed",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Invalid fixture: forbidden Bible-text field present."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-bible-text-invalid-fixture-1",
+      "chapterContextId": "chapter-context-bible-text-invalid-1",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "금지 텍스트 field",
+        "en": "Forbidden text field"
+      },
+      "summary": {
+        "ko": "금지 field 검사용 fixture입니다.",
+        "en": "Fixture for forbidden field validation."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "fixture basis",
+        "en": "Fixture basis"
+      },
+      "confidenceLabel": {
+        "ko": "fixture confidence",
+        "en": "Fixture confidence"
+      },
+      "cautionNote": {
+        "ko": "금지 field 검사용 invalid fixture입니다.",
+        "en": "Invalid fixture for forbidden field testing."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false,
+      "bibleText": "Forbidden fixture content"
+    }
+  ]
+}

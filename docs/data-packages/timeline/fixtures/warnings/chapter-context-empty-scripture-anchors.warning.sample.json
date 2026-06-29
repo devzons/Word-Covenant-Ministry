@@ -1,0 +1,56 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.warning.empty-scripture-anchors",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "review-required",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Warning fixture: empty scripture anchors."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-empty-anchors-warning-fixture-1",
+      "chapterContextId": "chapter-context-warning-empty-anchors-1",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "빈 anchor 경고",
+        "en": "Empty anchor warning"
+      },
+      "summary": {
+        "ko": "anchor가 비어 있는 warning fixture입니다.",
+        "en": "A warning fixture with empty anchors."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [],
+      "basisLabel": {
+        "ko": "약한 basis",
+        "en": "Weak basis"
+      },
+      "confidenceLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "cautionNote": {
+        "ko": "warning fixture입니다.",
+        "en": "Warning fixture."
+      },
+      "reviewStatus": "review-required",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false
+    }
+  ]
+}

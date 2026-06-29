@@ -1,0 +1,70 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.invalid.coordinate-field",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "reviewed",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Invalid fixture: forbidden coordinate field present."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-coordinate-invalid-fixture-1",
+      "chapterContextId": "chapter-context-coordinate-invalid-1",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "금지 좌표 field",
+        "en": "Forbidden coordinate field"
+      },
+      "summary": {
+        "ko": "좌표 field 검사용 fixture입니다.",
+        "en": "Fixture for coordinate field validation."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "fixture basis",
+        "en": "Fixture basis"
+      },
+      "confidenceLabel": {
+        "ko": "fixture confidence",
+        "en": "Fixture confidence"
+      },
+      "cautionNote": {
+        "ko": "좌표 field 검사용 invalid fixture입니다.",
+        "en": "Invalid fixture for coordinate field testing."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false,
+      "coordinates": {
+        "lat": 31.0,
+        "lng": 35.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.warning.overconfident-wording",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "review-required",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Warning fixture: overconfident wording."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-overconfident-warning-fixture-1",
+      "chapterContextId": "chapter-context-warning-overconfident-1",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "과도한 확신 표현",
+        "en": "Overconfident wording"
+      },
+      "summary": {
+        "ko": "이 장의 문맥은 완전히 확정되었습니다.",
+        "en": "The context of this chapter is fully certain."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "기초 anchor",
+        "en": "Basic anchor"
+      },
+      "confidenceLabel": {
+        "ko": "완전한 확실성",
+        "en": "Complete certainty"
+      },
+      "cautionNote": {
+        "ko": "warning fixture입니다.",
+        "en": "Warning fixture."
+      },
+      "reviewStatus": "review-required",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false
+    }
+  ]
+}

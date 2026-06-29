@@ -1,0 +1,68 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.invalid.related-id",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "reviewed",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Invalid fixture: unresolved related id."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-invalid-related-id-fixture-1",
+      "chapterContextId": "chapter-context-invalid-related-id-1",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "잘못된 related id",
+        "en": "Invalid related id"
+      },
+      "summary": {
+        "ko": "related id 검사용 invalid fixture입니다.",
+        "en": "Invalid fixture for related-id validation."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "fixture basis",
+        "en": "Fixture basis"
+      },
+      "confidenceLabel": {
+        "ko": "fixture confidence",
+        "en": "Fixture confidence"
+      },
+      "cautionNote": {
+        "ko": "잘못된 related id 검사용 invalid fixture입니다.",
+        "en": "Invalid fixture for unresolved related-id testing."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [
+        "event-does-not-exist"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false
+    }
+  ]
+}

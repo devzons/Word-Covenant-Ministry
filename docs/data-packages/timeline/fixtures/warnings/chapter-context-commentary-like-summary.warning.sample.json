@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.warning.commentary-like-summary",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "review-required",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Warning fixture: commentary-like summary."
+  ],
+  "items": [
+    {
+      "id": "chapter-context-commentary-warning-fixture-1",
+      "chapterContextId": "chapter-context-warning-commentary-1",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "commentary형 summary",
+        "en": "Commentary-like summary"
+      },
+      "summary": {
+        "ko": "이 장은 창조의 영적 의미를 상세히 해설하며 독자에게 깊은 묵상을 요구한다.",
+        "en": "This chapter offers an extended spiritual exposition and invites the reader into deep meditation."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 preview",
+        "en": "Chapter-level preview"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "기초 anchor",
+        "en": "Basic anchor"
+      },
+      "confidenceLabel": {
+        "ko": "검토 필요",
+        "en": "Review required"
+      },
+      "cautionNote": {
+        "ko": "warning fixture입니다.",
+        "en": "Warning fixture."
+      },
+      "reviewStatus": "review-required",
+      "sourceBasisLabel": {
+        "ko": "fixture source basis",
+        "en": "Fixture source basis"
+      },
+      "relatedBookIds": [],
+      "relatedEventIds": [],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [],
+      "isSkeleton": false
+    }
+  ]
+}

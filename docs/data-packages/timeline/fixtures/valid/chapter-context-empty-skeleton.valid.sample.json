@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schema.md",
+  "packageId": "chapter-context.fixture.valid.empty-skeleton",
+  "packageType": "scripture-context-atlas.chapter-context",
+  "packageVersion": "0.0.0-fixture",
+  "status": "skeleton",
+  "scope": "chapter-level-preview-metadata",
+  "notes": [
+    "Synthetic verifier fixture.",
+    "Valid fixture: empty chapter-context skeleton envelope only.",
+    "Not runtime data."
+  ],
+  "items": []
+}
