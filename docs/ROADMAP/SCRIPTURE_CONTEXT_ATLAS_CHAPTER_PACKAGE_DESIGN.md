@@ -1024,52 +1024,145 @@ Observed post-implementation boundary:
 - `chapter-context-overconfident-wording.warning.sample.json` still reports zero warnings individually because chapter-context wording warnings remain deferred in this CR
 - wrapper-level regression still passes because the current valid / invalid / warning directory-level expectations remain satisfied
 
+`CR-BR-CTX-30` readiness audit result:
+
+Current implementation status:
+
+- chapter-context package recognition is implemented
+- chapter-context envelope validation is implemented
+- approved `status: "skeleton"` plus `items: []` handling is implemented
+- minimum chapter-row required-field baseline is implemented
+- current generic guardrails already enforce:
+  - Bible-text invalid fixtures
+  - coordinate/map-provider invalid fixtures
+  - verse-tagging invalid fixtures
+- wrapper regression remains green, but current directory-level fixture buckets can still hide chapter-context-specific gaps when other fixtures in the same bucket satisfy the expected pass/fail/warning outcome
+
+Relationship-validation readiness:
+
+- `relatedBookIds`
+  - safe for next implementation
+  - target source is stable because canonical `bookId` values are already package-backed and the verifier already contains canonical-book knowledge
+- `relatedEventIds`
+  - safe for next implementation
+  - target source is stable because `events.core-biblical-skeleton.json` is package-backed and current event row ids are deterministic
+- `relatedKingdomIds`
+  - safe for next implementation
+  - target source is stable because `kings-kingdoms.skeleton.json` is package-backed and current row ids are deterministic
+- `relatedPlaceIds`
+  - needs narrower design
+  - current target source still comes from runtime schematic place fixtures in `timelinePreviewData.ts`, not from a dedicated package-backed places dataset
+  - validating these ids is possible, but it would couple verifier logic to runtime fixture shape and should therefore be reviewed separately before implementation
+- empty relation arrays must remain allowed and must continue to mean `no reviewed relation attached yet`
+- relation validation must remain packaging-only and must not imply Reader runtime linkage, place deep-link support, or stronger entity resolution
+
+Relationship-validation risk:
+
+- package-backed targets for books, events, and kingdoms are low-risk because they are already deterministic verifier inputs
+- runtime-fixture-backed place ids are the highest risk because they are not yet a dedicated package contract
+- relation-id namespace collision risk is currently low if validation stays field-specific rather than trying to resolve arbitrary ids globally
+- empty-array false positives are avoidable if the next implementation only validates non-empty arrays
+- the current invalid-related-id fixture is a good next target because it is objective and already exists
+
+Warning-rule readiness:
+
+- `empty scriptureAnchors`
+  - safe only with a narrow rule
+  - structurally easy, but current policy text describes this as warning-level weakness rather than a hard fail for all reviewed rows
+- `overconfident wording`
+  - safe only with a narrow phrase list
+  - should use a short explicit phrase list rather than open-ended confidence heuristics
+- `exact chronology language`
+  - safe only with a narrow phrase list
+  - should remain distinct from already-enforced exact chronology fields
+- `commentary-like summary`
+  - defer
+  - too subjective for the next immediate implementation slice
+- `sermon/application-like wording`
+  - defer
+  - too subjective and likely to produce false positives
+- `exhaustive wording`
+  - safe only with a narrow phrase list
+  - terms like `all context` / `complete context` are specific enough to consider later
+- `relatedPlaceIds` wording implying real-map claims
+  - defer
+  - better handled after the `relatedPlaceIds` source boundary is settled
+
+Warning-rule risk:
+
+- warning rules are more likely than relation rules to create false positives
+- current warning fixtures all still report `warningCount: 0` individually, so the wrapper's directory-level warning success is not sufficient evidence that chapter-context wording intent is enforced
+- commentary-like and sermon-like detection need more fixture coverage or a much tighter phrase policy before implementation
+
+Implementation-slicing recommendation:
+
+- `relationship-only implementation`
+  - recommended
+  - best first value/risk tradeoff if scoped to `relatedBookIds`, `relatedEventIds`, and `relatedKingdomIds`
+  - `relatedPlaceIds` should stay deferred or be explicitly excluded until its source contract is narrowed
+- `warning-only minimal implementation`
+  - not recommended as the next immediate slice
+  - less objective and more likely to introduce false positives
+- `relationship + minimal warning implementation`
+  - not recommended as the next immediate slice
+  - mixes objective id-resolution work with subjective wording heuristics too early
+- `more fixture preparation first`
+  - not required before relationship-only implementation
+  - still useful before any broader wording-warning implementation
+
 ## Recommended Next CR
 
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-30 Chapter Context Verifier Relationship and Warning Rule Readiness
+CR-BR-CTX-31 Chapter Context Verifier Relationship Rules Implementation
 ```
 
 Objective:
 
-- audit the remaining chapter-context enforcement gaps before deeper verifier logic is implemented
+- implement the next narrow, objective verifier slice for chapter-context relation ids
 
 Scope:
 
-- docs-only
-- compare the post-CR-BR-CTX-29 verifier behavior against the chapter-context fixtures
-- decide whether relationship-id validation can be added without overreaching beyond the approved scope
-- decide whether chapter-context wording warnings should remain generic or gain package-specific rules
-- confirm whether current directory-level wrapper expectations remain sufficient
+- verifier code
+- add field-specific validation for:
+  - `relatedBookIds`
+  - `relatedEventIds`
+  - `relatedKingdomIds`
+- keep empty arrays allowed
+- continue to defer `relatedPlaceIds` unless its source is explicitly narrowed inside the CR without widening architecture
+- keep warning-rule implementation out of scope
 
 Files likely touched:
 
+- `scripts/timeline/verify-timeline-package.mjs`
+- `scripts/timeline/verify-timeline-packages.mjs`
 - `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_CHAPTER_PACKAGE_DESIGN.md`
 - `docs/ROADMAP/PROJECT_STATUS.md`
 - `docs/ROADMAP/NEXT_TASKS.md`
 
 Explicitly not included:
 
-- no verifier code changes
 - no real chapter rows
 - no Reader or Timeline runtime hookup
 - no API / backend / DB / schema work
 - no verse-level tagging model
 - no person / paja / map implementation
-- no direct relationship-rule implementation yet
-- no warning-wording implementation yet
+- no `relatedPlaceIds` implementation unless separately narrowed
+- no wording-warning implementation yet
 
 Validation plan:
 
 - `git diff --check`
+- `node --check scripts/timeline/verify-timeline-package.mjs`
+- `node --check scripts/timeline/verify-timeline-packages.mjs`
+- `node scripts/timeline/verify-timeline-packages.mjs`
 - `git diff --stat`
 - `git status --short`
 
 Risk level:
 
-- low
+- low to moderate
 
 Browser QA needed:
 
@@ -1081,4 +1174,4 @@ The chapter-level context problem is currently a data-contract and skeleton-poli
 
 The current verifier can now recognize chapter-context packages and enforce the smallest safe envelope/baseline slice without runtime integration.
 
-The next safe step is to audit the remaining relationship-id and wording-warning gaps before a broader second implementation slice begins.
+The next safe step is not broad wording heuristics, but a narrower relation-id implementation slice for package-backed targets first.
