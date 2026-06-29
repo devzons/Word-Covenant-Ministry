@@ -599,6 +599,25 @@ Fallback-copy guidance:
 
 ## Future Verifier Guardrails
 
+Package recognition policy:
+
+- future verifier must recognize `packageType: "scripture-context-atlas.chapter-context"`
+- current envelope-only skeleton with `status: "skeleton"` and `items: []` is valid and must not fail
+- future non-skeleton package states may use stricter empty-items handling
+- recommended empty-items behavior:
+  - `status: "skeleton"`: allow
+  - `status: "draft"`: warn
+  - `status: "review-required"`: warn
+  - `status: "reviewed"`: fail
+  - `status: "blocked"`: allow if intentionally empty
+  - `status: "deprecated"`: allow if intentionally empty
+- `packageVersion` should follow the current package convention and remain SemVer-like with allowed maturity suffixes such as `0.1.0-skeleton`
+- deterministic metadata policy remains strict:
+  - fail on `generatedAt`
+  - fail on `createdAt`
+  - fail on runtime-loader hints
+  - fail on environment-specific metadata
+
 Recommended future verifier checks:
 
 - package type must match `scripture-context-atlas.chapter-context`
@@ -626,10 +645,22 @@ Recommended future verifier checks:
 
 Recommended fail conditions:
 
+- fail on missing `packageType`
+- fail on wrong `packageType`
+- fail on missing `packageId`
+- fail on missing `packageVersion`
+- fail on missing `status`
+- fail on missing `scope`
+- fail if `scope` is not `chapter-level-preview-metadata`
+- fail on missing `items`
+- fail if `items` is not an array
 - fail on Bible text fields
 - fail on coordinates / geocoding / map-provider fields
 - fail on verse-level tagging fields
 - fail on `selectedVerse`, `startVerse`, or `endVerse`
+- fail on runtime-loader hint fields
+- fail on environment-specific metadata
+- fail on translation-scoped package flags
 - fail on invalid `bookId`
 - fail on invalid chapter bounds
 - fail on duplicate `chapterContextId`
@@ -642,6 +673,7 @@ Recommended fail conditions:
 
 Recommended warning policy:
 
+- warn when `status` is non-skeleton and `items` remains empty unless the state is intentionally `blocked` or `deprecated`
 - warn if wording implies exact chronology
 - warn if wording implies auto-extracted entity resolution
 - warn if summary becomes commentary-like prose instead of metadata summary
@@ -649,25 +681,105 @@ Recommended warning policy:
 - warn if empty `scriptureAnchors` appear in draft-like rows
 - warn if `relatedPlaceIds` wording implies real-map claims
 - warn if person/paja/name-like fields appear before approval
+- warn on sermon/application-like wording
+- warn on broad summary claims with weak or generic basis
+- warn when too many related ids appear without a stronger basis note
+- warn on exhaustive-sounding phrases such as `all context` or `complete context`
+
+Forbidden field policy:
+
+- fail on Bible text fields such as:
+  - `text`
+  - `verseText`
+  - `bibleText`
+  - `passageText`
+- fail on verse-level tagging or occurrence fields such as:
+  - `selectedVerse`
+  - `startVerse`
+  - `endVerse`
+  - `verse`
+  - `verseRange`
+  - `entityOccurrences`
+  - `personOccurrences`
+  - `originalLanguageOccurrences`
+  - `strongOccurrences`
+- fail on coordinate/map fields such as:
+  - `lat`
+  - `lng`
+  - `latitude`
+  - `longitude`
+  - `coordinates`
+  - `geoJson`
+  - `mapProvider`
+  - `geocodingProvider`
+- fail on speculative atlas fields such as:
+  - `pajaInterpretation`
+  - `nameMystery`
+  - `doctrinalConclusion`
+- fail on Reader runtime state fields such as:
+  - `activeVerse`
+  - `selectedReferenceRange`
+  - `uiState`
+
+Relationship validation policy:
+
+- `relatedBookIds` must resolve to canonical book ids
+- `relatedEventIds` must resolve to event package row ids
+- `relatedKingdomIds` must resolve to kingdom package row ids
+- `relatedPlaceIds` must resolve to schematic place ids
+- invalid relation ids should fail
+- empty arrays remain allowed
+- empty arrays must be interpreted as `no reviewed relation attached yet`, not `no relation exists`
+- `relatedThemeLabels` remain label-only and are not id-validation targets
+- `relatedPersonIds` should fail until a separate person-package contract is approved
+
+Review and confidence behavior:
+
+- `reviewStatus` must be one of:
+  - `skeleton`
+  - `draft`
+  - `review-required`
+  - `reviewed`
+  - `blocked`
+  - `deprecated`
+- `confidenceLabel` must remain bilingual
+- empty-string bilingual labels should fail
+- overconfident certainty language should warn by default
+- exact-certainty language should fail only when it crosses into unsupported exact-chronology or verse-resolution claims
+
+Fixture-design recommendation:
+
+- do not add fixtures in this CR
+- the next fixture-design step should define at least:
+  - valid empty skeleton envelope
+  - valid minimal reviewed row
+  - invalid Bible text field
+  - invalid coordinate field
+  - invalid verse-tagging field
+  - invalid duplicate `bookId + chapter` row
+  - invalid related id
+  - warning overconfident wording
+  - warning empty scripture anchors
+  - warning commentary-like summary
 
 ## Recommended Next CR
 
 Recommended next CR:
 
 ```txt
-CR-BR-CTX-25 Chapter Context Verifier Rule Design
+CR-BR-CTX-26 Chapter Context Verifier Fixtures Design
 ```
 
 Objective:
 
-- define the future verifier-rule contract for chapter-context packages without changing verifier code yet
+- define the fixture plan for chapter-context verifier coverage before any verifier implementation starts
 
 Scope:
 
 - docs-only
-- define fail/warn expectation wording for `scripture-context-atlas.chapter-context`
-- align future verifier behavior with current chapter package contract
-- keep verifier implementation deferred
+- define valid / invalid / warning fixture categories
+- map each fixture category to the approved fail/warn contract
+- keep verifier implementation and fixture-file creation deferred
 
 Files likely touched:
 
@@ -678,6 +790,7 @@ Files likely touched:
 Explicitly not included:
 
 - no verifier code changes
+- no fixture file creation
 - no real chapter rows
 - no package loader code
 - no Reader UI implementation
@@ -703,4 +816,4 @@ Browser QA needed:
 
 The chapter-level context problem is currently a data-contract and skeleton-policy problem, not a UI problem.
 
-The next safe step is to define the future verifier rule contract for this empty skeleton package without drifting into runtime integration, row authoring, verse-level tagging, or commentary behavior.
+The next safe step is to define the fixture plan that will later exercise this verifier contract without drifting into runtime integration, row authoring, verse-level tagging, or commentary behavior.

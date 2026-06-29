@@ -214,6 +214,8 @@ Advanced Timeline link browser QA for `CR-BR-CTX-18` is now complete based on us
 
 `CR-BR-CTX-24 Chapter Context Skeleton File Creation` is now complete as a docs/data-only package-envelope step. `docs/data-packages/timeline/chapter-context.skeleton.json` now exists as the first chapter-context skeleton file using the approved `scripture-context-atlas.chapter-context` contract. The file remains strictly envelope-only with `items: []`, contains no sample rows and no real chapter rows, is not connected to Reader or Timeline runtime, and does not change verifier implementation. No API / backend / DB / schema changes, Timeline data package row changes, Reader UI changes, runtime loader changes, or Timeline Kingdom extraction work were added.
 
+`CR-BR-CTX-25 Chapter Context Verifier Rule Design` is now complete as a docs-only verifier-contract step in `docs/ROADMAP/SCRIPTURE_CONTEXT_ATLAS_CHAPTER_PACKAGE_DESIGN.md`. The chapter-context design note now defines how a future verifier should recognize `scripture-context-atlas.chapter-context` packages, when empty `items` arrays are acceptable by package status, which envelope and row conditions must fail, which wording and metadata conditions should warn, which forbidden fields must always fail, how relation ids should resolve, and how review/confidence behavior should be interpreted before any implementation begins. This CR also records the recommended next fixture-design categories for a later verifier-coverage step. No verifier code, no fixtures, no chapter rows, no Reader runtime connection, and no API / backend / DB / schema / Timeline data package row changes were added, and Timeline Kingdom extraction remains deferred.
+
 Current phase boundary:
 
 ```txt
