@@ -325,17 +325,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 산상수훈 전체를 단일 해석으로 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not settle the whole Sermon on the Mount into a single interpretation."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "matthew"
@@ -394,17 +394,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 표적의 의미를 단일 정리로 고정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not reduce the sign to a single summary meaning."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "matthew"
@@ -463,17 +463,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 성찬과 수난에 대한 모든 해석 결론을 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not finalize every interpretive conclusion about the Supper and the passion."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "matthew"
@@ -532,17 +532,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 수난 사건의 신학적 의미를 단일 정리로 고정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not reduce the theological meaning of the passion event to a single summary."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "matthew"
@@ -601,17 +601,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 탄생 기사에 대한 모든 조화 문제를 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not settle every harmonization question around the birth narrative."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "luke"
@@ -670,17 +670,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 오순절과 초기 교회에 대한 모든 교회론 결론을 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not finalize every ecclesiological conclusion about Pentecost and the early church."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "acts"
