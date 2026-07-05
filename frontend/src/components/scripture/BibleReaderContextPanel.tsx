@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 
+import type {
+  TimelineChapterContextRow,
+  TimelineChapterContextScriptureAnchor,
+} from "@/components/scripture/timeline/timelineChapterContextPackage";
 import { ContextRow } from "@/components/scripture/timeline/timeline-detail-panel/ContextRow";
 import { PanelSection } from "@/components/scripture/timeline/timeline-detail-panel/PanelSection";
 import { ScriptureAnchorsSection } from "@/components/scripture/timeline/timeline-detail-panel/ScriptureAnchorsSection";
@@ -25,6 +29,7 @@ export type BibleReaderRelatedMetadataPreview = {
 type BibleReaderContextPanelProps = {
   bookContext: TimelineBookContextRow | null;
   chapter: number;
+  chapterContextPreview?: TimelineChapterContextRow | null;
   locale: string;
   relatedMetadata: BibleReaderRelatedMetadataPreview;
   selectedVerse?: number | null;
@@ -40,6 +45,19 @@ const bibleReaderContextCopy = {
     authorship: "Authorship / Basis",
     background: "Background / Dating",
     scriptureAnchors: "Scripture Anchors",
+    chapterContextPreview: "Chapter Context Preview",
+    chapterContextPreviewNote:
+      "This section shows chapter-level preview metadata only and does not replace the current book context.",
+    chapterContextTitle: "Chapter context title",
+    chapterContextScope: "Chapter scope",
+    chapterContextSummary: "Summary",
+    chapterContextBasis: "Basis",
+    chapterContextConfidence: "Confidence",
+    chapterContextCaution: "Caution",
+    chapterContextSourceBasis: "Source basis",
+    chapterContextAnchors: "Chapter anchors",
+    chapterContextReference: "Reference",
+    chapterContextScopeType: "Scope",
     packageBasis: "Package basis",
     evidenceConfidence: "Evidence confidence",
     relatedMetadata: "Related metadata preview",
@@ -84,6 +102,19 @@ const bibleReaderContextCopy = {
     authorship: "저자 / 근거",
     background: "배경 / 연대",
     scriptureAnchors: "성경 근거",
+    chapterContextPreview: "장 문맥 미리보기",
+    chapterContextPreviewNote:
+      "이 section은 장 수준 preview metadata만 보여 주며 현재 책 문맥을 대체하지 않습니다.",
+    chapterContextTitle: "장 문맥 제목",
+    chapterContextScope: "장 범위",
+    chapterContextSummary: "요약",
+    chapterContextBasis: "기준",
+    chapterContextConfidence: "신뢰",
+    chapterContextCaution: "주의",
+    chapterContextSourceBasis: "출처 기준",
+    chapterContextAnchors: "장 근거",
+    chapterContextReference: "참조",
+    chapterContextScopeType: "범위",
     packageBasis: "패키지 기준",
     evidenceConfidence: "근거 신뢰",
     relatedMetadata: "관련 metadata 미리보기",
@@ -124,6 +155,7 @@ const bibleReaderContextCopy = {
 export function BibleReaderContextPanel({
   bookContext,
   chapter,
+  chapterContextPreview = null,
   locale,
   relatedMetadata,
   selectedVerse,
@@ -179,6 +211,47 @@ export function BibleReaderContextPanel({
             referenceOnlyDescription={copy.referenceOnly}
             rowId={bookContext.id}
           />
+
+          {chapterContextPreview ? (
+            <PanelSection label={copy.chapterContextPreview}>
+              <SectionNote>{copy.chapterContextPreviewNote}</SectionNote>
+              <ContextRow
+                label={copy.chapterContextTitle}
+                value={getTimelineText(chapterContextPreview.title, activeLocale)}
+              />
+              <ContextRow
+                label={copy.chapterContextScope}
+                value={getTimelineText(chapterContextPreview.chapterScopeLabel, activeLocale)}
+              />
+              <ContextRow
+                label={copy.chapterContextSummary}
+                value={getTimelineText(chapterContextPreview.summary, activeLocale)}
+              />
+              <ContextRow
+                label={copy.chapterContextBasis}
+                value={getTimelineText(chapterContextPreview.basisLabel, activeLocale)}
+              />
+              <ContextRow
+                label={copy.chapterContextConfidence}
+                value={getTimelineText(chapterContextPreview.confidenceLabel, activeLocale)}
+              />
+              <ContextRow
+                label={copy.chapterContextSourceBasis}
+                value={getTimelineText(chapterContextPreview.sourceBasisLabel, activeLocale)}
+              />
+              <ContextRow
+                label={copy.chapterContextCaution}
+                value={getTimelineText(chapterContextPreview.cautionNote, activeLocale)}
+              />
+              <ChapterContextAnchorList
+                anchors={chapterContextPreview.scriptureAnchors}
+                locale={activeLocale}
+                referenceLabel={copy.chapterContextReference}
+                scopeLabel={copy.chapterContextScopeType}
+                title={copy.chapterContextAnchors}
+              />
+            </PanelSection>
+          ) : null}
 
           <PanelSection label={copy.relatedMetadata}>
             {hasRelatedMetadata ? (
@@ -283,6 +356,44 @@ export function BibleReaderContextPanel({
           </PanelSection>
         </>
       )}
+    </div>
+  );
+}
+
+function ChapterContextAnchorList({
+  anchors,
+  locale,
+  referenceLabel,
+  scopeLabel,
+  title,
+}: {
+  anchors: TimelineChapterContextScriptureAnchor[];
+  locale: TimelineLocale;
+  referenceLabel: string;
+  scopeLabel: string;
+  title: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{title}</p>
+      <div className="space-y-2">
+        {anchors.map((anchor, index) => (
+          <div
+            className="rounded-md border border-zinc-200 bg-zinc-50 px-3 py-3"
+            key={`${anchor.bookId}-${anchor.reference}-${index}`}
+          >
+            <p className="text-sm font-medium text-zinc-900">
+              {getTimelineText(anchor.label, locale)}
+            </p>
+            <p className="mt-1 text-sm leading-6 text-zinc-600">
+              {referenceLabel}: {anchor.reference}
+            </p>
+            <p className="text-sm leading-6 text-zinc-600">
+              {scopeLabel}: {anchor.scope}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

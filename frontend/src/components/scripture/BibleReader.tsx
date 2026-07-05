@@ -478,6 +478,7 @@ export function BibleReader({
         <BibleReaderResearchPanel
           bookLabel={currentBook?.label[activeLocale] ?? bookMetadata.name}
           bookContext={bookContext}
+          chapterContextPreview={chapterContextPreview}
           initialSearchQuery={initialSearchQuery}
           relatedMetadata={relatedMetadata}
           selectedVerse={activeStudyVerse}
@@ -493,6 +494,7 @@ export function BibleReader({
 type BibleReaderResearchPanelProps = {
   bookLabel: string;
   bookContext: TimelineBookContextRow | null;
+  chapterContextPreview: TimelineChapterContextRow | null;
   initialSearchQuery: string;
   relatedMetadata: BibleReaderRelatedMetadataPreview;
   selectedVerse: number | null;
@@ -503,6 +505,7 @@ type BibleReaderResearchPanelProps = {
 function BibleReaderResearchPanel({
   bookLabel,
   bookContext,
+  chapterContextPreview,
   initialSearchQuery,
   relatedMetadata,
   selectedVerse,
@@ -569,6 +572,7 @@ function BibleReaderResearchPanel({
         <BibleReaderContextPanel
           bookContext={bookContext}
           chapter={chapter}
+          chapterContextPreview={chapterContextPreview}
           locale={locale}
           relatedMetadata={relatedMetadata}
           selectedVerse={selectedVerse}
