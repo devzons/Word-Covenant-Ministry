@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.5.0-pilot",
+  "packageVersion": "0.6.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -1600,6 +1600,420 @@
         {
           "ko": "서두",
           "en": "Opening"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-2-samuel-7",
+      "chapterContextId": "chapter-context-2-samuel-7",
+      "bookId": "2-samuel",
+      "chapter": 7,
+      "title": {
+        "ko": "사무엘하 7장 다윗 언약 문맥",
+        "en": "2 Samuel 7 Davidic Covenant Context"
+      },
+      "summary": {
+        "ko": "사무엘하 7장은 다윗 언약 약속과 왕조 계승의 의미가 함께 제시되는 장 수준 문맥 row입니다.",
+        "en": "2 Samuel 7 is a chapter-level context row where the Davidic covenant promise and the significance of dynastic continuity are presented together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 다윗 언약 문맥",
+        "en": "Chapter-level Davidic-covenant context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-samuel",
+          "label": {
+            "ko": "사무엘하 7장",
+            "en": "2 Samuel 7"
+          },
+          "reference": "2 Samuel 7",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 다윗 언약과 왕권 약속을 확장된 메시아 체계 설명으로 단순화하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not simplify the Davidic covenant and royal promise into an expanded messianic system explanation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "2-samuel"
+      ],
+      "relatedEventIds": [
+        "event-davidic-covenant-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "다윗 언약",
+          "en": "Davidic covenant"
+        },
+        {
+          "ko": "왕조",
+          "en": "Dynasty"
+        },
+        {
+          "ko": "약속",
+          "en": "Promise"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-ezra-1",
+      "chapterContextId": "chapter-context-ezra-1",
+      "bookId": "ezra",
+      "chapter": 1,
+      "title": {
+        "ko": "에스라 1장 귀환 시작 문맥",
+        "en": "Ezra 1 Return Beginning Context"
+      },
+      "summary": {
+        "ko": "에스라 1장은 포로 귀환의 시작과 회복 명령의 배경이 함께 드러나는 장 수준 문맥 row입니다.",
+        "en": "Ezra 1 is a chapter-level context row where the beginning of return from exile and the setting of the restoration decree appear together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 귀환 시작 문맥",
+        "en": "Chapter-level return-beginning context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "ezra",
+          "label": {
+            "ko": "에스라 1장",
+            "en": "Ezra 1"
+          },
+          "reference": "Ezra 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 귀환과 회복의 배경을 세부 연대 계산이나 단일 복구 서사로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not fix the setting of return and restoration into detailed chronology calculations or a single restoration narrative."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "ezra"
+      ],
+      "relatedEventIds": [
+        "event-return-from-exile-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "귀환",
+          "en": "Return"
+        },
+        {
+          "ko": "회복",
+          "en": "Restoration"
+        },
+        {
+          "ko": "포로 이후",
+          "en": "Post-exile"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-nehemiah-2",
+      "chapterContextId": "chapter-context-nehemiah-2",
+      "bookId": "nehemiah",
+      "chapter": 2,
+      "title": {
+        "ko": "느헤미야 2장 재건 위임 문맥",
+        "en": "Nehemiah 2 Rebuilding Commission Context"
+      },
+      "summary": {
+        "ko": "느헤미야 2장은 예루살렘 재건 위임과 성벽 회복 준비가 함께 전개되는 장 수준 문맥 row입니다.",
+        "en": "Nehemiah 2 is a chapter-level context row where the commission for Jerusalem's rebuilding and the preparation for wall restoration unfold together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 재건 위임 문맥",
+        "en": "Chapter-level rebuilding-commission context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "nehemiah",
+          "label": {
+            "ko": "느헤미야 2장",
+            "en": "Nehemiah 2"
+          },
+          "reference": "Nehemiah 2",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 재건 배경을 상세 지리 설명이나 공사 단계 목록으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand the rebuilding setting into detailed geography or a staged construction map."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "nehemiah"
+      ],
+      "relatedEventIds": [
+        "event-nehemiah-wall-rebuilding-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "재건",
+          "en": "Rebuilding"
+        },
+        {
+          "ko": "예루살렘",
+          "en": "Jerusalem"
+        },
+        {
+          "ko": "위임",
+          "en": "Commission"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-ezekiel-1",
+      "chapterContextId": "chapter-context-ezekiel-1",
+      "bookId": "ezekiel",
+      "chapter": 1,
+      "title": {
+        "ko": "에스겔 1장 포로기 환상 문맥",
+        "en": "Ezekiel 1 Exile Vision Context"
+      },
+      "summary": {
+        "ko": "에스겔 1장은 포로기 배경 속에서 예언자적 환상과 부름의 장면이 열리는 장 수준 문맥 row입니다.",
+        "en": "Ezekiel 1 is a chapter-level context row where a prophetic vision and calling scene open within the exile setting."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 포로기 환상 문맥",
+        "en": "Chapter-level exile-vision context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "ezekiel",
+          "label": {
+            "ko": "에스겔 1장",
+            "en": "Ezekiel 1"
+          },
+          "reference": "Ezekiel 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 환상 상징을 단일 도식이나 세부 상징 해설로 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not finalize visionary symbolism into a single scheme or detailed symbolic decoding."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "ezekiel"
+      ],
+      "relatedEventIds": [
+        "event-ezekiel-exile-vision-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "환상",
+          "en": "Vision"
+        },
+        {
+          "ko": "포로기",
+          "en": "Exile"
+        },
+        {
+          "ko": "예언자 부름",
+          "en": "Prophetic calling"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-15",
+      "chapterContextId": "chapter-context-acts-15",
+      "bookId": "acts",
+      "chapter": 15,
+      "title": {
+        "ko": "사도행전 15장 예루살렘 공의회 문맥",
+        "en": "Acts 15 Jerusalem Council Context"
+      },
+      "summary": {
+        "ko": "사도행전 15장은 이방인 포함을 둘러싼 초기 교회의 논의와 결정이 모이는 장 수준 문맥 row입니다.",
+        "en": "Acts 15 is a chapter-level context row where early church deliberation and decision concerning Gentile inclusion come together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 예루살렘 공의회 문맥",
+        "en": "Chapter-level Jerusalem-council context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 15장",
+            "en": "Acts 15"
+          },
+          "reference": "Acts 15",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 초기 교회 논의를 후대 교리 체계 전체로 확장하거나 단일 공식으로 단순화하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand early church deliberation into a full later doctrinal system or reduce it to a single formula."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-jerusalem-council-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예루살렘 공의회",
+          "en": "Jerusalem Council"
+        },
+        {
+          "ko": "이방인 포함",
+          "en": "Gentile inclusion"
+        },
+        {
+          "ko": "초기 교회",
+          "en": "Early church"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-revelation-21",
+      "chapterContextId": "chapter-context-revelation-21",
+      "bookId": "revelation",
+      "chapter": 21,
+      "title": {
+        "ko": "요한계시록 21장 새 창조 문맥",
+        "en": "Revelation 21 New Creation Context"
+      },
+      "summary": {
+        "ko": "요한계시록 21장은 새 창조와 최종 회복의 전망이 응축되는 장 수준 문맥 row입니다.",
+        "en": "Revelation 21 is a chapter-level context row where the prospect of new creation and final restoration is concentrated."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 새 창조 문맥",
+        "en": "Chapter-level new-creation context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "revelation",
+          "label": {
+            "ko": "요한계시록 21장",
+            "en": "Revelation 21"
+          },
+          "reference": "Revelation 21",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 새 창조와 완성의 전망을 특정 종말론 시간표나 체계로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not fix the prospect of new creation and consummation into a specific end-times timetable or system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "revelation"
+      ],
+      "relatedEventIds": [
+        "event-new-creation-consummation-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "새 창조",
+          "en": "New creation"
+        },
+        {
+          "ko": "완성",
+          "en": "Consummation"
+        },
+        {
+          "ko": "회복",
+          "en": "Restoration"
         }
       ],
       "isSkeleton": false
