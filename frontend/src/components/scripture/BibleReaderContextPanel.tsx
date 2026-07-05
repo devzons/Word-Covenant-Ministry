@@ -47,7 +47,7 @@ const bibleReaderContextCopy = {
     scriptureAnchors: "Scripture Anchors",
     chapterContextPreview: "Chapter Context Preview",
     chapterContextPreviewNote:
-      "This section shows chapter-level preview metadata only and does not replace the current book context.",
+      "This supplemental section shows chapter-level preview metadata only and does not replace the current book context.",
     chapterContextTitle: "Chapter context title",
     chapterContextScope: "Chapter scope",
     chapterContextSummary: "Summary",
@@ -104,7 +104,7 @@ const bibleReaderContextCopy = {
     scriptureAnchors: "성경 근거",
     chapterContextPreview: "장 문맥 미리보기",
     chapterContextPreviewNote:
-      "이 section은 장 수준 preview metadata만 보여 주며 현재 책 문맥을 대체하지 않습니다.",
+      "이 보조 section은 장 수준 preview metadata만 보여 주며 현재 책 문맥을 대체하지 않습니다.",
     chapterContextTitle: "장 문맥 제목",
     chapterContextScope: "장 범위",
     chapterContextSummary: "요약",
@@ -214,42 +214,44 @@ export function BibleReaderContextPanel({
 
           {chapterContextPreview ? (
             <PanelSection label={copy.chapterContextPreview}>
-              <SectionNote>{copy.chapterContextPreviewNote}</SectionNote>
-              <ContextRow
-                label={copy.chapterContextTitle}
-                value={getTimelineText(chapterContextPreview.title, activeLocale)}
-              />
-              <ContextRow
-                label={copy.chapterContextScope}
-                value={getTimelineText(chapterContextPreview.chapterScopeLabel, activeLocale)}
-              />
-              <ContextRow
-                label={copy.chapterContextSummary}
-                value={getTimelineText(chapterContextPreview.summary, activeLocale)}
-              />
-              <ContextRow
-                label={copy.chapterContextBasis}
-                value={getTimelineText(chapterContextPreview.basisLabel, activeLocale)}
-              />
-              <ContextRow
-                label={copy.chapterContextConfidence}
-                value={getTimelineText(chapterContextPreview.confidenceLabel, activeLocale)}
-              />
-              <ContextRow
-                label={copy.chapterContextSourceBasis}
-                value={getTimelineText(chapterContextPreview.sourceBasisLabel, activeLocale)}
-              />
-              <ContextRow
-                label={copy.chapterContextCaution}
-                value={getTimelineText(chapterContextPreview.cautionNote, activeLocale)}
-              />
-              <ChapterContextAnchorList
-                anchors={chapterContextPreview.scriptureAnchors}
-                locale={activeLocale}
-                referenceLabel={copy.chapterContextReference}
-                scopeLabel={copy.chapterContextScopeType}
-                title={copy.chapterContextAnchors}
-              />
+              <div className="space-y-3 rounded-md border border-zinc-200 bg-zinc-50/70 px-3 py-3">
+                <SectionNote>{copy.chapterContextPreviewNote}</SectionNote>
+                <ContextRow
+                  label={copy.chapterContextTitle}
+                  value={getTimelineText(chapterContextPreview.title, activeLocale)}
+                />
+                <ContextRow
+                  label={copy.chapterContextScope}
+                  value={getTimelineText(chapterContextPreview.chapterScopeLabel, activeLocale)}
+                />
+                <ContextRow
+                  label={copy.chapterContextSummary}
+                  value={getTimelineText(chapterContextPreview.summary, activeLocale)}
+                />
+                <ContextRow
+                  label={copy.chapterContextBasis}
+                  value={getTimelineText(chapterContextPreview.basisLabel, activeLocale)}
+                />
+                <ContextRow
+                  label={copy.chapterContextConfidence}
+                  value={getTimelineText(chapterContextPreview.confidenceLabel, activeLocale)}
+                />
+                <ContextRow
+                  label={copy.chapterContextSourceBasis}
+                  value={getTimelineText(chapterContextPreview.sourceBasisLabel, activeLocale)}
+                />
+                <ContextRow
+                  label={copy.chapterContextCaution}
+                  value={getTimelineText(chapterContextPreview.cautionNote, activeLocale)}
+                />
+                <ChapterContextAnchorList
+                  anchors={chapterContextPreview.scriptureAnchors}
+                  locale={activeLocale}
+                  referenceLabel={copy.chapterContextReference}
+                  scopeLabel={copy.chapterContextScopeType}
+                  title={copy.chapterContextAnchors}
+                />
+              </div>
             </PanelSection>
           ) : null}
 
@@ -374,11 +376,11 @@ function ChapterContextAnchorList({
   title: string;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" aria-label={title}>
       <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{title}</p>
-      <div className="space-y-2">
+      <ul className="space-y-2">
         {anchors.map((anchor, index) => (
-          <div
+          <li
             className="rounded-md border border-zinc-200 bg-zinc-50 px-3 py-3"
             key={`${anchor.bookId}-${anchor.reference}-${index}`}
           >
@@ -391,9 +393,9 @@ function ChapterContextAnchorList({
             <p className="text-sm leading-6 text-zinc-600">
               {scopeLabel}: {anchor.scope}
             </p>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
