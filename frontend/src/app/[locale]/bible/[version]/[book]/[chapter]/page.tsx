@@ -11,6 +11,10 @@ import {
   type CanonicalBooksPackage,
 } from "@/components/scripture/timeline/timelineBooksPackage";
 import {
+  getReviewedChapterContextByBookAndChapter,
+  normalizeTimelineChapterContextPackage,
+} from "@/components/scripture/timeline/timelineChapterContextPackage";
+import {
   normalizeCoreBiblicalEventsPackage,
   type CoreBiblicalEventsPackage,
 } from "@/components/scripture/timeline/timelineEventsPackage";
@@ -75,7 +79,7 @@ export default async function BibleReaderPage({
       isChapterOutOfRange = true;
     } else {
       bibleChapter = await getBibleChapter(version, book, chapterNumber);
-      const bookContextData = await loadBookContextData(book, locale);
+      const bookContextData = await loadBookContextData(book, chapterNumber, locale);
       bookContext = bookContextData.bookContext;
       relatedMetadata = bookContextData.relatedMetadata;
     }
@@ -141,7 +145,7 @@ function BibleReaderError({ locale, message }: { locale: string; message: string
   );
 }
 
-async function loadBookContextData(bookId: string, locale: string): Promise<{
+async function loadBookContextData(bookId: string, chapter: number, locale: string): Promise<{
   bookContext: TimelineBookContextRow | null;
   relatedMetadata: BibleReaderRelatedMetadataPreview;
 }> {
@@ -153,8 +157,9 @@ async function loadBookContextData(bookId: string, locale: string): Promise<{
       "data-packages",
       "timeline",
     );
-    const [booksRaw, eventsRaw, kingdomsRaw] = await Promise.all([
+    const [booksRaw, chapterContextRaw, eventsRaw, kingdomsRaw] = await Promise.all([
       readFile(path.join(timelinePackageDirectory, "books.66-canonical-skeleton.json"), "utf8"),
+      readFile(path.join(timelinePackageDirectory, "chapter-context.skeleton.json"), "utf8"),
       readFile(path.join(timelinePackageDirectory, "events.core-biblical-skeleton.json"), "utf8"),
       readFile(path.join(timelinePackageDirectory, "kings-kingdoms.skeleton.json"), "utf8"),
     ]);
@@ -162,6 +167,7 @@ async function loadBookContextData(bookId: string, locale: string): Promise<{
     const canonicalBooks = normalizeCanonicalBooksPackage(
       JSON.parse(booksRaw) as CanonicalBooksPackage,
     );
+    const chapterContextRows = normalizeTimelineChapterContextPackage(JSON.parse(chapterContextRaw));
     const coreEvents = normalizeCoreBiblicalEventsPackage(
       JSON.parse(eventsRaw) as CoreBiblicalEventsPackage,
     );
@@ -169,6 +175,12 @@ async function loadBookContextData(bookId: string, locale: string): Promise<{
       JSON.parse(kingdomsRaw) as KingsKingdomsPackage,
     );
     const bookContext = canonicalBooks.find((row) => row.bookId === bookId) ?? null;
+    const chapterContext = getReviewedChapterContextByBookAndChapter(
+      chapterContextRows,
+      bookId,
+      chapter,
+    );
+    void chapterContext;
 
     return {
       bookContext,
