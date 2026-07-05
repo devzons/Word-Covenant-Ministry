@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.2.0-pilot",
+  "packageVersion": "0.3.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -288,6 +288,421 @@
         {
           "ko": "하나님 나라",
           "en": "Kingdom of God"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-matthew-5",
+      "chapterContextId": "chapter-context-matthew-5",
+      "bookId": "matthew",
+      "chapter": 5,
+      "title": {
+        "ko": "마태복음 5장 산상수훈 문맥",
+        "en": "Matthew 5 Sermon on the Mount Context"
+      },
+      "summary": {
+        "ko": "마태복음 5장은 산상수훈의 시작과 하나님 나라 윤리의 방향을 보여 주는 장 수준 문맥 row입니다.",
+        "en": "Matthew 5 is a chapter-level context row for the opening of the Sermon on the Mount and the direction of kingdom ethics."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 산상수훈 시작 문맥",
+        "en": "Chapter-level Sermon on the Mount opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "label": {
+            "ko": "마태복음 5장",
+            "en": "Matthew 5"
+          },
+          "reference": "Matthew 5",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / author QA 대기",
+        "en": "Draft pilot row / awaiting author QA"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 산상수훈 전체를 단일 해석으로 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not settle the whole Sermon on the Mount into a single interpretation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "matthew"
+      ],
+      "relatedEventIds": [
+        "event-public-ministry-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "산상수훈",
+          "en": "Sermon on the Mount"
+        },
+        {
+          "ko": "하나님 나라 윤리",
+          "en": "Kingdom ethics"
+        },
+        {
+          "ko": "제자 가르침",
+          "en": "Disciple teaching"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-matthew-14",
+      "chapterContextId": "chapter-context-matthew-14",
+      "bookId": "matthew",
+      "chapter": 14,
+      "title": {
+        "ko": "마태복음 14장 오천 명 먹이심 문맥",
+        "en": "Matthew 14 Feeding the Five Thousand Context"
+      },
+      "summary": {
+        "ko": "마태복음 14장은 사역 전환, 무리 공급, 그리고 제자 반응이 함께 드러나는 장 수준 문맥 row입니다.",
+        "en": "Matthew 14 is a chapter-level context row where ministry transition, provision for the crowd, and disciple response appear together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 공급과 제자 반응 문맥",
+        "en": "Chapter-level provision and disciple-response context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "label": {
+            "ko": "마태복음 14장",
+            "en": "Matthew 14"
+          },
+          "reference": "Matthew 14",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / author QA 대기",
+        "en": "Draft pilot row / awaiting author QA"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 표적의 의미를 단일 정리로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reduce the sign to a single summary meaning."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "matthew"
+      ],
+      "relatedEventIds": [
+        "event-feeding-five-thousand-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "공급",
+          "en": "Provision"
+        },
+        {
+          "ko": "제자 반응",
+          "en": "Disciple response"
+        },
+        {
+          "ko": "사역 전환",
+          "en": "Ministry transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-matthew-26",
+      "chapterContextId": "chapter-context-matthew-26",
+      "bookId": "matthew",
+      "chapter": 26,
+      "title": {
+        "ko": "마태복음 26장 마지막 만찬 문맥",
+        "en": "Matthew 26 Last Supper Context"
+      },
+      "summary": {
+        "ko": "마태복음 26장은 마지막 만찬, 배신 긴장, 그리고 수난 직전 준비가 모이는 장 수준 문맥 row입니다.",
+        "en": "Matthew 26 is a chapter-level context row where the Last Supper, betrayal tension, and preparation for the passion converge."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 마지막 만찬과 수난 전환 문맥",
+        "en": "Chapter-level Last Supper and passion-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "label": {
+            "ko": "마태복음 26장",
+            "en": "Matthew 26"
+          },
+          "reference": "Matthew 26",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / author QA 대기",
+        "en": "Draft pilot row / awaiting author QA"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 성찬과 수난에 대한 모든 해석 결론을 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not finalize every interpretive conclusion about the Supper and the passion."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "matthew"
+      ],
+      "relatedEventIds": [
+        "event-last-supper-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "마지막 만찬",
+          "en": "Last Supper"
+        },
+        {
+          "ko": "배신 긴장",
+          "en": "Betrayal tension"
+        },
+        {
+          "ko": "수난 준비",
+          "en": "Passion preparation"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-matthew-27",
+      "chapterContextId": "chapter-context-matthew-27",
+      "bookId": "matthew",
+      "chapter": 27,
+      "title": {
+        "ko": "마태복음 27장 십자가 문맥",
+        "en": "Matthew 27 Crucifixion Context"
+      },
+      "summary": {
+        "ko": "마태복음 27장은 재판, 십자가, 그리고 매장까지 이어지는 수난 절정을 보여 주는 장 수준 문맥 row입니다.",
+        "en": "Matthew 27 is a chapter-level context row for the climax of the passion through trial, crucifixion, and burial."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 수난 절정 문맥",
+        "en": "Chapter-level passion-climax context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "label": {
+            "ko": "마태복음 27장",
+            "en": "Matthew 27"
+          },
+          "reference": "Matthew 27",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / author QA 대기",
+        "en": "Draft pilot row / awaiting author QA"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 수난 사건의 신학적 의미를 단일 정리로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reduce the theological meaning of the passion event to a single summary."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "matthew"
+      ],
+      "relatedEventIds": [
+        "event-crucifixion-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "십자가",
+          "en": "Crucifixion"
+        },
+        {
+          "ko": "수난",
+          "en": "Passion"
+        },
+        {
+          "ko": "매장",
+          "en": "Burial"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-luke-2",
+      "chapterContextId": "chapter-context-luke-2",
+      "bookId": "luke",
+      "chapter": 2,
+      "title": {
+        "ko": "누가복음 2장 탄생 문맥",
+        "en": "Luke 2 Birth Context"
+      },
+      "summary": {
+        "ko": "누가복음 2장은 예수 탄생, 초기 증언, 그리고 유년 장면을 함께 보여 주는 장 수준 문맥 row입니다.",
+        "en": "Luke 2 is a chapter-level context row that brings together the birth of Jesus, early witness, and childhood scenes."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 탄생과 초기 증언 문맥",
+        "en": "Chapter-level birth and early-witness context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "luke",
+          "label": {
+            "ko": "누가복음 2장",
+            "en": "Luke 2"
+          },
+          "reference": "Luke 2",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / author QA 대기",
+        "en": "Draft pilot row / awaiting author QA"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 탄생 기사에 대한 모든 조화 문제를 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not settle every harmonization question around the birth narrative."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "luke"
+      ],
+      "relatedEventIds": [
+        "event-incarnation-birth-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "탄생",
+          "en": "Birth"
+        },
+        {
+          "ko": "증언",
+          "en": "Witness"
+        },
+        {
+          "ko": "유년 장면",
+          "en": "Childhood scene"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-2",
+      "chapterContextId": "chapter-context-acts-2",
+      "bookId": "acts",
+      "chapter": 2,
+      "title": {
+        "ko": "사도행전 2장 오순절 문맥",
+        "en": "Acts 2 Pentecost Context"
+      },
+      "summary": {
+        "ko": "사도행전 2장은 오순절 사건과 예루살렘 초기 교회 공동체 형성이 함께 드러나는 장 수준 문맥 row입니다.",
+        "en": "Acts 2 is a chapter-level context row where Pentecost and the formation of the early Jerusalem church appear together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 오순절과 초기 교회 형성 문맥",
+        "en": "Chapter-level Pentecost and early-church formation context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 2장",
+            "en": "Acts 2"
+          },
+          "reference": "Acts 2",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / author QA 대기",
+        "en": "Draft pilot row / awaiting author QA"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 오순절과 초기 교회에 대한 모든 교회론 결론을 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not finalize every ecclesiological conclusion about Pentecost and the early church."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-pentecost-skeleton",
+        "event-early-church-jerusalem-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "오순절",
+          "en": "Pentecost"
+        },
+        {
+          "ko": "초기 교회",
+          "en": "Early church"
+        },
+        {
+          "ko": "증언과 공동체",
+          "en": "Witness and community"
         }
       ],
       "isSkeleton": false
