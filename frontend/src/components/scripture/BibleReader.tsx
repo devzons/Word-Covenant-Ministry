@@ -123,6 +123,7 @@ const bibleReaderCopy = {
     nextChapter: "Next chapter",
     selectOriginalVerse: "Select verse for original-language preview",
     selectInterlinearVerse: "Select verse for interlinear view",
+    selectReaderVerse: "Select verse for study workspace",
     studyPanel: "Study panel",
     workspaceTitle: "Scripture Research Workspace",
     workspaceDescription: "Reader-centered research tools stay aligned to the current passage.",
@@ -150,6 +151,7 @@ const bibleReaderCopy = {
     nextChapter: "다음 장",
     selectOriginalVerse: "원어 미리보기 절 선택",
     selectInterlinearVerse: "행간 보기 절 선택",
+    selectReaderVerse: "성경연구 작업공간 절 선택",
     studyPanel: "연구 패널",
     workspaceTitle: "성경 연구 작업공간",
     workspaceDescription: "현재 본문에 맞춰 연구 도구를 함께 살펴봅니다.",
@@ -262,6 +264,24 @@ export function BibleReader({
       window.removeEventListener("hashchange", updateActiveVerseId);
     };
   }, []);
+
+  function syncActiveVerseSelection(verseNumber: number) {
+    const nextVerseId = `v${verseNumber}`;
+
+    setActiveVerseId(nextVerseId);
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const nextHash = `#${nextVerseId}`;
+
+    if (window.location.hash === nextHash) {
+      return;
+    }
+
+    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
+  }
 
   return (
     <ScriptureResearchWorkspaceProvider
@@ -397,6 +417,8 @@ export function BibleReader({
                                 : `${copy.selectInterlinearVerse}: ${verse.verse}`
                             }
                             onClick={() => {
+                              syncActiveVerseSelection(verse.verse);
+
                               if (isOriginalMode) {
                                 setSelectedOriginalVerse(verse.verse);
                               }
@@ -410,7 +432,14 @@ export function BibleReader({
                             {verse.text}
                           </button>
                         ) : (
-                          <span className="break-words text-zinc-950">{verse.text}</span>
+                          <button
+                            aria-label={`${copy.selectReaderVerse}: ${verse.verse}`}
+                            className="min-w-0 break-words text-left text-zinc-950 transition-colors hover:text-zinc-700"
+                            onClick={() => syncActiveVerseSelection(verse.verse)}
+                            type="button"
+                          >
+                            {verse.text}
+                          </button>
                         )}
                         {isOriginalMode && visibleOriginalVerse === verse.verse ? (
                           <VerseOriginalLanguagePreview
