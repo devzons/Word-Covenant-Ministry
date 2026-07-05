@@ -2,14 +2,295 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.1.0-skeleton",
-  "status": "skeleton",
+  "packageVersion": "0.2.0-pilot",
+  "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
-    "Skeleton envelope only.",
-    "No chapter context rows are approved yet.",
+    "Pilot package with manual draft chapter-context rows.",
+    "All rows remain draft and require later review.",
     "This package is not connected to runtime yet.",
     "It does not store Bible text or perform verse-level tagging."
   ],
-  "items": []
+  "items": [
+    {
+      "id": "chapter-context-genesis-1",
+      "chapterContextId": "chapter-context-genesis-1",
+      "bookId": "genesis",
+      "chapter": 1,
+      "title": {
+        "ko": "창세기 1장 창조 문맥",
+        "en": "Genesis 1 Creation Context"
+      },
+      "summary": {
+        "ko": "창세기 1장은 창조 시작과 질서 있는 전개를 보여 주는 장 수준 문맥 초안입니다.",
+        "en": "Genesis 1 is a draft chapter-level context row for the beginning of creation and its ordered progression."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 창조 시작 문맥",
+        "en": "Chapter-level creation-opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 1장",
+            "en": "Genesis 1"
+          },
+          "reference": "Genesis 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot draft / 후속 검토 필요",
+        "en": "Pilot draft / later review required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata 초안이며 정확한 연대나 모든 해석을 제시하지 않습니다.",
+        "en": "This row is draft chapter-level preview metadata and does not present exact chronology or every interpretation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first chapter pilot draft",
+        "en": "Scripture-first chapter pilot draft"
+      },
+      "relatedBookIds": [
+        "genesis"
+      ],
+      "relatedEventIds": [
+        "event-creation-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "창조",
+          "en": "Creation"
+        },
+        {
+          "ko": "시작",
+          "en": "Beginning"
+        },
+        {
+          "ko": "질서",
+          "en": "Order"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-genesis-3",
+      "chapterContextId": "chapter-context-genesis-3",
+      "bookId": "genesis",
+      "chapter": 3,
+      "title": {
+        "ko": "창세기 3장 타락 문맥",
+        "en": "Genesis 3 Fall Context"
+      },
+      "summary": {
+        "ko": "창세기 3장은 타락, 심판, 그리고 후속 성경 흐름과 연결되는 약속 모티프를 보여 주는 장 수준 문맥 초안입니다.",
+        "en": "Genesis 3 is a draft chapter-level context row for the fall, judgment, and a promise motif that later connects across Scripture."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 타락과 심판 문맥",
+        "en": "Chapter-level fall and judgment context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 3장",
+            "en": "Genesis 3"
+          },
+          "reference": "Genesis 3",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot draft / 후속 검토 필요",
+        "en": "Pilot draft / later review required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata 초안이며 교리 결론을 확정하거나 해석 범위를 과도하게 닫지 않습니다.",
+        "en": "This row is draft chapter-level preview metadata and does not finalize doctrinal conclusions or close interpretive scope too tightly."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first chapter pilot draft",
+        "en": "Scripture-first chapter pilot draft"
+      },
+      "relatedBookIds": [
+        "genesis",
+        "romans",
+        "revelation"
+      ],
+      "relatedEventIds": [
+        "event-fall-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "타락",
+          "en": "Fall"
+        },
+        {
+          "ko": "심판",
+          "en": "Judgment"
+        },
+        {
+          "ko": "약속",
+          "en": "Promise"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-12",
+      "chapterContextId": "chapter-context-exodus-12",
+      "bookId": "exodus",
+      "chapter": 12,
+      "title": {
+        "ko": "출애굽기 12장 유월절 문맥",
+        "en": "Exodus 12 Passover Context"
+      },
+      "summary": {
+        "ko": "출애굽기 12장은 유월절 규례와 애굽에서의 출발 전환을 보여 주는 장 수준 문맥 초안입니다.",
+        "en": "Exodus 12 is a draft chapter-level context row for the Passover instructions and the transition into departure from Egypt."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 유월절과 출애굽 전환 문맥",
+        "en": "Chapter-level Passover and exodus-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 12장",
+            "en": "Exodus 12"
+          },
+          "reference": "Exodus 12",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot draft / 후속 검토 필요",
+        "en": "Pilot draft / later review required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata 초안이며 날짜 세부 계산이나 과도한 typology를 확정하지 않습니다.",
+        "en": "This row is draft chapter-level preview metadata and does not settle detailed date calculations or an overextended typology."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first chapter pilot draft",
+        "en": "Scripture-first chapter pilot draft"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-exodus-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "유월절",
+          "en": "Passover"
+        },
+        {
+          "ko": "해방",
+          "en": "Deliverance"
+        },
+        {
+          "ko": "언약 공동체",
+          "en": "Covenant community"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-matthew-13",
+      "chapterContextId": "chapter-context-matthew-13",
+      "bookId": "matthew",
+      "chapter": 13,
+      "title": {
+        "ko": "마태복음 13장 천국 비유 문맥",
+        "en": "Matthew 13 Kingdom Parables Context"
+      },
+      "summary": {
+        "ko": "마태복음 13장은 천국 비유 묶음과 반응의 대비를 보여 주는 장 수준 문맥 초안입니다.",
+        "en": "Matthew 13 is a draft chapter-level context row for the cluster of kingdom parables and their contrasting responses."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 천국 비유 문맥",
+        "en": "Chapter-level kingdom parables context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "matthew",
+          "label": {
+            "ko": "마태복음 13장",
+            "en": "Matthew 13"
+          },
+          "reference": "Matthew 13",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot draft / 후속 검토 필요",
+        "en": "Pilot draft / later review required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata 초안이며 모든 비유를 단일 해석으로 닫지 않습니다.",
+        "en": "This row is draft chapter-level preview metadata and does not collapse every parable into a single interpretation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first chapter pilot draft",
+        "en": "Scripture-first chapter pilot draft"
+      },
+      "relatedBookIds": [
+        "matthew",
+        "mark",
+        "luke"
+      ],
+      "relatedEventIds": [
+        "event-kingdom-parables-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "천국 비유",
+          "en": "Kingdom parables"
+        },
+        {
+          "ko": "듣는 자의 반응",
+          "en": "Hearer response"
+        },
+        {
+          "ko": "하나님 나라",
+          "en": "Kingdom of God"
+        }
+      ],
+      "isSkeleton": false
+    }
+  ]
 }
