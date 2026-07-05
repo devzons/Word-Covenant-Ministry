@@ -1154,17 +1154,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 정복 사건의 모든 역사적·신학적 논점을 단일 결론으로 고정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not fix every historical or theological question around the conquest event into one conclusion."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "joshua"
@@ -1223,17 +1223,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 사사 시대의 모든 연대나 순환 공식을 단일 도식으로 고정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not lock every chronology or cycle formula of the Judges period into a single scheme."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "judges"
@@ -1292,17 +1292,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 왕권 전환의 의미나 선택 주제를 단일 해석으로 닫지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not close the meaning of royal transition or election themes into a single interpretation."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "1-samuel"
@@ -1361,17 +1361,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 분열 원인과 이후 왕국 전개를 단일 설명으로 단순화하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not simplify the causes of division or the later kingdom development into a single explanation."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "1-kings"
@@ -1430,17 +1430,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 포로기 애가의 정서를 현대 적용이나 단일 역사 해석으로 고정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not fix the lament of exile into a single modern application or historical reading."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "psalms"
@@ -1499,17 +1499,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 포로기 신실함과 문화 긴장을 단일 모범 공식으로 단순화하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not simplify exile faithfulness and cultural tension into a single model formula."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "daniel"
@@ -1568,17 +1568,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "review-required pilot row / author self-check 통과",
-        "en": "Review-required pilot row / author self-check passed"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 환상 상징과 종말론 해석을 단일 체계로 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not finalize visionary symbolism and eschatological interpretation into a single system."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first review-required pilot row",
-        "en": "Scripture-first review-required pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "revelation"
