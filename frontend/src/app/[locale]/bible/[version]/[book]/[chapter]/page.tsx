@@ -13,6 +13,7 @@ import {
 import {
   getReviewedChapterContextByBookAndChapter,
   normalizeTimelineChapterContextPackage,
+  type TimelineChapterContextRow,
 } from "@/components/scripture/timeline/timelineChapterContextPackage";
 import {
   normalizeCoreBiblicalEventsPackage,
@@ -68,6 +69,7 @@ export default async function BibleReaderPage({
   let bibleChapter: BibleChapterResponse | null = null;
   let bookMetadata: BibleBookMetadata | null = null;
   let bookContext: TimelineBookContextRow | null = null;
+  let chapterContextPreview: TimelineChapterContextRow | null = null;
   let relatedMetadata: BibleReaderRelatedMetadataPreview = emptyRelatedMetadataPreview();
   let errorMessage = "";
   let isChapterOutOfRange = false;
@@ -81,6 +83,7 @@ export default async function BibleReaderPage({
       bibleChapter = await getBibleChapter(version, book, chapterNumber);
       const bookContextData = await loadBookContextData(book, chapterNumber, locale);
       bookContext = bookContextData.bookContext;
+      chapterContextPreview = bookContextData.chapterContextPreview;
       relatedMetadata = bookContextData.relatedMetadata;
     }
   } catch {
@@ -102,6 +105,7 @@ export default async function BibleReaderPage({
           bookContext={bookContext}
           bookMetadata={bookMetadata}
           chapter={bibleChapter}
+          chapterContextPreview={chapterContextPreview}
           initialSearchQuery={query.q ?? ""}
           locale={locale}
           mode={mode}
@@ -147,6 +151,7 @@ function BibleReaderError({ locale, message }: { locale: string; message: string
 
 async function loadBookContextData(bookId: string, chapter: number, locale: string): Promise<{
   bookContext: TimelineBookContextRow | null;
+  chapterContextPreview: TimelineChapterContextRow | null;
   relatedMetadata: BibleReaderRelatedMetadataPreview;
 }> {
   try {
@@ -184,6 +189,7 @@ async function loadBookContextData(bookId: string, chapter: number, locale: stri
 
     return {
       bookContext,
+      chapterContextPreview: chapterContext,
       relatedMetadata: bookContext
         ? createRelatedMetadataPreview({
             bookContext,
@@ -197,6 +203,7 @@ async function loadBookContextData(bookId: string, chapter: number, locale: stri
   } catch {
     return {
       bookContext: null,
+      chapterContextPreview: null,
       relatedMetadata: emptyRelatedMetadataPreview(),
     };
   }

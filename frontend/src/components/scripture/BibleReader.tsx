@@ -21,6 +21,7 @@ import {
   type ScriptureResearchReferenceRange,
 } from "@/components/scripture/ScriptureResearchWorkspaceContext";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
+import type { TimelineChapterContextRow } from "@/components/scripture/timeline/timelineChapterContextPackage";
 import type { TimelineBookContextRow } from "@/components/scripture/timeline/passionWeekTimeline";
 import { cn } from "@/lib/utils/cn";
 import type { BibleBookMetadata, BibleChapterResponse } from "@/types/bible";
@@ -33,6 +34,7 @@ type BibleReaderProps = {
   bookContext?: TimelineBookContextRow | null;
   bookMetadata: BibleBookMetadata;
   chapter: BibleChapterResponse;
+  chapterContextPreview?: TimelineChapterContextRow | null;
   initialSearchQuery?: string;
   locale: string;
   mode: OriginalLanguageReaderMode;
@@ -169,6 +171,7 @@ export function BibleReader({
   bookContext = null,
   bookMetadata,
   chapter,
+  chapterContextPreview = null,
   initialSearchQuery = "",
   locale,
   mode,
@@ -196,6 +199,7 @@ export function BibleReader({
     selectedInterlinearVerse ?? (isInterlinearMode ? (chapter.verses[0]?.verse ?? null) : null);
   const visibleOriginalVerse =
     selectedOriginalVerse ?? (isOriginalMode ? (chapter.verses[0]?.verse ?? null) : null);
+  void chapterContextPreview;
   const activeVerseNumber = activeVerseId.match(/^v(\d+)$/)?.[1]
     ? Number(activeVerseId.replace(/^v/, ""))
     : null;
