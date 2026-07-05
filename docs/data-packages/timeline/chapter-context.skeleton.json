@@ -2,12 +2,12 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.3.0-pilot",
+  "packageVersion": "0.4.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
     "Pilot package with manual chapter-context pilot rows.",
-    "Current rows have passed acceptance QA and are marked reviewed within this pilot package.",
+    "Current rows include reviewed pilot rows plus draft expansion rows within this pilot package.",
     "This package is not connected to runtime yet.",
     "It does not store Bible text or perform verse-level tagging."
   ],
@@ -703,6 +703,420 @@
         {
           "ko": "증언과 공동체",
           "en": "Witness and community"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-genesis-37",
+      "chapterContextId": "chapter-context-genesis-37",
+      "bookId": "genesis",
+      "chapter": 37,
+      "title": {
+        "ko": "창세기 37장 요셉 서사 전환 문맥",
+        "en": "Genesis 37 Joseph Narrative Turning-Point Context"
+      },
+      "summary": {
+        "ko": "창세기 37장은 요셉 서사의 위기 전환과 가족 긴장이 본격화되는 장 수준 문맥 row입니다.",
+        "en": "Genesis 37 is a chapter-level context row where the Joseph narrative turns through family tension and crisis."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 요셉 서사 위기 전환 문맥",
+        "en": "Chapter-level Joseph narrative crisis-turn context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 37장",
+            "en": "Genesis 37"
+          },
+          "reference": "Genesis 37",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / 후속 QA 필요",
+        "en": "Draft pilot row / follow-up QA required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 가족 갈등과 섭리 주제를 단일 해석으로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reduce family conflict and providence themes to a single interpretation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "genesis"
+      ],
+      "relatedEventIds": [
+        "event-joseph-sold-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "요셉",
+          "en": "Joseph"
+        },
+        {
+          "ko": "가족 긴장",
+          "en": "Family tension"
+        },
+        {
+          "ko": "서사 전환",
+          "en": "Narrative turning point"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-genesis-41",
+      "chapterContextId": "chapter-context-genesis-41",
+      "bookId": "genesis",
+      "chapter": 41,
+      "title": {
+        "ko": "창세기 41장 요셉의 애굽 상승 문맥",
+        "en": "Genesis 41 Joseph in Egypt Context"
+      },
+      "summary": {
+        "ko": "창세기 41장은 요셉의 해석과 애굽 내 역할 상승이 함께 드러나는 장 수준 문맥 row입니다.",
+        "en": "Genesis 41 is a chapter-level context row where Joseph’s interpretation and rise in Egypt appear together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 해석과 보존 준비 문맥",
+        "en": "Chapter-level interpretation and preservation-preparation context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 41장",
+            "en": "Genesis 41"
+          },
+          "reference": "Genesis 41",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / 후속 QA 필요",
+        "en": "Draft pilot row / follow-up QA required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 요셉 서사의 의미나 섭리 주제를 단일 정리로 닫지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not close the meaning of Joseph’s story or providence themes into a single summary."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "genesis"
+      ],
+      "relatedEventIds": [
+        "event-joseph-egypt-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "해석",
+          "en": "Interpretation"
+        },
+        {
+          "ko": "보존",
+          "en": "Preservation"
+        },
+        {
+          "ko": "애굽 상승",
+          "en": "Rise in Egypt"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-genesis-46",
+      "chapterContextId": "chapter-context-genesis-46",
+      "bookId": "genesis",
+      "chapter": 46,
+      "title": {
+        "ko": "창세기 46장 애굽 이주 문맥",
+        "en": "Genesis 46 Descent to Egypt Context"
+      },
+      "summary": {
+        "ko": "창세기 46장은 야곱의 집이 애굽으로 이동하며 족장 서사 흐름이 새로운 단계로 넘어가는 장 수준 문맥 row입니다.",
+        "en": "Genesis 46 is a chapter-level context row where Jacob’s household moves to Egypt and the patriarchal narrative enters a new phase."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 가문 이동과 서사 전환 문맥",
+        "en": "Chapter-level household-migration and narrative-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 46장",
+            "en": "Genesis 46"
+          },
+          "reference": "Genesis 46",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / 후속 QA 필요",
+        "en": "Draft pilot row / follow-up QA required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 인원 계산이나 이동 세부를 모든 조화 문제까지 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not settle every harmonization question about counts or migration details."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "genesis"
+      ],
+      "relatedEventIds": [
+        "event-jacobs-house-goes-to-egypt-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "애굽 이주",
+          "en": "Descent to Egypt"
+        },
+        {
+          "ko": "가문 이동",
+          "en": "Household migration"
+        },
+        {
+          "ko": "서사 전환",
+          "en": "Narrative transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-3",
+      "chapterContextId": "chapter-context-exodus-3",
+      "bookId": "exodus",
+      "chapter": 3,
+      "title": {
+        "ko": "출애굽기 3장 모세 부르심 문맥",
+        "en": "Exodus 3 Moses Calling Context"
+      },
+      "summary": {
+        "ko": "출애굽기 3장은 떨기나무 장면과 부르심 선포를 통해 출애굽 서사의 방향이 분명해지는 장 수준 문맥 row입니다.",
+        "en": "Exodus 3 is a chapter-level context row where the burning-bush scene and calling announcement clarify the direction of the Exodus narrative."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 부르심과 출애굽 전환 문맥",
+        "en": "Chapter-level calling and exodus-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 3장",
+            "en": "Exodus 3"
+          },
+          "reference": "Exodus 3",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / 후속 QA 필요",
+        "en": "Draft pilot row / follow-up QA required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 신현 장면의 모든 신학적 함의를 단일 표현으로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress every theological implication of the theophany into one expression."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-moses-called-burning-bush-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "모세 부르심",
+          "en": "Moses calling"
+        },
+        {
+          "ko": "떨기나무",
+          "en": "Burning bush"
+        },
+        {
+          "ko": "출애굽 전환",
+          "en": "Exodus transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-9",
+      "chapterContextId": "chapter-context-acts-9",
+      "bookId": "acts",
+      "chapter": 9,
+      "title": {
+        "ko": "사도행전 9장 바울 회심 문맥",
+        "en": "Acts 9 Paul Conversion Context"
+      },
+      "summary": {
+        "ko": "사도행전 9장은 바울 회심과 초기 전환 반응이 함께 드러나는 장 수준 문맥 row입니다.",
+        "en": "Acts 9 is a chapter-level context row where Paul’s conversion and the first responses to that turning point appear together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 회심과 사역 전환 문맥",
+        "en": "Chapter-level conversion and ministry-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 9장",
+            "en": "Acts 9"
+          },
+          "reference": "Acts 9",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / 후속 QA 필요",
+        "en": "Draft pilot row / follow-up QA required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 회심 사건의 모든 적용이나 해석을 단일 공식으로 정리하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not summarize every application or interpretation of the conversion event into a single formula."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-conversion-of-paul-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "회심",
+          "en": "Conversion"
+        },
+        {
+          "ko": "바울",
+          "en": "Paul"
+        },
+        {
+          "ko": "사역 전환",
+          "en": "Ministry transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-10",
+      "chapterContextId": "chapter-context-acts-10",
+      "bookId": "acts",
+      "chapter": 10,
+      "title": {
+        "ko": "사도행전 10장 고넬료 문맥",
+        "en": "Acts 10 Cornelius Context"
+      },
+      "summary": {
+        "ko": "사도행전 10장은 고넬료 사건을 통해 초기 교회 확장 방향이 분명해지는 장 수준 문맥 row입니다.",
+        "en": "Acts 10 is a chapter-level context row where the Cornelius episode clarifies the expanding direction of the early church."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 이방인 확장 전환 문맥",
+        "en": "Chapter-level Gentile-expansion transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 10장",
+            "en": "Acts 10"
+          },
+          "reference": "Acts 10",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / 후속 QA 필요",
+        "en": "Draft pilot row / follow-up QA required"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 초기 교회 확장의 모든 해석 결론을 단일 정리로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not fix every interpretive conclusion about early-church expansion into a single summary."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-cornelius-and-gentiles-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "고넬료",
+          "en": "Cornelius"
+        },
+        {
+          "ko": "이방인 확장",
+          "en": "Gentile expansion"
+        },
+        {
+          "ko": "초기 교회",
+          "en": "Early church"
         }
       ],
       "isSkeleton": false
