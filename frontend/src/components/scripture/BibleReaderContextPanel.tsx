@@ -162,6 +162,8 @@ export function BibleReaderContextPanel({
 }: BibleReaderContextPanelProps) {
   const activeLocale: TimelineLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderContextCopy[activeLocale];
+  const chapterContextHeadingId = `chapter-context-preview-${activeLocale}-${chapter}`;
+  const chapterContextAnchorListId = `${chapterContextHeadingId}-anchors`;
   const hasRelatedMetadata =
     relatedMetadata.events.length > 0 ||
     relatedMetadata.places.length > 0 ||
@@ -214,7 +216,13 @@ export function BibleReaderContextPanel({
 
           {chapterContextPreview ? (
             <PanelSection label={copy.chapterContextPreview}>
-              <div className="space-y-3 rounded-md border border-zinc-200 bg-zinc-50/70 px-3 py-3">
+              <section
+                aria-labelledby={chapterContextHeadingId}
+                className="space-y-3 rounded-md border border-zinc-200 bg-zinc-50/70 px-3 py-3"
+              >
+                <h3 className="sr-only" id={chapterContextHeadingId}>
+                  {copy.chapterContextPreview}
+                </h3>
                 <SectionNote>{copy.chapterContextPreviewNote}</SectionNote>
                 <ContextRow
                   label={copy.chapterContextTitle}
@@ -246,12 +254,13 @@ export function BibleReaderContextPanel({
                 />
                 <ChapterContextAnchorList
                   anchors={chapterContextPreview.scriptureAnchors}
+                  listId={chapterContextAnchorListId}
                   locale={activeLocale}
                   referenceLabel={copy.chapterContextReference}
                   scopeLabel={copy.chapterContextScopeType}
                   title={copy.chapterContextAnchors}
                 />
-              </div>
+              </section>
             </PanelSection>
           ) : null}
 
@@ -364,20 +373,24 @@ export function BibleReaderContextPanel({
 
 function ChapterContextAnchorList({
   anchors,
+  listId,
   locale,
   referenceLabel,
   scopeLabel,
   title,
 }: {
   anchors: TimelineChapterContextScriptureAnchor[];
+  listId: string;
   locale: TimelineLocale;
   referenceLabel: string;
   scopeLabel: string;
   title: string;
 }) {
   return (
-    <div className="space-y-2" aria-label={title}>
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">{title}</p>
+    <div aria-labelledby={listId} className="space-y-2">
+      <h4 className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500" id={listId}>
+        {title}
+      </h4>
       <ul className="space-y-2">
         {anchors.map((anchor, index) => (
           <li
