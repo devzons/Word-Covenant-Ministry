@@ -7,7 +7,7 @@
   "scope": "chapter-level-preview-metadata",
   "notes": [
     "Pilot package with manual chapter-context pilot rows.",
-    "Current rows have passed author self-check and require separate review.",
+    "Current rows have passed acceptance QA and are marked reviewed within this pilot package.",
     "This package is not connected to runtime yet.",
     "It does not store Bible text or perform verse-level tagging."
   ],
@@ -45,17 +45,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "pilot row / 별도 검토 필요",
-        "en": "Pilot row / separate review required"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 정확한 연대나 모든 해석을 제시하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not present exact chronology or every interpretation."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first chapter pilot row",
-        "en": "Scripture-first chapter pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "genesis"
@@ -114,17 +114,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "pilot row / 별도 검토 필요",
-        "en": "Pilot row / separate review required"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 교리 결론을 확정하거나 해석 범위를 과도하게 닫지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not finalize doctrinal conclusions or close interpretive scope too tightly."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first chapter pilot row",
-        "en": "Scripture-first chapter pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "genesis",
@@ -185,17 +185,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "pilot row / 별도 검토 필요",
-        "en": "Pilot row / separate review required"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 날짜 세부 계산이나 과도한 typology를 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not settle detailed date calculations or an overextended typology."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first chapter pilot row",
-        "en": "Scripture-first chapter pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "exodus"
@@ -254,17 +254,17 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "pilot row / 별도 검토 필요",
-        "en": "Pilot row / separate review required"
+        "ko": "reviewed pilot row / acceptance QA 통과",
+        "en": "Reviewed pilot row / acceptance QA passed"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 모든 비유를 단일 해석으로 닫지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not collapse every parable into a single interpretation."
       },
-      "reviewStatus": "review-required",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first chapter pilot row",
-        "en": "Scripture-first chapter pilot row"
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
       },
       "relatedBookIds": [
         "matthew",
