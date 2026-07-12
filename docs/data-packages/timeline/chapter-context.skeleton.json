@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.18.0-pilot",
+  "packageVersion": "0.19.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -4128,7 +4128,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 사사기의 전체 순환 구조를 이 한 장으로 압축하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not compress the whole cyclical structure of Judges into this single chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4197,7 +4197,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 상세한 페르시아 행정 배경이나 정확한 연대를 과도하게 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-assert detailed Persian administrative background or exact chronology."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4266,7 +4266,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 귀환 이후 신학 전체를 이 한 장에 과도하게 압축하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-compress the whole theology of return and restoration into this one chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4335,7 +4335,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 상세 연대 계산이나 완결된 율법 개혁 체계로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into detailed chronology calculations or a complete Torah-reform system."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4404,7 +4404,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 지도·지리 설명이나 정치 재구성을 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-expand into map/geography description or political reconstruction."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4473,7 +4473,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 이사야 전체의 선지 체계를 이 한 장으로 완결하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not resolve the whole prophetic system of Isaiah through this one chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
