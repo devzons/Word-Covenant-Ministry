@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.7.0-pilot",
+  "packageVersion": "0.8.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -2014,6 +2014,420 @@
         {
           "ko": "회복",
           "en": "Restoration"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-isaiah-7",
+      "chapterContextId": "chapter-context-isaiah-7",
+      "bookId": "isaiah",
+      "chapter": 7,
+      "title": {
+        "ko": "이사야 7장 아하스와 이사야 문맥",
+        "en": "Isaiah 7 Ahaz and Isaiah Context"
+      },
+      "summary": {
+        "ko": "이사야 7장은 위기 속 왕과 예언자의 만남, 그리고 표징을 둘러싼 장면이 모이는 장 수준 문맥 row입니다.",
+        "en": "Isaiah 7 is a chapter-level context row where a king in crisis, a prophetic encounter, and the setting of a sign come together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 아하스와 이사야 문맥",
+        "en": "Chapter-level Ahaz-and-Isaiah context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "isaiah",
+          "label": {
+            "ko": "이사야 7장",
+            "en": "Isaiah 7"
+          },
+          "reference": "Isaiah 7",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 예언 장면을 전체 해석 체계나 포괄적 증명 구조로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand the prophetic scene into a full interpretive system or comprehensive proof structure."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "isaiah"
+      ],
+      "relatedEventIds": [
+        "event-ahaz-and-isaiah-seven-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예언자 만남",
+          "en": "Prophetic encounter"
+        },
+        {
+          "ko": "표징 문맥",
+          "en": "Sign context"
+        },
+        {
+          "ko": "위기 속 응답",
+          "en": "Response in crisis"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-jeremiah-36",
+      "chapterContextId": "chapter-context-jeremiah-36",
+      "bookId": "jeremiah",
+      "chapter": 36,
+      "title": {
+        "ko": "예레미야 36장 두루마리와 여호야김 문맥",
+        "en": "Jeremiah 36 Scroll and Jehoiakim Context"
+      },
+      "summary": {
+        "ko": "예레미야 36장은 기록된 예언의 전달, 왕의 반응, 그리고 말씀 보존의 장면이 모이는 장 수준 문맥 row입니다.",
+        "en": "Jeremiah 36 is a chapter-level context row where the delivery of a written prophetic message, the king’s response, and the preservation of that word come together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 두루마리와 왕의 반응 문맥",
+        "en": "Chapter-level scroll-and-royal-response context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "jeremiah",
+          "label": {
+            "ko": "예레미야 36장",
+            "en": "Jeremiah 36"
+          },
+          "reference": "Jeremiah 36",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 왕정 말기 배경을 세부 연대 계산이나 장문 해설로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not extend the late-monarchy setting into detailed chronology calculations or long-form commentary."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "jeremiah"
+      ],
+      "relatedEventIds": [
+        "event-jeremiah-scroll-jehoiakim-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예언 두루마리",
+          "en": "Prophetic scroll"
+        },
+        {
+          "ko": "왕의 반응",
+          "en": "Royal response"
+        },
+        {
+          "ko": "말씀 보존",
+          "en": "Preservation of the word"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-john-20",
+      "chapterContextId": "chapter-context-john-20",
+      "bookId": "john",
+      "chapter": 20,
+      "title": {
+        "ko": "요한복음 20장 부활 증언 문맥",
+        "en": "John 20 Resurrection Witness Context"
+      },
+      "summary": {
+        "ko": "요한복음 20장은 부활의 증언, 만남, 그리고 반응이 모이는 장 수준 문맥 row입니다.",
+        "en": "John 20 is a chapter-level context row where resurrection witness, encounter, and response are gathered."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 부활 증언 문맥",
+        "en": "Chapter-level resurrection-witness context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "john",
+          "label": {
+            "ko": "요한복음 20장",
+            "en": "John 20"
+          },
+          "reference": "John 20",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 다른 복음서의 부활 장면 전체를 조화시키는 별도 비교 체계를 만들지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not construct a separate harmonization system for the full set of resurrection scenes across the Gospels."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "john"
+      ],
+      "relatedEventIds": [
+        "event-resurrection-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "부활",
+          "en": "Resurrection"
+        },
+        {
+          "ko": "증언",
+          "en": "Witness"
+        },
+        {
+          "ko": "반응",
+          "en": "Response"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-romans-1",
+      "chapterContextId": "chapter-context-romans-1",
+      "bookId": "romans",
+      "chapter": 1,
+      "title": {
+        "ko": "로마서 1장 바울 서신 서두 문맥",
+        "en": "Romans 1 Pauline Letter Opening Context"
+      },
+      "summary": {
+        "ko": "로마서 1장은 바울의 서신 서두와 교회들을 향한 사도적 증언의 방향이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Romans 1 is a chapter-level context row where Paul’s letter opening and the direction of apostolic witness to the churches come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 바울 서신 서두 문맥",
+        "en": "Chapter-level Pauline letter-opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "romans",
+          "label": {
+            "ko": "로마서 1장",
+            "en": "Romans 1"
+          },
+          "reference": "Romans 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 서신 서두를 전체 교리 체계의 완결 요약으로 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the letter opening into a complete summary of the full doctrinal system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "romans"
+      ],
+      "relatedEventIds": [
+        "event-pauline-letters-to-churches-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "서신 서두",
+          "en": "Letter opening"
+        },
+        {
+          "ko": "사도적 증언",
+          "en": "Apostolic witness"
+        },
+        {
+          "ko": "교회들",
+          "en": "Churches"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-james-1",
+      "chapterContextId": "chapter-context-james-1",
+      "bookId": "james",
+      "chapter": 1,
+      "title": {
+        "ko": "야고보서 1장 초기 교회 권면 문맥",
+        "en": "James 1 Early Christian Instruction Context"
+      },
+      "summary": {
+        "ko": "야고보서 1장은 시험 속 신앙과 초기 그리스도인 권면의 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "James 1 is a chapter-level context row where tested faith and the flow of early Christian instruction come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 초기 교회 권면 문맥",
+        "en": "Chapter-level early-Christian-instruction context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "james",
+          "label": {
+            "ko": "야고보서 1장",
+            "en": "James 1"
+          },
+          "reference": "James 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 시험과 실천 권면을 특정 논쟁 체계의 단일 결론으로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not fix tested faith and practical exhortation into a single conclusion within later debate systems."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "james"
+      ],
+      "relatedEventIds": [
+        "event-apostolic-witness-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "시험 속 신앙",
+          "en": "Tested faith"
+        },
+        {
+          "ko": "권면",
+          "en": "Instruction"
+        },
+        {
+          "ko": "초기 교회",
+          "en": "Early church"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-1-peter-1",
+      "chapterContextId": "chapter-context-1-peter-1",
+      "bookId": "1-peter",
+      "chapter": 1,
+      "title": {
+        "ko": "베드로전서 1장 흩어진 성도 권면 문맥",
+        "en": "1 Peter 1 Dispersed Believers Context"
+      },
+      "summary": {
+        "ko": "베드로전서 1장은 흩어진 성도들을 향한 사도적 격려와 정체성 권면이 드러나는 장 수준 문맥 row입니다.",
+        "en": "1 Peter 1 is a chapter-level context row where apostolic encouragement and identity-focused exhortation for dispersed believers come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 흩어진 성도 권면 문맥",
+        "en": "Chapter-level dispersed-believers context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-peter",
+          "label": {
+            "ko": "베드로전서 1장",
+            "en": "1 Peter 1"
+          },
+          "reference": "1 Peter 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 수신자 배경을 정확한 지리 재구성이나 지도 기반 설명으로 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not finalize the audience background into an exact geographic reconstruction or map-based explanation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "1-peter"
+      ],
+      "relatedEventIds": [
+        "event-apostolic-witness-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "흩어진 성도",
+          "en": "Dispersed believers"
+        },
+        {
+          "ko": "격려",
+          "en": "Encouragement"
+        },
+        {
+          "ko": "정체성 권면",
+          "en": "Identity exhortation"
         }
       ],
       "isSkeleton": false
