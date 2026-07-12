@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.13.0-pilot",
+  "packageVersion": "0.14.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -3252,6 +3252,420 @@
         {
           "ko": "복음 변증",
           "en": "Gospel defense"
+        },
+        {
+          "ko": "서신 시작",
+          "en": "Letter opening"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-numbers-14",
+      "chapterContextId": "chapter-context-numbers-14",
+      "bookId": "numbers",
+      "chapter": 14,
+      "title": {
+        "ko": "민수기 14장 광야 여정 경고 문맥",
+        "en": "Numbers 14 Wilderness Warning Context"
+      },
+      "summary": {
+        "ko": "민수기 14장은 불신앙의 반응과 그 결과가 광야 여정 문맥 안에서 드러나는 장 수준 문맥 row입니다.",
+        "en": "Numbers 14 is a chapter-level context row where the response of unbelief and its consequences appear within the wilderness-journey setting."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 광야 여정 경고 문맥",
+        "en": "Chapter-level wilderness-warning context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "numbers",
+          "label": {
+            "ko": "민수기 14장",
+            "en": "Numbers 14"
+          },
+          "reference": "Numbers 14",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 광야 여정의 정확한 연대나 이동 경로 지리를 재구성하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reconstruct exact wilderness chronology or route geography."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "numbers"
+      ],
+      "relatedEventIds": [
+        "event-wilderness-journey-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "광야 여정",
+          "en": "Wilderness journey"
+        },
+        {
+          "ko": "불신앙",
+          "en": "Unbelief"
+        },
+        {
+          "ko": "결과",
+          "en": "Consequence"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-joshua-24",
+      "chapterContextId": "chapter-context-joshua-24",
+      "bookId": "joshua",
+      "chapter": 24,
+      "title": {
+        "ko": "여호수아 24장 세겜 언약 갱신 문맥",
+        "en": "Joshua 24 Covenant Renewal Context"
+      },
+      "summary": {
+        "ko": "여호수아 24장은 세겜에서의 언약 갱신과 응답이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Joshua 24 is a chapter-level context row where covenant renewal at Shechem and the response to it come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 세겜 언약 갱신 문맥",
+        "en": "Chapter-level covenant-renewal-at-Shechem context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "joshua",
+          "label": {
+            "ko": "여호수아 24장",
+            "en": "Joshua 24"
+          },
+          "reference": "Joshua 24",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 지도 정보나 책 전체 언약 신학 요약으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into map-style detail or a compression of whole-book covenant theology."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "joshua"
+      ],
+      "relatedEventIds": [
+        "event-covenant-renewal-shechem-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "언약 갱신",
+          "en": "Covenant renewal"
+        },
+        {
+          "ko": "세겜",
+          "en": "Shechem"
+        },
+        {
+          "ko": "응답",
+          "en": "Response"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-1-samuel-3",
+      "chapterContextId": "chapter-context-1-samuel-3",
+      "bookId": "1-samuel",
+      "chapter": 3,
+      "title": {
+        "ko": "사무엘상 3장 사무엘 부르심 문맥",
+        "en": "1 Samuel 3 Samuel Calling Context"
+      },
+      "summary": {
+        "ko": "사무엘상 3장은 사무엘의 부르심과 말씀 전달이 드러나는 장 수준 문맥 row입니다.",
+        "en": "1 Samuel 3 is a chapter-level context row where Samuel's calling and the delivery of the word come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 사무엘 부르심 문맥",
+        "en": "Chapter-level Samuel-calling context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 3장",
+            "en": "1 Samuel 3"
+          },
+          "reference": "1 Samuel 3",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 사무엘 생애 전체를 확장 전기처럼 재구성하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reconstruct the whole life of Samuel as an expanded biography."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "1-samuel"
+      ],
+      "relatedEventIds": [
+        "event-samuel-called-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "부르심",
+          "en": "Calling"
+        },
+        {
+          "ko": "말씀 전달",
+          "en": "Word delivery"
+        },
+        {
+          "ko": "사무엘",
+          "en": "Samuel"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-1-kings-8",
+      "chapterContextId": "chapter-context-1-kings-8",
+      "bookId": "1-kings",
+      "chapter": 8,
+      "title": {
+        "ko": "열왕기상 8장 성전 봉헌 문맥",
+        "en": "1 Kings 8 Temple Dedication Context"
+      },
+      "summary": {
+        "ko": "열왕기상 8장은 솔로몬 성전 봉헌과 기도가 드러나는 장 수준 문맥 row입니다.",
+        "en": "1 Kings 8 is a chapter-level context row where Solomon's temple dedication and prayer come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성전 봉헌 문맥",
+        "en": "Chapter-level temple-dedication context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 8장",
+            "en": "1 Kings 8"
+          },
+          "reference": "1 Kings 8",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 성전 신학 전체를 포괄하는 체계 요약으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into a comprehensive system summary of temple theology."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "1-kings"
+      ],
+      "relatedEventIds": [
+        "event-solomon-temple-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "성전 봉헌",
+          "en": "Temple dedication"
+        },
+        {
+          "ko": "솔로몬",
+          "en": "Solomon"
+        },
+        {
+          "ko": "기도",
+          "en": "Prayer"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-amos-1",
+      "chapterContextId": "chapter-context-amos-1",
+      "bookId": "amos",
+      "chapter": 1,
+      "title": {
+        "ko": "아모스 1장 예언 시작 문맥",
+        "en": "Amos 1 Prophetic Opening Context"
+      },
+      "summary": {
+        "ko": "아모스 1장은 예언의 시작과 북왕국 배경이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Amos 1 is a chapter-level context row where the opening of the prophecy and the Northern Kingdom setting come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 예언 시작 문맥",
+        "en": "Chapter-level prophetic-opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "amos",
+          "label": {
+            "ko": "아모스 1장",
+            "en": "Amos 1"
+          },
+          "reference": "Amos 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 세부 연대 체계나 예언서 전체 체계 요약으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into a detailed chronology system or a full system summary of the prophetic corpus."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "amos"
+      ],
+      "relatedEventIds": [
+        "event-jeroboam-ii-and-prophetic-context-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예언 시작",
+          "en": "Prophetic opening"
+        },
+        {
+          "ko": "북왕국",
+          "en": "Northern Kingdom"
+        },
+        {
+          "ko": "예언 배경",
+          "en": "Prophetic setting"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-1-corinthians-1",
+      "chapterContextId": "chapter-context-1-corinthians-1",
+      "bookId": "1-corinthians",
+      "chapter": 1,
+      "title": {
+        "ko": "고린도전서 1장 바울 서신 시작 문맥",
+        "en": "1 Corinthians 1 Pauline Letter Opening Context"
+      },
+      "summary": {
+        "ko": "고린도전서 1장은 바울 서신의 시작과 고린도 교회 문맥이 드러나는 장 수준 문맥 row입니다.",
+        "en": "1 Corinthians 1 is a chapter-level context row where the opening of a Pauline letter and the Corinthian church setting come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 바울 서신 시작 문맥",
+        "en": "Chapter-level Pauline-letter-opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-corinthians",
+          "label": {
+            "ko": "고린도전서 1장",
+            "en": "1 Corinthians 1"
+          },
+          "reference": "1 Corinthians 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 선택 절 해석이나 완결된 교리 체계로 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the chapter into selected-verse interpretation or a complete doctrinal system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "1-corinthians"
+      ],
+      "relatedEventIds": [
+        "event-pauline-letters-to-churches-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "바울 서신",
+          "en": "Pauline letter"
+        },
+        {
+          "ko": "고린도 교회",
+          "en": "Corinthian church"
         },
         {
           "ko": "서신 시작",
