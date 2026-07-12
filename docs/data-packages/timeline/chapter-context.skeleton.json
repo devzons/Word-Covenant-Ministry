@@ -2,12 +2,12 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.15.0-pilot",
+  "packageVersion": "0.15.1-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
     "Pilot package with manual chapter-context pilot rows.",
-    "Current rows include reviewed pilot rows plus draft expansion rows within this pilot package.",
+    "Current rows include reviewed pilot rows within this pilot package.",
     "This package is not connected to runtime yet.",
     "It does not store Bible text or perform verse-level tagging."
   ],
@@ -1637,8 +1637,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 다윗 언약과 왕권 약속을 확장된 메시아 체계 설명으로 단순화하지 않습니다.",
@@ -1646,8 +1646,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "2-samuel"
@@ -1706,8 +1706,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 귀환과 회복의 배경을 세부 연대 계산이나 단일 복구 서사로 고정하지 않습니다.",
@@ -1715,8 +1715,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "ezra"
@@ -1775,8 +1775,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 재건 배경을 상세 지리 설명이나 공사 단계 목록으로 확장하지 않습니다.",
@@ -1784,8 +1784,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "nehemiah"
@@ -1844,8 +1844,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 환상 상징을 단일 도식이나 세부 상징 해설로 확정하지 않습니다.",
@@ -1853,8 +1853,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "ezekiel"
@@ -1913,8 +1913,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 초기 교회 논의를 후대 교리 체계 전체로 확장하거나 단일 공식으로 단순화하지 않습니다.",
@@ -1922,8 +1922,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "acts"
@@ -1982,8 +1982,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 새 창조와 완성의 전망을 특정 종말론 시간표나 체계로 고정하지 않습니다.",
@@ -1991,8 +1991,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "revelation"
@@ -2051,8 +2051,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 예언 장면을 전체 해석 체계나 포괄적 증명 구조로 확장하지 않습니다.",
@@ -2060,8 +2060,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "isaiah"
@@ -2120,8 +2120,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 왕정 말기 배경을 세부 연대 계산이나 장문 해설로 확장하지 않습니다.",
@@ -2129,8 +2129,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "jeremiah"
@@ -2189,8 +2189,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 다른 복음서의 부활 장면 전체를 조화시키는 별도 비교 체계를 만들지 않습니다.",
@@ -2198,8 +2198,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "john"
@@ -2258,8 +2258,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 서신 서두를 전체 교리 체계의 완결 요약으로 압축하지 않습니다.",
@@ -2267,8 +2267,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "romans"
@@ -2327,8 +2327,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 시험과 실천 권면을 특정 논쟁 체계의 단일 결론으로 고정하지 않습니다.",
@@ -2336,8 +2336,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "james"
@@ -2396,8 +2396,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 수신자 배경을 정확한 지리 재구성이나 지도 기반 설명으로 확정하지 않습니다.",
@@ -2405,8 +2405,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "1-peter"
@@ -2465,8 +2465,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 북왕국 멸망 배경을 세부 연대 계산이나 정치 재구성으로 확장하지 않습니다.",
@@ -2474,8 +2474,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "2-kings"
@@ -2534,8 +2534,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 예루살렘 함락과 유배를 정확한 연대 체계나 세부 역사 재구성으로 확장하지 않습니다.",
@@ -2543,8 +2543,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "2-kings"
@@ -2603,8 +2603,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 위기와 구원의 장면을 포괄적 섭리 신학 설명으로 확장하지 않습니다.",
@@ -2612,8 +2612,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "esther"
@@ -2672,8 +2672,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 책망과 경고를 후대의 교리 체계나 종말론 구조로 확장하지 않습니다.",
@@ -2681,8 +2681,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "malachi"
@@ -2741,8 +2741,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 병행 본문 조화나 선택 절 해석 중심의 별도 비교 체계를 만들지 않습니다.",
@@ -2750,8 +2750,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "john"
@@ -2810,8 +2810,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 경고와 권면을 후대 논쟁 체계의 완결 요약으로 확장하지 않습니다.",
@@ -2819,8 +2819,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "jude"
@@ -2879,8 +2879,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 이후 광야 심판 전개나 세부 지리 재구성으로 확장하지 않습니다.",
@@ -2888,8 +2888,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "numbers"
@@ -2948,8 +2948,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 모세 생애를 확장 전기나 정확한 연대 체계로 재구성하지 않습니다.",
@@ -2957,8 +2957,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "deuteronomy"
@@ -3017,8 +3017,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 결말과 계보 연결을 포괄적 유형론 체계로 확장하지 않습니다.",
@@ -3026,8 +3026,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "ruth"
@@ -3086,8 +3086,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 예언자적 충돌을 지도 정보나 과도한 서사 재구성으로 확장하지 않습니다.",
@@ -3095,8 +3095,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "1-kings"
@@ -3155,8 +3155,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 예언 배경을 세부 연대 체계나 전체 예언 체계 요약으로 확장하지 않습니다.",
@@ -3164,8 +3164,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "hosea"
@@ -3224,8 +3224,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 서신 서두와 복음 변증을 완결된 교리 체계나 선택 절 해석으로 압축하지 않습니다.",
@@ -3233,8 +3233,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "galatians"
@@ -3293,8 +3293,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 광야 여정의 정확한 연대나 이동 경로 지리를 재구성하지 않습니다.",
@@ -3302,8 +3302,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "numbers"
@@ -3362,8 +3362,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 지도 정보나 책 전체 언약 신학 요약으로 확장하지 않습니다.",
@@ -3371,8 +3371,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "joshua"
@@ -3431,8 +3431,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 사무엘 생애 전체를 확장 전기처럼 재구성하지 않습니다.",
@@ -3440,8 +3440,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "1-samuel"
@@ -3500,8 +3500,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 성전 신학 전체를 포괄하는 체계 요약으로 확장하지 않습니다.",
@@ -3509,8 +3509,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "1-kings"
@@ -3569,8 +3569,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 세부 연대 체계나 예언서 전체 체계 요약으로 확장하지 않습니다.",
@@ -3578,8 +3578,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "amos"
@@ -3638,8 +3638,8 @@
         "en": "Scripture chapter scope basis"
       },
       "confidenceLabel": {
-        "ko": "draft pilot row / authoring pass",
-        "en": "Draft pilot row / authoring pass"
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
       },
       "cautionNote": {
         "ko": "이 row는 장 수준 preview metadata이며 선택 절 해석이나 완결된 교리 체계로 압축하지 않습니다.",
@@ -3647,8 +3647,8 @@
       },
       "reviewStatus": "reviewed",
       "sourceBasisLabel": {
-        "ko": "Scripture-first draft pilot row",
-        "en": "Scripture-first draft pilot row"
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
       },
       "relatedBookIds": [
         "1-corinthians"
