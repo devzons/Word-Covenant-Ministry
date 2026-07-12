@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.15.1-pilot",
+  "packageVersion": "0.16.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -3670,6 +3670,420 @@
         {
           "ko": "서신 시작",
           "en": "Letter opening"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-14",
+      "chapterContextId": "chapter-context-exodus-14",
+      "bookId": "exodus",
+      "chapter": 14,
+      "title": {
+        "ko": "출애굽기 14장 구원과 바다 건넘 문맥",
+        "en": "Exodus 14 Deliverance and Sea Crossing Context"
+      },
+      "summary": {
+        "ko": "출애굽기 14장은 구원과 바다 건넘의 흐름이 현재 event anchor 안에서 드러나는 장 수준 문맥 row입니다.",
+        "en": "Exodus 14 is a chapter-level context row where the flow of deliverance and sea crossing comes into view within the current event anchor."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 구원과 바다 건넘 문맥",
+        "en": "Chapter-level deliverance-and-sea-crossing context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 14장",
+            "en": "Exodus 14"
+          },
+          "reference": "Exodus 14",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 출애굽 전체 신학이나 정확한 이동 경로 지리로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into full Exodus theology or exact route geography."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-passover-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "구원",
+          "en": "Deliverance"
+        },
+        {
+          "ko": "바다 건넘",
+          "en": "Sea crossing"
+        },
+        {
+          "ko": "출애굽 전환",
+          "en": "Exodus transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-joshua-3",
+      "chapterContextId": "chapter-context-joshua-3",
+      "bookId": "joshua",
+      "chapter": 3,
+      "title": {
+        "ko": "여호수아 3장 요단 건넘 문맥",
+        "en": "Joshua 3 Jordan Crossing Context"
+      },
+      "summary": {
+        "ko": "여호수아 3장은 요단을 건너 가나안 진입이 시작되는 흐름을 보여 주는 장 수준 문맥 row입니다.",
+        "en": "Joshua 3 is a chapter-level context row for the flow in which crossing the Jordan begins the entry into the land."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 요단 건넘과 진입 문맥",
+        "en": "Chapter-level Jordan-crossing and entry context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "joshua",
+          "label": {
+            "ko": "여호수아 3장",
+            "en": "Joshua 3"
+          },
+          "reference": "Joshua 3",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 지도형 지리 확장이나 세부 이동 경로 재구성으로 나아가지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into map-style geography or detailed route reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "joshua"
+      ],
+      "relatedEventIds": [
+        "event-entry-into-land-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "요단 건넘",
+          "en": "Jordan crossing"
+        },
+        {
+          "ko": "가나안 진입",
+          "en": "Entry into the land"
+        },
+        {
+          "ko": "전환",
+          "en": "Transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-lamentations-1",
+      "chapterContextId": "chapter-context-lamentations-1",
+      "bookId": "lamentations",
+      "chapter": 1,
+      "title": {
+        "ko": "예레미야애가 1장 시온 탄식 문맥",
+        "en": "Lamentations 1 Zion Lament Context"
+      },
+      "summary": {
+        "ko": "예레미야애가 1장은 시온의 탄식과 상실이 포로 배경 안에서 드러나는 장 수준 문맥 row입니다.",
+        "en": "Lamentations 1 is a chapter-level context row where Zion's lament and loss appear within the exile setting."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 포로 탄식 문맥",
+        "en": "Chapter-level exile-lament context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "lamentations",
+          "label": {
+            "ko": "예레미야애가 1장",
+            "en": "Lamentations 1"
+          },
+          "reference": "Lamentations 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 포로 전체 신학이나 모든 애가 해석을 포괄하는 체계로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into a full exile theology or a complete system for interpreting all lament material."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "lamentations"
+      ],
+      "relatedEventIds": [
+        "event-exile-lament-zion-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "탄식",
+          "en": "Lament"
+        },
+        {
+          "ko": "시온",
+          "en": "Zion"
+        },
+        {
+          "ko": "상실",
+          "en": "Loss"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-haggai-1",
+      "chapterContextId": "chapter-context-haggai-1",
+      "bookId": "haggai",
+      "chapter": 1,
+      "title": {
+        "ko": "학개 1장 성전 재건 촉구 문맥",
+        "en": "Haggai 1 Temple Rebuilding Call Context"
+      },
+      "summary": {
+        "ko": "학개 1장은 포로 귀환 이후 성전 재건을 촉구하는 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Haggai 1 is a chapter-level context row where the call to resume temple rebuilding after the exile comes into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성전 재건 촉구 문맥",
+        "en": "Chapter-level temple-rebuilding-call context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "haggai",
+          "label": {
+            "ko": "학개 1장",
+            "en": "Haggai 1"
+          },
+          "reference": "Haggai 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 포로기 후 상세 연대를 재구성하거나 anchor 범위를 넘어 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reconstruct detailed post-exilic chronology or expand beyond the current anchor range."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "haggai"
+      ],
+      "relatedEventIds": [
+        "event-temple-rebuilding-resumes-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "성전 재건",
+          "en": "Temple rebuilding"
+        },
+        {
+          "ko": "포로 귀환 이후",
+          "en": "Post-exile"
+        },
+        {
+          "ko": "촉구",
+          "en": "Call"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-zechariah-1",
+      "chapterContextId": "chapter-context-zechariah-1",
+      "bookId": "zechariah",
+      "chapter": 1,
+      "title": {
+        "ko": "스가랴 1장 포로 귀환 격려 문맥",
+        "en": "Zechariah 1 Post-exile Encouragement Context"
+      },
+      "summary": {
+        "ko": "스가랴 1장은 포로 귀환 이후의 격려와 성전 재건 배경이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Zechariah 1 is a chapter-level context row where post-exile encouragement and the temple-rebuilding background come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 포로 귀환 격려 문맥",
+        "en": "Chapter-level post-exile-encouragement context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "zechariah",
+          "label": {
+            "ko": "스가랴 1장",
+            "en": "Zechariah 1"
+          },
+          "reference": "Zechariah 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 상징 요소를 과도하게 해석하거나 완결된 체계로 정리하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-interpret symbolic elements or resolve them into a complete system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "zechariah"
+      ],
+      "relatedEventIds": [
+        "event-temple-rebuilding-resumes-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "포로 귀환 이후",
+          "en": "Post-exile"
+        },
+        {
+          "ko": "격려",
+          "en": "Encouragement"
+        },
+        {
+          "ko": "성전 재건",
+          "en": "Temple rebuilding"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-malachi-1",
+      "chapterContextId": "chapter-context-malachi-1",
+      "bookId": "malachi",
+      "chapter": 1,
+      "title": {
+        "ko": "말라기 1장 언약 책망 문맥",
+        "en": "Malachi 1 Covenant Rebuke Context"
+      },
+      "summary": {
+        "ko": "말라기 1장은 포로 귀환 이후의 언약 책망과 예배 점검이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Malachi 1 is a chapter-level context row where post-exile covenant rebuke and worship assessment come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 언약 책망 문맥",
+        "en": "Chapter-level covenant-rebuke context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "malachi",
+          "label": {
+            "ko": "말라기 1장",
+            "en": "Malachi 1"
+          },
+          "reference": "Malachi 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 완결된 교리 체계나 종말론 체계로 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the chapter into a complete doctrinal or eschatological system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "malachi"
+      ],
+      "relatedEventIds": [
+        "event-malachi-post-exile-rebuke-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "언약 책망",
+          "en": "Covenant rebuke"
+        },
+        {
+          "ko": "예배 점검",
+          "en": "Worship assessment"
+        },
+        {
+          "ko": "포로 귀환 이후",
+          "en": "Post-exile"
         }
       ],
       "isSkeleton": false
