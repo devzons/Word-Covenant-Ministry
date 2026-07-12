@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.19.0-pilot",
+  "packageVersion": "0.20.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -4498,6 +4498,420 @@
         {
           "ko": "선지서 서두",
           "en": "Prophetic opening"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-19",
+      "chapterContextId": "chapter-context-exodus-19",
+      "bookId": "exodus",
+      "chapter": 19,
+      "title": {
+        "ko": "출애굽기 19장 시내 언약 문맥",
+        "en": "Exodus 19 Sinai Covenant Context"
+      },
+      "summary": {
+        "ko": "출애굽기 19장은 시내 산 도착과 언약 장면의 긴장이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Exodus 19 is a chapter-level context row where the arrival at Sinai and the tension of the covenant scene come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 시내 언약 문맥",
+        "en": "Chapter-level Sinai-covenant context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 19장",
+            "en": "Exodus 19"
+          },
+          "reference": "Exodus 19",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 언약 신학 전체나 정확한 연대 계산으로 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-expand into the whole theology of covenant or exact chronology calculations."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-sinai-covenant-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "시내 산",
+          "en": "Sinai"
+        },
+        {
+          "ko": "언약",
+          "en": "Covenant"
+        },
+        {
+          "ko": "거룩한 임재",
+          "en": "Holy presence"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-judges-6",
+      "chapterContextId": "chapter-context-judges-6",
+      "bookId": "judges",
+      "chapter": 6,
+      "title": {
+        "ko": "사사기 6장 기드온 부르심 문맥",
+        "en": "Judges 6 Gideon Calling Context"
+      },
+      "summary": {
+        "ko": "사사기 6장은 억압과 구원 사이에서 기드온의 부르심이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Judges 6 is a chapter-level context row where Gideon's calling comes into view between oppression and deliverance."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 기드온 부르심 문맥",
+        "en": "Chapter-level Gideon-calling context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "judges",
+          "label": {
+            "ko": "사사기 6장",
+            "en": "Judges 6"
+          },
+          "reference": "Judges 6",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 기드온 전체 순환 서사를 이 한 장으로 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the entire Gideon cycle into this one chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "judges"
+      ],
+      "relatedEventIds": [
+        "event-gideon-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "기드온",
+          "en": "Gideon"
+        },
+        {
+          "ko": "억압과 구원",
+          "en": "Oppression and deliverance"
+        },
+        {
+          "ko": "사사 시대",
+          "en": "Judges period"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-1-kings-6",
+      "chapterContextId": "chapter-context-1-kings-6",
+      "bookId": "1-kings",
+      "chapter": 6,
+      "title": {
+        "ko": "열왕기상 6장 성전 건축 문맥",
+        "en": "1 Kings 6 Temple Construction Context"
+      },
+      "summary": {
+        "ko": "열왕기상 6장은 솔로몬 성전 건축의 전개가 드러나는 장 수준 문맥 row입니다.",
+        "en": "1 Kings 6 is a chapter-level context row where the progression of Solomon's temple construction comes into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성전 건축 문맥",
+        "en": "Chapter-level temple-construction context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 6장",
+            "en": "1 Kings 6"
+          },
+          "reference": "1 Kings 6",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 성전 신학 전체를 이 한 장으로 완결하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not resolve the whole theology of the temple through this one chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "1-kings"
+      ],
+      "relatedEventIds": [
+        "event-solomon-temple-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "솔로몬",
+          "en": "Solomon"
+        },
+        {
+          "ko": "성전",
+          "en": "Temple"
+        },
+        {
+          "ko": "건축",
+          "en": "Construction"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-2-kings-14",
+      "chapterContextId": "chapter-context-2-kings-14",
+      "bookId": "2-kings",
+      "chapter": 14,
+      "title": {
+        "ko": "열왕기하 14장 여로보암 2세 시대 문맥",
+        "en": "2 Kings 14 Jeroboam II Context"
+      },
+      "summary": {
+        "ko": "열왕기하 14장은 여로보암 2세 시대와 북왕국 배경이 드러나는 장 수준 문맥 row입니다.",
+        "en": "2 Kings 14 is a chapter-level context row where the era of Jeroboam II and the northern-kingdom background come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 여로보암 2세 문맥",
+        "en": "Chapter-level Jeroboam-II context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 14장",
+            "en": "2 Kings 14"
+          },
+          "reference": "2 Kings 14",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 북왕국 전체 재구성이나 상세 연대 계산으로 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-expand into a full reconstruction of the northern kingdom or detailed chronology calculations."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "2-kings"
+      ],
+      "relatedEventIds": [
+        "event-jeroboam-ii-and-prophetic-context-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "북왕국",
+          "en": "Northern kingdom"
+        },
+        {
+          "ko": "여로보암 2세",
+          "en": "Jeroboam II"
+        },
+        {
+          "ko": "선지 시대 배경",
+          "en": "Prophetic-era setting"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-2-chronicles-26",
+      "chapterContextId": "chapter-context-2-chronicles-26",
+      "bookId": "2-chronicles",
+      "chapter": 26,
+      "title": {
+        "ko": "역대하 26장 웃시야 시대 문맥",
+        "en": "2 Chronicles 26 Uzziah Context"
+      },
+      "summary": {
+        "ko": "역대하 26장은 웃시야 시대와 이사야 시대 배경이 맞물리는 장 수준 문맥 row입니다.",
+        "en": "2 Chronicles 26 is a chapter-level context row where the era of Uzziah and the background of Isaiah's period intersect."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 웃시야 시대 문맥",
+        "en": "Chapter-level Uzziah-era context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-chronicles",
+          "label": {
+            "ko": "역대하 26장",
+            "en": "2 Chronicles 26"
+          },
+          "reference": "2 Chronicles 26",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 이사야 시대 전체 선지 배경으로 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-expand into the entire prophetic background of Isaiah's era."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "2-chronicles"
+      ],
+      "relatedEventIds": [
+        "event-uzziah-and-isaiah-context-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "웃시야",
+          "en": "Uzziah"
+        },
+        {
+          "ko": "유다 왕국",
+          "en": "Kingdom of Judah"
+        },
+        {
+          "ko": "이사야 시대 배경",
+          "en": "Isaiah-era setting"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-isaiah-36",
+      "chapterContextId": "chapter-context-isaiah-36",
+      "bookId": "isaiah",
+      "chapter": 36,
+      "title": {
+        "ko": "이사야 36장 히스기야와 앗수르 위기 문맥",
+        "en": "Isaiah 36 Hezekiah and Assyria Crisis Context"
+      },
+      "summary": {
+        "ko": "이사야 36장은 히스기야 시대의 앗수르 위기가 전면에 드러나는 장 수준 문맥 row입니다.",
+        "en": "Isaiah 36 is a chapter-level context row where the Assyrian crisis in the days of Hezekiah comes into full view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 히스기야와 앗수르 위기 문맥",
+        "en": "Chapter-level Hezekiah-and-Assyria-crisis context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "isaiah",
+          "label": {
+            "ko": "이사야 36장",
+            "en": "Isaiah 36"
+          },
+          "reference": "Isaiah 36",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 이사야 37장까지 한 번에 중첩시키거나 상세 군사·지리 재구성으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not fold Isaiah 37 into the same row or expand into detailed military or geographic reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "isaiah"
+      ],
+      "relatedEventIds": [
+        "event-hezekiah-and-assyria-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "히스기야",
+          "en": "Hezekiah"
+        },
+        {
+          "ko": "앗수르 위기",
+          "en": "Assyrian crisis"
+        },
+        {
+          "ko": "예언서 역사 위기",
+          "en": "Prophetic historical crisis"
         }
       ],
       "isSkeleton": false
