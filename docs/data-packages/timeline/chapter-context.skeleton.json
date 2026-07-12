@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.16.0-pilot",
+  "packageVersion": "0.17.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -3714,7 +3714,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 출애굽 전체 신학이나 정확한 이동 경로 지리로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into full Exodus theology or exact route geography."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -3783,7 +3783,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 지도형 지리 확장이나 세부 이동 경로 재구성으로 나아가지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into map-style geography or detailed route reconstruction."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -3852,7 +3852,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 포로 전체 신학이나 모든 애가 해석을 포괄하는 체계로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into a full exile theology or a complete system for interpreting all lament material."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -3921,7 +3921,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 포로기 후 상세 연대를 재구성하거나 anchor 범위를 넘어 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not reconstruct detailed post-exilic chronology or expand beyond the current anchor range."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -3990,7 +3990,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 상징 요소를 과도하게 해석하거나 완결된 체계로 정리하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-interpret symbolic elements or resolve them into a complete system."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4059,7 +4059,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 완결된 교리 체계나 종말론 체계로 압축하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not compress the chapter into a complete doctrinal or eschatological system."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
