@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.9.0-pilot",
+  "packageVersion": "0.10.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -2428,6 +2428,420 @@
         {
           "ko": "정체성 권면",
           "en": "Identity exhortation"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-2-kings-17",
+      "chapterContextId": "chapter-context-2-kings-17",
+      "bookId": "2-kings",
+      "chapter": 17,
+      "title": {
+        "ko": "열왕기하 17장 북이스라엘 유배 문맥",
+        "en": "2 Kings 17 Northern Kingdom Exile Context"
+      },
+      "summary": {
+        "ko": "열왕기하 17장은 북이스라엘의 붕괴와 유배 전환이 드러나는 장 수준 문맥 row입니다.",
+        "en": "2 Kings 17 is a chapter-level context row where the collapse of the Northern Kingdom and the turn toward exile come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 북이스라엘 유배 문맥",
+        "en": "Chapter-level Northern Kingdom exile context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 17장",
+            "en": "2 Kings 17"
+          },
+          "reference": "2 Kings 17",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 북왕국 멸망 배경을 세부 연대 계산이나 정치 재구성으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand the Northern Kingdom's downfall into detailed chronology calculations or political reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "2-kings"
+      ],
+      "relatedEventIds": [
+        "event-northern-kingdom-exile-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "북왕국",
+          "en": "Northern Kingdom"
+        },
+        {
+          "ko": "유배",
+          "en": "Exile"
+        },
+        {
+          "ko": "붕괴",
+          "en": "Collapse"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-2-kings-25",
+      "chapterContextId": "chapter-context-2-kings-25",
+      "bookId": "2-kings",
+      "chapter": 25,
+      "title": {
+        "ko": "열왕기하 25장 예루살렘 함락과 유배 문맥",
+        "en": "2 Kings 25 Jerusalem Fall and Exile Context"
+      },
+      "summary": {
+        "ko": "열왕기하 25장은 예루살렘 함락과 남유다 유배의 전환이 드러나는 장 수준 문맥 row입니다.",
+        "en": "2 Kings 25 is a chapter-level context row where the fall of Jerusalem and the transition into Southern Kingdom exile come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 예루살렘 함락과 유배 문맥",
+        "en": "Chapter-level Jerusalem-fall-and-exile context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 25장",
+            "en": "2 Kings 25"
+          },
+          "reference": "2 Kings 25",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 예루살렘 함락과 유배를 정확한 연대 체계나 세부 역사 재구성으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand Jerusalem's fall and exile into an exact chronology system or detailed historical reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "2-kings"
+      ],
+      "relatedEventIds": [
+        "event-southern-kingdom-exile-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예루살렘 함락",
+          "en": "Jerusalem fall"
+        },
+        {
+          "ko": "남왕국",
+          "en": "Southern Kingdom"
+        },
+        {
+          "ko": "유배",
+          "en": "Exile"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-esther-4",
+      "chapterContextId": "chapter-context-esther-4",
+      "bookId": "esther",
+      "chapter": 4,
+      "title": {
+        "ko": "에스더 4장 구원 위기 문맥",
+        "en": "Esther 4 Deliverance Crisis Context"
+      },
+      "summary": {
+        "ko": "에스더 4장은 공동체의 위기와 중재 결단의 장면이 모이는 장 수준 문맥 row입니다.",
+        "en": "Esther 4 is a chapter-level context row where communal crisis and the scene of decisive intervention come together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 구원 위기 문맥",
+        "en": "Chapter-level deliverance-crisis context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "esther",
+          "label": {
+            "ko": "에스더 4장",
+            "en": "Esther 4"
+          },
+          "reference": "Esther 4",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 위기와 구원의 장면을 포괄적 섭리 신학 설명으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand the crisis-and-deliverance scene into a comprehensive theology of providence."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "esther"
+      ],
+      "relatedEventIds": [
+        "event-esther-deliverance-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "위기",
+          "en": "Crisis"
+        },
+        {
+          "ko": "중재",
+          "en": "Intercession"
+        },
+        {
+          "ko": "구원",
+          "en": "Deliverance"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-malachi-3",
+      "chapterContextId": "chapter-context-malachi-3",
+      "bookId": "malachi",
+      "chapter": 3,
+      "title": {
+        "ko": "말라기 3장 포로 귀환 후 책망 문맥",
+        "en": "Malachi 3 Post-exile Rebuke Context"
+      },
+      "summary": {
+        "ko": "말라기 3장은 포로 귀환 후 공동체를 향한 책망과 언약 경고의 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Malachi 3 is a chapter-level context row where rebuke toward the post-exile community and the flow of covenant warning come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 포로 귀환 후 책망 문맥",
+        "en": "Chapter-level post-exile-rebuke context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "malachi",
+          "label": {
+            "ko": "말라기 3장",
+            "en": "Malachi 3"
+          },
+          "reference": "Malachi 3",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 책망과 경고를 후대의 교리 체계나 종말론 구조로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand rebuke and warning into later doctrinal systems or eschatological structures."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "malachi"
+      ],
+      "relatedEventIds": [
+        "event-malachi-post-exile-rebuke-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "포로 귀환 후",
+          "en": "Post-exile"
+        },
+        {
+          "ko": "책망",
+          "en": "Rebuke"
+        },
+        {
+          "ko": "언약 경고",
+          "en": "Covenant warning"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-john-6",
+      "chapterContextId": "chapter-context-john-6",
+      "bookId": "john",
+      "chapter": 6,
+      "title": {
+        "ko": "요한복음 6장 오천 명 먹이심 문맥",
+        "en": "John 6 Feeding Five Thousand Context"
+      },
+      "summary": {
+        "ko": "요한복음 6장은 많은 무리를 향한 표적과 그에 대한 반응의 흐름이 모이는 장 수준 문맥 row입니다.",
+        "en": "John 6 is a chapter-level context row where the sign toward the crowd and the flow of response to it come together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 오천 명 먹이심 문맥",
+        "en": "Chapter-level feeding-five-thousand context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "john",
+          "label": {
+            "ko": "요한복음 6장",
+            "en": "John 6"
+          },
+          "reference": "John 6",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 병행 본문 조화나 선택 절 해석 중심의 별도 비교 체계를 만들지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not create a separate comparison system around harmonizing parallel accounts or selected-verse interpretation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "john"
+      ],
+      "relatedEventIds": [
+        "event-feeding-five-thousand-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "표적",
+          "en": "Sign"
+        },
+        {
+          "ko": "무리",
+          "en": "Crowd"
+        },
+        {
+          "ko": "반응",
+          "en": "Response"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-jude-1",
+      "chapterContextId": "chapter-context-jude-1",
+      "bookId": "jude",
+      "chapter": 1,
+      "title": {
+        "ko": "유다서 1장 사도적 경고 문맥",
+        "en": "Jude 1 Apostolic Warning Context"
+      },
+      "summary": {
+        "ko": "유다서 1장은 사도적 증언 안에서 공동체를 향한 경고와 권면의 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Jude 1 is a chapter-level context row where warning and exhortation toward the community come into view within apostolic witness."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 사도적 경고 문맥",
+        "en": "Chapter-level apostolic-warning context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "jude",
+          "label": {
+            "ko": "유다서 1장",
+            "en": "Jude 1"
+          },
+          "reference": "Jude 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 경고와 권면을 후대 논쟁 체계의 완결 요약으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand warning and exhortation into a complete summary of later debate systems."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "jude"
+      ],
+      "relatedEventIds": [
+        "event-apostolic-witness-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "사도적 증언",
+          "en": "Apostolic witness"
+        },
+        {
+          "ko": "경고",
+          "en": "Warning"
+        },
+        {
+          "ko": "권면",
+          "en": "Exhortation"
         }
       ],
       "isSkeleton": false
