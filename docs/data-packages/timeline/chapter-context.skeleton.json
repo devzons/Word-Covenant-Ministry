@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.10.0-pilot",
+  "packageVersion": "0.11.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -2472,7 +2472,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 북왕국 멸망 배경을 세부 연대 계산이나 정치 재구성으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand the Northern Kingdom's downfall into detailed chronology calculations or political reconstruction."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -2541,7 +2541,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 예루살렘 함락과 유배를 정확한 연대 체계나 세부 역사 재구성으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand Jerusalem's fall and exile into an exact chronology system or detailed historical reconstruction."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -2610,7 +2610,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 위기와 구원의 장면을 포괄적 섭리 신학 설명으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand the crisis-and-deliverance scene into a comprehensive theology of providence."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -2679,7 +2679,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 책망과 경고를 후대의 교리 체계나 종말론 구조로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand rebuke and warning into later doctrinal systems or eschatological structures."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -2748,7 +2748,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 병행 본문 조화나 선택 절 해석 중심의 별도 비교 체계를 만들지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not create a separate comparison system around harmonizing parallel accounts or selected-verse interpretation."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -2817,7 +2817,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 경고와 권면을 후대 논쟁 체계의 완결 요약으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand warning and exhortation into a complete summary of later debate systems."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
