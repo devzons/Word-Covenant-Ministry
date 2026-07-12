@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.14.0-pilot",
+  "packageVersion": "0.15.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -3300,7 +3300,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 광야 여정의 정확한 연대나 이동 경로 지리를 재구성하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not reconstruct exact wilderness chronology or route geography."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -3369,7 +3369,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 지도 정보나 책 전체 언약 신학 요약으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into map-style detail or a compression of whole-book covenant theology."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -3438,7 +3438,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 사무엘 생애 전체를 확장 전기처럼 재구성하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not reconstruct the whole life of Samuel as an expanded biography."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -3507,7 +3507,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 성전 신학 전체를 포괄하는 체계 요약으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into a comprehensive system summary of temple theology."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -3576,7 +3576,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 세부 연대 체계나 예언서 전체 체계 요약으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into a detailed chronology system or a full system summary of the prophetic corpus."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -3645,7 +3645,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 선택 절 해석이나 완결된 교리 체계로 압축하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not compress the chapter into selected-verse interpretation or a complete doctrinal system."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
