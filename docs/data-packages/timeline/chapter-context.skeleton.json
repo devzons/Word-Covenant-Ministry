@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.17.0-pilot",
+  "packageVersion": "0.18.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -4084,6 +4084,420 @@
         {
           "ko": "포로 귀환 이후",
           "en": "Post-exile"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-judges-4",
+      "chapterContextId": "chapter-context-judges-4",
+      "bookId": "judges",
+      "chapter": 4,
+      "title": {
+        "ko": "사사기 4장 드보라와 바락 문맥",
+        "en": "Judges 4 Deborah and Barak Context"
+      },
+      "summary": {
+        "ko": "사사기 4장은 드보라와 바락의 구원 서사와 사사 시대의 한 국면이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Judges 4 is a chapter-level context row where the deliverance account of Deborah and Barak and one phase of the judges period come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 드보라와 바락 문맥",
+        "en": "Chapter-level Deborah-and-Barak context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "judges",
+          "label": {
+            "ko": "사사기 4장",
+            "en": "Judges 4"
+          },
+          "reference": "Judges 4",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 사사기의 전체 순환 구조를 이 한 장으로 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the whole cyclical structure of Judges into this single chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "judges"
+      ],
+      "relatedEventIds": [
+        "event-deborah-and-barak-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "사사 시대",
+          "en": "Judges period"
+        },
+        {
+          "ko": "구원",
+          "en": "Deliverance"
+        },
+        {
+          "ko": "드보라와 바락",
+          "en": "Deborah and Barak"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-ezra-5",
+      "chapterContextId": "chapter-context-ezra-5",
+      "bookId": "ezra",
+      "chapter": 5,
+      "title": {
+        "ko": "에스라 5장 성전 재건 재개 문맥",
+        "en": "Ezra 5 Temple Rebuilding Resumes Context"
+      },
+      "summary": {
+        "ko": "에스라 5장은 포로 귀환 이후 성전 재건이 다시 추진되는 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Ezra 5 is a chapter-level context row where the post-exile resumption of temple rebuilding comes into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성전 재건 재개 문맥",
+        "en": "Chapter-level temple-rebuilding-resumes context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "ezra",
+          "label": {
+            "ko": "에스라 5장",
+            "en": "Ezra 5"
+          },
+          "reference": "Ezra 5",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 상세한 페르시아 행정 배경이나 정확한 연대를 과도하게 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-assert detailed Persian administrative background or exact chronology."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "ezra"
+      ],
+      "relatedEventIds": [
+        "event-temple-rebuilding-resumes-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "포로 귀환 이후",
+          "en": "Post-exile"
+        },
+        {
+          "ko": "성전 재건",
+          "en": "Temple rebuilding"
+        },
+        {
+          "ko": "재개",
+          "en": "Resumption"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-ezra-6",
+      "chapterContextId": "chapter-context-ezra-6",
+      "bookId": "ezra",
+      "chapter": 6,
+      "title": {
+        "ko": "에스라 6장 제2성전 회복 문맥",
+        "en": "Ezra 6 Second Temple Restoration Context"
+      },
+      "summary": {
+        "ko": "에스라 6장은 제2성전 완공과 귀환 공동체의 회복 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Ezra 6 is a chapter-level context row where the completion of the second temple and the restoration flow of the return community come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 제2성전 회복 문맥",
+        "en": "Chapter-level second-temple-restoration context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "ezra",
+          "label": {
+            "ko": "에스라 6장",
+            "en": "Ezra 6"
+          },
+          "reference": "Ezra 6",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 귀환 이후 신학 전체를 이 한 장에 과도하게 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-compress the whole theology of return and restoration into this one chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "ezra"
+      ],
+      "relatedEventIds": [
+        "event-second-temple-restoration-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "제2성전",
+          "en": "Second Temple"
+        },
+        {
+          "ko": "회복",
+          "en": "Restoration"
+        },
+        {
+          "ko": "포로 귀환 이후",
+          "en": "Post-exile"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-ezra-7",
+      "chapterContextId": "chapter-context-ezra-7",
+      "bookId": "ezra",
+      "chapter": 7,
+      "title": {
+        "ko": "에스라 7장 에스라 도착 문맥",
+        "en": "Ezra 7 Ezra Arrival Context"
+      },
+      "summary": {
+        "ko": "에스라 7장은 에스라의 도착과 율법 사역 배경이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Ezra 7 is a chapter-level context row where Ezra’s arrival and the background of his Torah ministry come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 에스라 도착 문맥",
+        "en": "Chapter-level Ezra-arrival context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "ezra",
+          "label": {
+            "ko": "에스라 7장",
+            "en": "Ezra 7"
+          },
+          "reference": "Ezra 7",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 상세 연대 계산이나 완결된 율법 개혁 체계로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into detailed chronology calculations or a complete Torah-reform system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "ezra"
+      ],
+      "relatedEventIds": [
+        "event-ezra-arrives-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "에스라",
+          "en": "Ezra"
+        },
+        {
+          "ko": "율법 사역",
+          "en": "Torah ministry"
+        },
+        {
+          "ko": "포로 귀환 이후",
+          "en": "Post-exile"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-nehemiah-6",
+      "chapterContextId": "chapter-context-nehemiah-6",
+      "bookId": "nehemiah",
+      "chapter": 6,
+      "title": {
+        "ko": "느헤미야 6장 성벽 재건 완결 문맥",
+        "en": "Nehemiah 6 Wall Rebuilding Completion Context"
+      },
+      "summary": {
+        "ko": "느헤미야 6장은 반대 속에서도 성벽 재건이 완결되어 가는 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Nehemiah 6 is a chapter-level context row where the completion of wall rebuilding in the face of opposition comes into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성벽 재건 완결 문맥",
+        "en": "Chapter-level wall-rebuilding-completion context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "nehemiah",
+          "label": {
+            "ko": "느헤미야 6장",
+            "en": "Nehemiah 6"
+          },
+          "reference": "Nehemiah 6",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 지도·지리 설명이나 정치 재구성을 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-expand into map/geography description or political reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "nehemiah"
+      ],
+      "relatedEventIds": [
+        "event-nehemiah-wall-rebuilding-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "느헤미야",
+          "en": "Nehemiah"
+        },
+        {
+          "ko": "성벽 재건",
+          "en": "Wall rebuilding"
+        },
+        {
+          "ko": "반대와 완결",
+          "en": "Opposition and completion"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-isaiah-1",
+      "chapterContextId": "chapter-context-isaiah-1",
+      "bookId": "isaiah",
+      "chapter": 1,
+      "title": {
+        "ko": "이사야 1장 선지서 서두 문맥",
+        "en": "Isaiah 1 Prophetic Opening Context"
+      },
+      "summary": {
+        "ko": "이사야 1장은 이사야서의 서두에서 책망과 호소가 드러나는 장 수준 문맥 row입니다.",
+        "en": "Isaiah 1 is a chapter-level context row where rebuke and appeal come into view at the opening of Isaiah."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 이사야 서두 문맥",
+        "en": "Chapter-level Isaiah-opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "isaiah",
+          "label": {
+            "ko": "이사야 1장",
+            "en": "Isaiah 1"
+          },
+          "reference": "Isaiah 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 이사야 전체의 선지 체계를 이 한 장으로 완결하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not resolve the whole prophetic system of Isaiah through this one chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "isaiah"
+      ],
+      "relatedEventIds": [
+        "event-uzziah-and-isaiah-context-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "이사야",
+          "en": "Isaiah"
+        },
+        {
+          "ko": "책망",
+          "en": "Rebuke"
+        },
+        {
+          "ko": "선지서 서두",
+          "en": "Prophetic opening"
         }
       ],
       "isSkeleton": false
