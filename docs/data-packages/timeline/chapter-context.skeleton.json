@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.11.0-pilot",
+  "packageVersion": "0.12.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -2842,6 +2842,420 @@
         {
           "ko": "권면",
           "en": "Exhortation"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-numbers-13",
+      "chapterContextId": "chapter-context-numbers-13",
+      "bookId": "numbers",
+      "chapter": 13,
+      "title": {
+        "ko": "민수기 13장 가데스바네아 정탐 문맥",
+        "en": "Numbers 13 Kadesh-Barnea Spies Context"
+      },
+      "summary": {
+        "ko": "민수기 13장은 가데스바네아 정탐과 그에 대한 공동체 반응의 전조가 드러나는 장 수준 문맥 row입니다.",
+        "en": "Numbers 13 is a chapter-level context row where the Kadesh-Barnea spying mission and the early shape of the community's response come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 가데스바네아 정탐 문맥",
+        "en": "Chapter-level Kadesh-Barnea spies context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "numbers",
+          "label": {
+            "ko": "민수기 13장",
+            "en": "Numbers 13"
+          },
+          "reference": "Numbers 13",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 이후 광야 심판 전개나 세부 지리 재구성으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into the later wilderness-judgment development or a detailed geographic reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "numbers"
+      ],
+      "relatedEventIds": [
+        "event-kadesh-barnea-spies-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "정탐",
+          "en": "Spies"
+        },
+        {
+          "ko": "가데스바네아",
+          "en": "Kadesh-Barnea"
+        },
+        {
+          "ko": "공동체 반응",
+          "en": "Community response"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-deuteronomy-34",
+      "chapterContextId": "chapter-context-deuteronomy-34",
+      "bookId": "deuteronomy",
+      "chapter": 34,
+      "title": {
+        "ko": "신명기 34장 모세 죽음과 전환 문맥",
+        "en": "Deuteronomy 34 Moses Death and Transition Context"
+      },
+      "summary": {
+        "ko": "신명기 34장은 모세의 죽음과 지도력 전환이 마무리되는 장 수준 문맥 row입니다.",
+        "en": "Deuteronomy 34 is a chapter-level context row where the death of Moses and the close of a leadership transition come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 모세 죽음과 전환 문맥",
+        "en": "Chapter-level Moses-death-and-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "deuteronomy",
+          "label": {
+            "ko": "신명기 34장",
+            "en": "Deuteronomy 34"
+          },
+          "reference": "Deuteronomy 34",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 모세 생애를 확장 전기나 정확한 연대 체계로 재구성하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reconstruct the life of Moses into an expanded biography or exact chronology system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "deuteronomy"
+      ],
+      "relatedEventIds": [
+        "event-moses-death-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "모세",
+          "en": "Moses"
+        },
+        {
+          "ko": "죽음",
+          "en": "Death"
+        },
+        {
+          "ko": "지도력 전환",
+          "en": "Leadership transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-ruth-4",
+      "chapterContextId": "chapter-context-ruth-4",
+      "bookId": "ruth",
+      "chapter": 4,
+      "title": {
+        "ko": "룻기 4장 룻과 보아스 결말 문맥",
+        "en": "Ruth 4 Ruth and Boaz Resolution Context"
+      },
+      "summary": {
+        "ko": "룻기 4장은 룻과 보아스의 결말과 계보 연결이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Ruth 4 is a chapter-level context row where the resolution of Ruth and Boaz and the linkage to lineage come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 룻과 보아스 결말 문맥",
+        "en": "Chapter-level Ruth-and-Boaz resolution context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "ruth",
+          "label": {
+            "ko": "룻기 4장",
+            "en": "Ruth 4"
+          },
+          "reference": "Ruth 4",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 결말과 계보 연결을 포괄적 유형론 체계로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand the resolution and lineage link into a comprehensive typological system."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "ruth"
+      ],
+      "relatedEventIds": [
+        "event-ruth-and-boaz-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "룻과 보아스",
+          "en": "Ruth and Boaz"
+        },
+        {
+          "ko": "결말",
+          "en": "Resolution"
+        },
+        {
+          "ko": "계보 연결",
+          "en": "Lineage link"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-1-kings-18",
+      "chapterContextId": "chapter-context-1-kings-18",
+      "bookId": "1-kings",
+      "chapter": 18,
+      "title": {
+        "ko": "열왕기상 18장 갈멜산 대결 문맥",
+        "en": "1 Kings 18 Elijah at Carmel Context"
+      },
+      "summary": {
+        "ko": "열왕기상 18장은 갈멜산 대결과 예언자적 충돌이 집중되는 장 수준 문맥 row입니다.",
+        "en": "1 Kings 18 is a chapter-level context row where the Carmel confrontation and prophetic conflict are concentrated."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 갈멜산 대결 문맥",
+        "en": "Chapter-level Carmel confrontation context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-kings",
+          "label": {
+            "ko": "열왕기상 18장",
+            "en": "1 Kings 18"
+          },
+          "reference": "1 Kings 18",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 예언자적 충돌을 지도 정보나 과도한 서사 재구성으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand the prophetic conflict into map-style detail or excessive narrative reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "1-kings"
+      ],
+      "relatedEventIds": [
+        "event-elijah-at-carmel-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "엘리야",
+          "en": "Elijah"
+        },
+        {
+          "ko": "갈멜산",
+          "en": "Carmel"
+        },
+        {
+          "ko": "대결",
+          "en": "Confrontation"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-hosea-1",
+      "chapterContextId": "chapter-context-hosea-1",
+      "bookId": "hosea",
+      "chapter": 1,
+      "title": {
+        "ko": "호세아 1장 예언 시작 문맥",
+        "en": "Hosea 1 Prophetic Opening Context"
+      },
+      "summary": {
+        "ko": "호세아 1장은 예언 시작과 북왕국 시대 배경이 함께 드러나는 장 수준 문맥 row입니다.",
+        "en": "Hosea 1 is a chapter-level context row where the opening of the prophetic witness and the Northern Kingdom setting come into view together."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 예언 시작 문맥",
+        "en": "Chapter-level prophetic-opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "hosea",
+          "label": {
+            "ko": "호세아 1장",
+            "en": "Hosea 1"
+          },
+          "reference": "Hosea 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 예언 배경을 세부 연대 체계나 전체 예언 체계 요약으로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand the prophetic setting into a detailed chronology system or a full summary of the prophetic corpus."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "hosea"
+      ],
+      "relatedEventIds": [
+        "event-jeroboam-ii-and-prophetic-context-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예언 시작",
+          "en": "Prophetic opening"
+        },
+        {
+          "ko": "북왕국",
+          "en": "Northern Kingdom"
+        },
+        {
+          "ko": "예언 배경",
+          "en": "Prophetic setting"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-galatians-1",
+      "chapterContextId": "chapter-context-galatians-1",
+      "bookId": "galatians",
+      "chapter": 1,
+      "title": {
+        "ko": "갈라디아서 1장 바울 서신 시작 문맥",
+        "en": "Galatians 1 Pauline Letter Opening Context"
+      },
+      "summary": {
+        "ko": "갈라디아서 1장은 바울 서신의 시작과 복음 변증의 흐름이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Galatians 1 is a chapter-level context row where the opening of a Pauline letter and the flow of gospel defense come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 바울 서신 시작 문맥",
+        "en": "Chapter-level Pauline-letter-opening context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "galatians",
+          "label": {
+            "ko": "갈라디아서 1장",
+            "en": "Galatians 1"
+          },
+          "reference": "Galatians 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "draft pilot row / authoring pass",
+        "en": "Draft pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 서신 서두와 복음 변증을 완결된 교리 체계나 선택 절 해석으로 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the letter opening and gospel defense into a complete doctrinal system or selected-verse interpretation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first draft pilot row",
+        "en": "Scripture-first draft pilot row"
+      },
+      "relatedBookIds": [
+        "galatians"
+      ],
+      "relatedEventIds": [
+        "event-pauline-letters-to-churches-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "바울 서신",
+          "en": "Pauline letter"
+        },
+        {
+          "ko": "복음 변증",
+          "en": "Gospel defense"
+        },
+        {
+          "ko": "서신 시작",
+          "en": "Letter opening"
         }
       ],
       "isSkeleton": false
