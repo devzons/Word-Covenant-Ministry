@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.6.0-pilot",
+  "packageVersion": "0.7.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -1644,7 +1644,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 다윗 언약과 왕권 약속을 확장된 메시아 체계 설명으로 단순화하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not simplify the Davidic covenant and royal promise into an expanded messianic system explanation."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -1713,7 +1713,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 귀환과 회복의 배경을 세부 연대 계산이나 단일 복구 서사로 고정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not fix the setting of return and restoration into detailed chronology calculations or a single restoration narrative."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -1782,7 +1782,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 재건 배경을 상세 지리 설명이나 공사 단계 목록으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand the rebuilding setting into detailed geography or a staged construction map."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -1851,7 +1851,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 환상 상징을 단일 도식이나 세부 상징 해설로 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not finalize visionary symbolism into a single scheme or detailed symbolic decoding."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -1920,7 +1920,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 초기 교회 논의를 후대 교리 체계 전체로 확장하거나 단일 공식으로 단순화하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand early church deliberation into a full later doctrinal system or reduce it to a single formula."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
@@ -1989,7 +1989,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 새 창조와 완성의 전망을 특정 종말론 시간표나 체계로 고정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not fix the prospect of new creation and consummation into a specific end-times timetable or system."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first draft pilot row",
         "en": "Scripture-first draft pilot row"
