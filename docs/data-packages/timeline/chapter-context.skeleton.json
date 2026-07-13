@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.21.0-pilot",
+  "packageVersion": "0.22.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -4912,6 +4912,420 @@
         {
           "ko": "예언서 역사 위기",
           "en": "Prophetic historical crisis"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-genesis-11",
+      "chapterContextId": "chapter-context-genesis-11",
+      "bookId": "genesis",
+      "chapter": 11,
+      "title": {
+        "ko": "창세기 11장 바벨 문맥",
+        "en": "Genesis 11 Babel Context"
+      },
+      "summary": {
+        "ko": "창세기 11장은 바벨 사건과 흩어짐의 전환이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Genesis 11 is a chapter-level context row where the Babel episode and the turn toward dispersion come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 바벨 문맥",
+        "en": "Chapter-level Babel context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "genesis",
+          "label": {
+            "ko": "창세기 11장",
+            "en": "Genesis 11"
+          },
+          "reference": "Genesis 11",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 태고 역사 전체를 압축하거나 언어·민족 추정을 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the whole primeval-history arc or over-expand into language or ethnicity speculation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "genesis"
+      ],
+      "relatedEventIds": [
+        "event-babel-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "바벨",
+          "en": "Babel"
+        },
+        {
+          "ko": "흩어짐",
+          "en": "Dispersion"
+        },
+        {
+          "ko": "전환",
+          "en": "Turning point"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-40",
+      "chapterContextId": "chapter-context-exodus-40",
+      "bookId": "exodus",
+      "chapter": 40,
+      "title": {
+        "ko": "출애굽기 40장 성막 완성 문맥",
+        "en": "Exodus 40 Tabernacle Completion Context"
+      },
+      "summary": {
+        "ko": "출애굽기 40장은 성막이 세워지고 임재의 표지가 드러나는 장 수준 문맥 row입니다.",
+        "en": "Exodus 40 is a chapter-level context row where the tabernacle is set up and the sign of divine presence comes into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성막 완성 문맥",
+        "en": "Chapter-level tabernacle-completion context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 40장",
+            "en": "Exodus 40"
+          },
+          "reference": "Exodus 40",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 성막 신학 전체를 이 한 장으로 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-expand the whole theology of the tabernacle through this one chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-tabernacle-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "성막",
+          "en": "Tabernacle"
+        },
+        {
+          "ko": "임재",
+          "en": "Presence"
+        },
+        {
+          "ko": "완성",
+          "en": "Completion"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-1-samuel-10",
+      "chapterContextId": "chapter-context-1-samuel-10",
+      "bookId": "1-samuel",
+      "chapter": 10,
+      "title": {
+        "ko": "사무엘상 10장 왕정 시작 문맥",
+        "en": "1 Samuel 10 Monarchy Beginning Context"
+      },
+      "summary": {
+        "ko": "사무엘상 10장은 사울과 왕정 시작의 전환이 드러나는 장 수준 문맥 row입니다.",
+        "en": "1 Samuel 10 is a chapter-level context row where Saul and the turn toward monarchy come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 왕정 시작 문맥",
+        "en": "Chapter-level monarchy-beginning context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "1-samuel",
+          "label": {
+            "ko": "사무엘상 10장",
+            "en": "1 Samuel 10"
+          },
+          "reference": "1 Samuel 10",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 왕정 전체 주제나 이후 역사 전개를 이 한 장으로 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not compress the whole monarchy theme or later royal history into this one chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "1-samuel"
+      ],
+      "relatedEventIds": [
+        "event-monarchy-begins-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "사울",
+          "en": "Saul"
+        },
+        {
+          "ko": "왕정",
+          "en": "Monarchy"
+        },
+        {
+          "ko": "전환",
+          "en": "Transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-2-kings-9",
+      "chapterContextId": "chapter-context-2-kings-9",
+      "bookId": "2-kings",
+      "chapter": 9,
+      "title": {
+        "ko": "열왕기하 9장 예후 전환 문맥",
+        "en": "2 Kings 9 Jehu Transition Context"
+      },
+      "summary": {
+        "ko": "열왕기하 9장은 예후 왕조 전환과 급격한 정치 변화가 드러나는 장 수준 문맥 row입니다.",
+        "en": "2 Kings 9 is a chapter-level context row where Jehu's dynastic transition and abrupt political change come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 예후 전환 문맥",
+        "en": "Chapter-level Jehu-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "2-kings",
+          "label": {
+            "ko": "열왕기하 9장",
+            "en": "2 Kings 9"
+          },
+          "reference": "2 Kings 9",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 예후 전체 순환이나 상세 정치 재구성으로 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-expand into the whole Jehu cycle or a detailed political reconstruction."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "2-kings"
+      ],
+      "relatedEventIds": [
+        "event-jehu-dynastic-transition-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예후",
+          "en": "Jehu"
+        },
+        {
+          "ko": "왕조 전환",
+          "en": "Dynastic transition"
+        },
+        {
+          "ko": "정치 변화",
+          "en": "Political change"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-jeremiah-39",
+      "chapterContextId": "chapter-context-jeremiah-39",
+      "bookId": "jeremiah",
+      "chapter": 39,
+      "title": {
+        "ko": "예레미야 39장 예루살렘 함락 문맥",
+        "en": "Jeremiah 39 Jerusalem Fall Context"
+      },
+      "summary": {
+        "ko": "예레미야 39장은 예루살렘 함락과 남유다 포로 전환이 전면에 드러나는 장 수준 문맥 row입니다.",
+        "en": "Jeremiah 39 is a chapter-level context row where Jerusalem's fall and the turn into the exile of Judah come fully into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 예루살렘 함락 문맥",
+        "en": "Chapter-level Jerusalem-fall context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "jeremiah",
+          "label": {
+            "ko": "예레미야 39장",
+            "en": "Jeremiah 39"
+          },
+          "reference": "Jeremiah 39",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 열왕기하 25장이나 예레미야애가 1장의 모든 문맥을 한 row로 중첩하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not collapse all the context of 2 Kings 25 or Lamentations 1 into one row."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "jeremiah"
+      ],
+      "relatedEventIds": [
+        "event-southern-kingdom-exile-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "예루살렘 함락",
+          "en": "Jerusalem falls"
+        },
+        {
+          "ko": "남유다",
+          "en": "Judah"
+        },
+        {
+          "ko": "포로 전환",
+          "en": "Exile transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-luke-3",
+      "chapterContextId": "chapter-context-luke-3",
+      "bookId": "luke",
+      "chapter": 3,
+      "title": {
+        "ko": "누가복음 3장 세례 요한 사역 문맥",
+        "en": "Luke 3 John the Baptist Ministry Context"
+      },
+      "summary": {
+        "ko": "누가복음 3장은 세례 요한의 선포 사역과 복음서 전환 배경이 드러나는 장 수준 문맥 row입니다.",
+        "en": "Luke 3 is a chapter-level context row where John the Baptist's proclamation ministry and a gospel-transition setting come into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 세례 요한 사역 문맥",
+        "en": "Chapter-level John-the-Baptist-ministry context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "luke",
+          "label": {
+            "ko": "누가복음 3장",
+            "en": "Luke 3"
+          },
+          "reference": "Luke 3",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 복음서 전체 조화나 selected-verse 해석으로 과도하게 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not over-expand into a full Gospel harmony or selected-verse interpretation."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "luke"
+      ],
+      "relatedEventIds": [
+        "event-john-the-baptist-ministry-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "세례 요한",
+          "en": "John the Baptist"
+        },
+        {
+          "ko": "선포",
+          "en": "Proclamation"
+        },
+        {
+          "ko": "복음서 전환",
+          "en": "Gospel transition"
         }
       ],
       "isSkeleton": false
