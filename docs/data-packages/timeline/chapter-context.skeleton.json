@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.20.0-pilot",
+  "packageVersion": "0.21.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -4542,7 +4542,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 언약 신학 전체나 정확한 연대 계산으로 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-expand into the whole theology of covenant or exact chronology calculations."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4611,7 +4611,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 기드온 전체 순환 서사를 이 한 장으로 압축하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not compress the entire Gideon cycle into this one chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4680,7 +4680,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 성전 신학 전체를 이 한 장으로 완결하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not resolve the whole theology of the temple through this one chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4749,7 +4749,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 북왕국 전체 재구성이나 상세 연대 계산으로 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-expand into a full reconstruction of the northern kingdom or detailed chronology calculations."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4818,7 +4818,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 이사야 시대 전체 선지 배경으로 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-expand into the entire prophetic background of Isaiah's era."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -4887,7 +4887,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 이사야 37장까지 한 번에 중첩시키거나 상세 군사·지리 재구성으로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not fold Isaiah 37 into the same row or expand into detailed military or geographic reconstruction."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
