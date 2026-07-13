@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.22.0-pilot",
+  "packageVersion": "0.23.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -4956,7 +4956,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 태고 역사 전체를 압축하거나 언어·민족 추정을 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not compress the whole primeval-history arc or over-expand into language or ethnicity speculation."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5025,7 +5025,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 성막 신학 전체를 이 한 장으로 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-expand the whole theology of the tabernacle through this one chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5094,7 +5094,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 왕정 전체 주제나 이후 역사 전개를 이 한 장으로 압축하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not compress the whole monarchy theme or later royal history into this one chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5163,7 +5163,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 예후 전체 순환이나 상세 정치 재구성으로 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-expand into the whole Jehu cycle or a detailed political reconstruction."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5232,7 +5232,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 열왕기하 25장이나 예레미야애가 1장의 모든 문맥을 한 row로 중첩하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not collapse all the context of 2 Kings 25 or Lamentations 1 into one row."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5301,7 +5301,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 복음서 전체 조화나 selected-verse 해석으로 과도하게 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not over-expand into a full Gospel harmony or selected-verse interpretation."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
