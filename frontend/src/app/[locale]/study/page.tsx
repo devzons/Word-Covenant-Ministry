@@ -61,6 +61,15 @@ const copy = {
         action: "Open Original Language",
         kind: "route" as const,
       },
+      {
+        id: "papers",
+        title: "Research Papers",
+        body: "Research essays on Scripture, covenant, original languages, Paja, and biblical interpretation.",
+        href: "#papers",
+        status: "Coming soon",
+        action: "Section preview",
+        kind: "anchor" as const,
+      },
     ],
     ctas: {
       read: "Read Scripture",
@@ -71,6 +80,7 @@ const copy = {
       books: "Books",
       interpretation: "Biblical Interpretation",
       originalPaja: "Original Languages & Paja",
+      papers: "Research Papers",
     },
     sectionBody: {
       sermons:
@@ -81,6 +91,8 @@ const copy = {
         "This area will focus on reading within context, comparing related passages, and keeping the passage in its own literary setting. The page is still being prepared.",
       originalPaja:
         "This area gathers Hebrew, Greek, word, and character study material as a support for deeper reading, not as a replacement for the text.",
+      papers:
+        "This section is reserved for longer research essays on Scripture, covenant, original languages, Paja, and biblical interpretation. It is still being prepared.",
     },
   },
   ko: {
@@ -131,6 +143,15 @@ const copy = {
         action: "원어 연구로 이동",
         kind: "route" as const,
       },
+      {
+        id: "papers",
+        title: "연구논문",
+        body: "성경 본문, 언약, 원어, 파자, 성경해석에 관한 깊이 있는 연구 글을 정리합니다.",
+        href: "#papers",
+        status: "준비 중",
+        action: "섹션 미리보기",
+        kind: "anchor" as const,
+      },
     ],
     ctas: {
       read: "성경읽기",
@@ -141,6 +162,7 @@ const copy = {
       books: "책소개",
       interpretation: "성경해석",
       originalPaja: "원어와 파자",
+      papers: "연구논문",
     },
     sectionBody: {
       sermons:
@@ -151,6 +173,8 @@ const copy = {
         "이 구역은 문맥을 따라 읽고 관련 구절을 비교하며, 본문을 그 자체의 자리에서 살피도록 돕는 공간으로 준비 중입니다.",
       originalPaja:
         "이 구역은 히브리어, 헬라어, 단어, 문자 연구를 본문을 더 깊이 살피기 위한 보조 자료로 제공합니다.",
+      papers:
+        "이 구역은 성경 본문, 언약, 원어, 파자, 성경해석에 관한 깊이 있는 연구 글을 정리할 예정이며, 현재 준비 중입니다.",
     },
   },
 };
@@ -277,6 +301,15 @@ export default async function StudyPage({ params }: StudyPageProps) {
                     {activeLocale === "en" ? "Open Original Language" : "원어 연구로 이동"}
                   </Link>
                 </div>
+              </article>
+              <article id="papers" className="rounded-md border border-zinc-200 bg-zinc-50 p-5 md:col-span-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                  {activeLocale === "en" ? "Coming soon" : "준비 중"}
+                </p>
+                <h3 className="text-base font-semibold text-zinc-950">
+                  {pageCopy.sections.papers}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-zinc-600">{pageCopy.sectionBody.papers}</p>
               </article>
             </div>
 
