@@ -319,7 +319,7 @@ export function BibleReader({
       verse={crossReferenceVerse ?? undefined}
       version={chapter.translation}
     >
-      <article className="flex w-full min-w-0 flex-col gap-8 overflow-x-hidden py-8 sm:py-12">
+      <article className="flex w-full min-w-0 flex-col gap-8 py-8 sm:py-12">
       <header className="flex min-w-0 max-w-full flex-col gap-5 border-b border-zinc-200 pb-6">
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">

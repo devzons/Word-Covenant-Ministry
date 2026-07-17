@@ -194,7 +194,7 @@ export function InterlinearVerse({
                         </span>
                       ) : null}
                       <span
-                        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-64 -translate-x-1/2 rounded-md border border-zinc-200 bg-white p-3 text-left text-xs leading-5 text-zinc-700 shadow-lg group-hover:block group-focus-visible:block"
+                        className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden w-64 max-w-[calc(100vw-1rem)] rounded-md border border-zinc-200 bg-white p-3 text-left text-xs leading-5 text-zinc-700 shadow-lg group-hover:block group-focus-visible:block"
                         dir="ltr"
                         role="tooltip"
                       >
