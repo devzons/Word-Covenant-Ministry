@@ -46,6 +46,12 @@ final class Plugin
         if (class_exists(BibleBooksSeeder::class)) {
             (new BibleBooksSeeder())->seed();
         }
+
+        if (class_exists(PostTypeRegistrar::class)) {
+            (new PostTypeRegistrar())->register();
+        }
+
+        flush_rewrite_rules();
     }
 
     public static function registerPostTypes(): void
