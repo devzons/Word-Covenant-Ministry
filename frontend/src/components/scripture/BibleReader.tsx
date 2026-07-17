@@ -212,6 +212,7 @@ export function BibleReader({
   const crossReferenceVerse =
     activeVerseNumber ?? visibleInterlinearVerse ?? visibleOriginalVerse ?? null;
   const activeStudyVerse = crossReferenceVerse;
+  const activeVerseHash = activeVerseId ? `#${activeVerseId}` : "";
   const selectedReferenceRange: ScriptureResearchReferenceRange | undefined = crossReferenceVerse
     ? {
         book: chapter.book,
@@ -385,13 +386,14 @@ export function BibleReader({
             </div>
 
             <div className="shrink-0 lg:border-l lg:border-zinc-200 lg:pl-4">
-              <ReaderModeControl
-                book={chapter.book}
-                chapter={chapter.chapter}
-                locale={locale}
-                mode={mode}
-                version={chapter.translation}
-              />
+        <ReaderModeControl
+          book={chapter.book}
+          chapter={chapter.chapter}
+          locale={locale}
+          mode={mode}
+          selectedVerseHash={activeVerseHash}
+          version={chapter.translation}
+        />
             </div>
           </div>
         </div>
@@ -534,6 +536,7 @@ export function BibleReader({
           initialSearchQuery={initialSearchQuery}
           relatedMetadata={relatedMetadata}
           selectedVerse={activeStudyVerse}
+          selectedVerseHash={activeVerseHash}
           studyPanelLabel={copy.studyPanel}
           verseCount={chapter.verses.length}
         />
@@ -550,6 +553,7 @@ type BibleReaderResearchPanelProps = {
   initialSearchQuery: string;
   relatedMetadata: BibleReaderRelatedMetadataPreview;
   selectedVerse: number | null;
+  selectedVerseHash: string;
   studyPanelLabel: string;
   verseCount: number;
 };
@@ -561,6 +565,7 @@ function BibleReaderResearchPanel({
   initialSearchQuery,
   relatedMetadata,
   selectedVerse,
+  selectedVerseHash,
   studyPanelLabel,
   verseCount,
 }: BibleReaderResearchPanelProps) {
@@ -590,7 +595,7 @@ function BibleReaderResearchPanel({
 
     const nextSearchParams = new URLSearchParams(searchParams.toString());
     nextSearchParams.set("section", section);
-    router.replace(`${pathname}?${nextSearchParams.toString()}`);
+    router.replace(`${pathname}?${nextSearchParams.toString()}${selectedVerseHash}`);
   }
 
   return (
@@ -627,6 +632,7 @@ function BibleReaderResearchPanel({
           key={searchPanelKey}
           locale={locale}
           mode={mode}
+          selectedVerseHash={selectedVerseHash}
           translation={version}
         />
       ) : null}

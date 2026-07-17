@@ -12,6 +12,7 @@ type ReaderSearchPanelProps = {
   initialSearchQuery?: string;
   locale: string;
   mode: OriginalLanguageReaderMode;
+  selectedVerseHash: string;
   translation: string;
 };
 
@@ -40,6 +41,7 @@ export function ReaderSearchPanel({
   initialSearchQuery = "",
   locale,
   mode,
+  selectedVerseHash,
   translation,
 }: ReaderSearchPanelProps) {
   const router = useRouter();
@@ -107,7 +109,12 @@ export function ReaderSearchPanel({
       setSubmittedQuery("");
       setErrorMessage("");
       router.replace(
-        createReaderCurrentHref({ mode, pathname, searchParams: currentSearchParams }),
+        createReaderCurrentHref({
+          mode,
+          pathname,
+          searchParams: currentSearchParams,
+          selectedVerseHash,
+        }),
       );
       return;
     }
@@ -124,6 +131,15 @@ export function ReaderSearchPanel({
         perPage: 20,
       });
       setSearch(nextSearch);
+      router.replace(
+        createReaderSearchHref({
+          mode,
+          pathname,
+          query: trimmedQuery,
+          searchParams: currentSearchParams,
+          selectedVerseHash,
+        }),
+      );
     } catch {
       setSearch(null);
       setErrorMessage(copy.error);
@@ -324,17 +340,40 @@ function createReaderResultHref({
   return `/${locale}/bible/${result.translation}/${result.book}/${result.chapter}?${params.toString()}#v${result.verse}`;
 }
 
+function createReaderSearchHref({
+  mode,
+  pathname,
+  query,
+  searchParams,
+  selectedVerseHash,
+}: {
+  mode: OriginalLanguageReaderMode;
+  pathname: string;
+  query: string;
+  searchParams: string;
+  selectedVerseHash: string;
+}) {
+  const params = new URLSearchParams(searchParams);
+  params.set("mode", mode);
+  params.set("q", query);
+
+  return `${pathname}?${params.toString()}${selectedVerseHash}`;
+}
+
 function createReaderCurrentHref({
   mode,
   pathname,
   searchParams,
+  selectedVerseHash,
 }: {
   mode: OriginalLanguageReaderMode;
   pathname: string;
   searchParams: string;
+  selectedVerseHash: string;
 }) {
   const params = new URLSearchParams(searchParams);
   params.set("mode", mode);
+  params.delete("q");
 
-  return `${pathname}?${params.toString()}`;
+  return `${pathname}?${params.toString()}${selectedVerseHash}`;
 }

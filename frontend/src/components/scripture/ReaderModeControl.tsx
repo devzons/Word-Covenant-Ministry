@@ -10,6 +10,7 @@ type ReaderModeControlProps = {
   book: string;
   chapter: number;
   mode: OriginalLanguageReaderMode;
+  selectedVerseHash: string;
 };
 
 const readerModes: Array<{
@@ -30,6 +31,7 @@ export function ReaderModeControl({
   book,
   chapter,
   mode,
+  selectedVerseHash,
 }: ReaderModeControlProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const searchParams = useSearchParams();
@@ -60,6 +62,7 @@ export function ReaderModeControl({
                 chapter,
                 mode: readerMode.value,
                 searchParams: currentSearchParams,
+                selectedVerseHash,
               })}
               key={readerMode.value}
             >
@@ -79,9 +82,10 @@ function createReaderModeHref({
   chapter,
   mode,
   searchParams,
+  selectedVerseHash,
 }: ReaderModeControlProps & { searchParams: string }): string {
   const params = new URLSearchParams(searchParams);
   params.set("mode", mode);
 
-  return `/${locale}/bible/${version}/${book}/${chapter}?${params.toString()}`;
+  return `/${locale}/bible/${version}/${book}/${chapter}?${params.toString()}${selectedVerseHash}`;
 }
