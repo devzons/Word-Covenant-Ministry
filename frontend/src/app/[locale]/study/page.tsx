@@ -30,28 +30,36 @@ const copy = {
         title: "Sermons & Exposition",
         body: "Follow the flow of the text as it is unfolded in preaching and exposition.",
         href: "/sermons",
+        status: "Available now",
+        action: "Open Sermons",
         kind: "route" as const,
       },
       {
         id: "books",
         title: "Books",
-        body: "Introduce books that help with manuscript preparation and Bible study.",
+        body: "Books and recommended reading are being prepared for this section.",
         href: "#books",
+        status: "Coming soon",
+        action: "Section preview",
         kind: "anchor" as const,
       },
       {
         id: "interpretation",
         title: "Biblical Interpretation",
-        body: "Read passages within their immediate context and the flow of the whole Bible.",
+        body: "This section will gather notes that trace context and the flow of Scripture.",
         href: "#interpretation",
+        status: "Coming soon",
+        action: "Section preview",
         kind: "anchor" as const,
       },
       {
         id: "original-paja",
         title: "Original Languages & Paja",
-        body: "Work with Hebrew, Greek, word studies, and character-level study as aids to the text.",
-        href: "#original-paja",
-        kind: "anchor" as const,
+        body: "Use the existing original-language study tools to inspect Hebrew, Greek, and word-level details.",
+        href: "/original-language",
+        status: "Available now",
+        action: "Open Original Language",
+        kind: "route" as const,
       },
     ],
     ctas: {
@@ -68,9 +76,9 @@ const copy = {
       sermons:
         "This area gathers sermon and exposition content that stays close to the biblical text and follows the flow of the passage.",
       books:
-        "This area introduces books and written resources that support Bible reading and careful study.",
+        "This area is reserved for books and written resources that support Bible reading and careful study. It is still being prepared.",
       interpretation:
-        "This area focuses on reading within context, comparing related passages, and keeping the passage in its own literary setting.",
+        "This area will focus on reading within context, comparing related passages, and keeping the passage in its own literary setting. The page is still being prepared.",
       originalPaja:
         "This area gathers Hebrew, Greek, word, and character study material as a support for deeper reading, not as a replacement for the text.",
     },
@@ -92,28 +100,36 @@ const copy = {
         title: "설교와 강해",
         body: "본문의 흐름을 따라 말씀을 풀어가는 설교와 강해를 살펴봅니다.",
         href: "/sermons",
+        status: "현재 연결됨",
+        action: "설교로 이동",
         kind: "route" as const,
       },
       {
         id: "books",
         title: "책소개",
-        body: "집필 원고와 성경 연구에 도움이 되는 책을 소개합니다.",
+        body: "집필 원고와 성경 연구에 도움이 되는 책이 정리될 공간입니다.",
         href: "#books",
+        status: "준비 중",
+        action: "섹션 미리보기",
         kind: "anchor" as const,
       },
       {
         id: "interpretation",
         title: "성경해석",
-        body: "문맥과 성경 전체의 흐름 안에서 본문을 살핍니다.",
+        body: "본문 문맥과 성경 전체의 흐름을 따라 정리될 공간입니다.",
         href: "#interpretation",
+        status: "준비 중",
+        action: "섹션 미리보기",
         kind: "anchor" as const,
       },
       {
         id: "original-paja",
         title: "원어와 파자",
-        body: "히브리어, 헬라어, 단어와 문자 연구를 본문 안에서 다룹니다.",
-        href: "#original-paja",
-        kind: "anchor" as const,
+        body: "원어 보기와 행간 보기를 포함한 연구 도구로 연결됩니다.",
+        href: "/original-language",
+        status: "현재 연결됨",
+        action: "원어 연구로 이동",
+        kind: "route" as const,
       },
     ],
     ctas: {
@@ -130,9 +146,9 @@ const copy = {
       sermons:
         "이 구역은 본문에 가까운 설교와 강해 자료를 모아, 말씀이 전개되는 흐름을 따라가도록 돕습니다.",
       books:
-        "이 구역은 성경 읽기와 연구를 돕는 책과 원고를 소개합니다.",
+        "이 구역은 성경 읽기와 연구를 돕는 책과 원고를 소개할 예정이며, 아직 준비 중입니다.",
       interpretation:
-        "이 구역은 문맥을 따라 읽고 관련 구절을 비교하며, 본문을 그 자체의 자리에서 살피도록 돕습니다.",
+        "이 구역은 문맥을 따라 읽고 관련 구절을 비교하며, 본문을 그 자체의 자리에서 살피도록 돕는 공간으로 준비 중입니다.",
       originalPaja:
         "이 구역은 히브리어, 헬라어, 단어, 문자 연구를 본문을 더 깊이 살피기 위한 보조 자료로 제공합니다.",
     },
@@ -187,20 +203,26 @@ export default async function StudyPage({ params }: StudyPageProps) {
                   key={card.id}
                   id={card.id}
                 >
-                  <h3 className="text-base font-semibold text-zinc-950">{card.title}</h3>
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-base font-semibold text-zinc-950">{card.title}</h3>
+                    <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                      {card.status}
+                    </span>
+                  </div>
                   <p className="mt-3 text-sm leading-6 text-zinc-600">{card.body}</p>
+                  {card.kind === "anchor" ? (
+                    <p className="mt-3 text-xs leading-5 text-zinc-500">
+                      {activeLocale === "en"
+                        ? "This section is a preview area on this page for now."
+                        : "이 섹션은 현재 이 페이지 안에서 미리보기 영역으로 제공됩니다."}
+                    </p>
+                  ) : null}
                   <div className="mt-5">
                     <Link
                       className="inline-flex min-h-10 items-center justify-center rounded-md border border-zinc-300 px-4 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
                       href={`/${activeLocale}${card.href}`}
                     >
-                      {card.kind === "route"
-                        ? activeLocale === "en"
-                          ? "Open Sermons"
-                          : "설교 열기"
-                        : activeLocale === "en"
-                          ? "Read more"
-                          : "자세히 보기"}
+                      {card.action}
                     </Link>
                   </div>
                 </article>
@@ -220,10 +242,16 @@ export default async function StudyPage({ params }: StudyPageProps) {
 
             <div className="grid gap-4 md:grid-cols-2">
               <article id="books" className="rounded-md bg-zinc-50 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                  {activeLocale === "en" ? "Coming soon" : "준비 중"}
+                </p>
                 <h3 className="text-base font-semibold text-zinc-950">{pageCopy.sections.books}</h3>
                 <p className="mt-3 text-sm leading-6 text-zinc-600">{pageCopy.sectionBody.books}</p>
               </article>
               <article id="interpretation" className="rounded-md bg-zinc-50 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                  {activeLocale === "en" ? "Coming soon" : "준비 중"}
+                </p>
                 <h3 className="text-base font-semibold text-zinc-950">
                   {pageCopy.sections.interpretation}
                 </h3>
@@ -232,12 +260,23 @@ export default async function StudyPage({ params }: StudyPageProps) {
                 </p>
               </article>
               <article id="original-paja" className="rounded-md bg-zinc-50 p-5 md:col-span-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                  {activeLocale === "en" ? "Available now" : "현재 연결됨"}
+                </p>
                 <h3 className="text-base font-semibold text-zinc-950">
                   {pageCopy.sections.originalPaja}
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-zinc-600">
                   {pageCopy.sectionBody.originalPaja}
                 </p>
+                <div className="mt-5">
+                  <Link
+                    className="inline-flex min-h-10 items-center justify-center rounded-md border border-zinc-300 bg-white px-4 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
+                    href={`/${activeLocale}/original-language`}
+                  >
+                    {activeLocale === "en" ? "Open Original Language" : "원어 연구로 이동"}
+                  </Link>
+                </div>
               </article>
             </div>
 
