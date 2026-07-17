@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { cn } from "@/lib/utils/cn";
 import type { OriginalLanguageReaderMode } from "@/types/original-language";
@@ -31,6 +32,8 @@ export function ReaderModeControl({
   mode,
 }: ReaderModeControlProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
+  const searchParams = useSearchParams();
+  const currentSearchParams = searchParams.toString();
 
   return (
     <nav
@@ -56,6 +59,7 @@ export function ReaderModeControl({
                 book,
                 chapter,
                 mode: readerMode.value,
+                searchParams: currentSearchParams,
               })}
               key={readerMode.value}
             >
@@ -74,10 +78,10 @@ function createReaderModeHref({
   book,
   chapter,
   mode,
-}: ReaderModeControlProps): string {
-  const params = new URLSearchParams({
-    mode,
-  });
+  searchParams,
+}: ReaderModeControlProps & { searchParams: string }): string {
+  const params = new URLSearchParams(searchParams);
+  params.set("mode", mode);
 
   return `/${locale}/bible/${version}/${book}/${chapter}?${params.toString()}`;
 }

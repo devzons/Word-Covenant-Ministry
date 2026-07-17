@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { BibleReader } from "@/components/scripture/BibleReader";
 import type { BibleReaderRelatedMetadataPreview } from "@/components/scripture/BibleReaderContextPanel";
+import type { ResearchPanelSection } from "@/components/scripture/ResearchPanelNavigation";
 import {
   normalizeCanonicalBooksPackage,
   type CanonicalBooksPackage,
@@ -37,6 +38,7 @@ import type { OriginalLanguageReaderMode } from "@/types/original-language";
 type BibleReaderPageProps = {
   params: Promise<BibleReaderParams>;
   searchParams: Promise<{
+    section?: string;
     mode?: string;
     q?: string;
   }>;
@@ -60,6 +62,7 @@ export default async function BibleReaderPage({
   const activeLocale = locale === "en" ? "en" : "ko";
   const query = await searchParams;
   const mode = parseReaderMode(query.mode);
+  const activeResearchSection = parseResearchSection(query.section);
   const chapterNumber = Number(chapter);
 
   if (!Number.isInteger(chapterNumber) || chapterNumber < 1) {
@@ -106,6 +109,7 @@ export default async function BibleReaderPage({
           bookMetadata={bookMetadata}
           chapter={bibleChapter}
           chapterContextPreview={chapterContextPreview}
+          initialActiveResearchSection={activeResearchSection}
           initialSearchQuery={query.q ?? ""}
           locale={locale}
           mode={mode}
@@ -133,6 +137,19 @@ function parseReaderMode(value: string | undefined): OriginalLanguageReaderMode 
   }
 
   return "reader";
+}
+
+function parseResearchSection(value: string | undefined): ResearchPanelSection {
+  if (
+    value === "search" ||
+    value === "insight" ||
+    value === "cross-reference" ||
+    value === "context"
+  ) {
+    return value;
+  }
+
+  return "search";
 }
 
 function BibleReaderError({ locale, message }: { locale: string; message: string }) {

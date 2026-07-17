@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
@@ -29,12 +29,14 @@ import type {
   OriginalLanguageReaderMode,
   OriginalLanguageSourceDataset,
 } from "@/types/original-language";
+import type { ResearchPanelSection } from "@/components/scripture/ResearchPanelNavigation";
 
 type BibleReaderProps = {
   bookContext?: TimelineBookContextRow | null;
   bookMetadata: BibleBookMetadata;
   chapter: BibleChapterResponse;
   chapterContextPreview?: TimelineChapterContextRow | null;
+  initialActiveResearchSection: ResearchPanelSection;
   initialSearchQuery?: string;
   locale: string;
   mode: OriginalLanguageReaderMode;
@@ -174,12 +176,14 @@ export function BibleReader({
   bookMetadata,
   chapter,
   chapterContextPreview = null,
+  initialActiveResearchSection,
   initialSearchQuery = "",
   locale,
   mode,
   relatedMetadata = { books: [], events: [], kingdoms: [], places: [] },
 }: BibleReaderProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderCopy[activeLocale];
   const [activeVerseId, setActiveVerseId] = useState("");
@@ -215,6 +219,7 @@ export function BibleReader({
         startVerse: crossReferenceVerse,
       }
     : undefined;
+  const currentSearchParams = searchParams.toString();
   const previousBook = currentBookIndex > 0 ? bookOptions[currentBookIndex - 1] : null;
   const nextBook =
     currentBookIndex >= 0 && currentBookIndex < bookOptions.length - 1
@@ -222,7 +227,14 @@ export function BibleReader({
       : null;
   const previousHref =
     chapterNumber > 1
-      ? createReaderHref(locale, chapter.translation, chapter.book, chapterNumber - 1, mode)
+      ? createReaderHref(
+          locale,
+          chapter.translation,
+          chapter.book,
+          chapterNumber - 1,
+          mode,
+          currentSearchParams,
+        )
       : previousBook
         ? createReaderHref(
             locale,
@@ -230,13 +242,21 @@ export function BibleReader({
             previousBook.slug,
             previousBook.chapterCount,
             mode,
+            currentSearchParams,
           )
         : null;
   const nextHref =
     chapterNumber < bookMetadata.chapter_count
-      ? createReaderHref(locale, chapter.translation, chapter.book, chapterNumber + 1, mode)
+      ? createReaderHref(
+          locale,
+          chapter.translation,
+          chapter.book,
+          chapterNumber + 1,
+          mode,
+          currentSearchParams,
+        )
       : nextBook
-        ? createReaderHref(locale, chapter.translation, nextBook.slug, 1, mode)
+        ? createReaderHref(locale, chapter.translation, nextBook.slug, 1, mode, currentSearchParams)
         : null;
   function handleReferenceChange(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -249,7 +269,9 @@ export function BibleReader({
       return;
     }
 
-    router.push(createReaderHref(locale, chapter.translation, book, nextChapter, mode));
+    router.push(
+      createReaderHref(locale, chapter.translation, book, nextChapter, mode, currentSearchParams),
+    );
   }
 
   useEffect(() => {
@@ -287,6 +309,7 @@ export function BibleReader({
     <ScriptureResearchWorkspaceProvider
       book={chapter.book}
       chapter={chapter.chapter}
+      initialActiveResearchSection={initialActiveResearchSection}
       key={`${chapter.translation}-${chapter.book}-${chapter.chapter}`}
       locale={locale}
       mode={mode}
@@ -541,6 +564,9 @@ function BibleReaderResearchPanel({
   studyPanelLabel,
   verseCount,
 }: BibleReaderResearchPanelProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const {
     activeResearchSection,
     book,
@@ -558,6 +584,14 @@ function BibleReaderResearchPanel({
   const activeSectionLabel = copy.workspaceSections[activeResearchSection];
   const activeReferenceLabel =
     activeLocale === "ko" ? `${bookLabel} ${chapter}장` : `${bookLabel} ${chapter}`;
+
+  function handleSectionChange(section: ResearchPanelSection) {
+    setActiveResearchSection(section);
+
+    const nextSearchParams = new URLSearchParams(searchParams.toString());
+    nextSearchParams.set("section", section);
+    router.replace(`${pathname}?${nextSearchParams.toString()}`);
+  }
 
   return (
     <aside
@@ -584,7 +618,7 @@ function BibleReaderResearchPanel({
       <ResearchPanelNavigation
         activeSection={activeResearchSection}
         locale={locale}
-        onSectionChange={setActiveResearchSection}
+        onSectionChange={handleSectionChange}
       />
 
       {activeResearchSection === "search" ? (
@@ -640,10 +674,10 @@ function createReaderHref(
   book: string,
   chapter: number,
   mode: OriginalLanguageReaderMode,
+  searchParams: string,
 ): string {
-  const params = new URLSearchParams({
-    mode,
-  });
+  const params = new URLSearchParams(searchParams);
+  params.set("mode", mode);
 
   return `/${locale}/bible/${version}/${book}/${chapter}?${params.toString()}`;
 }

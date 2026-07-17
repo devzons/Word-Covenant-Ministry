@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
@@ -44,6 +44,7 @@ export function ReaderSearchPanel({
 }: ReaderSearchPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = readerSearchCopy[activeLocale];
   const normalizedInitialQuery = initialSearchQuery.trim();
@@ -53,6 +54,7 @@ export function ReaderSearchPanel({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const trimmedQuery = query.trim();
+  const currentSearchParams = searchParams.toString();
 
   useEffect(() => {
     const nextQuery = initialSearchQuery.trim();
@@ -104,7 +106,9 @@ export function ReaderSearchPanel({
       setSearch(null);
       setSubmittedQuery("");
       setErrorMessage("");
-      router.replace(createReaderCurrentHref({ mode, pathname }));
+      router.replace(
+        createReaderCurrentHref({ mode, pathname, searchParams: currentSearchParams }),
+      );
       return;
     }
 
@@ -129,7 +133,15 @@ export function ReaderSearchPanel({
   }
 
   function handleResultClick(result: BibleSearchResult) {
-    router.push(createReaderResultHref({ locale, mode, query: submittedQuery, result }));
+    router.push(
+      createReaderResultHref({
+        locale,
+        mode,
+        query: submittedQuery,
+        result,
+        searchParams: currentSearchParams,
+      }),
+    );
   }
 
   return (
@@ -293,13 +305,16 @@ function createReaderResultHref({
   mode,
   query,
   result,
+  searchParams,
 }: {
   locale: string;
   mode: OriginalLanguageReaderMode;
   query: string;
   result: BibleSearchResult;
+  searchParams: string;
 }) {
-  const params = new URLSearchParams({ mode });
+  const params = new URLSearchParams(searchParams);
+  params.set("mode", mode);
   const trimmedQuery = query.trim();
 
   if (trimmedQuery) {
@@ -312,11 +327,14 @@ function createReaderResultHref({
 function createReaderCurrentHref({
   mode,
   pathname,
+  searchParams,
 }: {
   mode: OriginalLanguageReaderMode;
   pathname: string;
+  searchParams: string;
 }) {
-  const params = new URLSearchParams({ mode });
+  const params = new URLSearchParams(searchParams);
+  params.set("mode", mode);
 
   return `${pathname}?${params.toString()}`;
 }
