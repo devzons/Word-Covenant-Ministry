@@ -10,6 +10,18 @@ final class PostTypeRegistrar
     {
         $this->registerStudyPostType();
         $this->registerStudyCategoryTaxonomy();
+
+        if (is_admin()) {
+            $this->registerStudyAdminListHooks();
+        }
+    }
+
+    private function registerStudyAdminListHooks(): void
+    {
+        add_filter('manage_edit-wcm_study_columns', [$this, 'filterStudyColumns']);
+        add_action('manage_wcm_study_posts_custom_column', [$this, 'renderStudyColumn'], 10, 2);
+        add_action('restrict_manage_posts', [$this, 'renderStudyCategoryFilter']);
+        add_action('pre_get_posts', [$this, 'filterStudyListQuery']);
     }
 
     private function registerStudyPostType(): void
@@ -89,5 +101,117 @@ final class PostTypeRegistrar
                 'with_front' => false,
             ],
         ]);
+    }
+
+    /**
+     * @param array<string, string> $columns
+     * @return array<string, string>
+     */
+    public function filterStudyColumns(array $columns): array
+    {
+        $filtered = [];
+
+        foreach ($columns as $key => $label) {
+            $filtered[$key] = $label;
+
+            if ($key === 'title') {
+                $filtered['wcm_study_category'] = __('Study Category / 말씀연구 분류', 'wcm-core');
+            }
+        }
+
+        if (! array_key_exists('wcm_study_category', $filtered)) {
+            $filtered['wcm_study_category'] = __('Study Category / 말씀연구 분류', 'wcm-core');
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * @param string $column
+     * @param int $postId
+     */
+    public function renderStudyColumn(string $column, int $postId): void
+    {
+        if ($column !== 'wcm_study_category') {
+            return;
+        }
+
+        $terms = get_the_terms($postId, 'wcm_study_category');
+
+        if (empty($terms) || is_wp_error($terms)) {
+            echo '&mdash;';
+
+            return;
+        }
+
+        $names = array_map(
+            static fn (\WP_Term $term): string => esc_html($term->name),
+            $terms
+        );
+
+        echo implode(', ', $names);
+    }
+
+    public function renderStudyCategoryFilter(): void
+    {
+        global $typenow;
+
+        if ($typenow !== 'wcm_study') {
+            return;
+        }
+
+        wp_dropdown_categories([
+            'show_option_all' => __('All Study Categories / 모든 말씀연구 분류', 'wcm-core'),
+            'taxonomy' => 'wcm_study_category',
+            'name' => 'wcm_study_category',
+            'orderby' => 'name',
+            'selected' => $this->getSelectedStudyCategoryId(),
+            'hierarchical' => true,
+            'hide_empty' => false,
+            'value_field' => 'term_id',
+            'show_count' => false,
+        ]);
+    }
+
+    public function filterStudyListQuery(\WP_Query $query): void
+    {
+        if (! is_admin() || ! $query->is_main_query()) {
+            return;
+        }
+
+        $postType = $query->get('post_type');
+
+        if ($postType !== 'wcm_study') {
+            return;
+        }
+
+        $termId = $this->getSelectedStudyCategoryId();
+
+        if ($termId < 1) {
+            return;
+        }
+
+        $query->set('tax_query', [
+            [
+                'taxonomy' => 'wcm_study_category',
+                'field' => 'term_id',
+                'terms' => [$termId],
+            ],
+        ]);
+    }
+
+    private function getSelectedStudyCategoryId(): int
+    {
+        if (! isset($_GET['wcm_study_category'])) {
+            return 0;
+        }
+
+        $selected = sanitize_text_field(wp_unslash($_GET['wcm_study_category']));
+
+        if ($selected === '') {
+            return 0;
+        }
+
+        return (int) $selected;
     }
 }
