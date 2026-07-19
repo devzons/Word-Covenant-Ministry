@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 type MeaningCardPilotLocale = "en" | "ko";
-type MeaningCardPilotKey = "hesed" | "zera";
+type MeaningCardPilotKey = "hesed" | "zera" | "berit";
 
 type MeaningCardPilotProps = {
   locale: MeaningCardPilotLocale;
@@ -434,6 +434,158 @@ const meaningCardPilotContent: Record<MeaningCardPilotKey, Record<MeaningCardPil
       ],
     },
   },
+  berit: {
+    en: {
+      originalTerm: "בְּרִית",
+      transliteration: { en: "berit", ko: "베리트" },
+      currentMeaning: {
+        en: "covenant",
+        ko: "언약",
+      },
+      shortExplanation: {
+        en: "In the midst of the flood judgment, God declares that he will establish his covenant with Noah and preserve him and his family. In this context, בְּרִית refers to the covenant God establishes by his own declaration and promise.",
+        ko: "하나님께서는 홍수의 심판 가운데 노아와 언약을 세우시고 그와 그의 가족을 보존하겠다고 말씀하십니다. 이 문맥에서 בְּרִית는 하나님께서 자신의 선언과 약속으로 세우시는 언약을 가리킵니다.",
+      },
+      partOfSpeech: { en: "Noun", ko: "명사" },
+      theme: { en: "Covenant and Promise", ko: "언약과 약속" },
+      currentPassage: { en: "Genesis 6:18", ko: "창세기 6:18" },
+      canonicalMeaning: {
+        en: "In Genesis, בְּרִית refers to the covenant by which God establishes and sustains an ordered relationship through his own declaration and promise. The covenant announced to Noah is later stated in relation to his offspring and every living creature, and the canonical trajectory continues through the covenants associated with Abraham, Sinai, and the promised new covenant. These covenants differ in parties, signs, responsibilities, and scope, so their distinctions should not be collapsed into a single word meaning.",
+        ko: "창세기에서 בְּרִית는 하나님께서 자신의 선언과 약속으로 관계의 질서를 세우고 지속하시는 언약을 가리킵니다. 노아에게 예고된 언약은 홍수 후 그의 후손과 모든 생물에게까지 명시되며, 이후 아브라함 언약과 시내산 언약과 새 언약의 흐름으로 전개됩니다. 그러나 각 언약은 대상과 표징과 책임과 범위가 서로 같지 않으므로, 그 차이를 하나의 단어 뜻으로 합쳐서는 안 됩니다.",
+      },
+      relatedThemes: { en: "Covenant, Promise", ko: "언약, 약속" },
+      strong: "H1285",
+      evidencePreview: {
+        en: "Genesis 9:9–17 — the covenant’s scope and rainbow sign are declared in relation to Noah’s offspring and every living creature; Genesis 15:18 — the land promise to Abram is joined to covenant establishment; Exodus 24:8 — the Sinai covenant is confirmed with covenant blood and the people’s response; Jeremiah 31:31 — a new covenant is promised later in the canonical story",
+        ko: "창세기 9:9–17 — 노아의 후손과 모든 생물에게 언약의 범위와 무지개 표징이 명시됨; 창세기 15:18 — 아브람에게 주어진 땅의 약속이 언약 체결과 연결됨; 출애굽기 24:8 — 시내산에서 언약이 피와 백성의 응답을 통해 확증됨; 예레미야 31:31 — 후대에 새 언약이 약속됨",
+      },
+      journeyNote: {
+        en: "The journey begins in Genesis 6:18 and continues through the covenant storyline of Genesis and the prophets.",
+        ko: "의미 여정은 창세기 6:18에서 시작해 창세기와 예언서의 언약 흐름으로 이어집니다.",
+      },
+      journeyPath: {
+        en: "Genesis 6:18 → Genesis 9:9–17 → Genesis 15:18 → Exodus 24:8 → Jeremiah 31:31",
+        ko: "창세기 6:18 → 창세기 9:9–17 → 창세기 15:18 → 출애굽기 24:8 → 예레미야 31:31",
+      },
+      passageNote: {
+        en: "These passages show the covenant’s scope, ratification, and later canonical development.",
+        ko: "이 본문들은 언약의 범위, 확증, 그리고 후대 정경적 전개를 보여 줍니다.",
+      },
+      passageLinks: [
+        {
+          book: "genesis",
+          chapter: 9,
+          verse: 9,
+          label: {
+            en: "Genesis 9:9–17",
+            ko: "창세기 9:9–17",
+          },
+        },
+        {
+          book: "genesis",
+          chapter: 15,
+          verse: 18,
+          label: {
+            en: "Genesis 15:18",
+            ko: "창세기 15:18",
+          },
+        },
+        {
+          book: "exodus",
+          chapter: 24,
+          verse: 8,
+          label: {
+            en: "Exodus 24:8",
+            ko: "출애굽기 24:8",
+          },
+        },
+        {
+          book: "jeremiah",
+          chapter: 31,
+          verse: 31,
+          label: {
+            en: "Jeremiah 31:31",
+            ko: "예레미야 31:31",
+          },
+        },
+      ],
+    },
+    ko: {
+      originalTerm: "בְּרִית",
+      transliteration: { en: "berit", ko: "베리트" },
+      currentMeaning: {
+        en: "covenant",
+        ko: "언약",
+      },
+      shortExplanation: {
+        en: "In the midst of the flood judgment, God declares that he will establish his covenant with Noah and preserve him and his family. In this context, בְּרִית refers to the covenant God establishes by his own declaration and promise.",
+        ko: "하나님께서는 홍수의 심판 가운데 노아와 언약을 세우시고 그와 그의 가족을 보존하겠다고 말씀하십니다. 이 문맥에서 בְּרִית는 하나님께서 자신의 선언과 약속으로 세우시는 언약을 가리킵니다.",
+      },
+      partOfSpeech: { en: "Noun", ko: "명사" },
+      theme: { en: "Covenant and Promise", ko: "언약과 약속" },
+      currentPassage: { en: "Genesis 6:18", ko: "창세기 6:18" },
+      canonicalMeaning: {
+        en: "In Genesis, בְּרִית refers to the covenant by which God establishes and sustains an ordered relationship through his own declaration and promise. The covenant announced to Noah is later stated in relation to his offspring and every living creature, and the canonical trajectory continues through the covenants associated with Abraham, Sinai, and the promised new covenant. These covenants differ in parties, signs, responsibilities, and scope, so their distinctions should not be collapsed into a single word meaning.",
+        ko: "창세기에서 בְּרִית는 하나님께서 자신의 선언과 약속으로 관계의 질서를 세우고 지속하시는 언약을 가리킵니다. 노아에게 예고된 언약은 홍수 후 그의 후손과 모든 생물에게까지 명시되며, 이후 아브라함 언약과 시내산 언약과 새 언약의 흐름으로 전개됩니다. 그러나 각 언약은 대상과 표징과 책임과 범위가 서로 같지 않으므로, 그 차이를 하나의 단어 뜻으로 합쳐서는 안 됩니다.",
+      },
+      relatedThemes: { en: "Covenant, Promise", ko: "언약, 약속" },
+      strong: "H1285",
+      evidencePreview: {
+        en: "Genesis 9:9–17 — the covenant’s scope and rainbow sign are declared in relation to Noah’s offspring and every living creature; Genesis 15:18 — the land promise to Abram is joined to covenant establishment; Exodus 24:8 — the Sinai covenant is confirmed with covenant blood and the people’s response; Jeremiah 31:31 — a new covenant is promised later in the canonical story",
+        ko: "창세기 9:9–17 — 노아의 후손과 모든 생물에게 언약의 범위와 무지개 표징이 명시됨; 창세기 15:18 — 아브람에게 주어진 땅의 약속이 언약 체결과 연결됨; 출애굽기 24:8 — 시내산에서 언약이 피와 백성의 응답을 통해 확증됨; 예레미야 31:31 — 후대에 새 언약이 약속됨",
+      },
+      journeyNote: {
+        en: "The journey begins in Genesis 6:18 and continues through the covenant storyline of Genesis and the prophets.",
+        ko: "의미 여정은 창세기 6:18에서 시작해 창세기와 예언서의 언약 흐름으로 이어집니다.",
+      },
+      journeyPath: {
+        en: "Genesis 6:18 → Genesis 9:9–17 → Genesis 15:18 → Exodus 24:8 → Jeremiah 31:31",
+        ko: "창세기 6:18 → 창세기 9:9–17 → 창세기 15:18 → 출애굽기 24:8 → 예레미야 31:31",
+      },
+      passageNote: {
+        en: "These passages show the covenant’s scope, ratification, and later canonical development.",
+        ko: "이 본문들은 언약의 범위, 확증, 그리고 후대 정경적 전개를 보여 줍니다.",
+      },
+      passageLinks: [
+        {
+          book: "genesis",
+          chapter: 9,
+          verse: 9,
+          label: {
+            en: "Genesis 9:9–17",
+            ko: "창세기 9:9–17",
+          },
+        },
+        {
+          book: "genesis",
+          chapter: 15,
+          verse: 18,
+          label: {
+            en: "Genesis 15:18",
+            ko: "창세기 15:18",
+          },
+        },
+        {
+          book: "exodus",
+          chapter: 24,
+          verse: 8,
+          label: {
+            en: "Exodus 24:8",
+            ko: "출애굽기 24:8",
+          },
+        },
+        {
+          book: "jeremiah",
+          chapter: 31,
+          verse: 31,
+          label: {
+            en: "Jeremiah 31:31",
+            ko: "예레미야 31:31",
+          },
+        },
+      ],
+    },
+  },
 } as const;
 
 export function MeaningCardPilot({
@@ -632,6 +784,16 @@ export function getMeaningCardPilotKey({
     sourceRef === "STEP_TAHOT:Gen.3.15#09=L:0"
   ) {
     return "zera";
+  }
+
+  if (
+    book === "genesis" &&
+    chapter === 6 &&
+    verse === 18 &&
+    strongsNumber === "H1285" &&
+    sourceRef === "STEP_TAHOT:Gen.6.18#03=L:0"
+  ) {
+    return "berit";
   }
 
   return null;

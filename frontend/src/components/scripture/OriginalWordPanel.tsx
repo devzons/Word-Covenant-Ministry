@@ -172,7 +172,7 @@ function OriginalWordPanelContent({
   closeButtonRef: RefObject<HTMLButtonElement | null>;
   copy: (typeof originalWordPanelCopy)["en"];
   handleClose: () => void;
-  meaningCardKey: "hesed" | "zera" | null;
+  meaningCardKey: "hesed" | "zera" | "berit" | null;
   translation: string;
   word: OriginalWordPanelWord;
 }) {
