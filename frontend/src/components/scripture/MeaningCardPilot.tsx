@@ -120,8 +120,8 @@ export function MeaningCardPilot({
         </button>
       </div>
 
-      <dl className="grid gap-3 text-sm">
-        <MeaningCardRow
+      <dl className="grid gap-2.5 text-sm">
+        <MeaningCardField
           label={activeLocale === "ko" ? "원어" : "Original Term"}
           value={
             <span className="break-words">
@@ -132,23 +132,24 @@ export function MeaningCardPilot({
             </span>
           }
         />
-        <MeaningCardRow
+        <MeaningCardField
+          emphasize
           label={copy.currentMeaning}
           value={activeLocale === "ko" ? "언약적 신실한 사랑" : "Covenant-faithful love"}
         />
-        <MeaningCardRow
+        <MeaningCardField
           label={activeLocale === "ko" ? "본문 설명" : "Short Explanation"}
           value={copy.shortExplanation}
         />
-        <MeaningCardRow
+        <MeaningCardField
           label={copy.partOfSpeech}
           value={activeLocale === "ko" ? "명사" : "Noun"}
         />
-        <MeaningCardRow
+        <MeaningCardField
           label={copy.theme}
           value={activeLocale === "ko" ? "언약" : "Covenant"}
         />
-        <MeaningCardRow
+        <MeaningCardField
           label={copy.currentPassage}
           value={activeLocale === "ko" ? "호세아 6:6" : "Hosea 6:6"}
         />
@@ -191,8 +192,9 @@ export function MeaningCardPilot({
 
       {activeSection === "evidence" ? (
         <MeaningCardSection title={copy.evidence}>
-          <dl className="grid gap-1">
-            <MeaningCardCompactField
+          <dl className="grid gap-0.5">
+            <MeaningCardField
+              compact
               label={copy.canonicalMeaning}
               value={
                 activeLocale === "ko"
@@ -200,16 +202,19 @@ export function MeaningCardPilot({
                   : "The reviewed biblical range of love, mercy, and faithfulness expressed within covenant relationship."
               }
             />
-            <MeaningCardCompactField
+            <MeaningCardField
+              compact
               label={copy.relatedThemes}
               value={activeLocale === "ko" ? "긍휼, 신실함, 사랑" : copy.relatedThemeList}
             />
-            <MeaningCardCompactField label={copy.strong} value="H2617" />
-            <MeaningCardCompactField
+            <MeaningCardField compact label={copy.strong} value="H2617" />
+            <MeaningCardField
+              compact
               label={copy.lxx}
               value={<span>ἔλεος ({activeLocale === "ko" ? "엘레오스" : "eleos"})</span>}
             />
-            <MeaningCardCompactField
+            <MeaningCardField
+              compact
               label={copy.ntReception}
               value={
                 activeLocale === "ko"
@@ -217,7 +222,8 @@ export function MeaningCardPilot({
                   : "Matthew 9:13; Matthew 12:7"
               }
             />
-            <MeaningCardCompactField
+            <MeaningCardField
+              compact
               label={copy.evidencePreview}
               value={
                 activeLocale === "ko"
@@ -281,32 +287,35 @@ function MeaningCardSection({
   );
 }
 
-function MeaningCardRow({
+function MeaningCardField({
+  compact = false,
+  emphasize = false,
   label,
   value,
 }: {
+  compact?: boolean;
+  emphasize?: boolean;
   label: string;
   value: ReactNode;
 }) {
-  return (
-    <div className="flex flex-wrap items-start gap-x-2 gap-y-1 rounded-md border border-zinc-200 bg-white px-3 py-2">
-      <dt className="shrink-0 font-semibold text-zinc-500">{label}:</dt>
-      <dd className="min-w-0 flex-1 break-words text-zinc-950">{value}</dd>
-    </div>
-  );
-}
+  const baseClassName = compact
+    ? "flex flex-wrap items-start gap-x-2 gap-y-0.5 py-1"
+    : "flex flex-wrap items-start gap-x-2 gap-y-1 rounded-md border border-zinc-200 bg-white px-3 py-2";
 
-function MeaningCardCompactField({
-  label,
-  value,
-}: {
-  label: string;
-  value: ReactNode;
-}) {
   return (
-    <div className="flex flex-wrap gap-x-2 gap-y-1 py-1.5">
-      <dt className="shrink-0 font-semibold text-zinc-500">{label}:</dt>
-      <dd className="min-w-0 flex-1 break-words text-zinc-900">{value}</dd>
+    <div className={baseClassName}>
+      <dt className="shrink-0 font-medium text-zinc-500">{label}:</dt>
+      <dd
+        className={[
+          "min-w-0 flex-1 break-words",
+          compact ? "text-zinc-900" : "text-zinc-950",
+          emphasize ? "font-medium" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {value}
+      </dd>
     </div>
   );
 }
