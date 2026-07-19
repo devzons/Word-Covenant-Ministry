@@ -45,6 +45,12 @@ The cross-cutting semantic umbrella for the research, meaning, and publication l
 docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md
 ```
 
+The next detailed meaning-layer design document is:
+
+```txt
+docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md
+```
+
 ## Deployment and Seed Migration Policy
 
 WCM release, schema, and seed migration strategy is documented in:

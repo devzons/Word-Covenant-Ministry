@@ -65,6 +65,7 @@ Create a decision record for architecture changes, repository structure changes,
 ## Top-Level Project Documents
 
 - `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md`: top-level semantic and publication architecture for Scripture meaning, original-language study, and related research layers.
+- `docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md`: meaning identity, Meaning Card, Meaning Journey, Theme Layer, evidence, and publication architecture under the Revelation Language Platform umbrella.
 - `docs/PROJECTS/SCRIPTURE_RESEARCH_ARCHITECTURE.md`: Reader and research-workspace implementation architecture under the Revelation Language Platform umbrella.
 
 ## Environment Endpoints

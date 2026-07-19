@@ -42,6 +42,8 @@ Think of the relationship this way:
 - Revelation Language Platform: the top-level meaning and publication constitution
 - Scripture Research Architecture: the current Reader/workspace implementation architecture inside that constitution
 
+The next detailed semantic layer is documented in `docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md`.
+
 The lower-level document should stay aligned with this one, but it should not define the platform vision independently.
 
 ### What This Document Decides

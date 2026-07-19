@@ -11,6 +11,7 @@ CR-90Y Timeline Content Completeness Audit / Content Expansion is complete throu
 Current documentation objective:
 
 - finalize `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md` and keep the Scripture Research Architecture companion doc aligned with it
+- draft and review `docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md` as the next meaning-centric design layer
 
 CR-92A Korean History Reference Layer Design is documented.
 

@@ -50,3 +50,4 @@ Alternatives Considered
 - [ADR-0015 Source Data Management Strategy](0015-source-data-management-strategy.md)
 - [ADR-0016 Deployment Version-Control Strategy](0016-deployment-version-control-strategy.md)
 - [ADR-0017 Revelation Language Platform Semantic Architecture](0017-revelation-language-platform-semantic-architecture.md)
+- [ADR-0018 Meaning Layer Architecture](0018-meaning-layer-architecture.md)

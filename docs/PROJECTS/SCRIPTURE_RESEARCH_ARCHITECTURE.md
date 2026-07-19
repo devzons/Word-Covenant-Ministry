@@ -6,6 +6,8 @@ This document defines the long-term Scripture research architecture for Word Cov
 
 It is the operational companion to `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md`, which defines the broader platform constitution for meaning, semantic relations, and publication.
 
+The conceptual meaning model itself is defined in `docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md`. This document stays focused on the operational Reader and research-workspace wiring that will consume that meaning model.
+
 The goal is to keep Bible reading central while connecting search, original-language study, cross references, gospel harmony, English Bible support, Hebrew-Greek bridge study, and future commentary into one coherent research flow.
 
 This is an architecture document only. It does not approve schema changes, migrations, imports, new APIs, or production data changes.
