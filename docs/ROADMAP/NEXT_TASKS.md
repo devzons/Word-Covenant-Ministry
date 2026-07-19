@@ -12,6 +12,7 @@ Current documentation objective:
 
 - finalize `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md` and keep the Scripture Research Architecture companion doc aligned with it
 - draft and review `docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md` as the next meaning-centric design layer
+- draft and review `docs/PROJECTS/MEANING_CARD_PILOT_SPECIFICATION.md` as the first Meaning Card pilot standard
 
 CR-92A Korean History Reference Layer Design is documented.
 

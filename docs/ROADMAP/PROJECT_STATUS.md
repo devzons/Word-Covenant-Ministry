@@ -17,6 +17,7 @@ Current documentation objective:
 - formalize `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md` as the umbrella architecture for Scripture meaning, original-language study, semantic relations, and publication flow
 - keep `docs/PROJECTS/SCRIPTURE_RESEARCH_ARCHITECTURE.md` aligned as the operational Reader/research-workspace companion
 - design `docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md` as the next semantic layer beneath the umbrella architecture
+- define `docs/PROJECTS/MEANING_CARD_PILOT_SPECIFICATION.md` as the first Meaning Card pilot standard
 
 ## Required Session Start
 

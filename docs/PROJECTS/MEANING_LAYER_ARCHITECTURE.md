@@ -43,6 +43,8 @@ This document decides:
 - the research-object hierarchy
 - the publication pipeline relationship
 
+The first reviewed Meaning Card pilot specification is documented in `docs/PROJECTS/MEANING_CARD_PILOT_SPECIFICATION.md`.
+
 ### What This Document Does Not Decide
 
 This document does not decide:
@@ -748,4 +750,3 @@ The following are explicitly out of scope for this document:
 - runtime UI implementation
 - backend schema implementation
 - data import implementation
-

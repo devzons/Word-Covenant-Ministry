@@ -51,6 +51,12 @@ The next detailed meaning-layer design document is:
 docs/PROJECTS/MEANING_LAYER_ARCHITECTURE.md
 ```
 
+The first pilot Meaning Card specification is:
+
+```txt
+docs/PROJECTS/MEANING_CARD_PILOT_SPECIFICATION.md
+```
+
 ## Deployment and Seed Migration Policy
 
 WCM release, schema, and seed migration strategy is documented in:
