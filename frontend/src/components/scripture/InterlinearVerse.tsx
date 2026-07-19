@@ -225,6 +225,7 @@ export function InterlinearVerse({
       </div>
 
       <OriginalWordPanel
+        passage={{ book, chapter, verse }}
         locale={activeLocale}
         translation={translation}
         word={selectedWord}

@@ -155,6 +155,7 @@ export function VerseOriginalLanguagePreview({
       ) : null}
 
       <OriginalWordPanel
+        passage={{ book, chapter, verse }}
         locale={locale}
         translation={translation}
         word={selectedWord}
