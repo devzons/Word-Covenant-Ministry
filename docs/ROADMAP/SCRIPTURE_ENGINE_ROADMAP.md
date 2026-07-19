@@ -39,6 +39,12 @@ The Scripture Engine foundation is in place for the first KRV workflow:
 - English Bible Support has completed local WEB apply only; staging and production WEB promotion remain unapproved.
 - Current stabilization focus is Scripture Research UX QA, documentation alignment, and commit preparation.
 
+The cross-cutting semantic umbrella for the research, meaning, and publication layers is documented in:
+
+```txt
+docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md
+```
+
 ## Deployment and Seed Migration Policy
 
 WCM release, schema, and seed migration strategy is documented in:

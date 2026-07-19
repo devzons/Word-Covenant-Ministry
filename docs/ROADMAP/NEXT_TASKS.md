@@ -8,6 +8,10 @@
 
 CR-90Y Timeline Content Completeness Audit / Content Expansion is complete through available validation. The Scripture Timeline now includes compact Books / Psalms context rows, a package-backed Kings / Kingdoms preview with accordion sections and metadata-only chronology cautions, the same Matthew 14 / 14 / 14 comparison view, and the same left sidebar navigator, a main workspace area, and a right detail panel while remaining Scripture-first and page-stay oriented. Staging and release work remain paused until the next Timeline preview branch is chosen.
 
+Current documentation objective:
+
+- finalize `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md` and keep the Scripture Research Architecture companion doc aligned with it
+
 CR-92A Korean History Reference Layer Design is documented.
 
 CR-91B-2 Context Inspector Cross-Linking is complete through available validation. The Scripture Evidence Panel can now navigate among existing Events, Books / Psalms, Places, and explicitly related Kingdom or Genealogy rows through secondary related-item chips while keeping Scripture anchors as primary Reader links. No API, DB, schema, import, coordinates, map provider, or commentary layer was added. Korean history placeholder remains non-linked and supporting only.

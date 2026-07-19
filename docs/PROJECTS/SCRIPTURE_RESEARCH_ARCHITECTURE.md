@@ -4,6 +4,8 @@
 
 This document defines the long-term Scripture research architecture for Word Covenant Ministry.
 
+It is the operational companion to `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md`, which defines the broader platform constitution for meaning, semantic relations, and publication.
+
 The goal is to keep Bible reading central while connecting search, original-language study, cross references, gospel harmony, English Bible support, Hebrew-Greek bridge study, and future commentary into one coherent research flow.
 
 This is an architecture document only. It does not approve schema changes, migrations, imports, new APIs, or production data changes.

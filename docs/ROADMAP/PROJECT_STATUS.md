@@ -12,6 +12,11 @@ This document records the current project state so the next developer or coding 
 
 Documentation Gate Proportionality applies: architecture, database, API, schema, import, migration, source-data, Data Package, deployment, and production-impacting work keep the full approval gate, while narrow frontend-only UI, route-shell, browser QA, and UX polish work may use the lighter workflow after inspection and relevant validation.
 
+Current documentation objective:
+
+- formalize `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md` as the umbrella architecture for Scripture meaning, original-language study, semantic relations, and publication flow
+- keep `docs/PROJECTS/SCRIPTURE_RESEARCH_ARCHITECTURE.md` aligned as the operational Reader/research-workspace companion
+
 ## Required Session Start
 
 Before any future code or documentation change, read:

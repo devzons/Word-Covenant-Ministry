@@ -62,6 +62,11 @@ Create a decision record for architecture changes, repository structure changes,
 - Frontend hosting: Vercel
 - Backend local development: Local WP
 
+## Top-Level Project Documents
+
+- `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md`: top-level semantic and publication architecture for Scripture meaning, original-language study, and related research layers.
+- `docs/PROJECTS/SCRIPTURE_RESEARCH_ARCHITECTURE.md`: Reader and research-workspace implementation architecture under the Revelation Language Platform umbrella.
+
 ## Environment Endpoints
 
 Local frontend:

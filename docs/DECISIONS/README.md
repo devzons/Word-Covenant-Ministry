@@ -49,3 +49,4 @@ Alternatives Considered
 - [ADR-0014 Bible Import Pipeline Strategy](0014-bible-import-pipeline-strategy.md)
 - [ADR-0015 Source Data Management Strategy](0015-source-data-management-strategy.md)
 - [ADR-0016 Deployment Version-Control Strategy](0016-deployment-version-control-strategy.md)
+- [ADR-0017 Revelation Language Platform Semantic Architecture](0017-revelation-language-platform-semantic-architecture.md)
