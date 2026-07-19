@@ -3,11 +3,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 
-import { MeaningCardPilot, isMeaningCardPilotCandidate } from "@/components/scripture/MeaningCardPilot";
+import {
+  MeaningCardPilot,
+  getMeaningCardPilotKey,
+} from "@/components/scripture/MeaningCardPilot";
 import { StrongStudyPanel } from "@/components/scripture/StrongStudyPanel";
 import { formatOriginalLanguageMorphology } from "@/lib/original-language/morphology";
 
 export type OriginalWordPanelWord = {
+  occurrence_id?: number;
+  source_ref?: string;
   surface_form: string;
   lemma: string;
   strongs_number: string;
@@ -81,14 +86,16 @@ export function OriginalWordPanel({
 }: OriginalWordPanelProps) {
   const activeLocale = locale === "ko" ? "ko" : "en";
   const copy = originalWordPanelCopy[activeLocale];
-  const meaningCardAvailable =
-    Boolean(word && passage) &&
-    isMeaningCardPilotCandidate({
-      book: passage?.book ?? "",
-      chapter: passage?.chapter ?? 0,
-      verse: passage?.verse ?? 0,
-      strongsNumber: word?.strongs_number ?? "",
-    });
+  const meaningCardKey =
+    word && passage
+      ? getMeaningCardPilotKey({
+          book: passage?.book ?? "",
+          chapter: passage?.chapter ?? 0,
+          verse: passage?.verse ?? 0,
+          strongsNumber: word?.strongs_number ?? "",
+          sourceRef: word?.source_ref ?? "",
+        })
+      : null;
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const handleClose = useCallback(() => {
@@ -123,7 +130,12 @@ export function OriginalWordPanel({
     return null;
   }
 
-  const panelKey = `${passage?.book ?? "unknown"}:${passage?.chapter ?? 0}:${passage?.verse ?? 0}:${word.strongs_number}`;
+  const panelKey = [
+    passage?.book ?? "unknown",
+    passage?.chapter ?? 0,
+    passage?.verse ?? 0,
+    word.source_ref ?? word.occurrence_id ?? word.strongs_number,
+  ].join(":");
 
   return (
     <div className="fixed inset-0 z-50">
@@ -139,7 +151,7 @@ export function OriginalWordPanel({
         closeButtonRef={closeButtonRef}
         copy={copy}
         handleClose={handleClose}
-        meaningCardAvailable={meaningCardAvailable}
+        meaningCardKey={meaningCardKey}
         translation={translation}
         word={word}
       />
@@ -152,7 +164,7 @@ function OriginalWordPanelContent({
   closeButtonRef,
   copy,
   handleClose,
-  meaningCardAvailable,
+  meaningCardKey,
   translation,
   word,
 }: {
@@ -160,12 +172,12 @@ function OriginalWordPanelContent({
   closeButtonRef: RefObject<HTMLButtonElement | null>;
   copy: (typeof originalWordPanelCopy)["en"];
   handleClose: () => void;
-  meaningCardAvailable: boolean;
+  meaningCardKey: "hesed" | "zera" | null;
   translation: string;
   word: OriginalWordPanelWord;
 }) {
   const [panelView, setPanelView] = useState<"meaning" | "word" | "strong">(() =>
-    meaningCardAvailable ? "meaning" : "word",
+    meaningCardKey ? "meaning" : "word",
   );
 
   const dialogLabel = panelView === "meaning" ? copy.meaningDialog : copy.dialog;
@@ -188,13 +200,14 @@ function OriginalWordPanelContent({
       ) : panelView === "meaning" ? (
         <MeaningCardPilot
           locale={activeLocale}
+          pilotKey={meaningCardKey ?? "hesed"}
           onOpenWordDetails={() => setPanelView("word")}
           translation={translation}
         />
       ) : (
         <OriginalWordDetails
           closeButtonRef={closeButtonRef}
-          meaningCardAvailable={meaningCardAvailable}
+          meaningCardAvailable={Boolean(meaningCardKey)}
           onOpenMeaningCard={() => setPanelView("meaning")}
           onClose={handleClose}
           onOpenStrongStudy={() => setPanelView("strong")}

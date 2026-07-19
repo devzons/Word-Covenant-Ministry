@@ -237,6 +237,8 @@ export function InterlinearVerse({
 
 function toPanelWord(token: HighLevelInterlinearToken): OriginalWordPanelWord {
   return {
+    occurrence_id: token.id,
+    source_ref: token.source_ref,
     surface_form: token.surface_form,
     lemma: token.term.lemma,
     strongs_number: token.term.strongs_number,

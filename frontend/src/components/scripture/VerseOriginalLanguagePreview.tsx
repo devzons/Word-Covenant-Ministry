@@ -226,6 +226,8 @@ function renderPreviewState({
 
 function toPanelWord(occurrence: OriginalLanguageJoinedOccurrence): OriginalWordPanelWord {
   return {
+    occurrence_id: occurrence.id,
+    source_ref: occurrence.source_ref,
     surface_form: occurrence.surface_form,
     lemma: occurrence.term.lemma,
     strongs_number: occurrence.term.strongs_number,
