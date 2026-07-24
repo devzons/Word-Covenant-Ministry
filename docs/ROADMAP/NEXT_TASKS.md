@@ -8,6 +8,11 @@
 
 CR-90Y Timeline Content Completeness Audit / Content Expansion is complete through available validation. The Scripture Timeline now includes compact Books / Psalms context rows, a package-backed Kings / Kingdoms preview with accordion sections and metadata-only chronology cautions, the same Matthew 14 / 14 / 14 comparison view, and the same left sidebar navigator, a main workspace area, and a right detail panel while remaining Scripture-first and page-stay oriented. Staging and release work remain paused until the next Timeline preview branch is chosen.
 
+Approved phase-exception note:
+
+- Password Reset and Private Verse Notes are being implemented as an approved Phase Exception.
+- Timeline and Meaning Layer work remain paused during this user-feature implementation and are not being replaced.
+
 Current documentation objective:
 
 - finalize `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md` and keep the Scripture Research Architecture companion doc aligned with it

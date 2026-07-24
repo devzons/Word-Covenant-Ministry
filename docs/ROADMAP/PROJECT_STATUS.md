@@ -12,6 +12,11 @@ This document records the current project state so the next developer or coding 
 
 Documentation Gate Proportionality applies: architecture, database, API, schema, import, migration, source-data, Data Package, deployment, and production-impacting work keep the full approval gate, while narrow frontend-only UI, route-shell, browser QA, and UX polish work may use the lighter workflow after inspection and relevant validation.
 
+Approved phase-exception note:
+
+- Password Reset and Private Verse Notes are being implemented as an approved Phase Exception.
+- Timeline and Meaning Layer work remain paused during this user-feature implementation and are not being replaced.
+
 Current documentation objective:
 
 - formalize `docs/PROJECTS/REVELATION_LANGUAGE_PLATFORM.md` as the umbrella architecture for Scripture meaning, original-language study, semantic relations, and publication flow

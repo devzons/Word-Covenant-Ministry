@@ -51,3 +51,4 @@ Alternatives Considered
 - [ADR-0016 Deployment Version-Control Strategy](0016-deployment-version-control-strategy.md)
 - [ADR-0017 Revelation Language Platform Semantic Architecture](0017-revelation-language-platform-semantic-architecture.md)
 - [ADR-0018 Meaning Layer Architecture](0018-meaning-layer-architecture.md)
+- [ADR-0019 Private Verse Notes Storage and API Strategy](0019-private-verse-notes-storage-and-api-strategy.md)
