@@ -77,10 +77,19 @@ final class AuthController
         $identifier = trim(sanitize_text_field($this->stringValue($payload['identifier'] ?? null)));
         $password = $this->stringValue($payload['password'] ?? null);
         $remember = (bool) ($payload['remember'] ?? false);
+        $loggedInCookie = null;
 
         if ($identifier === '' || $password === '') {
             return $this->error('invalid_request', 'Identifier and password are required.', 400);
         }
+
+        $captureLoggedInCookie = static function (
+            string $cookie
+        ) use (&$loggedInCookie): void {
+            $loggedInCookie = $cookie;
+        };
+
+        add_action('set_logged_in_cookie', $captureLoggedInCookie, 10, 1);
 
         $login = $this->resolveLogin($identifier);
         $user = wp_signon(
@@ -92,14 +101,21 @@ final class AuthController
             is_ssl()
         );
 
+        remove_action('set_logged_in_cookie', $captureLoggedInCookie, 10);
+
         if (is_wp_error($user)) {
             return $this->error('invalid_credentials', 'Invalid credentials.', 401);
+        }
+
+        if (defined('LOGGED_IN_COOKIE') && is_string($loggedInCookie) && $loggedInCookie !== '') {
+            $_COOKIE[LOGGED_IN_COOKIE] = $loggedInCookie;
         }
 
         wp_set_current_user($user->ID);
 
         return $this->success(
             [
+                'restNonce' => $this->restNonce(),
                 'user' => $this->formatUser($user),
             ]
         );
@@ -122,6 +138,7 @@ final class AuthController
 
         return $this->success(
             [
+                'restNonce' => null,
                 'user' => null,
             ]
         );
@@ -133,6 +150,9 @@ final class AuthController
 
         return $this->success(
             [
+                'restNonce' => $user instanceof WP_User && $user->exists()
+                    ? $this->restNonce()
+                    : null,
                 'user' => $user instanceof WP_User && $user->exists()
                     ? $this->formatUser($user)
                     : null,
@@ -384,6 +404,15 @@ final class AuthController
     private function stringValue(mixed $value): string
     {
         return is_string($value) ? $value : '';
+    }
+
+    private function restNonce(): ?string
+    {
+        if (! is_user_logged_in()) {
+            return null;
+        }
+
+        return wp_create_nonce('wp_rest');
     }
 
     /**

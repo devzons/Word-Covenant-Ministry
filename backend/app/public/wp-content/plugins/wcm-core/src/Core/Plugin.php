@@ -26,6 +26,7 @@ final class Plugin
 
         self::$booted = true;
 
+        add_action('init', [self::class, 'ensureSchema'], 1);
         add_action('init', [self::class, 'registerPostTypes']);
         add_action('rest_api_init', [self::class, 'registerApi']);
         add_action('admin_init', [self::class, 'registerSettings']);
@@ -62,6 +63,13 @@ final class Plugin
     {
         if (class_exists(PostTypeRegistrar::class)) {
             (new PostTypeRegistrar())->register();
+        }
+    }
+
+    public static function ensureSchema(): void
+    {
+        if (class_exists(SchemaInstaller::class)) {
+            (new SchemaInstaller())->install();
         }
     }
 

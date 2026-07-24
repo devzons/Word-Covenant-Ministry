@@ -12,7 +12,7 @@ final class AuthRestBridge
      */
     public function determineCurrentUser(int|false $userId): int|false
     {
-        if ($userId || ! $this->isBridgeRoute() || ! $this->hasAllowedOrigin()) {
+        if ($userId || ! $this->isCookieRestoreRoute() || ! $this->hasAllowedOrigin()) {
             return $userId;
         }
 
@@ -26,6 +26,8 @@ final class AuthRestBridge
             return false;
         }
 
+        wp_set_current_user($validatedUserId);
+
         return $validatedUserId;
     }
 
@@ -35,7 +37,7 @@ final class AuthRestBridge
      */
     public function bypassNonceCheckForBridgeRoutes(mixed $result): mixed
     {
-        if (! empty($result) || ! $this->isBridgeRoute() || ! $this->hasAllowedOrigin()) {
+        if (! empty($result) || ! $this->isNonceBypassRoute() || ! $this->hasAllowedOrigin()) {
             return $result;
         }
 
@@ -46,7 +48,22 @@ final class AuthRestBridge
         return true;
     }
 
-    private function isBridgeRoute(): bool
+    private function isCookieRestoreRoute(): bool
+    {
+        $route = $this->requestRoute();
+
+        if ($route === null) {
+            return false;
+        }
+
+        return $route === '/wcm/v1/auth/me'
+            || $route === '/wcm/v1/auth/logout'
+            || $route === '/wcm/v1/my/notes'
+            || $route === '/wcm/v1/my/notes/by-reference'
+            || preg_match('#^/wcm/v1/my/notes/\d+$#', $route) === 1;
+    }
+
+    private function isNonceBypassRoute(): bool
     {
         $route = $this->requestRoute();
 

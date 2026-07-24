@@ -10,7 +10,7 @@ use WCM\Scripture\Repositories\OriginalTermRepository;
 final class SchemaInstaller
 {
     public const DB_VERSION_OPTION = 'wcm_core_db_version';
-    public const DB_VERSION = '1.6.0';
+    public const DB_VERSION = '1.7.0';
 
     public function install(): void
     {
@@ -42,6 +42,7 @@ final class SchemaInstaller
         $originalTermsTable = $prefix . 'wcm_original_terms';
         $originalWordOccurrencesTable = $prefix . 'wcm_original_word_occurrences';
         $crossReferencesTable = $prefix . 'wcm_cross_references';
+        $userVerseNotesTable = $prefix . 'wcm_user_verse_notes';
 
         return [
             "CREATE TABLE {$versionsTable} (
@@ -174,6 +175,21 @@ final class SchemaInstaller
                 KEY source_dataset_lookup (source_dataset),
                 KEY review_status_lookup (review_status),
                 KEY package_lookup (package_id)
+            ) {$charsetCollate};",
+            "CREATE TABLE {$userVerseNotesTable} (
+                id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                user_id BIGINT UNSIGNED NOT NULL,
+                translation VARCHAR(32) NOT NULL,
+                book_slug VARCHAR(64) NOT NULL,
+                chapter_number INT UNSIGNED NOT NULL,
+                verse_number INT UNSIGNED NOT NULL,
+                note_text TEXT NOT NULL,
+                created_at DATETIME NOT NULL,
+                updated_at DATETIME NOT NULL,
+                PRIMARY KEY  (id),
+                UNIQUE KEY user_reference_lookup (user_id, translation, book_slug, chapter_number, verse_number),
+                KEY user_updated_lookup (user_id, updated_at),
+                KEY reference_lookup (translation, book_slug, chapter_number, verse_number)
             ) {$charsetCollate};",
         ];
     }
