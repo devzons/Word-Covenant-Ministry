@@ -14,7 +14,6 @@ type LoginFormProps = {
 
 const copy = {
   en: {
-    description: "Use your WordPress account to continue.",
     identifier: "Email or username",
     invalidCredentials: "Check your email or username and password.",
     password: "Password",
@@ -24,7 +23,6 @@ const copy = {
     unknownError: "Sign-in could not be completed.",
   },
   ko: {
-    description: "기존 WordPress 계정으로 로그인합니다.",
     identifier: "이메일 또는 사용자 이름",
     invalidCredentials: "이메일 또는 사용자 이름과 비밀번호를 확인해 주세요.",
     password: "비밀번호",
@@ -49,19 +47,22 @@ export function LoginForm({ locale }: LoginFormProps) {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     if (status === "authenticated") {
       router.replace(redirectTarget);
-      router.refresh();
     }
   }, [redirectTarget, router, status]);
 
+  if (status === "authenticated" || isRedirecting) {
+    return null;
+  }
+
   return (
     <Card className="mx-auto max-w-md">
-      <div className="space-y-2">
+      <div>
         <h1 className="text-2xl font-semibold text-zinc-950">{labels.title}</h1>
-        <p className="text-sm leading-6 text-zinc-600">{labels.description}</p>
       </div>
 
       <form
@@ -76,8 +77,7 @@ export function LoginForm({ locale }: LoginFormProps) {
               identifier: identifier.trim(),
               password,
             });
-            router.replace(redirectTarget);
-            router.refresh();
+            setIsRedirecting(true);
           } catch (error) {
             if (
               error instanceof AuthApiError &&
@@ -163,6 +163,10 @@ function safeRedirect(rawRedirect: string | null, locale: "en" | "ko"): string {
     }
 
     if (!isLocalePath(url.pathname, locale)) {
+      return fallback;
+    }
+
+    if (url.pathname === `/${locale}/login`) {
       return fallback;
     }
 
