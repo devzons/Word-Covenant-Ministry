@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { AuthStatus } from "@/components/layout/AuthStatus";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
 import { Container } from "@/components/ui/Container";
 import { primaryNavigation } from "@/config/navigation";
@@ -39,6 +40,7 @@ export function SiteHeader({ className, locale }: SiteHeaderProps) {
               </Link>
             ))}
           </nav>
+          <AuthStatus locale={locale} />
           <Suspense fallback={null}>
             <LocaleSwitcher currentLocale={locale} />
           </Suspense>
@@ -62,6 +64,9 @@ export function SiteHeader({ className, locale }: SiteHeaderProps) {
               </Link>
             ))}
           </nav>
+          <div className="mt-3 border-t border-zinc-200 pt-3">
+            <AuthStatus locale={locale} />
+          </div>
           <div className="mt-3 border-t border-zinc-200 pt-3">
             <Suspense fallback={null}>
               <LocaleSwitcher currentLocale={locale} />

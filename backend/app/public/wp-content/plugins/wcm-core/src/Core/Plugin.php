@@ -31,6 +31,7 @@ final class Plugin
         add_action('admin_menu', [self::class, 'registerAdminPages']);
         add_action('admin_enqueue_scripts', [self::class, 'enqueueAdminAssets']);
         add_action('admin_notices', [self::class, 'renderDatabaseHealthNotice']);
+        add_filter('allowed_http_origins', [self::class, 'filterAllowedHttpOrigins']);
     }
 
     public static function activate(): void
@@ -106,5 +107,65 @@ final class Plugin
         echo '<div class="notice notice-error"><p>';
         echo esc_html__('WCM Core: Scripture database tables are missing:', 'wcm-core') . ' ' . $missingTables;
         echo '</p></div>';
+    }
+
+    /**
+     * @param array<int, string> $origins
+     * @return array<int, string>
+     */
+    public static function filterAllowedHttpOrigins(array $origins): array
+    {
+        $frontendOrigins = [];
+        $environmentOrigin = self::normalizeOrigin((string) getenv('WCM_FRONTEND_URL'));
+
+        if ($environmentOrigin !== null) {
+            $frontendOrigins[] = $environmentOrigin;
+        }
+
+        $homeHost = (string) wp_parse_url(home_url(), PHP_URL_HOST);
+        $isLocalEnvironment =
+            str_contains($homeHost, '.local') ||
+            str_contains($homeHost, 'localhost') ||
+            wp_get_environment_type() !== 'production';
+
+        if ($isLocalEnvironment) {
+            $frontendOrigins[] = 'http://wordcovenantministry.local:3030';
+        } else {
+            $frontendOrigins[] = 'https://wordcovenantministry.org';
+        }
+
+        return array_values(
+            array_unique(
+                array_merge(
+                    $origins,
+                    array_values(array_filter($frontendOrigins))
+                )
+            )
+        );
+    }
+
+    private static function normalizeOrigin(string $origin): ?string
+    {
+        $origin = trim($origin);
+
+        if ($origin === '') {
+            return null;
+        }
+
+        $scheme = wp_parse_url($origin, PHP_URL_SCHEME);
+        $host = wp_parse_url($origin, PHP_URL_HOST);
+        $port = wp_parse_url($origin, PHP_URL_PORT);
+
+        if (! is_string($scheme) || ! is_string($host) || $scheme === '' || $host === '') {
+            return null;
+        }
+
+        $normalized = strtolower($scheme) . '://' . strtolower($host);
+
+        if (is_int($port)) {
+            $normalized .= ':' . $port;
+        }
+
+        return $normalized;
     }
 }

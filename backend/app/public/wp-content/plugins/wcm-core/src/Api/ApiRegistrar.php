@@ -8,6 +8,7 @@ final class ApiRegistrar
 {
     public function register(): void
     {
+        (new AuthController())->registerRoutes();
         (new BibleController())->registerRoutes();
         (new BibleSearchController())->registerRoutes();
         (new OriginalLanguageController())->registerRoutes();
