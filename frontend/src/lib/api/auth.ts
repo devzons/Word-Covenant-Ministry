@@ -17,12 +17,28 @@ type LoginInput = {
   password: string;
 };
 
+type ForgotPasswordInput = {
+  identifier: string;
+  locale: "en" | "ko";
+};
+
+type ResetPasswordInput = {
+  key: string;
+  locale: "en" | "ko";
+  login: string;
+  password: string;
+};
+
 type LoginResponse = {
   user: AuthUser;
 };
 
 type MeResponse = {
   user: AuthUser | null;
+};
+
+type MessageResponse = {
+  message: string;
 };
 
 export async function login(input: LoginInput): Promise<AuthUser> {
@@ -46,6 +62,28 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   });
 
   return data.user;
+}
+
+export async function forgotPassword(
+  input: ForgotPasswordInput,
+): Promise<string> {
+  const data = await authRequest<MessageResponse>("/wcm/v1/auth/forgot-password", {
+    body: JSON.stringify(input),
+    method: "POST",
+  });
+
+  return data.message;
+}
+
+export async function resetPassword(
+  input: ResetPasswordInput,
+): Promise<string> {
+  const data = await authRequest<MessageResponse>("/wcm/v1/auth/reset-password", {
+    body: JSON.stringify(input),
+    method: "POST",
+  });
+
+  return data.message;
 }
 
 async function authRequest<T>(

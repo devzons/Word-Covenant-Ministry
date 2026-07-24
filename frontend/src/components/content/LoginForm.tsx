@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -14,6 +15,7 @@ type LoginFormProps = {
 
 const copy = {
   en: {
+    forgotPassword: "Forgot your password?",
     identifier: "Email or username",
     invalidCredentials: "Check your email or username and password.",
     password: "Password",
@@ -23,6 +25,7 @@ const copy = {
     unknownError: "Sign-in could not be completed.",
   },
   ko: {
+    forgotPassword: "비밀번호를 잊으셨나요?",
     identifier: "이메일 또는 사용자 이름",
     invalidCredentials: "이메일 또는 사용자 이름과 비밀번호를 확인해 주세요.",
     password: "비밀번호",
@@ -137,6 +140,15 @@ export function LoginForm({ locale }: LoginFormProps) {
         <Button className="w-full" disabled={isSubmitting} type="submit">
           {isSubmitting ? labels.submitting : labels.submit}
         </Button>
+
+        <div className="pt-2 text-center">
+          <Link
+            className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-950"
+            href={`/${activeLocale}/forgot-password`}
+          >
+            {labels.forgotPassword}
+          </Link>
+        </div>
       </form>
     </Card>
   );
