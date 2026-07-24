@@ -5,6 +5,11 @@ export type AuthUser = {
   roles: string[];
 };
 
+export type AuthSession = {
+  restNonce: string | null;
+  user: AuthUser | null;
+};
+
 export type AuthEnvelope<T> = {
   success?: boolean;
   data?: T;

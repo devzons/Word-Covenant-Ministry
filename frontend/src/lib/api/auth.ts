@@ -1,5 +1,5 @@
 import { createApiUrl } from "@/lib/api/client";
-import type { AuthEnvelope, AuthUser } from "@/types/auth";
+import type { AuthEnvelope, AuthSession } from "@/types/auth";
 
 export class AuthApiError extends Error {
   constructor(
@@ -29,39 +29,27 @@ type ResetPasswordInput = {
   password: string;
 };
 
-type LoginResponse = {
-  user: AuthUser;
-};
-
-type MeResponse = {
-  user: AuthUser | null;
-};
-
 type MessageResponse = {
   message: string;
 };
 
-export async function login(input: LoginInput): Promise<AuthUser> {
-  const data = await authRequest<LoginResponse>("/wcm/v1/auth/login", {
+export async function login(input: LoginInput): Promise<AuthSession> {
+  return authRequest<AuthSession>("/wcm/v1/auth/login", {
     body: JSON.stringify(input),
     method: "POST",
   });
-
-  return data.user;
 }
 
-export async function logout(): Promise<void> {
-  await authRequest<MeResponse>("/wcm/v1/auth/logout", {
+export async function logout(): Promise<AuthSession> {
+  return authRequest<AuthSession>("/wcm/v1/auth/logout", {
     method: "POST",
   });
 }
 
-export async function getCurrentUser(): Promise<AuthUser | null> {
-  const data = await authRequest<MeResponse>("/wcm/v1/auth/me", {
+export async function getCurrentUser(): Promise<AuthSession> {
+  return authRequest<AuthSession>("/wcm/v1/auth/me", {
     method: "GET",
   });
-
-  return data.user;
 }
 
 export async function forgotPassword(

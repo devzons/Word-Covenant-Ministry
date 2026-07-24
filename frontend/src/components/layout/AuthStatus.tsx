@@ -16,11 +16,13 @@ const copy = {
   en: {
     loading: "Loading",
     login: "Log in",
+    myNotes: "My notes",
     logout: "Log out",
   },
   ko: {
     loading: "불러오는 중",
     login: "로그인",
+    myNotes: "내 노트",
     logout: "로그아웃",
   },
 } as const;
@@ -59,8 +61,14 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
   }
 
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className={cn("flex flex-wrap items-center gap-3", className)}>
       <span className="text-sm font-medium text-zinc-700">{user.name}</span>
+      <Link
+        className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-950"
+        href={`/${activeLocale}/my/notes`}
+      >
+        {copy[activeLocale].myNotes}
+      </Link>
       <Button
         className="h-9 px-3"
         disabled={isSubmitting}

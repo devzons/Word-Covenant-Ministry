@@ -20,6 +20,7 @@ import {
   useScriptureResearchWorkspace,
   type ScriptureResearchReferenceRange,
 } from "@/components/scripture/ScriptureResearchWorkspaceContext";
+import { VerseNotePanel } from "@/components/scripture/VerseNotePanel";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
 import type { TimelineChapterContextRow } from "@/components/scripture/timeline/timelineChapterContextPackage";
 import type { TimelineBookContextRow } from "@/components/scripture/timeline/passionWeekTimeline";
@@ -473,6 +474,18 @@ export function BibleReader({
                             chapter={chapter.chapter}
                             locale={locale}
                             source={originalLanguageSource}
+                            translation={chapter.translation}
+                            verse={verse.verse}
+                          />
+                        ) : null}
+                        {isActive ? (
+                          <VerseNotePanel
+                            book={chapter.book}
+                            chapter={chapter.chapter}
+                            locale={locale}
+                            referenceLabel={`${
+                              currentBook?.label[activeLocale] ?? bookMetadata.name
+                            } ${chapter.chapter}:${verse.verse}`}
                             translation={chapter.translation}
                             verse={verse.verse}
                           />

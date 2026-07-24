@@ -28,6 +28,7 @@ type AuthContextValue = {
   login: (input: LoginInput) => Promise<AuthUser>;
   logout: () => Promise<void>;
   refresh: () => Promise<AuthUser | null>;
+  restNonce: string | null;
   status: AuthStatus;
   user: AuthUser | null;
 };
@@ -35,17 +36,20 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const [restNonce, setRestNonce] = useState<string | null>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");
 
   const refresh = useCallback(async (): Promise<AuthUser | null> => {
     try {
-      const nextUser = await getCurrentUser();
-      setUser(nextUser);
-      setStatus(nextUser ? "authenticated" : "unauthenticated");
+      const session = await getCurrentUser();
+      setRestNonce(session.restNonce);
+      setUser(session.user);
+      setStatus(session.user ? "authenticated" : "unauthenticated");
 
-      return nextUser;
+      return session.user;
     } catch {
+      setRestNonce(null);
       setUser(null);
       setStatus("unauthenticated");
 
@@ -55,18 +59,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(
     async (input: LoginInput): Promise<AuthUser> => {
-      const nextUser = await loginRequest(input);
-      setUser(nextUser);
+      const session = await loginRequest(input);
+
+      if (session.user === null) {
+        throw new Error("Authenticated session is missing user data.");
+      }
+
+      setRestNonce(session.restNonce);
+      setUser(session.user);
       setStatus("authenticated");
 
-      return nextUser;
+      return session.user;
     },
     [],
   );
 
   const logout = useCallback(async (): Promise<void> => {
-    await logoutRequest();
-    setUser(null);
+    const session = await logoutRequest();
+    setRestNonce(session.restNonce);
+    setUser(session.user);
     setStatus("unauthenticated");
   }, []);
 
@@ -74,19 +85,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let isActive = true;
 
     void getCurrentUser()
-      .then((nextUser) => {
+      .then((session) => {
         if (!isActive) {
           return;
         }
 
-        setUser(nextUser);
-        setStatus(nextUser ? "authenticated" : "unauthenticated");
+        setRestNonce(session.restNonce);
+        setUser(session.user);
+        setStatus(session.user ? "authenticated" : "unauthenticated");
       })
       .catch(() => {
         if (!isActive) {
           return;
         }
 
+        setRestNonce(null);
         setUser(null);
         setStatus("unauthenticated");
       });
@@ -101,10 +114,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       refresh,
+      restNonce,
       status,
       user,
     }),
-    [login, logout, refresh, status, user],
+    [login, logout, refresh, restNonce, status, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
