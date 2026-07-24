@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 
-import { AuthProvider } from "@/components/layout/AuthProvider";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { siteConfig } from "@/config/site";
@@ -19,11 +18,9 @@ export function SiteShell({
 }: SiteShellProps) {
   return (
     <div className={cn("flex min-h-screen flex-col bg-white text-zinc-950", className)}>
-      <AuthProvider>
-        <SiteHeader locale={locale} />
-        <main className="flex-1">{children}</main>
-        <SiteFooter locale={locale} />
-      </AuthProvider>
+      <SiteHeader locale={locale} />
+      <main className="flex-1">{children}</main>
+      <SiteFooter locale={locale} />
     </div>
   );
 }

@@ -6,6 +6,7 @@ namespace WCM\Core;
 
 use WCM\Admin\CrossReferenceReviewPage;
 use WCM\Api\ApiRegistrar;
+use WCM\Api\AuthRestBridge;
 use WCM\Database\BibleBooksSeeder;
 use WCM\Database\BibleVersionSeeder;
 use WCM\Database\DatabaseHealthCheck;
@@ -32,6 +33,8 @@ final class Plugin
         add_action('admin_enqueue_scripts', [self::class, 'enqueueAdminAssets']);
         add_action('admin_notices', [self::class, 'renderDatabaseHealthNotice']);
         add_filter('allowed_http_origins', [self::class, 'filterAllowedHttpOrigins']);
+        add_filter('determine_current_user', [self::class, 'determineAuthBridgeCurrentUser'], 5);
+        add_filter('rest_authentication_errors', [self::class, 'bypassAuthBridgeNonceCheck'], 90);
     }
 
     public static function activate(): void
@@ -167,5 +170,19 @@ final class Plugin
         }
 
         return $normalized;
+    }
+
+    /**
+     * @param int|false $userId
+     * @return int|false
+     */
+    public static function determineAuthBridgeCurrentUser(int|false $userId): int|false
+    {
+        return (new AuthRestBridge())->determineCurrentUser($userId);
+    }
+
+    public static function bypassAuthBridgeNonceCheck(mixed $result): mixed
+    {
+        return (new AuthRestBridge())->bypassNonceCheckForBridgeRoutes($result);
     }
 }
