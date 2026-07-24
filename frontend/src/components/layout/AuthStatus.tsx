@@ -29,6 +29,12 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const { logout, status, user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const logoutErrorCopy =
+    activeLocale === "ko"
+      ? "로그아웃을 완료할 수 없습니다. 다시 시도해 주세요."
+      : "Sign-out could not be completed. Please try again.";
 
   if (status === "loading") {
     return (
@@ -60,9 +66,12 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
         disabled={isSubmitting}
         onClick={async () => {
           setIsSubmitting(true);
+          setErrorMessage("");
 
           try {
             await logout();
+          } catch {
+            setErrorMessage(logoutErrorCopy);
           } finally {
             setIsSubmitting(false);
           }
@@ -71,6 +80,9 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
       >
         {copy[activeLocale].logout}
       </Button>
+      {errorMessage ? (
+        <span className="text-sm text-red-700">{errorMessage}</span>
+      ) : null}
     </div>
   );
 }

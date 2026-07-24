@@ -65,7 +65,7 @@ final class AuthRestBridge
             return false;
         }
 
-        return is_allowed_http_origin($origin);
+        return is_allowed_http_origin($origin) !== '';
     }
 
     private function requestRoute(): ?string
