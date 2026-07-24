@@ -40,7 +40,7 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
 
   if (status === "loading") {
     return (
-      <span className={cn("text-sm text-zinc-400", className)}>
+      <span className={cn("text-xs text-zinc-400", className)}>
         {copy[activeLocale].loading}
       </span>
     );
@@ -61,8 +61,10 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
   }
 
   return (
-    <div className={cn("flex flex-wrap items-center gap-3", className)}>
-      <span className="text-sm font-medium text-zinc-700">{user.name}</span>
+    <div className={cn("flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2", className)}>
+      <span className="max-w-[10rem] truncate text-sm font-medium text-zinc-700 sm:max-w-[14rem]">
+        {user.name}
+      </span>
       <Link
         className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-950"
         href={`/${activeLocale}/my/notes`}
@@ -70,7 +72,7 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
         {copy[activeLocale].myNotes}
       </Link>
       <Button
-        className="h-9 px-3"
+        className="h-8 px-2.5"
         disabled={isSubmitting}
         onClick={async () => {
           setIsSubmitting(true);
@@ -89,7 +91,7 @@ export function AuthStatus({ className, locale }: AuthStatusProps) {
         {copy[activeLocale].logout}
       </Button>
       {errorMessage ? (
-        <span className="text-sm text-red-700">{errorMessage}</span>
+        <span className="basis-full text-sm text-red-700">{errorMessage}</span>
       ) : null}
     </div>
   );

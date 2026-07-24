@@ -16,40 +16,49 @@ type SiteHeaderProps = {
 export function SiteHeader({ className, locale }: SiteHeaderProps) {
   return (
     <header className={cn("border-b border-zinc-200 bg-white", className)}>
-      <Container className="flex flex-col gap-3 py-4 md:min-h-16 md:flex-row md:items-center md:justify-between md:gap-6">
-        <div className="flex items-center justify-between gap-4">
-          <Link href={localizedHref("/", locale)} className="text-base font-semibold text-zinc-950">
+      <Container className="py-0">
+        <div className="flex min-w-0 items-start justify-between gap-4 border-b border-zinc-200 py-3 sm:items-center">
+          <Link
+            href={localizedHref("/", locale)}
+            className="shrink-0 text-base font-semibold text-zinc-950"
+          >
             {siteConfig.name}
           </Link>
-          <div className="md:hidden">
+
+          <div className="flex min-w-0 flex-col items-end gap-2 md:hidden">
             <Suspense fallback={null}>
               <LocaleSwitcher currentLocale={locale} />
             </Suspense>
+            <AuthStatus className="justify-end" locale={locale} />
+          </div>
+
+          <div className="hidden min-w-0 items-center gap-4 md:flex">
+            <Suspense fallback={null}>
+              <LocaleSwitcher currentLocale={locale} />
+            </Suspense>
+            <AuthStatus className="justify-end" locale={locale} />
           </div>
         </div>
 
-        <div className="hidden items-center gap-5 md:flex">
-          <nav aria-label="Primary navigation" className="flex gap-5">
-            {primaryNavigation.map((item) => (
-              <Link
-                className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-950"
-                href={localizedHref(item.href, locale)}
-                key={item.href}
-              >
-                {item.label[localeLabel(locale)]}
-              </Link>
-            ))}
-          </nav>
-          <AuthStatus locale={locale} />
-          <Suspense fallback={null}>
-            <LocaleSwitcher currentLocale={locale} />
-          </Suspense>
-        </div>
+        <nav
+          aria-label="Primary navigation"
+          className="hidden items-center gap-5 overflow-x-auto py-3 md:flex"
+        >
+          {primaryNavigation.map((item) => (
+            <Link
+              className="whitespace-nowrap text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-950"
+              href={localizedHref(item.href, locale)}
+              key={item.href}
+            >
+              {item.label[localeLabel(locale)]}
+            </Link>
+          ))}
+        </nav>
 
-        <details className="group md:hidden">
+        <details className="group py-3 md:hidden">
           <summary className="flex cursor-pointer list-none items-center justify-between rounded-md border border-zinc-200 px-3 py-2 text-sm font-semibold text-zinc-900 marker:hidden">
             <span>{locale === "ko" ? "메뉴" : "Menu"}</span>
-            <span aria-hidden="true" className="text-zinc-500 group-open:rotate-180">
+            <span aria-hidden="true" className="text-zinc-500 transition-transform group-open:rotate-180">
               v
             </span>
           </summary>
@@ -64,14 +73,6 @@ export function SiteHeader({ className, locale }: SiteHeaderProps) {
               </Link>
             ))}
           </nav>
-          <div className="mt-3 border-t border-zinc-200 pt-3">
-            <AuthStatus locale={locale} />
-          </div>
-          <div className="mt-3 border-t border-zinc-200 pt-3">
-            <Suspense fallback={null}>
-              <LocaleSwitcher currentLocale={locale} />
-            </Suspense>
-          </div>
         </details>
       </Container>
     </header>
