@@ -42,6 +42,8 @@ type GospelHarmonyWorkspaceProps = {
   locale: "en" | "ko";
 };
 
+type GospelHarmonyLayout = "parallel" | "stacked";
+
 const gospelHarmonyCopy = {
   en: {
     title: "Gospel Harmony",
@@ -55,6 +57,9 @@ const gospelHarmonyCopy = {
     searchResults: "Search Results",
     selectUnit: "Browse Units",
     parallelPassages: "Parallel Passages",
+    layoutLabel: "Reading Layout",
+    layoutParallel: "Parallel",
+    layoutStacked: "Stacked",
     selectedInformation: "Selected Unit",
     classification: "Classification",
     tags: "Tags",
@@ -100,6 +105,9 @@ const gospelHarmonyCopy = {
     searchResults: "검색 결과",
     selectUnit: "단위 탐색",
     parallelPassages: "병행 본문",
+    layoutLabel: "읽기 레이아웃",
+    layoutParallel: "병행 대조",
+    layoutStacked: "위아래 읽기",
     selectedInformation: "선택 단위 정보",
     classification: "분류",
     tags: "태그",
@@ -157,6 +165,8 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
   const searchParams = useSearchParams();
   const requestedView = resolveGospelHarmonyView(searchParams.get("view"));
   const activeView = requestedView ?? "all";
+  const requestedLayout = resolveGospelHarmonyLayout(searchParams.get("layout"));
+  const activeLayout = requestedLayout ?? "parallel";
   const requestedUnitId = resolveGospelHarmonyUnitId(searchParams.get("unit"));
   const [searchQuery, setSearchQuery] = useState("");
   const [openMobileColumn, setOpenMobileColumn] = useState<GospelHarmonyBook | null>(null);
@@ -233,6 +243,11 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
       shouldReplace = true;
     }
 
+    if (requestedLayout === null && searchParams.get("layout")) {
+      params.delete("layout");
+      shouldReplace = true;
+    }
+
     const activeUnitInView =
       requestedUnitId && filteredByView.some((unit) => unit.id === requestedUnitId)
         ? requestedUnitId
@@ -254,16 +269,44 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
       shouldReplace = true;
     }
 
+    if (activeLayout === "parallel") {
+      if (params.has("layout")) {
+        params.delete("layout");
+        shouldReplace = true;
+      }
+    } else if (searchParams.get("layout") !== activeLayout) {
+      params.set("layout", activeLayout);
+      shouldReplace = true;
+    }
+
     if (!shouldReplace) {
       return;
     }
 
     const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-  }, [activeView, filteredByView, pathname, requestedUnitId, requestedView, router, searchParams]);
+    const hash = getCurrentHash();
+    router.replace(query ? `${pathname}?${query}${hash}` : `${pathname}${hash}`, { scroll: false });
+  }, [
+    activeLayout,
+    activeView,
+    filteredByView,
+    pathname,
+    requestedLayout,
+    requestedUnitId,
+    requestedView,
+    router,
+    searchParams,
+  ]);
 
-  function replaceQuery(nextView: GospelHarmonyView, nextUnitId?: string) {
+  function replaceQuery(options: {
+    layout?: GospelHarmonyLayout;
+    unitId?: string;
+    view?: GospelHarmonyView;
+  }) {
     const params = new URLSearchParams(searchParams.toString());
+    const nextView = options.view ?? activeView;
+    const nextLayout = options.layout ?? activeLayout;
+    const nextUnitId = options.unitId;
 
     if (nextView === "all") {
       params.delete("view");
@@ -275,17 +318,28 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
       params.set("unit", nextUnitId);
     }
 
+    if (nextLayout === "parallel") {
+      params.delete("layout");
+    } else {
+      params.set("layout", nextLayout);
+    }
+
     const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    const hash = getCurrentHash();
+    router.replace(query ? `${pathname}?${query}${hash}` : `${pathname}${hash}`, { scroll: false });
   }
 
   function handleViewChange(nextView: GospelHarmonyView) {
     const nextUnits = gospelHarmonyUnits.filter((unit) => matchesView(unit, nextView));
-    replaceQuery(nextView, nextUnits[0]?.id);
+    replaceQuery({ unitId: nextUnits[0]?.id, view: nextView });
   }
 
   function handleSelectUnit(unitId: string) {
-    replaceQuery(activeView, unitId);
+    replaceQuery({ unitId });
+  }
+
+  function handleLayoutChange(nextLayout: GospelHarmonyLayout) {
+    replaceQuery({ layout: nextLayout });
   }
 
   function handleOpenPreview(target: PassagePreviewTarget, triggerElement: HTMLElement) {
@@ -327,7 +381,7 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
         <p className="text-base leading-7 text-zinc-600">{copy.description}</p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]">
+      <div className="grid gap-5 xl:grid-cols-[220px_minmax(0,1fr)]">
         <GospelHarmonyNavigator
           activeView={activeView}
           copy={copy}
@@ -347,11 +401,47 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
         <div className="flex min-w-0 flex-col gap-4">
           {displayUnit ? (
             <>
-              <div className="flex flex-col gap-3 rounded-md border border-zinc-200 bg-white p-5">
-                <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
-                  {copy.parallelPassages}
-                </p>
-                <h2 className="text-2xl font-semibold text-zinc-950">{displayUnit.title[locale]}</h2>
+              <div className="flex flex-col gap-3 rounded-md border border-zinc-200 bg-white p-4">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="flex min-w-0 flex-col gap-3">
+                    <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
+                      {copy.parallelPassages}
+                    </p>
+                    <h2 className="text-2xl font-semibold text-zinc-950">{displayUnit.title[locale]}</h2>
+                  </div>
+                  <div className="flex flex-col gap-2 lg:items-end">
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                      {copy.layoutLabel}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {(
+                        [
+                          ["parallel", copy.layoutParallel],
+                          ["stacked", copy.layoutStacked],
+                        ] as const
+                      ).map(([layout, label]) => {
+                        const active = activeLayout === layout;
+
+                        return (
+                          <button
+                            aria-pressed={active}
+                            className={cn(
+                              "rounded-md border px-3 py-2 text-sm font-semibold transition-colors",
+                              active
+                                ? "border-zinc-950 bg-zinc-950 text-white"
+                                : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100",
+                            )}
+                            key={layout}
+                            onClick={() => handleLayoutChange(layout)}
+                            type="button"
+                          >
+                            {label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
                 <div className="grid gap-4 md:grid-cols-3">
                   <InfoCard label={copy.classification} value={displayUnit.category[locale]} />
                   <InfoCard
@@ -385,44 +475,47 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
                 </div>
               </div>
 
-              <div className="rounded-md border border-zinc-200 bg-zinc-50 p-4 lg:hidden">
-                <div className="flex flex-col gap-3">
-                  <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
-                    {copy.mobileRecordedAccounts}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {visibleBooks.map((book) => {
-                      const active = mobileActiveColumn === book;
+              {activeLayout === "parallel" ? (
+                <div className="rounded-md border border-zinc-200 bg-zinc-50 p-4 lg:hidden">
+                  <div className="flex flex-col gap-3">
+                    <p className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                      {copy.mobileRecordedAccounts}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {visibleBooks.map((book) => {
+                        const active = mobileActiveColumn === book;
 
-                      return (
-                        <button
-                          aria-pressed={active}
-                          className={cn(
-                            "rounded-md border px-3 py-2 text-sm font-semibold transition-colors",
-                            active
-                              ? "border-zinc-950 bg-zinc-950 text-white"
-                              : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100",
-                          )}
-                          key={book}
-                          onClick={() => setOpenMobileColumn(book)}
-                          type="button"
-                        >
-                          {gospelHarmonyBookLabels[book][locale]}
-                        </button>
-                      );
-                    })}
+                        return (
+                          <button
+                            aria-pressed={active}
+                            className={cn(
+                              "rounded-md border px-3 py-2 text-sm font-semibold transition-colors",
+                              active
+                                ? "border-zinc-950 bg-zinc-950 text-white"
+                                : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100",
+                            )}
+                            key={book}
+                            onClick={() => setOpenMobileColumn(book)}
+                            type="button"
+                          >
+                            {gospelHarmonyBookLabels[book][locale]}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
 
-              <div className={getDesktopGridClass(visibleBooks.length)}>
+              <div className={activeLayout === "stacked" ? "flex flex-col gap-3" : getParallelGridClass(visibleBooks.length)}>
                 {visibleBooks.map((column) => (
                   <HarmonyColumn
                     bookCount={visibleBooks.length}
                     column={column}
                     copy={copy}
-                    isMobileOpen={mobileActiveColumn === column}
+                    isMobileOpen={activeLayout === "stacked" ? true : mobileActiveColumn === column}
                     key={column}
+                    layout={activeLayout}
                     locale={locale}
                     onPreview={handleOpenPreview}
                     passage={displayUnit.passages[column]}
@@ -433,7 +526,7 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
 
               <HarmonyRelatedPassages
                 copy={copy}
-                key={`${displayUnit.id}-${activeView}`}
+                key={`${displayUnit.id}-${activeView}-${activeLayout}`}
                 locale={locale}
                 onPreview={handleOpenPreview}
                 translation={translation}
@@ -648,6 +741,7 @@ function HarmonyColumn({
   column,
   copy,
   isMobileOpen,
+  layout,
   locale,
   onPreview,
   passage,
@@ -657,6 +751,7 @@ function HarmonyColumn({
   column: GospelHarmonyBook;
   copy: (typeof gospelHarmonyCopy)["en"];
   isMobileOpen: boolean;
+  layout: GospelHarmonyLayout;
   locale: "en" | "ko";
   onPreview: (target: PassagePreviewTarget, triggerElement: HTMLElement) => void;
   passage?: GospelHarmonyPassage;
@@ -666,17 +761,17 @@ function HarmonyColumn({
     <section
       className={cn(
         "min-h-40 rounded-md border border-zinc-200 bg-white",
-        !isMobileOpen ? "hidden lg:block" : "",
+        layout === "parallel" && !isMobileOpen ? "hidden lg:block" : "",
         bookCount === 1 ? "lg:col-span-full" : "",
       )}
     >
-      <div className="border-b border-zinc-200 px-4 py-3">
+      <div className="border-b border-zinc-200 px-3 py-2.5">
         <h3 className="text-lg font-semibold text-zinc-950">
           {gospelHarmonyBookLabels[column][locale]}
         </h3>
       </div>
 
-      <div className="px-4 py-4">
+      <div className="px-3 py-3">
         {passage ? (
           <HarmonyPassageContent
             copy={copy}
@@ -803,18 +898,37 @@ function renderPassageState({
   }
 
   return (
-    <ol className="flex flex-col gap-2">
+      <ol className="flex flex-col gap-2">
       {verses.map((verse) => (
-        <li
-          className="grid grid-cols-[1.75rem_minmax(0,1fr)] gap-2 text-base leading-7"
-          key={verse.verse}
-        >
-          <span className="pt-0.5 text-sm font-semibold text-zinc-500">{verse.verse}</span>
+        <li className="text-base leading-7" key={verse.verse}>
+          <span className="mr-1 align-super text-[0.7rem] font-semibold text-zinc-500">
+            {verse.verse}
+          </span>
           <span className="break-words text-zinc-900">{verse.text}</span>
         </li>
       ))}
     </ol>
   );
+}
+
+function resolveGospelHarmonyLayout(value: string | null): GospelHarmonyLayout | null {
+  if (!value) {
+    return null;
+  }
+
+  if (value === "parallel" || value === "stacked") {
+    return value;
+  }
+
+  return null;
+}
+
+function getCurrentHash() {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
+  return window.location.hash || "";
 }
 
 function matchesView(unit: GospelHarmonyUnit, view: GospelHarmonyView): boolean {
@@ -861,16 +975,16 @@ function buildSearchIndex(unit: GospelHarmonyUnit): string {
   return `${titles} ${references}`;
 }
 
-function getDesktopGridClass(bookCount: number): string {
+function getParallelGridClass(bookCount: number): string {
   switch (bookCount) {
     case 1:
-      return "grid gap-4";
+      return "grid gap-3";
     case 2:
-      return "grid gap-4 lg:grid-cols-2";
+      return "grid gap-3 lg:grid-cols-2";
     case 3:
-      return "grid gap-4 lg:grid-cols-3";
+      return "grid gap-3 lg:grid-cols-3";
     default:
-      return "grid gap-4 lg:grid-cols-4";
+      return "grid gap-3 lg:grid-cols-2";
   }
 }
 
