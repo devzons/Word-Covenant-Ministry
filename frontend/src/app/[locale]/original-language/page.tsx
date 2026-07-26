@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { SiteShell } from "@/components/layout/SiteShell";
-import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/config/site";
 
 type OriginalLanguagePageProps = {
@@ -41,7 +40,7 @@ export default async function OriginalLanguagePage({ params }: OriginalLanguageP
 
   return (
     <SiteShell locale={activeLocale}>
-      <Container>
+      <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <section className="flex flex-col gap-8 py-12 sm:py-16">
           <div className="flex max-w-3xl flex-col gap-3">
             <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
@@ -76,7 +75,7 @@ export default async function OriginalLanguagePage({ params }: OriginalLanguageP
             </Link>
           </div>
         </section>
-      </Container>
+      </div>
     </SiteShell>
   );
 }

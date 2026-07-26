@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import type { ReactElement } from "react";
 
 import { SiteShell } from "@/components/layout/SiteShell";
-import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/config/site";
 import { fetchStudyCategories, fetchStudyContents } from "@/lib/api/study";
 import { createMetadata } from "@/lib/seo/metadata";
@@ -199,7 +198,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
 
   return (
     <SiteShell locale={activeLocale}>
-      <Container>
+      <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <div className="py-12 sm:py-16">
           <div className="mb-6 lg:hidden">
             <nav aria-label={pageCopy.sidebarTitle} className="flex flex-wrap gap-2">
@@ -485,7 +484,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </SiteShell>
   );
 }

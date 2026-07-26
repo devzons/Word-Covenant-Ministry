@@ -1,6 +1,5 @@
 import { SiteShell } from "@/components/layout/SiteShell";
 import { GospelHarmonyWorkspace } from "@/components/scripture/GospelHarmonyWorkspace";
-import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/config/site";
 
 type GospelHarmonyPageProps = {
@@ -15,9 +14,9 @@ export default async function GospelHarmonyPage({ params }: GospelHarmonyPagePro
 
   return (
     <SiteShell locale={activeLocale}>
-      <Container>
+      <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <GospelHarmonyWorkspace locale={activeLocale} />
-      </Container>
+      </div>
     </SiteShell>
   );
 }
