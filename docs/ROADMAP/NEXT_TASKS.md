@@ -1213,3 +1213,5 @@ Next CR:
   - Purpose: use the now-confirmed live browser baseline for the compact navigator plus `parallel` / `stacked` reading modes to decide the next smallest Gospel Harmony CR, such as optional navigator collapse review, metadata polish, or another narrow study-surface UX improvement, without reopening backend/API/data scope or changing the current phase.
 - `Gospel Harmony Event Coverage and Sequence Audit`
   - Purpose: audit the non-parable event units in the current Harmony dataset for remaining omissions, overlap, and ordering quality after the parable/eschatology/reference audit, while keeping the frontend-only reference model and avoiding backend/API/schema changes.
+- `Gospel Harmony Event Metadata and Remaining Candidate Review`
+  - Purpose: review whether any newly added event titles/categories/section placements still need minor neutrality or grouping polish, and decide whether any lower-priority candidates such as Zacchaeus, Martha and Mary, or post-resurrection appearance subdivision belong in a later conservative reference-only batch without reopening backend/API/data architecture.

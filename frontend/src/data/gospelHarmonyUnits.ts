@@ -75,7 +75,7 @@ export const gospelHarmonySectionLabels: Record<
   GospelHarmonySection,
   { en: string; ko: string }
 > = {
-  "ministry-start": { en: "Beginning of Ministry", ko: "사역의 시작" },
+  "ministry-start": { en: "Birth and Early Ministry", ko: "탄생과 초기 사역" },
   kingdom: { en: "Kingdom of God", ko: "하나님 나라" },
   "grace-repentance-forgiveness": {
     en: "Grace, Repentance, and Forgiveness",
@@ -88,7 +88,7 @@ export const gospelHarmonySectionLabels: Record<
   "prayer-faith": { en: "Prayer and Faith", ko: "기도와 믿음" },
   "stewardship-wealth": { en: "Stewardship and Wealth", ko: "청지기와 재물" },
   "israel-leaders": { en: "Israel and Its Leaders", ko: "이스라엘과 지도자" },
-  eschatology: { en: "End Times, Return, and Judgment", ko: "종말·재림·심판" },
+  eschatology: { en: "Passion, Resurrection, and End Times", ko: "수난·부활·종말" },
   figurative: { en: "Johannine Figurative Teachings", ko: "요한복음 표상 말씀" },
 };
 
@@ -153,6 +153,73 @@ function unit(definition: GospelHarmonyUnitDefinition): GospelHarmonyUnitDefinit
 
 const unitDefinitions: GospelHarmonyUnitDefinition[] = [
   unit({
+    id: "jesus-birth",
+    title: { ko: "예수님의 탄생", en: "Birth of Jesus" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      matthew: passage("matthew", 1, 18, 25),
+      luke: passage("luke", 2, 1, 7),
+    },
+  }),
+  unit({
+    id: "shepherds-at-birth",
+    title: { ko: "목자들의 방문", en: "Visit of the Shepherds" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      luke: passage("luke", 2, 8, 20),
+    },
+  }),
+  unit({
+    id: "presentation-in-temple",
+    title: { ko: "할례와 성전 봉헌", en: "Circumcision and Presentation in the Temple" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      luke: passage("luke", 2, 21, 38),
+    },
+  }),
+  unit({
+    id: "visit-of-magi",
+    title: { ko: "동방 박사", en: "Visit of the Magi" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      matthew: passage("matthew", 2, 1, 12),
+    },
+  }),
+  unit({
+    id: "flight-to-egypt-and-return",
+    title: { ko: "애굽 피난과 귀환", en: "Flight to Egypt and Return" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      matthew: passage("matthew", 2, 13, 23),
+    },
+  }),
+  unit({
+    id: "boy-jesus-in-temple",
+    title: { ko: "소년 예수님의 성전 방문", en: "Boy Jesus in the Temple" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      luke: passage("luke", 2, 41, 52),
+    },
+  }),
+  unit({
+    id: "john-baptist-ministry",
+    title: { ko: "세례 요한의 사역", en: "Ministry of John the Baptist" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      matthew: passage("matthew", 3, 1, 12),
+      mark: passage("mark", 1, 1, 8),
+      luke: passage("luke", 3, 1, 18),
+      john: passage("john", 1, 19, 28),
+    },
+  }),
+  unit({
     id: "jesus-baptism",
     title: { ko: "예수님의 세례", en: "Baptism of Jesus" },
     kinds: ["event"],
@@ -175,6 +242,24 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
+    id: "first-disciples",
+    title: { ko: "첫 제자들", en: "First Disciples" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      john: passage("john", 1, 35, 51),
+    },
+  }),
+  unit({
+    id: "cana-wedding",
+    title: { ko: "가나 혼인잔치", en: "Wedding at Cana" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      john: passage("john", 2, 1, 11),
+    },
+  }),
+  unit({
     id: "calling-four-disciples",
     title: { ko: "네 제자 부르심", en: "Calling of Four Disciples" },
     kinds: ["event"],
@@ -183,6 +268,49 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
       matthew: passage("matthew", 4, 18, 22),
       mark: passage("mark", 1, 16, 20),
       luke: passage("luke", 5, 1, 11),
+    },
+  }),
+  unit({
+    id: "calming-the-storm",
+    title: { ko: "풍랑을 잔잔하게 하심", en: "Calming the Storm" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      matthew: passage("matthew", 8, 23, 27),
+      mark: passage("mark", 4, 35, 41),
+      luke: passage("luke", 8, 22, 25),
+    },
+  }),
+  unit({
+    id: "gerasene-demoniac",
+    title: { ko: "거라사 귀신 들린 자", en: "Gerasene Demoniac" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      matthew: passage("matthew", 8, 28, 34),
+      mark: passage("mark", 5, 1, 20),
+      luke: passage("luke", 8, 26, 39),
+    },
+  }),
+  unit({
+    id: "jairus-daughter-and-bleeding-woman",
+    title: { ko: "야이로의 딸과 혈루증 여인", en: "Jairus's Daughter and the Bleeding Woman" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      matthew: passage("matthew", 9, 18, 26),
+      mark: passage("mark", 5, 21, 43),
+      luke: passage("luke", 8, 40, 56),
+    },
+  }),
+  unit({
+    id: "death-of-john-baptist",
+    title: { ko: "세례 요한의 죽음", en: "Death of John the Baptist" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      matthew: passage("matthew", 14, 1, 12),
+      mark: passage("mark", 6, 14, 29),
     },
   }),
   unit({
@@ -198,6 +326,28 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
+    id: "walking-on-water",
+    title: { ko: "물 위를 걸으심", en: "Walking on Water" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      matthew: passage("matthew", 14, 22, 33),
+      mark: passage("mark", 6, 45, 52),
+      john: passage("john", 6, 16, 21),
+    },
+  }),
+  unit({
+    id: "peter-confession",
+    title: { ko: "베드로의 신앙 고백", en: "Peter's Confession" },
+    kinds: ["event"],
+    section: "discipleship-obedience",
+    passages: {
+      matthew: passage("matthew", 16, 13, 20),
+      mark: passage("mark", 8, 27, 30),
+      luke: passage("luke", 9, 18, 21),
+    },
+  }),
+  unit({
     id: "transfiguration",
     title: { ko: "변화산", en: "Transfiguration" },
     kinds: ["event"],
@@ -206,6 +356,50 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
       matthew: passage("matthew", 17, 1, 8),
       mark: passage("mark", 9, 2, 8),
       luke: passage("luke", 9, 28, 36),
+    },
+  }),
+  unit({
+    id: "raising-of-lazarus",
+    title: { ko: "나사로를 살리심", en: "Raising of Lazarus" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      john: passage("john", 11, 1, 44),
+    },
+  }),
+  unit({
+    id: "triumphal-entry",
+    title: { ko: "예루살렘 입성", en: "Triumphal Entry" },
+    kinds: ["event"],
+    section: "israel-leaders",
+    passages: {
+      matthew: passage("matthew", 21, 1, 11),
+      mark: passage("mark", 11, 1, 11),
+      luke: passage("luke", 19, 28, 40),
+      john: passage("john", 12, 12, 19),
+    },
+  }),
+  unit({
+    id: "temple-cleansing",
+    title: { ko: "성전 정화", en: "Temple Cleansing" },
+    kinds: ["event"],
+    section: "israel-leaders",
+    passages: {
+      matthew: passage("matthew", 21, 12, 17),
+      mark: passage("mark", 11, 15, 19),
+      luke: passage("luke", 19, 45, 48),
+    },
+  }),
+  unit({
+    id: "last-supper",
+    title: { ko: "최후의 만찬", en: "Last Supper" },
+    kinds: ["event"],
+    section: "discipleship-obedience",
+    passages: {
+      matthew: passage("matthew", 26, 20, 29),
+      mark: passage("mark", 14, 17, 25),
+      luke: passage("luke", 22, 14, 23),
+      john: passage("john", 13, 1, 30),
     },
   }),
   unit({
@@ -220,6 +414,18 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
+    id: "arrest-of-jesus",
+    title: { ko: "예수님의 체포", en: "Arrest of Jesus" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      matthew: passage("matthew", 26, 47, 56),
+      mark: passage("mark", 14, 43, 52),
+      luke: passage("luke", 22, 47, 53),
+      john: passage("john", 18, 1, 11),
+    },
+  }),
+  unit({
     id: "crucifixion",
     title: { ko: "십자가", en: "Crucifixion" },
     kinds: ["event"],
@@ -229,6 +435,94 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
       mark: passage("mark", 15, 21, 41),
       luke: passage("luke", 23, 26, 49),
       john: passage("john", 19, 16, 37),
+    },
+  }),
+  unit({
+    id: "burial-of-jesus",
+    title: { ko: "예수님의 장사", en: "Burial of Jesus" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      matthew: passage("matthew", 27, 57, 61),
+      mark: passage("mark", 15, 42, 47),
+      luke: passage("luke", 23, 50, 56),
+      john: passage("john", 19, 38, 42),
+    },
+  }),
+  unit({
+    id: "empty-tomb",
+    title: { ko: "빈 무덤", en: "Empty Tomb" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      matthew: passage("matthew", 28, 1, 8),
+      mark: passage("mark", 16, 1, 8),
+      luke: passage("luke", 24, 1, 12),
+      john: passage("john", 20, 1, 10),
+    },
+  }),
+  unit({
+    id: "appearance-to-mary-magdalene",
+    title: { ko: "막달라 마리아에게 나타나심", en: "Appearance to Mary Magdalene" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      john: passage("john", 20, 11, 18),
+    },
+  }),
+  unit({
+    id: "road-to-emmaus",
+    title: { ko: "엠마오로 가는 두 제자", en: "Road to Emmaus" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      luke: passage("luke", 24, 13, 35),
+    },
+  }),
+  unit({
+    id: "appearance-to-disciples",
+    title: { ko: "제자들에게 나타나심", en: "Appearance to the Disciples" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      luke: passage("luke", 24, 36, 49),
+      john: passage("john", 20, 19, 23),
+    },
+  }),
+  unit({
+    id: "appearance-to-thomas",
+    title: { ko: "도마에게 나타나심", en: "Appearance to Thomas" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      john: passage("john", 20, 24, 29),
+    },
+  }),
+  unit({
+    id: "disciples-by-sea-of-galilee",
+    title: { ko: "갈릴리 바닷가의 제자들", en: "Disciples by the Sea of Galilee" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      john: passage("john", 21, 1, 19),
+    },
+  }),
+  unit({
+    id: "great-commission",
+    title: { ko: "지상명령", en: "Great Commission" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      matthew: passage("matthew", 28, 16, 20),
+    },
+  }),
+  unit({
+    id: "ascension",
+    title: { ko: "승천", en: "Ascension" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      luke: passage("luke", 24, 50, 53),
     },
   }),
 
