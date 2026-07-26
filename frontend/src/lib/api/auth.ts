@@ -1,5 +1,14 @@
 import { createApiUrl } from "@/lib/api/client";
-import type { AuthEnvelope, AuthSession } from "@/types/auth";
+import type {
+  AuthEnvelope,
+  AuthSession,
+  RegisterUserInput,
+  RegisterUserResponse,
+  ResendVerificationInput,
+  ResendVerificationResponse,
+  VerifyEmailInput,
+  VerifyEmailResponse,
+} from "@/types/auth";
 
 export class AuthApiError extends Error {
   constructor(
@@ -72,6 +81,33 @@ export async function resetPassword(
   });
 
   return data.message;
+}
+
+export async function registerUser(
+  input: RegisterUserInput,
+): Promise<RegisterUserResponse> {
+  return authRequest<RegisterUserResponse>("/wcm/v1/auth/register", {
+    body: JSON.stringify(input),
+    method: "POST",
+  });
+}
+
+export async function verifyEmail(
+  input: VerifyEmailInput,
+): Promise<VerifyEmailResponse> {
+  return authRequest<VerifyEmailResponse>("/wcm/v1/auth/verify-email", {
+    body: JSON.stringify(input),
+    method: "POST",
+  });
+}
+
+export async function resendEmailVerification(
+  input: ResendVerificationInput,
+): Promise<ResendVerificationResponse> {
+  return authRequest<ResendVerificationResponse>("/wcm/v1/auth/resend-verification", {
+    body: JSON.stringify(input),
+    method: "POST",
+  });
 }
 
 async function authRequest<T>(
