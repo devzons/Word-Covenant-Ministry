@@ -6,6 +6,7 @@ namespace WCM\Core;
 
 use WCM\Admin\CrossReferenceReviewPage;
 use WCM\Api\ApiRegistrar;
+use WCM\Api\Auth\AuthFrontendUrlBuilder;
 use WCM\Api\AuthRestBridge;
 use WCM\Database\BibleBooksSeeder;
 use WCM\Database\BibleVersionSeeder;
@@ -34,6 +35,8 @@ final class Plugin
         add_action('admin_enqueue_scripts', [self::class, 'enqueueAdminAssets']);
         add_action('admin_notices', [self::class, 'renderDatabaseHealthNotice']);
         add_filter('allowed_http_origins', [self::class, 'filterAllowedHttpOrigins']);
+        add_filter('wp_mail_from', [self::class, 'filterMailFromAddress']);
+        add_filter('wp_mail_from_name', [self::class, 'filterMailFromName']);
         add_filter('determine_current_user', [self::class, 'determineAuthBridgeCurrentUser'], 5);
         add_filter('rest_authentication_errors', [self::class, 'bypassAuthBridgeNonceCheck'], 90);
     }
@@ -126,24 +129,7 @@ final class Plugin
      */
     public static function filterAllowedHttpOrigins(array $origins): array
     {
-        $frontendOrigins = [];
-        $environmentOrigin = self::normalizeOrigin((string) getenv('WCM_FRONTEND_URL'));
-
-        if ($environmentOrigin !== null) {
-            $frontendOrigins[] = $environmentOrigin;
-        }
-
-        $homeHost = (string) wp_parse_url(home_url(), PHP_URL_HOST);
-        $isLocalEnvironment =
-            str_contains($homeHost, '.local') ||
-            str_contains($homeHost, 'localhost') ||
-            wp_get_environment_type() !== 'production';
-
-        if ($isLocalEnvironment) {
-            $frontendOrigins[] = 'http://wordcovenantministry.local:3030';
-        } else {
-            $frontendOrigins[] = 'https://wordcovenantministry.org';
-        }
+        $frontendOrigins = (new AuthFrontendUrlBuilder())->allowedOrigins();
 
         return array_values(
             array_unique(
@@ -155,29 +141,26 @@ final class Plugin
         );
     }
 
-    private static function normalizeOrigin(string $origin): ?string
+    public static function filterMailFromAddress(string $fromAddress): string
     {
-        $origin = trim($origin);
+        $configuredFromAddress = trim((string) getenv('WCM_EMAIL_FROM_ADDRESS'));
 
-        if ($origin === '') {
-            return null;
+        if ($configuredFromAddress === '' || ! is_email($configuredFromAddress)) {
+            return $fromAddress;
         }
 
-        $scheme = wp_parse_url($origin, PHP_URL_SCHEME);
-        $host = wp_parse_url($origin, PHP_URL_HOST);
-        $port = wp_parse_url($origin, PHP_URL_PORT);
+        return $configuredFromAddress;
+    }
 
-        if (! is_string($scheme) || ! is_string($host) || $scheme === '' || $host === '') {
-            return null;
+    public static function filterMailFromName(string $fromName): string
+    {
+        $configuredFromName = trim((string) getenv('WCM_EMAIL_FROM_NAME'));
+
+        if ($configuredFromName === '') {
+            return $fromName;
         }
 
-        $normalized = strtolower($scheme) . '://' . strtolower($host);
-
-        if (is_int($port)) {
-            $normalized .= ':' . $port;
-        }
-
-        return $normalized;
+        return sanitize_text_field($configuredFromName);
     }
 
     /**

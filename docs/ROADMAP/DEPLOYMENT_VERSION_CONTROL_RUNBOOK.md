@@ -162,6 +162,25 @@ composer install
 7. Run API smoke tests and critical frontend route smoke tests.
 8. Confirm release notes include tag, plugin version, `db_version`, seed sets, checksums, and validation output.
 
+## Registration / Auth Environment Contract
+
+Before staging or production promotion of account features such as login, password reset, registration, email verification, or private verse notes, confirm these runtime values explicitly:
+
+```txt
+Frontend public URL: WCM_FRONTEND_URL
+Optional extra frontend origins for CORS: WCM_ALLOWED_ORIGINS
+Optional mail sender address: WCM_EMAIL_FROM_ADDRESS
+Optional mail sender display name: WCM_EMAIL_FROM_NAME
+```
+
+Rules:
+
+- `WCM_FRONTEND_URL` should point to the public frontend origin for the target environment.
+- `WCM_ALLOWED_ORIGINS` may be a comma-separated allowlist when multiple approved frontend origins must reach the backend during staged rollout.
+- `WCM_EMAIL_FROM_ADDRESS` and `WCM_EMAIL_FROM_NAME` should be set before production mail is enabled so registration verification and password reset mail do not rely on generic WordPress defaults.
+- Local-only hosts such as `.local`, `localhost`, and `127.0.0.1` must not be used for staging or production values.
+- Production and staging should set these values explicitly even though the backend contains fallback host-derivation logic for local safety and emergency defaults.
+
 ## Production Checklist
 
 Before production:
@@ -171,6 +190,11 @@ Before production:
 - Confirm staging passed with the same tag and same seed-set checksum.
 - Confirm database backup is restorable.
 - Confirm rollback owner and rollback window.
+- Confirm `WCM_FRONTEND_URL` points to the target public frontend.
+- Confirm `WCM_ALLOWED_ORIGINS` contains only approved frontend origins.
+- Confirm `WCM_EMAIL_FROM_ADDRESS` and `WCM_EMAIL_FROM_NAME` are provisioned.
+- Confirm the production email provider, SPF, DKIM, and DMARC ownership are documented outside Git.
+- Confirm a public support/privacy contact method is available from the live site.
 
 Production steps:
 
@@ -220,6 +244,14 @@ Seed rollback:
 - If row-level rollback tracking exists, restore previous values from `wcm_seed_migration_rows`.
 - If only a backup file exists, restore affected rows from the generated backup file.
 - Mark the seed migration as `rolled_back` once tracking exists.
+
+Registration-specific rollback cautions:
+
+- Code rollback does not delete users created while registration was enabled.
+- Pending accounts may still carry `wcm_requires_email_verification = 1` and consent metadata after rollback.
+- If verification or resend routes are withdrawn by rollback, pending accounts can become stranded until the same release is restored or an operator runs a separate recovery plan.
+- User-owned private verse notes must not be deleted as part of registration rollback.
+- Registration rollback review should therefore confirm whether pending users need a temporary operator support path before code is rolled back.
 
 ## Release Evidence
 
