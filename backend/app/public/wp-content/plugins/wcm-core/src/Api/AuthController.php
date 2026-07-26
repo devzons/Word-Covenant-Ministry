@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace WCM\Api;
 
+use WCM\Api\Auth\AuthConfig;
+use WCM\Api\Auth\AuthFrontendUrlBuilder;
+use WCM\Api\Auth\AuthRateLimiter;
+use WCM\Api\Auth\EmailVerificationService;
+use WCM\Api\Auth\RegistrationService;
+use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_User;
@@ -11,6 +17,14 @@ use WP_User;
 final class AuthController
 {
     private const NAMESPACE = 'wcm/v1';
+
+    public function __construct(
+        private readonly AuthFrontendUrlBuilder $urlBuilder = new AuthFrontendUrlBuilder(),
+        private readonly AuthRateLimiter $rateLimiter = new AuthRateLimiter(),
+        private readonly EmailVerificationService $emailVerificationService = new EmailVerificationService(),
+        private readonly RegistrationService $registrationService = new RegistrationService()
+    ) {
+    }
 
     public function registerRoutes(): void
     {
@@ -63,6 +77,36 @@ final class AuthController
                 'permission_callback' => '__return_true',
             ]
         );
+
+        register_rest_route(
+            self::NAMESPACE,
+            '/auth/register',
+            [
+                'methods' => 'POST',
+                'callback' => [$this, 'register'],
+                'permission_callback' => '__return_true',
+            ]
+        );
+
+        register_rest_route(
+            self::NAMESPACE,
+            '/auth/verify-email',
+            [
+                'methods' => 'POST',
+                'callback' => [$this, 'verifyEmail'],
+                'permission_callback' => '__return_true',
+            ]
+        );
+
+        register_rest_route(
+            self::NAMESPACE,
+            '/auth/resend-verification',
+            [
+                'methods' => 'POST',
+                'callback' => [$this, 'resendVerification'],
+                'permission_callback' => '__return_true',
+            ]
+        );
     }
 
     public function login(WP_REST_Request $request): WP_REST_Response
@@ -77,40 +121,36 @@ final class AuthController
         $identifier = trim(sanitize_text_field($this->stringValue($payload['identifier'] ?? null)));
         $password = $this->stringValue($payload['password'] ?? null);
         $remember = (bool) ($payload['remember'] ?? false);
-        $loggedInCookie = null;
 
         if ($identifier === '' || $password === '') {
             return $this->error('invalid_request', 'Identifier and password are required.', 400);
         }
 
-        $captureLoggedInCookie = static function (
-            string $cookie
-        ) use (&$loggedInCookie): void {
-            $loggedInCookie = $cookie;
-        };
-
-        add_action('set_logged_in_cookie', $captureLoggedInCookie, 10, 1);
-
         $login = $this->resolveLogin($identifier);
-        $user = wp_signon(
-            [
-                'user_login' => $login,
-                'user_password' => $password,
-                'remember' => $remember,
-            ],
-            is_ssl()
-        );
-
-        remove_action('set_logged_in_cookie', $captureLoggedInCookie, 10);
+        $user = wp_authenticate($login, $password);
 
         if (is_wp_error($user)) {
             return $this->error('invalid_credentials', 'Invalid credentials.', 401);
         }
 
-        if (defined('LOGGED_IN_COOKIE') && is_string($loggedInCookie) && $loggedInCookie !== '') {
-            $_COOKIE[LOGGED_IN_COOKIE] = $loggedInCookie;
+        if ($this->emailVerificationService->requiresVerification($user)
+            && ! $this->emailVerificationService->isVerified($user)
+        ) {
+            wp_clear_auth_cookie();
+            wp_set_current_user(0);
+
+            if (defined('LOGGED_IN_COOKIE')) {
+                unset($_COOKIE[LOGGED_IN_COOKIE]);
+            }
+
+            return $this->error(
+                'email_verification_required',
+                'Please verify your email address before logging in.',
+                403
+            );
         }
 
+        wp_set_auth_cookie($user->ID, $remember, is_ssl());
         wp_set_current_user($user->ID);
 
         return $this->success(
@@ -238,6 +278,130 @@ final class AuthController
         );
     }
 
+    public function register(WP_REST_Request $request): WP_REST_Response
+    {
+        $originValidation = $this->validateAllowedOrigin();
+
+        if ($originValidation !== null) {
+            return $originValidation;
+        }
+
+        $payload = $this->payload($request);
+        $locale = $this->validatedLocale($payload['locale'] ?? null);
+
+        if ($locale === null) {
+            return $this->error('registration_invalid_locale', 'Locale must be ko or en.', 400);
+        }
+
+        if ($this->registrationRateLimited($payload)) {
+            return $this->error(
+                'registration_rate_limited',
+                'Too many registration attempts. Please try again later.',
+                429
+            );
+        }
+
+        $result = $this->registrationService->register($payload, $locale);
+
+        if ($result instanceof WP_Error) {
+            return $this->fromWpError($result);
+        }
+
+        return $this->success($result, 201);
+    }
+
+    public function verifyEmail(WP_REST_Request $request): WP_REST_Response
+    {
+        $originValidation = $this->validateAllowedOrigin();
+
+        if ($originValidation !== null) {
+            return $originValidation;
+        }
+
+        if ($this->verificationRateLimited()) {
+            return $this->error(
+                'verification_rate_limited',
+                'Too many verification attempts. Please try again later.',
+                429
+            );
+        }
+
+        $payload = $this->payload($request);
+        $token = trim($this->stringValue($payload['token'] ?? null));
+
+        if ($token === '') {
+            return $this->error(
+                'verification_invalid_or_expired',
+                'The verification link is invalid or has expired.',
+                400
+            );
+        }
+
+        $result = $this->emailVerificationService->verifyToken($token);
+
+        if ($result instanceof WP_Error) {
+            return $this->fromWpError($result);
+        }
+
+        return $this->success($result);
+    }
+
+    public function resendVerification(WP_REST_Request $request): WP_REST_Response
+    {
+        $originValidation = $this->validateAllowedOrigin();
+
+        if ($originValidation !== null) {
+            return $originValidation;
+        }
+
+        $payload = $this->payload($request);
+        $locale = $this->validatedLocale($payload['locale'] ?? null);
+
+        if ($locale === null) {
+            return $this->error('invalid_request', 'Locale must be ko or en.', 400);
+        }
+
+        $email = strtolower(trim(sanitize_email($this->stringValue($payload['email'] ?? null))));
+
+        if ($email === '' || ! is_email($email) || strlen($email) > AuthConfig::MAX_EMAIL_LENGTH) {
+            return $this->error('invalid_request', 'A valid email address is required.', 400);
+        }
+
+        if ($this->resendRateLimited($email)) {
+            return $this->success(['status' => 'accepted']);
+        }
+
+        $user = get_user_by('email', $email);
+
+        if (! $user instanceof WP_User || ! $user->exists()) {
+            return $this->success(['status' => 'accepted']);
+        }
+
+        if (! $this->emailVerificationService->requiresVerification($user)
+            || $this->emailVerificationService->isVerified($user)
+        ) {
+            return $this->success(['status' => 'accepted']);
+        }
+
+        if ($this->rateLimiter->inCooldown('resend_user', (string) $user->ID)) {
+            return $this->success(['status' => 'accepted']);
+        }
+
+        $result = $this->emailVerificationService->issueToken($user, $locale);
+
+        if ($result instanceof WP_Error) {
+            return $this->fromWpError($result);
+        }
+
+        $this->rateLimiter->startCooldown(
+            'resend_user',
+            (string) $user->ID,
+            AuthConfig::RESEND_COOLDOWN
+        );
+
+        return $this->success(['status' => 'accepted']);
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -299,7 +463,7 @@ final class AuthController
             return;
         }
 
-        $resetUrl = $this->buildPasswordResetUrl($locale, (string) $user->user_login, $resetKey);
+        $resetUrl = $this->urlBuilder->passwordResetUrl($locale, (string) $user->user_login, $resetKey);
         $subject = $locale === 'en'
             ? 'Word Covenant Ministry password reset'
             : 'Word Covenant Ministry 비밀번호 재설정';
@@ -312,38 +476,6 @@ final class AuthController
             $subject,
             $message
         );
-    }
-
-    private function buildPasswordResetUrl(string $locale, string $login, string $key): string
-    {
-        $frontendBaseUrl = $this->frontendBaseUrl();
-
-        return add_query_arg(
-            [
-                'key' => rawurlencode($key),
-                'login' => rawurlencode($login),
-            ],
-            trailingslashit($frontendBaseUrl) . ltrim($locale . '/reset-password', '/')
-        );
-    }
-
-    private function frontendBaseUrl(): string
-    {
-        $configuredUrl = trim((string) getenv('WCM_FRONTEND_URL'));
-
-        if ($configuredUrl !== '') {
-            return untrailingslashit($configuredUrl);
-        }
-
-        $homeHost = (string) wp_parse_url(home_url(), PHP_URL_HOST);
-        $isLocalEnvironment =
-            str_contains($homeHost, '.local') ||
-            str_contains($homeHost, 'localhost') ||
-            wp_get_environment_type() !== 'production';
-
-        return $isLocalEnvironment
-            ? 'http://wordcovenantministry.local:3030'
-            : 'https://wordcovenantministry.org';
     }
 
     private function normalizeLocale(mixed $value): string
@@ -406,6 +538,84 @@ final class AuthController
         return is_string($value) ? $value : '';
     }
 
+    private function validatedLocale(mixed $value): ?string
+    {
+        if (! is_string($value)) {
+            return null;
+        }
+
+        $locale = strtolower(trim($value));
+
+        return in_array($locale, ['ko', 'en'], true) ? $locale : null;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function registrationRateLimited(array $payload): bool
+    {
+        $ip = $this->rateLimiter->requestIp();
+        $email = strtolower(trim($this->stringValue($payload['email'] ?? null)));
+        $username = trim($this->stringValue($payload['username'] ?? null));
+
+        if ($this->rateLimiter->tooManyAttempts(
+            'register_ip',
+            $ip,
+            AuthConfig::REGISTRATION_IP_LIMIT,
+            AuthConfig::REGISTRATION_WINDOW
+        )) {
+            return true;
+        }
+
+        if ($email !== '' && $this->rateLimiter->tooManyAttempts(
+            'register_email',
+            $this->rateLimiter->hashKey($email),
+            AuthConfig::REGISTRATION_IP_LIMIT,
+            AuthConfig::REGISTRATION_WINDOW
+        )) {
+            return true;
+        }
+
+        if ($username !== '' && $this->rateLimiter->tooManyAttempts(
+            'register_username',
+            $this->rateLimiter->hashKey($username),
+            AuthConfig::REGISTRATION_IP_LIMIT,
+            AuthConfig::REGISTRATION_WINDOW
+        )) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function verificationRateLimited(): bool
+    {
+        return $this->rateLimiter->tooManyAttempts(
+            'verify_ip',
+            $this->rateLimiter->requestIp(),
+            AuthConfig::VERIFY_IP_LIMIT,
+            AuthConfig::VERIFY_WINDOW
+        );
+    }
+
+    private function resendRateLimited(string $email): bool
+    {
+        $ip = $this->rateLimiter->requestIp();
+        $emailHash = $this->rateLimiter->hashKey($email);
+
+        return $this->rateLimiter->tooManyAttempts(
+            'resend_ip',
+            $ip,
+            AuthConfig::RESEND_IP_LIMIT,
+            AuthConfig::RESEND_WINDOW
+        ) || $this->rateLimiter->tooManyAttempts(
+            'resend_email',
+            $emailHash,
+            AuthConfig::RESEND_EMAIL_LIMIT,
+            AuthConfig::RESEND_WINDOW
+        );
+    }
+
     private function restNonce(): ?string
     {
         if (! is_user_logged_in()) {
@@ -437,6 +647,17 @@ final class AuthController
                 'code' => $code,
                 'message' => $message,
             ],
+            $status
+        );
+    }
+
+    private function fromWpError(WP_Error $error): WP_REST_Response
+    {
+        $status = (int) ($error->get_error_data()['status'] ?? 500);
+
+        return $this->error(
+            $error->get_error_code(),
+            (string) $error->get_error_message(),
             $status
         );
     }
