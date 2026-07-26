@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { AuthApiError, verifyEmail } from "@/lib/api/auth";
 import { LegalNoticeLinks } from "@/components/content/LegalNoticeLinks";
@@ -57,6 +57,7 @@ export function VerifyEmailPanel({ locale, token }: VerifyEmailPanelProps) {
   const [errorMessage, setErrorMessage] = useState(
     trimmedToken ? "" : labels.missingToken,
   );
+  const verifyLockRef = useRef(false);
 
   return (
     <Card className="mx-auto max-w-md">
@@ -88,10 +89,11 @@ export function VerifyEmailPanel({ locale, token }: VerifyEmailPanelProps) {
             className="w-full"
             disabled={status === "loading" || trimmedToken === ""}
             onClick={async () => {
-              if (trimmedToken === "" || status === "loading") {
+              if (trimmedToken === "" || status === "loading" || verifyLockRef.current) {
                 return;
               }
 
+              verifyLockRef.current = true;
               setStatus("loading");
               setErrorMessage("");
 
@@ -100,11 +102,11 @@ export function VerifyEmailPanel({ locale, token }: VerifyEmailPanelProps) {
 
                 if (data.verified && data.loginAllowed) {
                   setStatus("success");
-                } else {
-                  setStatus("invalid");
-                  setErrorMessage(labels.unknownError);
-                }
-              } catch (error) {
+              } else {
+                setStatus("invalid");
+                setErrorMessage(labels.unknownError);
+              }
+            } catch (error) {
                 if (
                   error instanceof AuthApiError &&
                   (error.code === "verification_invalid_or_expired" ||
@@ -112,13 +114,15 @@ export function VerifyEmailPanel({ locale, token }: VerifyEmailPanelProps) {
                 ) {
                   setStatus("invalid");
                   setErrorMessage(error.message || labels.invalidBody);
-                } else {
-                  setStatus("invalid");
-                  setErrorMessage(labels.unknownError);
-                }
+              } else {
+                setStatus("invalid");
+                setErrorMessage(labels.unknownError);
               }
-            }}
-            type="button"
+            } finally {
+              verifyLockRef.current = false;
+            }
+          }}
+          type="button"
           >
             {status === "loading" ? labels.loading : labels.submit}
           </Button>

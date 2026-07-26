@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { AuthApiError, resendEmailVerification } from "@/lib/api/auth";
 import { Button } from "@/components/ui/Button";
@@ -38,12 +38,19 @@ export function VerificationResendForm({
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitLockRef = useRef(false);
 
   return (
     <form
       className="space-y-4"
+      noValidate
       onSubmit={async (event) => {
         event.preventDefault();
+
+        if (submitLockRef.current) {
+          return;
+        }
+
         setEmailError("");
         setFormError("");
         setSuccessMessage("");
@@ -55,6 +62,7 @@ export function VerificationResendForm({
           return;
         }
 
+        submitLockRef.current = true;
         setIsSubmitting(true);
 
         try {
@@ -76,6 +84,7 @@ export function VerificationResendForm({
           }
         } finally {
           setIsSubmitting(false);
+          submitLockRef.current = false;
         }
       }}
     >

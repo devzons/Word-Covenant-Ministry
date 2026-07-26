@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { AuthApiError } from "@/lib/api/auth";
@@ -73,6 +73,7 @@ export function LoginForm({ locale }: LoginFormProps) {
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const submitLockRef = useRef(false);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -94,6 +95,12 @@ export function LoginForm({ locale }: LoginFormProps) {
         className="mt-6 space-y-4"
         onSubmit={async (event) => {
           event.preventDefault();
+
+          if (submitLockRef.current) {
+            return;
+          }
+
+          submitLockRef.current = true;
           setErrorMessage("");
           setErrorCode(null);
           setIsSubmitting(true);
@@ -123,6 +130,7 @@ export function LoginForm({ locale }: LoginFormProps) {
             }
           } finally {
             setIsSubmitting(false);
+            submitLockRef.current = false;
           }
         }}
       >

@@ -134,6 +134,7 @@ export function RegisterForm({ locale }: RegisterFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const submitLockRef = useRef(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
   const displayNameRef = useRef<HTMLInputElement>(null);
@@ -150,8 +151,14 @@ export function RegisterForm({ locale }: RegisterFormProps) {
 
       <form
         className="mt-6 space-y-4"
+        noValidate
         onSubmit={async (event) => {
           event.preventDefault();
+
+          if (submitLockRef.current) {
+            return;
+          }
+
           setFormError("");
           setFieldErrors({});
 
@@ -203,6 +210,7 @@ export function RegisterForm({ locale }: RegisterFormProps) {
             return;
           }
 
+          submitLockRef.current = true;
           setIsSubmitting(true);
 
           try {
@@ -258,6 +266,7 @@ export function RegisterForm({ locale }: RegisterFormProps) {
             setFormError(nextErrors.formError);
           } finally {
             setIsSubmitting(false);
+            submitLockRef.current = false;
           }
         }}
       >
