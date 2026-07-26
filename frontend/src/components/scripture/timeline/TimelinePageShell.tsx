@@ -17,14 +17,14 @@ import {
   getTimelineText,
   type TimelineInspectorSelection,
   timelineBookContextRows,
-  timelineGenealogyComparisonRows,
-  timelineGenealogySegments,
   timelineKingdomComparisonRows,
   timelineBooks,
   timelinePeriods,
   timelinePlaces,
   type TimelineEvent,
   type TimelineBookContextRow,
+  type TimelineGenealogyComparisonRow,
+  type TimelineGenealogySegment,
   type TimelineSchematicPlaceRow,
   type TimelineText,
   type TimelineLocale,
@@ -59,6 +59,8 @@ type TimelinePageShellProps = {
   coreEventStats: {
     totalCount: number;
   };
+  genealogyComparisonRows: TimelineGenealogyComparisonRow[];
+  genealogySegments: TimelineGenealogySegment[];
   initialFilters: TimelineFilterState;
   initialView: TimelineView;
   koreanHistoryReferenceRows: TimelineKoreanHistoryReferenceRow[];
@@ -191,6 +193,8 @@ export function TimelinePageShell({
   canonicalBookStats,
   coreEventRows,
   coreEventStats,
+  genealogyComparisonRows,
+  genealogySegments,
   initialFilters,
   initialView,
   koreanHistoryReferenceRows,
@@ -390,8 +394,12 @@ export function TimelinePageShell({
     [kingsKingdomRows],
   );
   const genealogyComparisonById = useMemo(
-    () => new Map(timelineGenealogyComparisonRows.map((row) => [row.id, row])),
-    [],
+    () => new Map(genealogyComparisonRows.map((row) => [row.id, row])),
+    [genealogyComparisonRows],
+  );
+  const genealogySegmentById = useMemo(
+    () => new Map(genealogySegments.map((segment) => [segment.id, segment])),
+    [genealogySegments],
   );
   const schematicPlaceById = useMemo(
     () => new Map(schematicPlaceRows.map((row) => [row.id, row])),
@@ -923,6 +931,8 @@ export function TimelinePageShell({
               {activeView === "genealogy" ? (
                 <GenealogyComparisonPreviewPanel
                   activePeriodId={filters.periodId}
+                  genealogyComparisonRows={genealogyComparisonRows}
+                  genealogySegments={genealogySegments}
                   locale={activeLocale}
                   onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "genealogy" })}
                   searchTerm={filters.searchTerm}
@@ -979,6 +989,7 @@ export function TimelinePageShell({
               bookContextByBookId,
               eventById,
               genealogyComparisonById,
+              genealogySegmentById,
               kingdomComparisonById,
               schematicPlaceById,
               schematicPlaceByPlaceId,
@@ -2759,6 +2770,8 @@ function getTimelineHighlightStrengthRank(
 
 type GenealogyComparisonPreviewPanelProps = {
   activePeriodId: string;
+  genealogyComparisonRows: TimelineGenealogyComparisonRow[];
+  genealogySegments: TimelineGenealogySegment[];
   locale: TimelineLocale;
   searchTerm: string;
   onSelectRow: (rowId: string) => void;
@@ -2767,6 +2780,8 @@ type GenealogyComparisonPreviewPanelProps = {
 
 function GenealogyComparisonPreviewPanel({
   activePeriodId,
+  genealogyComparisonRows,
+  genealogySegments,
   locale,
   searchTerm,
   onSelectRow,
@@ -2774,14 +2789,14 @@ function GenealogyComparisonPreviewPanel({
 }: GenealogyComparisonPreviewPanelProps) {
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
-  const visibleRows = timelineGenealogyComparisonRows.filter((row) => {
+  const visibleRows = genealogyComparisonRows.filter((row) => {
     const matchesPeriod = activePeriodId === "all" || row.periodId === activePeriodId;
     const matchesSearch = matchesGenealogySearch(row, normalizedSearch);
 
     return matchesPeriod && matchesSearch;
   });
 
-  const groupedSegments = timelineGenealogySegments
+  const groupedSegments = genealogySegments
     .map((segment) => ({
       rows: visibleRows.filter((row) => row.segmentId === segment.id),
       segment,
@@ -2998,7 +3013,7 @@ function handleSelectableKeyDown(
 }
 
 function matchesGenealogySearch(
-  row: (typeof timelineGenealogyComparisonRows)[number],
+  row: TimelineGenealogyComparisonRow,
   query: string,
 ) {
   if (!query) {

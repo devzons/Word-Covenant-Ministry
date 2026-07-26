@@ -1,7 +1,6 @@
 import {
   getTimelineBook,
   getTimelineText,
-  timelineGenealogySegments,
   type TimelineGenealogyComparisonRow,
   type TimelineInspectorSelection,
   type TimelineKingdomComparisonRow,
@@ -41,7 +40,7 @@ export function GenealogyEvidencePanel({
   relatedStudy,
   selection,
 }: GenealogyEvidencePanelProps) {
-  const segment = timelineGenealogySegments.find((item) => item.id === row.segmentId);
+  const segment = lookupMaps.genealogySegmentById.get(row.segmentId);
 
   return (
     <div className="space-y-4">

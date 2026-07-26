@@ -25,6 +25,10 @@ import {
   type KoreanHistoryReferencePackage,
 } from "@/components/scripture/timeline/koreanHistoryReferences";
 import {
+  normalizeGenealogyPackage,
+  type GenealogyPackage,
+} from "@/components/scripture/timeline/timelineGenealogyPackage";
+import {
   normalizePlacesPackage,
   type PlacesPackage,
 } from "@/components/scripture/timeline/timelinePlacesPackage";
@@ -55,6 +59,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const coreEventsPackage = await loadCoreBiblicalEventsPackage();
   const kingsKingdomsPackage = await loadKingsKingdomsPackage();
   const koreanHistoryReferencePackage = await loadKoreanHistoryReferencesPackage();
+  const genealogyPackage = await loadGenealogyPackage();
   const placesPackage = await loadPlacesPackage();
   const canonicalBookRows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
   const canonicalBookStats = getCanonicalBookPreviewStats(canonicalBookRows);
@@ -64,6 +69,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const koreanHistoryReferenceRows = normalizeKoreanHistoryReferencesPackage(
     koreanHistoryReferencePackage,
   );
+  const genealogyPackageRows = normalizeGenealogyPackage(genealogyPackage);
   const schematicPlaceRows = normalizePlacesPackage(placesPackage);
   const kingsKingdomStats = getKingsKingdomsPreviewStats(kingsKingdomRows);
   const initialFilters = {
@@ -80,6 +86,8 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
         canonicalBookStats={canonicalBookStats}
         coreEventRows={coreEventRows}
         coreEventStats={coreEventStats}
+        genealogyComparisonRows={genealogyPackageRows.comparisonRows}
+        genealogySegments={genealogyPackageRows.segments}
         initialFilters={initialFilters}
         initialView={initialView}
         koreanHistoryReferenceRows={koreanHistoryReferenceRows}
@@ -195,6 +203,24 @@ async function loadPlacesPackage(): Promise<PlacesPackage> {
   try {
     const raw = await readFile(packagePath, "utf8");
     return JSON.parse(raw) as PlacesPackage;
+  } catch {
+    return { items: [] };
+  }
+}
+
+async function loadGenealogyPackage(): Promise<GenealogyPackage> {
+  const packagePath = path.join(
+    process.cwd(),
+    "..",
+    "docs",
+    "data-packages",
+    "timeline",
+    "genealogy.matthew-pilot.json",
+  );
+
+  try {
+    const raw = await readFile(packagePath, "utf8");
+    return JSON.parse(raw) as GenealogyPackage;
   } catch {
     return { items: [] };
   }

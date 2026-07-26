@@ -2,6 +2,7 @@ import type {
   PassionWeekTimelineEvent,
   TimelineBookContextRow,
   TimelineGenealogyComparisonRow,
+  TimelineGenealogySegment,
   TimelineInspectorSelection,
   TimelineKingdomComparisonRow,
   TimelineSchematicPlaceRow,
@@ -18,6 +19,7 @@ export type TimelineEvidenceLookupMaps = {
   bookContextByBookId: Map<string, TimelineBookContextRow>;
   eventById: Map<string, PassionWeekTimelineEvent>;
   genealogyComparisonById: Map<string, TimelineGenealogyComparisonRow>;
+  genealogySegmentById: Map<string, TimelineGenealogySegment>;
   kingdomComparisonById: Map<string, TimelineKingdomEvidenceRow>;
   schematicPlaceById: Map<string, TimelineSchematicPlaceRow>;
   schematicPlaceByPlaceId: Map<string, TimelineSchematicPlaceRow>;

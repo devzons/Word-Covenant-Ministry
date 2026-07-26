@@ -4,7 +4,6 @@ import {
   getTimelinePlace,
   getTimelineText,
   timelineBookContextRows,
-  timelineGenealogyComparisonRows,
   timelineKingdomComparisonRows,
   type PassionWeekTimelineEvent,
   type TimelineBookContextRow,
@@ -79,7 +78,9 @@ export function EventEvidencePanel({
       .map((eventId) => lookupMaps.eventById.get(eventId))
       .filter((row): row is PassionWeekTimelineEvent => row !== undefined && row.id !== event.id),
   );
-  const relatedGenealogyRows = timelineGenealogyComparisonRows.filter((row) => row.relatedEventIds?.includes(event.id));
+  const relatedGenealogyRows = Array.from(lookupMaps.genealogyComparisonById.values()).filter((row) =>
+    row.relatedEventIds?.includes(event.id),
+  );
 
   return (
     <div className="space-y-4">

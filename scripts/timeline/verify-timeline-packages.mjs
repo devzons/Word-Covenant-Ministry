@@ -12,6 +12,7 @@ const verifierScript = path.join(repoRoot, "scripts/timeline/verify-timeline-pac
 const targets = {
   books: "docs/data-packages/timeline/books.66-canonical-skeleton.json",
   events: "docs/data-packages/timeline/events.core-biblical-skeleton.json",
+  genealogy: "docs/data-packages/timeline/genealogy.matthew-pilot.json",
   kings: "docs/data-packages/timeline/kings-kingdoms.skeleton.json",
   places: "docs/data-packages/timeline/places.schematic-pilot.json",
   validFixtures: "docs/data-packages/timeline/fixtures/valid",
@@ -24,6 +25,7 @@ function main() {
     () => runSyntaxCheck(),
     () => runReadablePass("books.66-canonical-skeleton.json", [targets.books]),
     () => runReadablePass("events.core-biblical-skeleton.json", [targets.events]),
+    () => runReadablePass("genealogy.matthew-pilot.json", [targets.genealogy]),
     () => runReadablePass("kings-kingdoms.skeleton.json", [targets.kings]),
     () => runReadablePass("places.schematic-pilot.json", [targets.places]),
     () => runReadablePass("valid fixtures", [targets.validFixtures]),

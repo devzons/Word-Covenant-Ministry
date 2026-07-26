@@ -115,6 +115,8 @@ const KINGS_TRANSITION_TARGET_TYPES = new Set([
   "templeMarker",
 ]);
 
+const GENEALOGY_RECORD_TYPES = new Set(["segment", "comparison"]);
+
 const EXACT_CHRONOLOGY_FIELDS = new Set([
   "exactYear",
   "startYear",
@@ -301,6 +303,12 @@ const ISSUE = {
   CHAPTER_CONTEXT_LABEL_INVALID: "TLN_CHAPTER_CONTEXT_LABEL_INVALID",
   CHAPTER_CONTEXT_ID_DUPLICATE: "TLN_CHAPTER_CONTEXT_ID_DUPLICATE",
   CHAPTER_CONTEXT_BOOK_CHAPTER_DUPLICATE: "TLN_CHAPTER_CONTEXT_BOOK_CHAPTER_DUPLICATE",
+  GENEALOGY_RECORD_TYPE_INVALID: "TLN_GENEALOGY_RECORD_TYPE_INVALID",
+  GENEALOGY_FIELD_MISSING: "TLN_GENEALOGY_FIELD_MISSING",
+  GENEALOGY_SEGMENT_UNRESOLVED: "TLN_GENEALOGY_SEGMENT_UNRESOLVED",
+  GENEALOGY_SEGMENT_TARGET_INVALID: "TLN_GENEALOGY_SEGMENT_TARGET_INVALID",
+  GENEALOGY_BOOK_ID_INVALID: "TLN_GENEALOGY_BOOK_ID_INVALID",
+  GENEALOGY_EVENT_ID_UNRESOLVED: "TLN_GENEALOGY_EVENT_ID_UNRESOLVED",
 };
 
 function main(argv) {
@@ -482,6 +490,10 @@ function validatePackage(filePath, data, registry, issues) {
 
   if (isChapterContextPackageType(packageType)) {
     validateChapterContextPackage(filePath, data, items, issues);
+  }
+
+  if (packageType === "timeline.genealogy") {
+    validateGenealogyPackage(filePath, items, localIndex, registry, issues);
   }
 }
 
@@ -743,6 +755,122 @@ function validateChapterContextRow(filePath, packageStatus, item, rowLabel, issu
       path: "isSkeleton",
       recordId: item.id ?? rowLabel,
       field: "isSkeleton",
+    }));
+  }
+}
+
+function validateGenealogyPackage(filePath, items, localIndex, registry, issues) {
+  for (const item of items) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) {
+      continue;
+    }
+
+    const rowLabel = item.id ?? "unknown-genealogy-row";
+
+    if (!hasNonEmptyValue(item.recordType)) {
+      issues.push(makeIssue("error", ISSUE.GENEALOGY_FIELD_MISSING, filePath, rowLabel, 'Genealogy row must include non-empty "recordType".', {
+        path: "recordType",
+        recordId: item.id ?? rowLabel,
+        field: "recordType",
+      }));
+      continue;
+    }
+
+    if (!GENEALOGY_RECORD_TYPES.has(item.recordType)) {
+      issues.push(makeIssue("error", ISSUE.GENEALOGY_RECORD_TYPE_INVALID, filePath, rowLabel, `Genealogy recordType "${item.recordType}" is not allowed.`, {
+        path: "recordType",
+        recordId: item.id ?? rowLabel,
+        field: "recordType",
+        recordType: item.recordType,
+      }));
+      continue;
+    }
+
+    const requiredFields =
+      item.recordType === "segment"
+        ? ["rangeLabel", "structureLabel", "note", "basisLabel", "scriptureAnchors"]
+        : ["segmentId", "matthewName", "comparisonLabel", "periodId", "basisLabel", "scriptureAnchors"];
+
+    for (const field of requiredFields) {
+      if (!hasNonEmptyValue(item[field])) {
+        issues.push(makeIssue("error", ISSUE.GENEALOGY_FIELD_MISSING, filePath, rowLabel, `Genealogy ${item.recordType} row is missing required field "${field}".`, {
+          path: field,
+          recordId: item.id ?? rowLabel,
+          field,
+          recordType: item.recordType,
+        }));
+      }
+    }
+
+    if (item.recordType === "comparison" && hasNonEmptyValue(item.segmentId)) {
+      validateGenealogySegmentReference(filePath, rowLabel, item, localIndex, issues);
+    }
+
+    if (Array.isArray(item.relatedBookIds)) {
+      item.relatedBookIds.forEach((bookId, index) => {
+        if (!Object.prototype.hasOwnProperty.call(CANONICAL_BOOK_CHAPTERS, bookId)) {
+          issues.push(makeIssue("error", ISSUE.GENEALOGY_BOOK_ID_INVALID, filePath, rowLabel, `Genealogy relatedBookIds[${index}] "${bookId}" is not a recognized canonical book id.`, {
+            path: `relatedBookIds[${index}]`,
+            recordId: item.id ?? rowLabel,
+            field: "relatedBookIds",
+            bookId,
+            recordType: item.recordType,
+          }));
+        }
+      });
+    }
+
+    if (Array.isArray(item.relatedEventIds)) {
+      item.relatedEventIds.forEach((eventId, index) => {
+        const registryEntry = registry.get(eventId);
+        if (!registryEntry) {
+          issues.push(makeIssue("error", ISSUE.GENEALOGY_EVENT_ID_UNRESOLVED, filePath, rowLabel, `Genealogy relatedEventIds[${index}] "${eventId}" does not resolve in the timeline package registry.`, {
+            path: `relatedEventIds[${index}]`,
+            recordId: item.id ?? rowLabel,
+            field: "relatedEventIds",
+            eventId,
+            recordType: item.recordType,
+          }));
+        }
+      });
+    }
+  }
+}
+
+function validateGenealogySegmentReference(filePath, rowLabel, item, localIndex, issues) {
+  const registryEntry = localIndex.counts.get(item.segmentId);
+  if (!registryEntry) {
+    issues.push(makeIssue("error", ISSUE.GENEALOGY_SEGMENT_UNRESOLVED, filePath, rowLabel, `Genealogy comparison segmentId "${item.segmentId}" does not resolve within the same package.`, {
+      path: "segmentId",
+      recordId: item.id ?? rowLabel,
+      field: "segmentId",
+      recordType: item.recordType,
+      targetId: item.segmentId,
+    }));
+    return;
+  }
+
+  const targetRecord = localIndex.records.get(item.segmentId);
+  if (!targetRecord || targetRecord.recordType !== "segment") {
+    issues.push(makeIssue("error", ISSUE.GENEALOGY_SEGMENT_TARGET_INVALID, filePath, rowLabel, `Genealogy comparison segmentId "${item.segmentId}" must target a segment row.`, {
+      path: "segmentId",
+      recordId: item.id ?? rowLabel,
+      field: "segmentId",
+      recordType: item.recordType,
+      targetId: item.segmentId,
+      targetRecordType: targetRecord?.recordType,
+    }));
+    return;
+  }
+
+  if (registryEntry > 1) {
+    issues.push(makeIssue("error", ISSUE.GENEALOGY_SEGMENT_TARGET_INVALID, filePath, rowLabel, `Genealogy comparison segmentId "${item.segmentId}" is ambiguous because the id appears ${registryEntry} times in the package.`, {
+      path: "segmentId",
+      recordId: item.id ?? rowLabel,
+      field: "segmentId",
+      recordType: item.recordType,
+      targetId: item.segmentId,
+      occurrences: registryEntry,
     }));
   }
 }
