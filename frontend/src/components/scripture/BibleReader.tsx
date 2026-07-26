@@ -21,7 +21,9 @@ import {
   type ScriptureResearchReferenceRange,
 } from "@/components/scripture/ScriptureResearchWorkspaceContext";
 import { VerseNotePanel } from "@/components/scripture/VerseNotePanel";
+import { VerseNoteSheet } from "@/components/scripture/VerseNoteSheet";
 import { VerseOriginalLanguagePreview } from "@/components/scripture/VerseOriginalLanguagePreview";
+import { useVerseNoteWorkspace } from "@/components/scripture/useVerseNoteWorkspace";
 import type { TimelineChapterContextRow } from "@/components/scripture/timeline/timelineChapterContextPackage";
 import type { TimelineBookContextRow } from "@/components/scripture/timeline/passionWeekTimeline";
 import { cn } from "@/lib/utils/cn";
@@ -187,6 +189,8 @@ export function BibleReader({
   const searchParams = useSearchParams();
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = bibleReaderCopy[activeLocale];
+  const isDesktopResearchPanel = useDesktopResearchPanel();
+  const noteWorkspace = useVerseNoteWorkspace(locale);
   const [activeVerseId, setActiveVerseId] = useState("");
   const [selectedOriginalVerse, setSelectedOriginalVerse] = useState<number | null>(null);
   const [selectedInterlinearVerse, setSelectedInterlinearVerse] = useState<number | null>(null);
@@ -307,6 +311,22 @@ export function BibleReader({
     window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
   }
 
+  async function handleOpenVerseNote(verseNumber: number) {
+    const nextReferenceLabel = `${
+      currentBook?.label[activeLocale] ?? bookMetadata.name
+    } ${chapter.chapter}:${verseNumber}`;
+
+    syncActiveVerseSelection(verseNumber);
+
+    await noteWorkspace.openForVerse({
+      book: chapter.book,
+      chapter: chapter.chapter,
+      referenceLabel: nextReferenceLabel,
+      translation: chapter.translation,
+      verse: verseNumber,
+    });
+  }
+
   return (
     <ScriptureResearchWorkspaceProvider
       book={chapter.book}
@@ -421,7 +441,7 @@ export function BibleReader({
                   <li className="flex flex-col" id={verseId} key={verse.verse}>
                     <div
                       className={cn(
-                        "grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
+                        "group/verse grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
                         isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
                       )}
                     >
@@ -433,7 +453,7 @@ export function BibleReader({
                       >
                         {verse.verse}
                       </span>
-                      <div className="flex min-w-0 flex-col">
+                      <div className="flex min-w-0 flex-col gap-2">
                         {isSelectableStudyMode ? (
                           <button
                             className="min-w-0 break-words text-left text-zinc-950 transition-colors hover:text-zinc-700"
@@ -467,6 +487,27 @@ export function BibleReader({
                             {verse.text}
                           </button>
                         )}
+                        <div className="flex items-center justify-end">
+                          <button
+                            aria-label={`${noteWorkspace.labels.note}: ${
+                              currentBook?.label[activeLocale] ?? bookMetadata.name
+                            } ${chapter.chapter}:${verse.verse}`}
+                            className={cn(
+                              "inline-flex h-8 min-w-0 items-center justify-center rounded-md border px-3 text-xs font-medium transition-colors",
+                              "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950",
+                              "opacity-0 pointer-events-none group-hover/verse:opacity-100 group-hover/verse:pointer-events-auto group-focus-within/verse:opacity-100 group-focus-within/verse:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto",
+                              (isActive ||
+                                noteWorkspace.reference?.verse === verse.verse) &&
+                                noteWorkspace.reference?.chapter === chapter.chapter &&
+                                noteWorkspace.reference?.book === chapter.book &&
+                                "opacity-100 pointer-events-auto",
+                            )}
+                            onClick={() => void handleOpenVerseNote(verse.verse)}
+                            type="button"
+                          >
+                            {noteWorkspace.labels.trigger}
+                          </button>
+                        </div>
                         {isOriginalMode && visibleOriginalVerse === verse.verse ? (
                           <VerseOriginalLanguagePreview
                             autoLoad
@@ -474,18 +515,6 @@ export function BibleReader({
                             chapter={chapter.chapter}
                             locale={locale}
                             source={originalLanguageSource}
-                            translation={chapter.translation}
-                            verse={verse.verse}
-                          />
-                        ) : null}
-                        {isActive ? (
-                          <VerseNotePanel
-                            book={chapter.book}
-                            chapter={chapter.chapter}
-                            locale={locale}
-                            referenceLabel={`${
-                              currentBook?.label[activeLocale] ?? bookMetadata.name
-                            } ${chapter.chapter}:${verse.verse}`}
                             translation={chapter.translation}
                             verse={verse.verse}
                           />
@@ -547,6 +576,8 @@ export function BibleReader({
           bookContext={bookContext}
           chapterContextPreview={chapterContextPreview}
           initialSearchQuery={initialSearchQuery}
+          isDesktopResearchPanel={isDesktopResearchPanel}
+          noteWorkspace={noteWorkspace}
           relatedMetadata={relatedMetadata}
           selectedVerse={activeStudyVerse}
           selectedVerseHash={activeVerseHash}
@@ -555,6 +586,26 @@ export function BibleReader({
         />
       </div>
       </article>
+      {!isDesktopResearchPanel && noteWorkspace.isOpen && noteWorkspace.reference ? (
+        <VerseNoteSheet
+          draft={noteWorkspace.draft}
+          errorMessage={noteWorkspace.errorMessage}
+          isDeleting={noteWorkspace.isDeleting}
+          isLoading={noteWorkspace.isLoading}
+          isOpen={noteWorkspace.isOpen}
+          isSaving={noteWorkspace.isSaving}
+          labels={noteWorkspace.labels}
+          onClose={() => {
+            noteWorkspace.requestClose();
+          }}
+          onDelete={() => void noteWorkspace.submitDelete()}
+          onDraftChange={noteWorkspace.setDraft}
+          onSave={() => void noteWorkspace.submitSave()}
+          referenceLabel={noteWorkspace.reference.referenceLabel}
+          saveState={noteWorkspace.saveState}
+          showDelete={Boolean(noteWorkspace.note)}
+        />
+      ) : null}
     </ScriptureResearchWorkspaceProvider>
   );
 }
@@ -564,6 +615,8 @@ type BibleReaderResearchPanelProps = {
   bookContext: TimelineBookContextRow | null;
   chapterContextPreview: TimelineChapterContextRow | null;
   initialSearchQuery: string;
+  isDesktopResearchPanel: boolean;
+  noteWorkspace: ReturnType<typeof useVerseNoteWorkspace>;
   relatedMetadata: BibleReaderRelatedMetadataPreview;
   selectedVerse: number | null;
   selectedVerseHash: string;
@@ -576,6 +629,8 @@ function BibleReaderResearchPanel({
   bookContext,
   chapterContextPreview,
   initialSearchQuery,
+  isDesktopResearchPanel,
+  noteWorkspace,
   relatedMetadata,
   selectedVerse,
   selectedVerseHash,
@@ -604,6 +659,13 @@ function BibleReaderResearchPanel({
     activeLocale === "ko" ? `${bookLabel} ${chapter}장` : `${bookLabel} ${chapter}`;
 
   function handleSectionChange(section: ResearchPanelSection) {
+    if (noteWorkspace.isOpen && isDesktopResearchPanel) {
+      const didClose = noteWorkspace.requestClose();
+      if (!didClose) {
+        return;
+      }
+    }
+
     setActiveResearchSection(section);
 
     const nextSearchParams = new URLSearchParams(searchParams.toString());
@@ -639,7 +701,29 @@ function BibleReaderResearchPanel({
         onSectionChange={handleSectionChange}
       />
 
-      {activeResearchSection === "search" ? (
+      {isDesktopResearchPanel && noteWorkspace.isOpen && noteWorkspace.reference ? (
+        <VerseNotePanel
+          canDelete={Boolean(noteWorkspace.note)}
+          closeLabel={noteWorkspace.labels.close}
+          draft={noteWorkspace.draft}
+          errorMessage={noteWorkspace.errorMessage}
+          hasNote={Boolean(noteWorkspace.note)}
+          isDeleting={noteWorkspace.isDeleting}
+          isLoading={noteWorkspace.isLoading}
+          isSaving={noteWorkspace.isSaving}
+          labels={noteWorkspace.labels}
+          onClose={() => {
+            noteWorkspace.requestClose();
+          }}
+          onDelete={() => void noteWorkspace.submitDelete()}
+          onDraftChange={noteWorkspace.setDraft}
+          onSave={() => void noteWorkspace.submitSave()}
+          referenceLabel={noteWorkspace.reference.referenceLabel}
+          saveState={noteWorkspace.saveState}
+        />
+      ) : null}
+
+      {!isDesktopResearchPanel || !noteWorkspace.isOpen ? activeResearchSection === "search" ? (
         <ReaderSearchPanel
           initialSearchQuery={initialSearchQuery}
           key={searchPanelKey}
@@ -648,9 +732,9 @@ function BibleReaderResearchPanel({
           selectedVerseHash={selectedVerseHash}
           translation={version}
         />
-      ) : null}
+      ) : null : null}
 
-      {activeResearchSection === "context" ? (
+      {!isDesktopResearchPanel || !noteWorkspace.isOpen ? activeResearchSection === "context" ? (
         <BibleReaderContextPanel
           bookContext={bookContext}
           chapter={chapter}
@@ -659,9 +743,9 @@ function BibleReaderResearchPanel({
           relatedMetadata={relatedMetadata}
           selectedVerse={selectedVerse}
         />
-      ) : null}
+      ) : null : null}
 
-      {activeResearchSection === "insight" ? (
+      {!isDesktopResearchPanel || !noteWorkspace.isOpen ? activeResearchSection === "insight" ? (
         <PassageInsightPanel
           book={book}
           bookLabel={bookLabel}
@@ -672,9 +756,9 @@ function BibleReaderResearchPanel({
           translation={version}
           verseCount={verseCount}
         />
-      ) : null}
+      ) : null : null}
 
-      {activeResearchSection === "cross-reference" ? (
+      {!isDesktopResearchPanel || !noteWorkspace.isOpen ? activeResearchSection === "cross-reference" ? (
         <CrossReferencePanel
           book={book}
           chapter={chapter}
@@ -682,7 +766,7 @@ function BibleReaderResearchPanel({
           translation={version}
           verse={verse ?? null}
         />
-      ) : null}
+      ) : null : null}
     </aside>
   );
 }
@@ -726,4 +810,26 @@ function localizedChapterReference({
   }
 
   return `${bookName} ${chapter}`;
+}
+
+function useDesktopResearchPanel() {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const updateMatch = () => setMatches(mediaQuery.matches);
+
+    updateMatch();
+    mediaQuery.addEventListener("change", updateMatch);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateMatch);
+    };
+  }, []);
+
+  return matches;
 }
