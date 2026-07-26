@@ -1205,3 +1205,5 @@ Next CR:
   - Purpose: confirm the real staging frontend/backend hosts, production-like HTTPS/cookie/CORS assumptions, provisioned email sender/provider contract, public legal/privacy support channel, and the exact staged deployment/rollback checklist before any staging or production promotion.
 - `Gospel Harmony Browser QA and Metadata Polish`
   - Purpose: run live desktop/mobile browser QA for the expanded Gospel Harmony filters, grouped navigation, dynamic recorded-Gospel layout, and single-Gospel full-width rendering; confirm query-state sync in the actual browser; and decide whether small route-level metadata polish is still needed without changing backend, API, or the current phase state.
+- `Gospel Harmony Browser QA and Navigator Keyboard Review`
+  - Purpose: run live desktop/mobile browser QA for the compact accordion navigator, confirm one-section-open behavior and internal sidebar scrolling in the actual browser, verify selected-item visibility and keyboard traversal, and decide whether any additional small metadata polish is still needed without changing backend, API, or the current phase state.

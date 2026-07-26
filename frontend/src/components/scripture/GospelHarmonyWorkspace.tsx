@@ -52,6 +52,7 @@ const gospelHarmonyCopy = {
     searchLabel: "Search",
     searchPlaceholder: "Search titles or references",
     searchEmpty: "No harmony units match this filter or search.",
+    searchResults: "Search Results",
     selectUnit: "Browse Units",
     parallelPassages: "Parallel Passages",
     selectedInformation: "Selected Unit",
@@ -96,6 +97,7 @@ const gospelHarmonyCopy = {
     searchLabel: "검색",
     searchPlaceholder: "제목 또는 성경 참조 검색",
     searchEmpty: "현재 필터와 검색에 맞는 대조 단위가 없습니다.",
+    searchResults: "검색 결과",
     selectUnit: "단위 탐색",
     parallelPassages: "병행 본문",
     selectedInformation: "선택 단위 정보",
@@ -330,11 +332,13 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
           activeView={activeView}
           copy={copy}
           groupedSections={groupedSections}
+          key={`${activeView}:${selectedUnit.section}:${searchQuery.trim() ? "search" : "browse"}`}
           locale={locale}
           onSearchChange={setSearchQuery}
           onSelectUnit={handleSelectUnit}
           onViewChange={handleViewChange}
           searchQuery={searchQuery}
+          selectedSection={selectedUnit.section}
           selectedUnitId={selectedUnit.id}
           totalVisibleUnits={filteredUnits.length}
           viewCounts={viewCounts}
