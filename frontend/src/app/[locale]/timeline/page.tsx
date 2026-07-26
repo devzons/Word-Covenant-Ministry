@@ -24,6 +24,10 @@ import {
   normalizeKoreanHistoryReferencesPackage,
   type KoreanHistoryReferencePackage,
 } from "@/components/scripture/timeline/koreanHistoryReferences";
+import {
+  normalizePlacesPackage,
+  type PlacesPackage,
+} from "@/components/scripture/timeline/timelinePlacesPackage";
 
 type TimelinePageProps = {
   params: Promise<{
@@ -51,6 +55,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const coreEventsPackage = await loadCoreBiblicalEventsPackage();
   const kingsKingdomsPackage = await loadKingsKingdomsPackage();
   const koreanHistoryReferencePackage = await loadKoreanHistoryReferencesPackage();
+  const placesPackage = await loadPlacesPackage();
   const canonicalBookRows = normalizeCanonicalBooksPackage(canonicalBooksPackage);
   const canonicalBookStats = getCanonicalBookPreviewStats(canonicalBookRows);
   const coreEventRows = normalizeCoreBiblicalEventsPackage(coreEventsPackage);
@@ -59,6 +64,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const koreanHistoryReferenceRows = normalizeKoreanHistoryReferencesPackage(
     koreanHistoryReferencePackage,
   );
+  const schematicPlaceRows = normalizePlacesPackage(placesPackage);
   const kingsKingdomStats = getKingsKingdomsPreviewStats(kingsKingdomRows);
   const initialFilters = {
     bookId: parseFilterValue(query.book),
@@ -90,6 +96,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
           initialFilters.searchTerm,
         ].join(":")}
         locale={activeLocale}
+        schematicPlaceRows={schematicPlaceRows}
       />
     </SiteShell>
   );
@@ -173,4 +180,22 @@ async function loadKoreanHistoryReferencesPackage(): Promise<KoreanHistoryRefere
   );
   const raw = await readFile(packagePath, "utf8");
   return JSON.parse(raw) as KoreanHistoryReferencePackage;
+}
+
+async function loadPlacesPackage(): Promise<PlacesPackage> {
+  const packagePath = path.join(
+    process.cwd(),
+    "..",
+    "docs",
+    "data-packages",
+    "timeline",
+    "places.schematic-pilot.json",
+  );
+
+  try {
+    const raw = await readFile(packagePath, "utf8");
+    return JSON.parse(raw) as PlacesPackage;
+  } catch {
+    return { items: [] };
+  }
 }

@@ -6,7 +6,6 @@ import {
   timelineBookContextRows,
   timelineGenealogyComparisonRows,
   timelineKingdomComparisonRows,
-  timelineSchematicPlaceRows,
   type PassionWeekTimelineEvent,
   type TimelineBookContextRow,
   type TimelineInspectorSelection,
@@ -64,7 +63,7 @@ export function EventEvidencePanel({
       ...event.placeIds
         .map((placeId) => lookupMaps.schematicPlaceByPlaceId.get(placeId))
         .filter((row): row is TimelineSchematicPlaceRow => Boolean(row)),
-      ...timelineSchematicPlaceRows.filter((row) => row.relatedEventIds?.includes(event.id)),
+      ...Array.from(lookupMaps.schematicPlaceById.values()).filter((row) => row.relatedEventIds?.includes(event.id)),
     ],
   );
   const relatedKingdomRows = dedupeById(

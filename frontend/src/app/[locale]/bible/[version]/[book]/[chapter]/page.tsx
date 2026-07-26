@@ -25,7 +25,10 @@ import {
   type KingsKingdomsPackage,
 } from "@/components/scripture/timeline/timelineKingsKingdomsPackage";
 import {
-  timelineSchematicPlaceRows,
+  normalizePlacesPackage,
+  type PlacesPackage,
+} from "@/components/scripture/timeline/timelinePlacesPackage";
+import {
   type TimelineBookContextRow,
   type TimelineText,
 } from "@/components/scripture/timeline/passionWeekTimeline";
@@ -179,11 +182,12 @@ async function loadBookContextData(bookId: string, chapter: number, locale: stri
       "data-packages",
       "timeline",
     );
-    const [booksRaw, chapterContextRaw, eventsRaw, kingdomsRaw] = await Promise.all([
+    const [booksRaw, chapterContextRaw, eventsRaw, kingdomsRaw, placesRaw] = await Promise.all([
       readFile(path.join(timelinePackageDirectory, "books.66-canonical-skeleton.json"), "utf8"),
       readFile(path.join(timelinePackageDirectory, "chapter-context.skeleton.json"), "utf8"),
       readFile(path.join(timelinePackageDirectory, "events.core-biblical-skeleton.json"), "utf8"),
       readFile(path.join(timelinePackageDirectory, "kings-kingdoms.skeleton.json"), "utf8"),
+      readFile(path.join(timelinePackageDirectory, "places.schematic-pilot.json"), "utf8"),
     ]);
 
     const canonicalBooks = normalizeCanonicalBooksPackage(
@@ -196,6 +200,7 @@ async function loadBookContextData(bookId: string, chapter: number, locale: stri
     const kingdoms = normalizeKingsKingdomsPackage(
       JSON.parse(kingdomsRaw) as KingsKingdomsPackage,
     );
+    const places = normalizePlacesPackage(JSON.parse(placesRaw) as PlacesPackage);
     const bookContext = canonicalBooks.find((row) => row.bookId === bookId) ?? null;
     const chapterContext = getReviewedChapterContextByBookAndChapter(
       chapterContextRows,
@@ -214,6 +219,7 @@ async function loadBookContextData(bookId: string, chapter: number, locale: stri
             coreEvents,
             kingdoms,
             locale,
+            places,
           })
         : emptyRelatedMetadataPreview(),
     };
@@ -241,12 +247,14 @@ function createRelatedMetadataPreview({
   coreEvents,
   kingdoms,
   locale,
+  places,
 }: {
   bookContext: TimelineBookContextRow;
   canonicalBooks: TimelineBookContextRow[];
   coreEvents: Array<{ id: string; title: TimelineText }>;
   kingdoms: Array<{ id: string; title: TimelineText }>;
   locale: string;
+  places: Array<{ id: string; placeId: string; title: TimelineText }>;
 }): BibleReaderRelatedMetadataPreview {
   const timelineLocale = locale === "en" ? "en" : "ko";
   const booksById = new Map(
@@ -280,7 +288,7 @@ function createRelatedMetadataPreview({
     ]),
   );
   const placesById = new Map(
-    timelineSchematicPlaceRows.flatMap((row) => [
+    places.flatMap((row) => [
       [row.placeId, { id: row.placeId, label: row.title }] as const,
       [row.id, { id: row.id, label: row.title }] as const,
     ]),

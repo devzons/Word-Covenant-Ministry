@@ -20,12 +20,12 @@ import {
   timelineGenealogyComparisonRows,
   timelineGenealogySegments,
   timelineKingdomComparisonRows,
-  timelineSchematicPlaceRows,
   timelineBooks,
   timelinePeriods,
   timelinePlaces,
   type TimelineEvent,
   type TimelineBookContextRow,
+  type TimelineSchematicPlaceRow,
   type TimelineText,
   type TimelineLocale,
 } from "./passionWeekTimeline";
@@ -69,6 +69,7 @@ type TimelinePageShellProps = {
     totalCount: number;
   };
   locale: TimelineLocale;
+  schematicPlaceRows: TimelineSchematicPlaceRow[];
 };
 
 type TimelineBookSectionNavigationItem = {
@@ -196,6 +197,7 @@ export function TimelinePageShell({
   kingsKingdomRows,
   kingsKingdomStats,
   locale,
+  schematicPlaceRows,
 }: TimelinePageShellProps) {
   const activeLocale = locale === "en" ? "en" : "ko";
   const copy = pageCopy[activeLocale];
@@ -392,12 +394,12 @@ export function TimelinePageShell({
     [],
   );
   const schematicPlaceById = useMemo(
-    () => new Map(timelineSchematicPlaceRows.map((row) => [row.id, row])),
-    [],
+    () => new Map(schematicPlaceRows.map((row) => [row.id, row])),
+    [schematicPlaceRows],
   );
   const schematicPlaceByPlaceId = useMemo(
-    () => new Map(timelineSchematicPlaceRows.map((row) => [row.placeId, row])),
-    [],
+    () => new Map(schematicPlaceRows.map((row) => [row.placeId, row])),
+    [schematicPlaceRows],
   );
   const resolveSelectionFromQuery = useCallback(
     (
@@ -934,6 +936,7 @@ export function TimelinePageShell({
                   highlightState={timelineHighlightState}
                   locale={activeLocale}
                   onSelectRow={(rowId) => selectInspectorItem({ id: rowId, type: "place" })}
+                  schematicPlaceRows={schematicPlaceRows}
                   searchTerm={filters.searchTerm}
                   selection={inspectorSelection}
                   selectedRowId={inspectorSelection?.type === "place" ? inspectorSelection.id : ""}
@@ -1294,6 +1297,7 @@ type PlacesSchematicMapPreviewPanelProps = {
   highlightState: TimelineHighlightState;
   locale: TimelineLocale;
   onSelectRow: (rowId: string) => void;
+  schematicPlaceRows: TimelineSchematicPlaceRow[];
   searchTerm: string;
   selection: TimelineInspectorSelection;
   selectedRowId: string;
@@ -1368,13 +1372,14 @@ function PlacesSchematicMapPreviewPanel({
   highlightState,
   locale,
   onSelectRow,
+  schematicPlaceRows,
   searchTerm,
   selection,
   selectedRowId,
 }: PlacesSchematicMapPreviewPanelProps) {
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
-  const visibleRows = timelineSchematicPlaceRows.filter((row) => matchesSchematicPlaceSearch(row, normalizedSearch));
+  const visibleRows = schematicPlaceRows.filter((row) => matchesSchematicPlaceSearch(row, normalizedSearch));
 
   const groupedSections = schematicFlowSections
     .map((section) => ({
@@ -1386,6 +1391,7 @@ function PlacesSchematicMapPreviewPanel({
     bookContextById,
     highlightState,
     locale,
+    schematicPlaceRows,
     selection,
   });
 
@@ -1419,8 +1425,8 @@ function PlacesSchematicMapPreviewPanel({
           </p>
           <p className="text-xs leading-5 text-zinc-500">
             {locale === "ko"
-              ? "성경 본문은 저장하거나 표시하지 않으며, Places package integration과 실제 map integration은 모두 아직 보류 상태입니다."
-              : "Bible text is not stored or rendered here, and both Places package integration and real map integration remain deferred."}
+              ? "성경 본문은 저장하거나 표시하지 않으며, 실제 map integration은 여전히 보류 상태입니다."
+              : "Bible text is not stored or rendered here, and real map integration remains deferred."}
           </p>
         </div>
 
@@ -1615,15 +1621,17 @@ function buildPlacesSchematicHighlightSummary({
   bookContextById,
   highlightState,
   locale,
+  schematicPlaceRows,
   selection,
 }: {
   bookContextById: Map<string, TimelineBookContextRow>;
   highlightState: TimelineHighlightState;
   locale: TimelineLocale;
+  schematicPlaceRows: TimelineSchematicPlaceRow[];
   selection: TimelineInspectorSelection;
 }): PlacesSchematicHighlightSummary | null {
   if (selection?.type === "place") {
-    const placeRow = timelineSchematicPlaceRows.find((row) => row.id === selection.id);
+    const placeRow = schematicPlaceRows.find((row) => row.id === selection.id);
 
     if (!placeRow) {
       return null;
@@ -1686,7 +1694,7 @@ function getPlacesSummaryTypeLabel(
 }
 
 function getSchematicFlowGroupLabel(
-  flowGroup: NonNullable<(typeof timelineSchematicPlaceRows)[number]["conceptFlowGroup"]>,
+  flowGroup: NonNullable<TimelineSchematicPlaceRow["conceptFlowGroup"]>,
   locale: TimelineLocale,
 ) {
   switch (flowGroup) {
@@ -3023,7 +3031,7 @@ function matchesGenealogySearch(
 }
 
 function matchesSchematicPlaceSearch(
-  row: (typeof timelineSchematicPlaceRows)[number],
+  row: TimelineSchematicPlaceRow,
   query: string,
 ) {
   if (!query) {
