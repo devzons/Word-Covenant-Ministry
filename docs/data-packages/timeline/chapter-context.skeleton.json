@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.23.0-pilot",
+  "packageVersion": "0.24.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -5326,6 +5326,282 @@
         {
           "ko": "복음서 전환",
           "en": "Gospel transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-1",
+      "chapterContextId": "chapter-context-exodus-1",
+      "bookId": "exodus",
+      "chapter": 1,
+      "title": {
+        "ko": "출애굽기 1장 애굽 압제 문맥",
+        "en": "Exodus 1 Egyptian Oppression Context"
+      },
+      "summary": {
+        "ko": "출애굽기 1장은 이스라엘이 애굽에서 압제를 받는 배경이 전면에 드러나는 장 수준 문맥 row입니다.",
+        "en": "Exodus 1 is a chapter-level context row where the setting of Israel’s oppression in Egypt comes fully into view."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 애굽 압제 문맥",
+        "en": "Chapter-level Egyptian-oppression context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 1장",
+            "en": "Exodus 1"
+          },
+          "reference": "Exodus 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 출애굽 전체나 이후 구원 사건 전체를 이 한 장으로 미리 압축하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not pre-collapse the whole Exodus or its later deliverance events into this one chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-israel-enslaved-in-egypt-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "압제",
+          "en": "Oppression"
+        },
+        {
+          "ko": "애굽",
+          "en": "Egypt"
+        },
+        {
+          "ko": "배경 전환",
+          "en": "Setting transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-2",
+      "chapterContextId": "chapter-context-exodus-2",
+      "bookId": "exodus",
+      "chapter": 2,
+      "title": {
+        "ko": "출애굽기 2장 모세 출생 문맥",
+        "en": "Exodus 2 Moses Birth Context"
+      },
+      "summary": {
+        "ko": "출애굽기 2장은 모세의 출생과 보존 장면이 출애굽 서사 안에서 부각되는 장 수준 문맥 row입니다.",
+        "en": "Exodus 2 is a chapter-level context row where the scene of Moses’ birth and preservation is brought into focus within the Exodus narrative."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 모세 출생 문맥",
+        "en": "Chapter-level Moses-birth context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 2장",
+            "en": "Exodus 2"
+          },
+          "reference": "Exodus 2",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 모세 생애 전체나 이후 사명을 이 장에서 모두 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not settle the whole life of Moses or all of his later calling from this chapter alone."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-moses-born-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "모세",
+          "en": "Moses"
+        },
+        {
+          "ko": "보존",
+          "en": "Preservation"
+        },
+        {
+          "ko": "서사 준비",
+          "en": "Narrative preparation"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-exodus-24",
+      "chapterContextId": "chapter-context-exodus-24",
+      "bookId": "exodus",
+      "chapter": 24,
+      "title": {
+        "ko": "출애굽기 24장 시내 언약 확증 문맥",
+        "en": "Exodus 24 Sinai Covenant Ratification Context"
+      },
+      "summary": {
+        "ko": "출애굽기 24장은 시내 언약 장면이 확증과 응답의 흐름으로 모이는 장 수준 문맥 row입니다.",
+        "en": "Exodus 24 is a chapter-level context row where the Sinai covenant scene gathers into a flow of ratification and response."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 시내 언약 확증 문맥",
+        "en": "Chapter-level Sinai-covenant-ratification context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "exodus",
+          "label": {
+            "ko": "출애굽기 24장",
+            "en": "Exodus 24"
+          },
+          "reference": "Exodus 24",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 시내 언약 전체 구조나 후속 성막 본문까지 한 row로 확장하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not expand into the full Sinai-covenant structure or later tabernacle material in one row."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "exodus"
+      ],
+      "relatedEventIds": [
+        "event-sinai-covenant-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "언약",
+          "en": "Covenant"
+        },
+        {
+          "ko": "확증",
+          "en": "Ratification"
+        },
+        {
+          "ko": "응답",
+          "en": "Response"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-esther-9",
+      "chapterContextId": "chapter-context-esther-9",
+      "bookId": "esther",
+      "chapter": 9,
+      "title": {
+        "ko": "에스더 9장 구원 기억 문맥",
+        "en": "Esther 9 Deliverance Remembrance Context"
+      },
+      "summary": {
+        "ko": "에스더 9장은 구원의 결과가 공동체의 기억과 절기 표지로 모이는 장 수준 문맥 row입니다.",
+        "en": "Esther 9 is a chapter-level context row where the outcome of deliverance gathers into communal remembrance and festival marking."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 구원 기억 문맥",
+        "en": "Chapter-level deliverance-remembrance context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "esther",
+          "label": {
+            "ko": "에스더 9장",
+            "en": "Esther 9"
+          },
+          "reference": "Esther 9",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "pilot row / authoring pass",
+        "en": "Pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 에스더서 전체 섭리 해석이나 모든 역사 재구성을 이 장에 집중시키지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not concentrate the whole providence reading of Esther or a full historical reconstruction into this chapter."
+      },
+      "reviewStatus": "draft",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first pilot row",
+        "en": "Scripture-first pilot row"
+      },
+      "relatedBookIds": [
+        "esther"
+      ],
+      "relatedEventIds": [
+        "event-esther-deliverance-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "구원",
+          "en": "Deliverance"
+        },
+        {
+          "ko": "기억",
+          "en": "Remembrance"
+        },
+        {
+          "ko": "절기 표지",
+          "en": "Festival marking"
         }
       ],
       "isSkeleton": false
