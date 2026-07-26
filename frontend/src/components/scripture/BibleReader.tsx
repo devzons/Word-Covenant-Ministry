@@ -326,15 +326,40 @@ export function BibleReader({
       currentBook?.label[activeLocale] ?? bookMetadata.name
     } ${chapter.chapter}:${verseNumber}`;
 
-    syncActiveVerseSelection(verseNumber);
-
-    await noteWorkspace.openForVerse({
+    const didOpen = await noteWorkspace.openForVerse({
       book: chapter.book,
       chapter: chapter.chapter,
       referenceLabel: nextReferenceLabel,
       translation: chapter.translation,
       verse: verseNumber,
     });
+
+    if (!didOpen) {
+      return false;
+    }
+
+    syncActiveVerseSelection(verseNumber);
+    return true;
+  }
+
+  async function handleVerseSelection(verseNumber: number, nextMode?: "original" | "interlinear") {
+    if (noteWorkspace.isOpen) {
+      const didSwitchNoteTarget = await handleOpenVerseNote(verseNumber);
+
+      if (!didSwitchNoteTarget) {
+        return;
+      }
+    } else {
+      syncActiveVerseSelection(verseNumber);
+    }
+
+    if (nextMode === "original") {
+      setSelectedOriginalVerse(verseNumber);
+    }
+
+    if (nextMode === "interlinear") {
+      setSelectedInterlinearVerse(verseNumber);
+    }
   }
 
   function getVerseNoteReferenceLabel(verseNumber: number) {
@@ -490,17 +515,12 @@ export function BibleReader({
                                 ? `${copy.selectOriginalVerse}: ${verse.verse}`
                                 : `${copy.selectInterlinearVerse}: ${verse.verse}`
                             }
-                            onClick={() => {
-                              syncActiveVerseSelection(verse.verse);
-
-                              if (isOriginalMode) {
-                                setSelectedOriginalVerse(verse.verse);
-                              }
-
-                              if (isInterlinearMode) {
-                                setSelectedInterlinearVerse(verse.verse);
-                              }
-                            }}
+                            onClick={() =>
+                              void handleVerseSelection(
+                                verse.verse,
+                                isOriginalMode ? "original" : "interlinear",
+                              )
+                            }
                             type="button"
                           >
                             {verse.text}
@@ -509,7 +529,7 @@ export function BibleReader({
                           <button
                             aria-label={`${copy.selectReaderVerse}: ${verse.verse}`}
                             className="min-w-0 break-words text-left text-zinc-950 transition-colors hover:text-zinc-700"
-                            onClick={() => syncActiveVerseSelection(verse.verse)}
+                            onClick={() => void handleVerseSelection(verse.verse)}
                             type="button"
                           >
                             {verse.text}
@@ -528,13 +548,14 @@ export function BibleReader({
                         ) : null}
                       </div>
                       <button
+                        aria-pressed={isNoteEditorOpen}
                         aria-expanded={isNoteEditorOpen}
                         aria-label={noteTriggerLabel}
                         className={cn(
                           "absolute right-1 top-1 inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-zinc-400 transition",
                           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2",
                           "pointer-events-none opacity-0 lg:group-hover/verse:pointer-events-auto lg:group-hover/verse:opacity-100 lg:group-focus-within/verse:pointer-events-auto lg:group-focus-within/verse:opacity-100",
-                          (isActive || isWorkspaceVerse) && "pointer-events-auto opacity-100",
+                          isActive && "pointer-events-auto opacity-100",
                           hasKnownNote &&
                             "border-zinc-200/80 bg-white/80 text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100",
                           !hasKnownNote &&

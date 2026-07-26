@@ -47,7 +47,7 @@ export type VerseNoteWorkspaceState = {
     unsaved: string;
   };
   note: VerseNote | null;
-  openForVerse: (reference: VerseNoteReference) => Promise<void>;
+  openForVerse: (reference: VerseNoteReference) => Promise<boolean>;
   reference: VerseNoteReference | null;
   requestClose: () => boolean;
   saveState: "idle" | "saving" | "saved" | "error";
@@ -164,17 +164,17 @@ export function useVerseNoteWorkspace(locale: string): VerseNoteWorkspaceState {
       setErrorMessage("");
 
       if (status === "loading") {
-        return;
+        return false;
       }
 
       if (status !== "authenticated") {
         router.push(loginHref(nextReference.verse));
-        return;
+        return false;
       }
 
       if (reference && noteKey !== null && noteKey !== createNoteKey(nextReference)) {
         if (!confirmDiscard()) {
-          return;
+          return false;
         }
       }
 
@@ -187,6 +187,8 @@ export function useVerseNoteWorkspace(locale: string): VerseNoteWorkspaceState {
         setNote(null);
         setDraftState("");
       }
+
+      return true;
     },
     [confirmDiscard, loginHref, noteKey, reference, router, status],
   );
