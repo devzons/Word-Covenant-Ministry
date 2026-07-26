@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.24.0-pilot",
+  "packageVersion": "0.25.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -5370,7 +5370,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 출애굽 전체나 이후 구원 사건 전체를 이 한 장으로 미리 압축하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not pre-collapse the whole Exodus or its later deliverance events into this one chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5439,7 +5439,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 모세 생애 전체나 이후 사명을 이 장에서 모두 확정하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not settle the whole life of Moses or all of his later calling from this chapter alone."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5508,7 +5508,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 시내 언약 전체 구조나 후속 성막 본문까지 한 row로 확장하지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not expand into the full Sinai-covenant structure or later tabernacle material in one row."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
@@ -5577,7 +5577,7 @@
         "ko": "이 row는 장 수준 preview metadata이며 에스더서 전체 섭리 해석이나 모든 역사 재구성을 이 장에 집중시키지 않습니다.",
         "en": "This row is chapter-level preview metadata and does not concentrate the whole providence reading of Esther or a full historical reconstruction into this chapter."
       },
-      "reviewStatus": "draft",
+      "reviewStatus": "reviewed",
       "sourceBasisLabel": {
         "ko": "Scripture-first pilot row",
         "en": "Scripture-first pilot row"
