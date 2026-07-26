@@ -494,18 +494,10 @@ export function BibleReader({
                   <li className="flex flex-col" id={verseId} key={verse.verse}>
                     <div
                       className={cn(
-                        "group/verse relative grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
+                        "group/verse relative scroll-mt-24 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
                         isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
                       )}
                     >
-                      <span
-                        className={cn(
-                          "pt-0.5 text-sm font-semibold text-zinc-500",
-                          isActive && "text-blue-700",
-                        )}
-                      >
-                        {verse.verse}
-                      </span>
                       <div className="flex min-w-0 flex-col pr-10">
                         {isSelectableStudyMode ? (
                           <button
@@ -523,7 +515,15 @@ export function BibleReader({
                             }
                             type="button"
                           >
-                            {verse.text}
+                            <span
+                              className={cn(
+                                "mr-1 align-super text-[0.7em] font-semibold text-zinc-500",
+                                isActive && "text-blue-700",
+                              )}
+                            >
+                              {verse.verse}
+                            </span>
+                            <span>{verse.text}</span>
                           </button>
                         ) : (
                           <button
@@ -532,7 +532,15 @@ export function BibleReader({
                             onClick={() => void handleVerseSelection(verse.verse)}
                             type="button"
                           >
-                            {verse.text}
+                            <span
+                              className={cn(
+                                "mr-1 align-super text-[0.7em] font-semibold text-zinc-500",
+                                isActive && "text-blue-700",
+                              )}
+                            >
+                              {verse.verse}
+                            </span>
+                            <span>{verse.text}</span>
                           </button>
                         )}
                         {isOriginalMode && visibleOriginalVerse === verse.verse ? (
