@@ -143,6 +143,11 @@ const bibleReaderCopy = {
       insight: "Insight",
       "cross-reference": "Related Passages",
     },
+    noteActions: {
+      create: "Open personal note",
+      edit: "Reopen personal note",
+      close: "Close personal note",
+    },
   },
   ko: {
     version: "버전",
@@ -170,6 +175,11 @@ const bibleReaderCopy = {
       search: "검색",
       insight: "통찰",
       "cross-reference": "관련 구절",
+    },
+    noteActions: {
+      create: "개인 노트 작성",
+      edit: "개인 노트 열기",
+      close: "개인 노트 닫기",
     },
   },
 };
@@ -327,6 +337,13 @@ export function BibleReader({
     });
   }
 
+  function getVerseNoteReferenceLabel(verseNumber: number) {
+    const bookLabel = currentBook?.label[activeLocale] ?? bookMetadata.name;
+    return activeLocale === "ko"
+      ? `${bookLabel} ${chapter.chapter}장 ${verseNumber}절`
+      : `${bookLabel} ${chapter.chapter}:${verseNumber}`;
+  }
+
   return (
     <ScriptureResearchWorkspaceProvider
       book={chapter.book}
@@ -436,12 +453,23 @@ export function BibleReader({
                   (isInterlinearMode && visibleInterlinearVerse === verse.verse) ||
                   (isOriginalMode && visibleOriginalVerse === verse.verse);
                 const isSelectableStudyMode = isOriginalMode || isInterlinearMode;
+                const isWorkspaceVerse =
+                  noteWorkspace.reference?.book === chapter.book &&
+                  noteWorkspace.reference?.chapter === chapter.chapter &&
+                  noteWorkspace.reference?.verse === verse.verse;
+                const hasKnownNote = isWorkspaceVerse && Boolean(noteWorkspace.note?.note.trim());
+                const isNoteEditorOpen = isWorkspaceVerse && noteWorkspace.isOpen;
+                const noteTriggerLabel = isNoteEditorOpen
+                  ? `${getVerseNoteReferenceLabel(verse.verse)} ${copy.noteActions.close}`
+                  : `${getVerseNoteReferenceLabel(verse.verse)} ${
+                      hasKnownNote ? copy.noteActions.edit : copy.noteActions.create
+                    }`;
 
                 return (
                   <li className="flex flex-col" id={verseId} key={verse.verse}>
                     <div
                       className={cn(
-                        "group/verse grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
+                        "group/verse relative grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-lg border border-transparent px-2 py-0.5 text-lg leading-7 transition-colors",
                         isActive && "border-blue-200 bg-blue-50 hover:bg-blue-100",
                       )}
                     >
@@ -453,7 +481,7 @@ export function BibleReader({
                       >
                         {verse.verse}
                       </span>
-                      <div className="flex min-w-0 flex-col gap-2">
+                      <div className="flex min-w-0 flex-col pr-10">
                         {isSelectableStudyMode ? (
                           <button
                             className="min-w-0 break-words text-left text-zinc-950 transition-colors hover:text-zinc-700"
@@ -487,27 +515,6 @@ export function BibleReader({
                             {verse.text}
                           </button>
                         )}
-                        <div className="flex items-center justify-end">
-                          <button
-                            aria-label={`${noteWorkspace.labels.note}: ${
-                              currentBook?.label[activeLocale] ?? bookMetadata.name
-                            } ${chapter.chapter}:${verse.verse}`}
-                            className={cn(
-                              "inline-flex h-8 min-w-0 items-center justify-center rounded-md border px-3 text-xs font-medium transition-colors",
-                              "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950",
-                              "opacity-0 pointer-events-none group-hover/verse:opacity-100 group-hover/verse:pointer-events-auto group-focus-within/verse:opacity-100 group-focus-within/verse:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto",
-                              (isActive ||
-                                noteWorkspace.reference?.verse === verse.verse) &&
-                                noteWorkspace.reference?.chapter === chapter.chapter &&
-                                noteWorkspace.reference?.book === chapter.book &&
-                                "opacity-100 pointer-events-auto",
-                            )}
-                            onClick={() => void handleOpenVerseNote(verse.verse)}
-                            type="button"
-                          >
-                            {noteWorkspace.labels.trigger}
-                          </button>
-                        </div>
                         {isOriginalMode && visibleOriginalVerse === verse.verse ? (
                           <VerseOriginalLanguagePreview
                             autoLoad
@@ -520,6 +527,33 @@ export function BibleReader({
                           />
                         ) : null}
                       </div>
+                      <button
+                        aria-expanded={isNoteEditorOpen}
+                        aria-label={noteTriggerLabel}
+                        className={cn(
+                          "absolute right-1 top-1 inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-zinc-400 transition",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2",
+                          "pointer-events-none opacity-0 lg:group-hover/verse:pointer-events-auto lg:group-hover/verse:opacity-100 lg:group-focus-within/verse:pointer-events-auto lg:group-focus-within/verse:opacity-100",
+                          (isActive || isWorkspaceVerse) && "pointer-events-auto opacity-100",
+                          hasKnownNote &&
+                            "border-zinc-200/80 bg-white/80 text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100",
+                          !hasKnownNote &&
+                            "hover:border-zinc-200 hover:bg-zinc-100/80 hover:text-zinc-600",
+                          isNoteEditorOpen && "border-zinc-300 bg-zinc-100 text-zinc-700",
+                        )}
+                        onClick={() => {
+                          if (isNoteEditorOpen) {
+                            noteWorkspace.requestClose();
+                            return;
+                          }
+
+                          void handleOpenVerseNote(verse.verse);
+                        }}
+                        title={noteTriggerLabel}
+                        type="button"
+                      >
+                        <VerseNoteIcon hasNote={hasKnownNote} />
+                      </button>
                     </div>
 
                     {isInterlinearMode && visibleInterlinearVerse === verse.verse ? (
@@ -607,6 +641,56 @@ export function BibleReader({
         />
       ) : null}
     </ScriptureResearchWorkspaceProvider>
+  );
+}
+
+function VerseNoteIcon({ hasNote }: { hasNote: boolean }) {
+  if (hasNote) {
+    return (
+      <svg
+        aria-hidden="true"
+        className="h-4 w-4"
+        fill="none"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M5.75 3.75h8.5a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-8.5a2 2 0 0 1-2-2v-8.5a2 2 0 0 1 2-2Z"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M7 7.25h6M7 10h6M7 12.75h4"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth="1.5"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-4 w-4"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        d="M5.75 3.75h8.5a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-8.5a2 2 0 0 1-2-2v-8.5a2 2 0 0 1 2-2Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M7 7.25h6"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+    </svg>
   );
 }
 
