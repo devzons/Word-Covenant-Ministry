@@ -183,21 +183,21 @@ export function GospelHarmonyNavigator({
                           aria-controls={panelId}
                           aria-expanded={isOpen}
                           className={cn(
-                            "flex w-full items-center justify-between gap-3 px-3 py-2 text-left transition-colors",
+                            "flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left transition-colors",
                             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-inset",
                             isOpen ? "bg-zinc-100" : "bg-white hover:bg-zinc-50",
                           )}
                           onClick={() => setOpenSection(group.section)}
                           type="button"
                         >
-                          <span className="text-sm font-semibold text-zinc-800">{gospelHarmonySectionLabels[group.section][locale]}</span>
-                          <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-500">
-                            {group.count}
-                          </span>
+                        <span className="text-sm font-semibold leading-5 text-zinc-800">{gospelHarmonySectionLabels[group.section][locale]}</span>
+                        <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-500">
+                          {group.count}
+                        </span>
                         </button>
 
                         {isOpen ? (
-                          <div className="border-t border-zinc-200 px-2 py-2" id={panelId}>
+                          <div className="border-t border-zinc-200 px-2 py-2.5" id={panelId}>
                             <ul className="flex flex-col gap-2">
                               {group.units.map((unit) => {
                                 const active = unit.id === selectedUnitId;
@@ -250,7 +250,7 @@ const UnitButton = forwardRef<HTMLButtonElement, UnitButtonProps>(function UnitB
     <button
       aria-pressed={active}
       className={cn(
-        "flex w-full flex-col gap-1 rounded-md border px-3 py-2 text-left transition-colors",
+        "flex w-full flex-col gap-1.5 rounded-md border px-3 py-2.5 text-left transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2",
         active
           ? "border-zinc-950 bg-zinc-950 text-white"
@@ -260,8 +260,8 @@ const UnitButton = forwardRef<HTMLButtonElement, UnitButtonProps>(function UnitB
       ref={ref}
       type="button"
     >
-      <div className="flex items-start justify-between gap-2">
-        <span className="line-clamp-2 text-sm font-semibold leading-5">{unit.title[locale]}</span>
+      <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
+        <span className="min-w-0 flex-1 line-clamp-2 text-sm font-semibold leading-[1.35]">{unit.title[locale]}</span>
         <span
           className={cn(
             "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold",

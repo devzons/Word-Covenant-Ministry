@@ -381,7 +381,7 @@ export function GospelHarmonyWorkspace({ locale }: GospelHarmonyWorkspaceProps) 
         <p className="text-base leading-7 text-zinc-600">{copy.description}</p>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[220px_minmax(0,1fr)]">
+      <div className="grid gap-5 xl:grid-cols-[260px_minmax(0,1fr)] 2xl:grid-cols-[280px_minmax(0,1fr)]">
         <GospelHarmonyNavigator
           activeView={activeView}
           copy={copy}
