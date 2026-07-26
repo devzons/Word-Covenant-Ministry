@@ -1215,3 +1215,5 @@ Next CR:
   - Purpose: audit the non-parable event units in the current Harmony dataset for remaining omissions, overlap, and ordering quality after the parable/eschatology/reference audit, while keeping the frontend-only reference model and avoiding backend/API/schema changes.
 - `Gospel Harmony Event Metadata and Remaining Candidate Review`
   - Purpose: review whether any newly added event titles/categories/section placements still need minor neutrality or grouping polish, and decide whether any lower-priority candidates such as Zacchaeus, Martha and Mary, or post-resurrection appearance subdivision belong in a later conservative reference-only batch without reopening backend/API/data architecture.
+- `Gospel Harmony Lower-Priority Event Candidate Review`
+  - Purpose: review the still-unadded lower-priority event candidates after the now-completed metadata pass, especially Martha and Mary, Sending of the Seventy-Two, Temple Tax, Feeding the Four Thousand, Demoniac Boy, Pilate/Herod trial subdivisions, and Tomb Guard, and decide whether another small conservative event batch is warranted without reopening UI, backend, API, or schema scope.

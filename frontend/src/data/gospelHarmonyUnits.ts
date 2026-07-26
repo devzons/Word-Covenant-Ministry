@@ -260,6 +260,24 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
+    id: "nicodemus",
+    title: { ko: "니고데모와의 대화", en: "Jesus and Nicodemus" },
+    kinds: ["event"],
+    section: "ministry-start",
+    passages: {
+      john: passage("john", 3, 1, 21),
+    },
+  }),
+  unit({
+    id: "samaritan-woman",
+    title: { ko: "사마리아 여인", en: "Samaritan Woman" },
+    kinds: ["event"],
+    section: "grace-repentance-forgiveness",
+    passages: {
+      john: passage("john", 4, 4, 42),
+    },
+  }),
+  unit({
     id: "calling-four-disciples",
     title: { ko: "네 제자 부르심", en: "Calling of Four Disciples" },
     kinds: ["event"],
@@ -307,10 +325,19 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     id: "death-of-john-baptist",
     title: { ko: "세례 요한의 죽음", en: "Death of John the Baptist" },
     kinds: ["event"],
-    section: "ministry-start",
+    section: "israel-leaders",
     passages: {
       matthew: passage("matthew", 14, 1, 12),
       mark: passage("mark", 6, 14, 29),
+    },
+  }),
+  unit({
+    id: "widow-of-nain-son-raised",
+    title: { ko: "나인성 과부의 아들을 살리심", en: "Widow of Nain's Son Raised" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      luke: passage("luke", 7, 11, 17),
     },
   }),
   unit({
@@ -351,11 +378,21 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     id: "transfiguration",
     title: { ko: "변화산", en: "Transfiguration" },
     kinds: ["event"],
-    section: "ministry-start",
+    section: "discipleship-obedience",
     passages: {
       matthew: passage("matthew", 17, 1, 8),
       mark: passage("mark", 9, 2, 8),
       luke: passage("luke", 9, 28, 36),
+    },
+  }),
+  unit({
+    id: "syrophoenician-woman",
+    title: { ko: "수로보니게 여인", en: "Syrophoenician Woman" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      matthew: passage("matthew", 15, 21, 28),
+      mark: passage("mark", 7, 24, 30),
     },
   }),
   unit({
@@ -380,6 +417,15 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
+    id: "zacchaeus",
+    title: { ko: "삭개오", en: "Zacchaeus" },
+    kinds: ["event"],
+    section: "grace-repentance-forgiveness",
+    passages: {
+      luke: passage("luke", 19, 1, 10),
+    },
+  }),
+  unit({
     id: "temple-cleansing",
     title: { ko: "성전 정화", en: "Temple Cleansing" },
     kinds: ["event"],
@@ -391,6 +437,16 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
+    id: "widows-offering",
+    title: { ko: "과부의 두 렙돈", en: "Widow's Offering" },
+    kinds: ["event"],
+    section: "israel-leaders",
+    passages: {
+      mark: passage("mark", 12, 41, 44),
+      luke: passage("luke", 21, 1, 4),
+    },
+  }),
+  unit({
     id: "last-supper",
     title: { ko: "최후의 만찬", en: "Last Supper" },
     kinds: ["event"],
@@ -399,7 +455,15 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
       matthew: passage("matthew", 26, 20, 29),
       mark: passage("mark", 14, 17, 25),
       luke: passage("luke", 22, 14, 23),
-      john: passage("john", 13, 1, 30),
+    },
+  }),
+  unit({
+    id: "foot-washing",
+    title: { ko: "제자들의 발을 씻기심", en: "Washing the Disciples' Feet" },
+    kinds: ["event"],
+    section: "discipleship-obedience",
+    passages: {
+      john: passage("john", 13, 1, 20),
     },
   }),
   unit({
@@ -423,6 +487,17 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
       mark: passage("mark", 14, 43, 52),
       luke: passage("luke", 22, 47, 53),
       john: passage("john", 18, 1, 11),
+    },
+  }),
+  unit({
+    id: "peter-denial",
+    title: { ko: "베드로의 부인", en: "Peter's Denial" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      matthew: passage("matthew", 26, 69, 75),
+      mark: passage("mark", 14, 66, 72),
+      luke: passage("luke", 22, 54, 62),
     },
   }),
   unit({
@@ -500,11 +575,20 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
   }),
   unit({
     id: "disciples-by-sea-of-galilee",
-    title: { ko: "갈릴리 바닷가의 제자들", en: "Disciples by the Sea of Galilee" },
+    title: { ko: "갈릴리 바닷가에 나타나심", en: "Appearance by the Sea of Galilee" },
     kinds: ["event"],
     section: "eschatology",
     passages: {
-      john: passage("john", 21, 1, 19),
+      john: passage("john", 21, 1, 14),
+    },
+  }),
+  unit({
+    id: "peter-restoration",
+    title: { ko: "베드로 회복", en: "Restoration of Peter" },
+    kinds: ["event"],
+    section: "discipleship-obedience",
+    passages: {
+      john: passage("john", 21, 15, 19),
     },
   }),
   unit({
