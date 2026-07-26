@@ -933,6 +933,23 @@ export function getGospelHarmonyRecordCount(unit: GospelHarmonyUnit): number {
 function validateGospelHarmonyUnits() {
   const ids = new Set<string>();
   const sequences = new Set<number>();
+  const validKinds = new Set<GospelHarmonyKind>([
+    "parable",
+    "eschatology",
+    "event",
+    "figurative",
+  ]);
+  const validSections = new Set<GospelHarmonySection>([
+    "ministry-start",
+    "kingdom",
+    "grace-repentance-forgiveness",
+    "discipleship-obedience",
+    "prayer-faith",
+    "stewardship-wealth",
+    "israel-leaders",
+    "eschatology",
+    "figurative",
+  ]);
 
   for (const unit of gospelHarmonyUnits) {
     if (ids.has(unit.id)) {
@@ -945,6 +962,20 @@ function validateGospelHarmonyUnits() {
 
     ids.add(unit.id);
     sequences.add(unit.sequence);
+
+    if (!unit.title.ko || !unit.title.en || !unit.category.ko || !unit.category.en) {
+      throw new Error(`Missing localized value for Gospel Harmony unit: ${unit.id}`);
+    }
+
+    if (!validSections.has(unit.section)) {
+      throw new Error(`Invalid Gospel Harmony section for ${unit.id}: ${unit.section}`);
+    }
+
+    for (const kind of unit.kinds) {
+      if (!validKinds.has(kind)) {
+        throw new Error(`Invalid Gospel Harmony kind for ${unit.id}: ${kind}`);
+      }
+    }
 
     const passageEntries = Object.entries(unit.passages) as [
       GospelHarmonyBook,
@@ -990,6 +1021,16 @@ function validateGospelHarmonyUnits() {
     throw new Error(
       `Expected 46 Gospel Harmony parables, received ${gospelHarmonyCounts.parables}`,
     );
+  }
+
+  for (const [alias, target] of Object.entries(gospelHarmonyUnitAliases)) {
+    if (ids.has(alias)) {
+      throw new Error(`Gospel Harmony alias collides with real unit id: ${alias}`);
+    }
+
+    if (!ids.has(target)) {
+      throw new Error(`Gospel Harmony alias target is missing: ${alias} -> ${target}`);
+    }
   }
 }
 

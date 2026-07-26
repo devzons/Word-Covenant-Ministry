@@ -1211,3 +1211,5 @@ Next CR:
   - Purpose: run live desktop/mobile browser QA for the new `parallel` / `stacked` reading modes, confirm `layout` query persistence and `2 x 2` four-Gospel rendering in the actual browser, verify that navigator/search behavior remains unaffected, and apply only small UX polish if browser interaction reveals any remaining readability issues.
 - `Gospel Harmony Reading Layout Acceptance and Next Local Work Selection`
   - Purpose: use the now-confirmed live browser baseline for the compact navigator plus `parallel` / `stacked` reading modes to decide the next smallest Gospel Harmony CR, such as optional navigator collapse review, metadata polish, or another narrow study-surface UX improvement, without reopening backend/API/data scope or changing the current phase.
+- `Gospel Harmony Event Coverage and Sequence Audit`
+  - Purpose: audit the non-parable event units in the current Harmony dataset for remaining omissions, overlap, and ordering quality after the parable/eschatology/reference audit, while keeping the frontend-only reference model and avoiding backend/API/schema changes.
