@@ -25,7 +25,6 @@ export {
   getTimelineReaderHrefFromReader,
   getTimelineDatePreview,
   getTimelineText,
-  passionWeekTimelineEvents,
   timelineBookContextRows,
   timelineKingdomComparisonRows,
   timelineBooks,
