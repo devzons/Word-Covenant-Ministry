@@ -138,10 +138,12 @@ final class RegistrationService
     {
         $rawUsername = trim(is_string($value) ? $value : '');
         $username = sanitize_user($rawUsername, true);
+        $hasValidCharacters = preg_match('/^[A-Za-z0-9._-]+$/', $rawUsername) === 1;
 
         if ($rawUsername === ''
             || $username === ''
             || $rawUsername !== $username
+            || ! $hasValidCharacters
             || strlen($username) < AuthConfig::MIN_USERNAME_LENGTH
             || strlen($username) > AuthConfig::MAX_USERNAME_LENGTH
         ) {

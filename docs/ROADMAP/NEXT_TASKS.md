@@ -1194,3 +1194,10 @@ Next CR:
 
 - `User Registration Integration and Security QA`
   - Purpose: run end-to-end local registration flow QA against the existing backend contract, verify Mailpit delivery and locale links, verify resend cooldown/rate-limit behavior, confirm token expiry/replay handling, recheck unverified vs verified login behavior, and finish browser-level desktop/mobile validation for Korean and English auth routes.
+
+`User Registration Integration and Security QA` is now complete as a runtime-backed QA step, but the full Phase Exception is not closed yet because live browser interaction coverage still remains. Local WordPress, WCM REST routes, Mailpit, and the frontend build/runtime were all brought up and exercised on Sunday, July 26, 2026. End-to-end runtime QA confirmed Korean and English registration success, legal consent metadata capture at backend-owned version `1.0`, localized verification emails, unverified login blocking, successful verification, verified login, `/auth/me`, logout, password reset regression safety, and authenticated private-note CRUD plus cross-user `404` ownership protection. Two defects were fixed during this QA: strict backend username validation now rejects space-containing logins that previously slipped past WordPress core sanitization, and auth rate limiting now increments numeric-string transient values correctly so registration and verification throttling trigger at the intended thresholds. QA users were deleted and WCM auth transients were cleared after validation. `php -l`, `composer dump-autoload`, `npm run typecheck`, `npm run lint`, and an unrestricted `npm run build` all passed.
+
+Next CR:
+
+- `User Registration Final Browser QA`
+  - Purpose: finish live desktop/mobile interaction QA for `/[locale]/register`, `/[locale]/register/check-email`, `/[locale]/verify-email`, `/[locale]/login`, safe return-path navigation, focus/overflow behavior, and final browser network/console review now that backend/runtime integration has been validated.

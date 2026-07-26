@@ -24,7 +24,7 @@ final class AuthRateLimiter
     {
         $key = $this->counterKey($bucket, $subject);
         $count = get_transient($key);
-        $count = is_int($count) ? $count + 1 : 1;
+        $count = is_numeric($count) ? ((int) $count) + 1 : 1;
 
         set_transient($key, $count, $windowSeconds);
 
