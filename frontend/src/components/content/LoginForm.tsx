@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { AuthApiError } from "@/lib/api/auth";
 import { useAuth } from "@/components/layout/AuthProvider";
+import { LegalNoticeLinks } from "@/components/content/LegalNoticeLinks";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
@@ -149,6 +150,11 @@ export function LoginForm({ locale }: LoginFormProps) {
             {labels.forgotPassword}
           </Link>
         </div>
+
+        <LegalNoticeLinks
+          className="flex flex-wrap items-center justify-center gap-2 border-t border-zinc-200 pt-3 text-xs text-zinc-500"
+          locale={activeLocale}
+        />
       </form>
     </Card>
   );

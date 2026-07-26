@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { AuthApiError, forgotPassword } from "@/lib/api/auth";
+import { LegalNoticeLinks } from "@/components/content/LegalNoticeLinks";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
@@ -116,6 +117,11 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
             {labels.backToLogin}
           </Link>
         </div>
+
+        <LegalNoticeLinks
+          className="flex flex-wrap items-center justify-center gap-2 border-t border-zinc-200 pt-3 text-xs text-zinc-500"
+          locale={activeLocale}
+        />
       </form>
     </Card>
   );
