@@ -1,6 +1,8 @@
 import { apiRequest } from "@/lib/api/client";
 import type {
   StudyCategory,
+  StudyCategoryRef,
+  StudyContentDetail,
   StudyContentQueryOptions,
   StudyContentSummary,
   StudyLocale,
@@ -15,12 +17,19 @@ type WordPressStudyContent = {
   slug?: string;
   title?: WordPressRenderedField;
   excerpt?: WordPressRenderedField;
+  content?: WordPressRenderedField;
   date?: string;
   modified?: string;
   link?: string;
   categories?: unknown;
   wcm_study_category?: unknown;
   wcm_study_category_ids?: unknown;
+  _embedded?: {
+    author?: Array<{
+      name?: string;
+    }>;
+    "wp:term"?: unknown[];
+  };
 };
 
 type WordPressStudyCategory = {
@@ -64,6 +73,46 @@ export async function fetchStudyContents(
   }
 }
 
+export async function fetchStudyContentBySlug(
+  locale: StudyLocale,
+  slug: string,
+): Promise<StudyContentDetail | null> {
+  const trimmedSlug = slug.trim();
+
+  if (trimmedSlug === "") {
+    return null;
+  }
+
+  const slugCandidates = Array.from(
+    new Set([trimmedSlug, safeEncodeURIComponent(trimmedSlug)]),
+  );
+
+  for (const slugCandidate of slugCandidates) {
+    const params = new URLSearchParams({
+      slug: slugCandidate,
+      status: "publish",
+      per_page: "1",
+      _embed: "author,wp:term",
+    });
+    params.set("lang", locale);
+
+    try {
+      const response = await apiRequest<WordPressStudyContent[]>(
+        `/wp/v2/wcm_study?${params.toString()}`,
+      );
+      const detail = normalizeStudyContentDetailList(response)[0] ?? null;
+
+      if (detail) {
+        return detail;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
 export async function fetchStudyCategories(locale: StudyLocale): Promise<StudyCategory[]> {
   const params = new URLSearchParams({
     _fields: "id,slug,name,description,count,link,parent",
@@ -101,7 +150,7 @@ function normalizeStudyContent(item: unknown): StudyContentSummary | null {
   }
 
   const id = parseNumber(item.id);
-  const slug = parseString(item.slug);
+  const slug = normalizeStudySlug(parseString(item.slug));
   const title = parseRenderedString(item.title);
   const excerpt = parseRenderedString(item.excerpt);
   const date = parseString(item.date);
@@ -122,6 +171,41 @@ function normalizeStudyContent(item: unknown): StudyContentSummary | null {
     modified,
     link,
     studyCategoryIds,
+  };
+}
+
+function normalizeStudyContentDetailList(response: WordPressStudyContent[] | unknown): StudyContentDetail[] {
+  if (!Array.isArray(response)) {
+    return [];
+  }
+
+  return response.flatMap((item) => {
+    const detail = normalizeStudyContentDetail(item);
+
+    return detail ? [detail] : [];
+  });
+}
+
+function normalizeStudyContentDetail(item: unknown): StudyContentDetail | null {
+  if (!isRecord(item)) {
+    return null;
+  }
+
+  const summary = normalizeStudyContent(item);
+
+  if (!summary) {
+    return null;
+  }
+
+  const content = parseRenderedString(item.content);
+  const authorName = parseEmbeddedAuthorName(item._embedded);
+  const categories = parseEmbeddedStudyCategories(item._embedded);
+
+  return {
+    ...summary,
+    content,
+    authorName,
+    categories,
   };
 }
 
@@ -194,6 +278,63 @@ function parseRenderedString(value: unknown): string {
   return parseString(value.rendered);
 }
 
+function parseEmbeddedAuthorName(value: unknown): string {
+  if (!isRecord(value) || !Array.isArray(value.author)) {
+    return "";
+  }
+
+  for (const author of value.author) {
+    if (isRecord(author)) {
+      const name = parseString(author.name);
+
+      if (name !== "") {
+        return name;
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseEmbeddedStudyCategories(value: unknown): StudyCategoryRef[] {
+  if (!isRecord(value) || !Array.isArray(value["wp:term"])) {
+    return [];
+  }
+
+  const normalized: StudyCategoryRef[] = [];
+
+  for (const termGroup of value["wp:term"]) {
+    if (!Array.isArray(termGroup)) {
+      continue;
+    }
+
+    for (const term of termGroup) {
+      if (!isRecord(term)) {
+        continue;
+      }
+
+      const id = parseNumber(term.id);
+      const slug = parseString(term.slug);
+      const name = parseString(term.name);
+      const taxonomy = parseString(term.taxonomy);
+      const parent = parseNumber(term.parent) ?? 0;
+
+      if (taxonomy !== "wcm_study_category" || id === null || slug === "" || name === "") {
+        continue;
+      }
+
+      normalized.push({
+        id,
+        slug,
+        name,
+        parent,
+      });
+    }
+  }
+
+  return normalized;
+}
+
 function parseNumber(value: unknown): number | null {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
@@ -210,6 +351,26 @@ function parseNumber(value: unknown): number | null {
 
 function parseString(value: unknown): string {
   return typeof value === "string" ? value : "";
+}
+
+function normalizeStudySlug(value: string): string {
+  if (value === "") {
+    return "";
+  }
+
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function safeEncodeURIComponent(value: string): string {
+  try {
+    return encodeURIComponent(value);
+  } catch {
+    return value;
+  }
 }
 
 function toPositiveInt(value: number | undefined, fallback: number): number {

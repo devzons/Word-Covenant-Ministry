@@ -11,6 +11,19 @@ export type StudyContentSummary = {
   studyCategoryIds: number[];
 };
 
+export type StudyCategoryRef = {
+  id: number;
+  slug: string;
+  name: string;
+  parent: number;
+};
+
+export type StudyContentDetail = StudyContentSummary & {
+  content: string;
+  authorName: string;
+  categories: StudyCategoryRef[];
+};
+
 export type StudyCategory = {
   id: number;
   slug: string;
