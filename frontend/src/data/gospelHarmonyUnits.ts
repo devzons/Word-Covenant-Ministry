@@ -364,6 +364,26 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
+    id: "syrophoenician-woman",
+    title: { ko: "수로보니게 여인", en: "Syrophoenician Woman" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      matthew: passage("matthew", 15, 21, 28),
+      mark: passage("mark", 7, 24, 30),
+    },
+  }),
+  unit({
+    id: "feeding-four-thousand",
+    title: { ko: "사천 명을 먹이심", en: "Feeding the Four Thousand" },
+    kinds: ["event"],
+    section: "kingdom",
+    passages: {
+      matthew: passage("matthew", 15, 32, 39),
+      mark: passage("mark", 8, 1, 10),
+    },
+  }),
+  unit({
     id: "peter-confession",
     title: { ko: "베드로의 신앙 고백", en: "Peter's Confession" },
     kinds: ["event"],
@@ -386,13 +406,41 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
-    id: "syrophoenician-woman",
-    title: { ko: "수로보니게 여인", en: "Syrophoenician Woman" },
+    id: "healing-demon-possessed-boy",
+    title: { ko: "귀신 들린 아이를 고치심", en: "Healing a Demon-Possessed Boy" },
     kinds: ["event"],
     section: "kingdom",
     passages: {
-      matthew: passage("matthew", 15, 21, 28),
-      mark: passage("mark", 7, 24, 30),
+      matthew: passage("matthew", 17, 14, 20),
+      mark: passage("mark", 9, 14, 29),
+      luke: passage("luke", 9, 37, 43),
+    },
+  }),
+  unit({
+    id: "sending-of-seventy-two",
+    title: { ko: "칠십이 인 파송", en: "Sending of the Seventy-Two" },
+    kinds: ["event"],
+    section: "discipleship-obedience",
+    passages: {
+      luke: passage("luke", 10, 1, 20),
+    },
+  }),
+  unit({
+    id: "martha-and-mary",
+    title: { ko: "마르다와 마리아", en: "Martha and Mary" },
+    kinds: ["event"],
+    section: "discipleship-obedience",
+    passages: {
+      luke: passage("luke", 10, 38, 42),
+    },
+  }),
+  unit({
+    id: "zacchaeus",
+    title: { ko: "삭개오", en: "Zacchaeus" },
+    kinds: ["event"],
+    section: "grace-repentance-forgiveness",
+    passages: {
+      luke: passage("luke", 19, 1, 10),
     },
   }),
   unit({
@@ -417,15 +465,6 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     },
   }),
   unit({
-    id: "zacchaeus",
-    title: { ko: "삭개오", en: "Zacchaeus" },
-    kinds: ["event"],
-    section: "grace-repentance-forgiveness",
-    passages: {
-      luke: passage("luke", 19, 1, 10),
-    },
-  }),
-  unit({
     id: "temple-cleansing",
     title: { ko: "성전 정화", en: "Temple Cleansing" },
     kinds: ["event"],
@@ -444,6 +483,17 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
     passages: {
       mark: passage("mark", 12, 41, 44),
       luke: passage("luke", 21, 1, 4),
+    },
+  }),
+  unit({
+    id: "judas-agrees-to-betray-jesus",
+    title: { ko: "유다가 예수님을 넘기기로 합의함", en: "Judas Agrees to Betray Jesus" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      matthew: passage("matthew", 26, 14, 16),
+      mark: passage("mark", 14, 10, 11),
+      luke: passage("luke", 22, 3, 6),
     },
   }),
   unit({
@@ -522,6 +572,15 @@ const unitDefinitions: GospelHarmonyUnitDefinition[] = [
       mark: passage("mark", 15, 42, 47),
       luke: passage("luke", 23, 50, 56),
       john: passage("john", 19, 38, 42),
+    },
+  }),
+  unit({
+    id: "guard-at-tomb",
+    title: { ko: "무덤 경비", en: "Guard at the Tomb" },
+    kinds: ["event"],
+    section: "eschatology",
+    passages: {
+      matthew: passage("matthew", 27, 62, 66),
     },
   }),
   unit({
