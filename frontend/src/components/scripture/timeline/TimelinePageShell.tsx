@@ -87,7 +87,7 @@ type TimelineKingdomSectionNavigationItem = {
 };
 
 type TimelineView = "overview" | "events" | "books" | "kingdoms" | "genealogy" | "places" | "themes";
-type TimelineSupportedInspectType = "book" | "event" | "kingdom";
+type TimelineSupportedInspectType = "book" | "event" | "genealogy" | "kingdom" | "place";
 
 type TimelineOption = {
   id: string;
@@ -425,9 +425,17 @@ export function TimelinePageShell({
         return { id: inspectId, type: "kingdom" };
       }
 
+      if (view === "genealogy" && inspectType === "genealogy" && genealogyComparisonById.has(inspectId)) {
+        return { id: inspectId, type: "genealogy" };
+      }
+
+      if (view === "places" && inspectType === "place" && schematicPlaceById.has(inspectId)) {
+        return { id: inspectId, type: "place" };
+      }
+
       return null;
     },
-    [bookContextByBookId, eventById, kingdomComparisonById],
+    [bookContextByBookId, eventById, genealogyComparisonById, kingdomComparisonById, schematicPlaceById],
   );
   const getInspectQueryState = useCallback(
     (selection: TimelineInspectorSelection) => {
@@ -457,6 +465,20 @@ export function TimelinePageShell({
         return {
           inspectId: selection.id,
           inspectType: "kingdom" as const,
+        };
+      }
+
+      if (selection.type === "genealogy") {
+        return {
+          inspectId: selection.id,
+          inspectType: "genealogy" as const,
+        };
+      }
+
+      if (selection.type === "place") {
+        return {
+          inspectId: selection.id,
+          inspectType: "place" as const,
         };
       }
 
@@ -1069,7 +1091,13 @@ function parseTimelineViewValue(value: string | null): TimelineView {
 function parseInspectTypeValue(value: string | null): TimelineSupportedInspectType | null {
   const normalized = normalizeQueryValue(value);
 
-  if (normalized === "event" || normalized === "book" || normalized === "kingdom") {
+  if (
+    normalized === "event" ||
+    normalized === "book" ||
+    normalized === "kingdom" ||
+    normalized === "genealogy" ||
+    normalized === "place"
+  ) {
     return normalized;
   }
 
