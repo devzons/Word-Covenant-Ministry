@@ -33,41 +33,34 @@ export function StudySectionNavigation({ locale }: StudySectionNavigationProps) 
   const pageCopy = copy[locale];
 
   const activeSection = resolveActiveSection(pathname);
+  const isHub = activeSection === "hub";
   const sections: Array<{ key: StudySection; label: string }> = [
+    { key: "hub", label: pageCopy.hub },
     { key: "sermons", label: pageCopy.sermons },
     { key: "publications", label: pageCopy.publications },
   ];
 
   return (
     <section className="border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+      <div
+        className={cn(
+          "mx-auto flex w-full max-w-[1600px] flex-col px-4 sm:px-6 lg:px-8",
+          isHub ? "gap-3 py-4 sm:py-5" : "gap-4 py-6",
+        )}
+      >
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.08em] text-zinc-500">
             Word Covenant Ministry
           </p>
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div className="min-w-0">
-              <h1 className="text-2xl font-semibold text-zinc-950 sm:text-3xl">
-                {pageCopy.title}
-              </h1>
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold text-zinc-950 sm:text-3xl">{pageCopy.title}</h1>
+            {!isHub ? (
               <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">
                 {locale === "en"
                   ? "Use separate persistent workspaces for sermons and publications without mixing their navigation structures."
                   : "설교와 강해, 책과 연구논문을 서로 다른 persistent workspace로 분리해 탐색 구조를 섞지 않고 사용합니다."}
               </p>
-            </div>
-            <Link
-              aria-current={activeSection === "hub" ? "page" : undefined}
-              className={cn(
-                "inline-flex min-h-10 items-center rounded-md px-3 text-sm font-medium transition-colors",
-                activeSection === "hub"
-                  ? "bg-zinc-950 text-white"
-                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950",
-              )}
-              href={buildStudySectionHref(locale, "hub")}
-            >
-              {pageCopy.hub}
-            </Link>
+            ) : null}
           </div>
         </div>
 
