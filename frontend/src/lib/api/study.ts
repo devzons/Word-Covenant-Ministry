@@ -4,8 +4,10 @@ import type {
   StudyCategoryRef,
   StudyContentDetail,
   StudyContentQueryOptions,
+  StudyEngagement,
   StudyContentSummary,
   StudyLocale,
+  StudyViewRecordResult,
 } from "@/types/study";
 
 type WordPressRenderedField = {
@@ -40,6 +42,13 @@ type WordPressStudyCategory = {
   count?: number;
   link?: string;
   parent?: number;
+};
+
+type WcmApiEnvelope<T> = {
+  success?: boolean;
+  data?: T;
+  code?: string;
+  message?: string;
 };
 
 export async function fetchStudyContents(
@@ -129,6 +138,47 @@ export async function fetchStudyCategories(locale: StudyLocale): Promise<StudyCa
     return normalizeStudyCategoryList(response);
   } catch {
     return [];
+  }
+}
+
+export async function getStudyEngagement(
+  studyId: number,
+  locale: StudyLocale,
+): Promise<StudyEngagement | null> {
+  try {
+    const response = await apiRequest<WcmApiEnvelope<StudyEngagement>>(
+      `/wcm/v1/studies/${studyId}/engagement?locale=${locale}`,
+      {
+        credentials: "include",
+      },
+    );
+
+    return response.success === true && response.data ? response.data : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function recordStudyView(
+  studyId: number,
+  locale: StudyLocale,
+): Promise<StudyViewRecordResult | null> {
+  try {
+    const response = await apiRequest<WcmApiEnvelope<StudyViewRecordResult>>(
+      `/wcm/v1/studies/${studyId}/view`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ locale }),
+      },
+    );
+
+    return response.success === true && response.data ? response.data : null;
+  } catch {
+    return null;
   }
 }
 

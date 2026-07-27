@@ -14,6 +14,7 @@ use WCM\Database\DatabaseHealthCheck;
 use WCM\Database\SchemaInstaller;
 use WCM\PostTypes\PostTypeRegistrar;
 use WCM\Settings\SettingsRegistrar;
+use WCM\Study\StudyViewMaintenance;
 
 final class Plugin
 {
@@ -29,7 +30,9 @@ final class Plugin
 
         add_action('init', [self::class, 'ensureSchema'], 1);
         add_action('init', [self::class, 'registerPostTypes']);
+        add_action('init', [self::class, 'ensureStudyViewMaintenanceSchedule']);
         add_action('rest_api_init', [self::class, 'registerApi']);
+        add_action(StudyViewMaintenance::CRON_HOOK, [self::class, 'runStudyViewMaintenance']);
         add_action('admin_init', [self::class, 'registerSettings']);
         add_action('admin_menu', [self::class, 'registerAdminPages']);
         add_action('admin_enqueue_scripts', [self::class, 'enqueueAdminAssets']);
@@ -47,6 +50,10 @@ final class Plugin
             (new SchemaInstaller())->install();
         }
 
+        if (class_exists(StudyViewMaintenance::class)) {
+            (new StudyViewMaintenance())->ensureSchedule();
+        }
+
         if (class_exists(BibleVersionSeeder::class)) {
             (new BibleVersionSeeder())->seed();
         }
@@ -57,6 +64,15 @@ final class Plugin
 
         if (class_exists(PostTypeRegistrar::class)) {
             (new PostTypeRegistrar())->register();
+        }
+
+        flush_rewrite_rules();
+    }
+
+    public static function deactivate(): void
+    {
+        if (class_exists(StudyViewMaintenance::class)) {
+            StudyViewMaintenance::clearSchedule();
         }
 
         flush_rewrite_rules();
@@ -80,6 +96,20 @@ final class Plugin
     {
         if (class_exists(ApiRegistrar::class)) {
             (new ApiRegistrar())->register();
+        }
+    }
+
+    public static function ensureStudyViewMaintenanceSchedule(): void
+    {
+        if (class_exists(StudyViewMaintenance::class)) {
+            (new StudyViewMaintenance())->ensureSchedule();
+        }
+    }
+
+    public static function runStudyViewMaintenance(): void
+    {
+        if (class_exists(StudyViewMaintenance::class)) {
+            (new StudyViewMaintenance())->run();
         }
     }
 

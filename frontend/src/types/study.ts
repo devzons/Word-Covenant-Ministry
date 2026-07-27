@@ -24,6 +24,20 @@ export type StudyContentDetail = StudyContentSummary & {
   categories: StudyCategoryRef[];
 };
 
+export type StudyEngagement = {
+  study_id: number;
+  locale: StudyLocale;
+  views_total: number;
+  views_7d: number;
+  views_30d: number;
+  comments_approved: number;
+};
+
+export type StudyViewRecordResult = StudyEngagement & {
+  counted: boolean;
+  reason: "recorded" | "duplicate" | "prefetch" | "bot";
+};
+
 export type StudyCategory = {
   id: number;
   slug: string;

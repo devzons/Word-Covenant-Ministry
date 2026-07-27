@@ -16,5 +16,6 @@ final class ApiRegistrar
         (new InterlinearController())->registerRoutes();
         (new CrossReferenceController())->registerRoutes();
         (new NotesController())->registerRoutes();
+        (new StudyEngagementController())->registerRoutes();
     }
 }

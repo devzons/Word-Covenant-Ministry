@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { StudyEngagementSummary } from "@/components/content/study/StudyEngagementSummary";
 import { StudyContentArticle } from "@/components/content/study/StudyContentArticle";
 import { siteConfig } from "@/config/site";
 import { fetchStudyCategories, fetchStudyContentBySlug, fetchStudyContents } from "@/lib/api/study";
@@ -77,9 +78,11 @@ export default async function StudySermonDetailPage({
   );
   const siblings = buildStudySiblingLinks(activeLocale, "sermons", detail.slug, scope, q, "all", categorySlug);
   const subtitle = formatStudyDate(detail.date, activeLocale, detail.authorName);
+  const articleBodyId = `study-article-body-${detail.id}`;
 
   return (
     <StudyContentArticle
+      articleBodyId={articleBodyId}
       badge={pageCopy.badge}
       breadcrumb={[
         activeLocale === "en" ? "Study" : "말씀연구",
@@ -110,6 +113,13 @@ export default async function StudySermonDetailPage({
       previousTitle={siblings.previous?.title ?? null}
       subtitle={subtitle}
       title={detail.title}
+      engagement={(
+        <StudyEngagementSummary
+          bodyElementId={articleBodyId}
+          locale={activeLocale}
+          studyId={detail.id}
+        />
+      )}
     />
   );
 }

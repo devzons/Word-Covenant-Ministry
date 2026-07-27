@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 type StudyContentArticleProps = {
+  articleBodyId?: string;
   badge: string;
   breadcrumb: string[];
   categoryLabel: string;
@@ -21,9 +23,11 @@ type StudyContentArticleProps = {
   nextHref: string | null;
   nextLabel: string;
   nextTitle: string | null;
+  engagement?: ReactNode;
 };
 
 export function StudyContentArticle({
+  articleBodyId,
   badge,
   breadcrumb,
   categoryLabel,
@@ -44,6 +48,7 @@ export function StudyContentArticle({
   nextHref,
   nextLabel,
   nextTitle,
+  engagement,
 }: StudyContentArticleProps) {
   return (
     <article className="flex min-w-0 flex-col gap-6">
@@ -136,17 +141,22 @@ export function StudyContentArticle({
               ) : null}
             </div>
           ) : null}
+
+          {engagement ? <div>{engagement}</div> : null}
         </div>
       </header>
 
       <div className="rounded-md border border-zinc-200 bg-white p-6">
         {contentHtml !== "" ? (
           <div
+            id={articleBodyId}
             className="max-w-4xl text-base leading-8 text-zinc-800 [&_.wp-block-heading]:mt-8 [&_.wp-block-heading]:text-2xl [&_.wp-block-heading]:font-semibold [&_.wp-block-list]:my-5 [&_.wp-block-list]:pl-6 [&_.wp-block-paragraph]:my-5 [&_.wp-block-quote]:my-6 [&_.wp-block-quote]:border-l-4 [&_.wp-block-quote]:border-zinc-300 [&_.wp-block-quote]:pl-4 [&_a]:text-zinc-900 [&_a]:underline [&_a]:underline-offset-4"
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
         ) : (
-          <p className="max-w-3xl text-base leading-8 text-zinc-600">{emptyBody}</p>
+          <p className="max-w-3xl text-base leading-8 text-zinc-600" id={articleBodyId}>
+            {emptyBody}
+          </p>
         )}
       </div>
     </article>

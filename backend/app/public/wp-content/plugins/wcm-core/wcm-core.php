@@ -24,6 +24,7 @@ require_once $autoload;
 
 if (class_exists(\WCM\Core\Plugin::class)) {
     register_activation_hook(__FILE__, [\WCM\Core\Plugin::class, 'activate']);
+    register_deactivation_hook(__FILE__, [\WCM\Core\Plugin::class, 'deactivate']);
 
     \WCM\Core\Plugin::boot();
 }

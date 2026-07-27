@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { StudyEngagementSummary } from "@/components/content/study/StudyEngagementSummary";
 import { StudyContentArticle } from "@/components/content/study/StudyContentArticle";
 import { siteConfig } from "@/config/site";
 import { fetchStudyCategories, fetchStudyContentBySlug, fetchStudyContents } from "@/lib/api/study";
@@ -89,9 +90,11 @@ export default async function StudyPublicationDetailPage({
   );
   const subtitle = formatStudyDate(detail.date, activeLocale, detail.authorName);
   const badge = labels.branch?.slug === "research_paper" ? pageCopy.papers : pageCopy.books;
+  const articleBodyId = `study-article-body-${detail.id}`;
 
   return (
     <StudyContentArticle
+      articleBodyId={articleBodyId}
       badge={badge}
       breadcrumb={[
         activeLocale === "en" ? "Study" : "말씀연구",
@@ -122,6 +125,13 @@ export default async function StudyPublicationDetailPage({
       previousTitle={siblings.previous?.title ?? null}
       subtitle={subtitle}
       title={detail.title}
+      engagement={(
+        <StudyEngagementSummary
+          bodyElementId={articleBodyId}
+          locale={activeLocale}
+          studyId={detail.id}
+        />
+      )}
     />
   );
 }

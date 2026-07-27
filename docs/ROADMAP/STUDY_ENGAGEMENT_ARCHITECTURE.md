@@ -2,10 +2,10 @@
 
 ## Purpose
 
-Define the approved storage, permission, API, privacy, and WordPress admin architecture for study-detail engagement features before any runtime implementation.
+Define the approved and now partially implemented storage, permission, API, privacy, and WordPress admin architecture for study-detail engagement features.
 
-This document is implementation-ready planning only.
-It does not enable comments, create tables, register REST routes, change schema, or alter frontend behavior.
+As of Monday, July 27, 2026, the view-tracking foundation is implemented.
+Discussion writes, comment moderation UI wiring, and admin dashboards remain planned but not yet enabled.
 
 ## Scope
 
@@ -36,13 +36,10 @@ This document does not approve runtime engagement features for:
 - Meaning Layer / Meaning Card
 - visual-resource preparation cards
 
-This document also does not approve:
+This document still does not approve:
 
-- schema writes
 - WordPress native comments support activation
-- REST endpoint registration
 - frontend discussion UI
-- frontend view tracker
 - admin dashboard implementation
 - email notification implementation
 
@@ -79,12 +76,15 @@ Current facts:
 
 ### Current study REST surface
 
-There is no custom WCM study-detail controller yet.
-
-Frontend study routes currently consume WordPress core REST directly:
+Frontend study routes still consume WordPress core REST directly for study content:
 
 - `GET /wp/v2/wcm_study`
 - `GET /wp/v2/wcm_study_category`
+
+The implemented engagement sidecar routes now live in:
+
+- `GET /wcm/v1/studies/{studyId}/engagement`
+- `POST /wcm/v1/studies/{studyId}/view`
 
 Current frontend files:
 
@@ -108,8 +108,6 @@ Current study DTOs expose:
 Current study DTOs do not expose:
 
 - discussion enabled state
-- comment counts
-- view counts
 - popularity windows
 - featured/recommended flags
 - explicit Scripture-book relationships
@@ -186,7 +184,7 @@ backend/app/public/wp-content/plugins/wcm-core/src/Database/SchemaInstaller.php
 Current facts:
 
 - option key: `wcm_core_db_version`
-- current version: `1.7.0`
+- current implemented version: `1.8.0`
 - custom tables are created through `dbDelta`
 - additive migrations are performed inside `SchemaInstaller`
 
@@ -424,23 +422,30 @@ Purpose:
 - recent-window recomputation
 - moderation-safe forensic aggregate support without storing raw IP/UA
 
-Approved initial shape:
+Implemented shape:
 
 ```txt
 id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT
 study_id BIGINT UNSIGNED NOT NULL
 locale VARCHAR(8) NOT NULL
 viewer_key_hash CHAR(64) NOT NULL
-view_date DATE NOT NULL
+viewed_at DATETIME NOT NULL
+dedupe_expires_at DATETIME NOT NULL
 created_at DATETIME NOT NULL
 ```
 
 Indexes:
 
 - primary key on `id`
-- unique key on `(study_id, locale, viewer_key_hash, view_date)`
-- lookup key on `(study_id, locale, view_date)`
-- lookup key on `(view_date)`
+- lookup key on `(study_id, locale, viewed_at)`
+- lookup key on `(study_id, locale, viewer_key_hash, dedupe_expires_at)`
+- lookup key on `(dedupe_expires_at)`
+
+Implementation note:
+
+- strict 24-hour dedup is not based on a calendar-date unique key
+- the service uses a per-`study + locale + viewer` MySQL advisory lock plus a `dedupe_expires_at > now()` duplicate check before insert
+- this preserves a real rolling 24-hour window across midnight boundaries
 
 #### `wcm_study_view_stats`
 
@@ -450,18 +455,23 @@ Purpose:
 - fast admin summary
 - fast future hub ranking
 
-Approved initial shape:
+Implemented shape:
 
 ```txt
 study_id BIGINT UNSIGNED NOT NULL
 locale VARCHAR(8) NOT NULL
-views_total BIGINT UNSIGNED NOT NULL DEFAULT 0
+total_views BIGINT UNSIGNED NOT NULL DEFAULT 0
 views_7d BIGINT UNSIGNED NOT NULL DEFAULT 0
 views_30d BIGINT UNSIGNED NOT NULL DEFAULT 0
-last_viewed_at DATETIME NULL
 updated_at DATETIME NOT NULL
 PRIMARY KEY (study_id, locale)
 ```
+
+Indexes:
+
+- primary key on `(study_id, locale)`
+- lookup key on `(locale, views_30d)`
+- lookup key on `(updated_at)`
 
 Reason for dual-table design:
 
@@ -518,6 +528,12 @@ a view is recorded only after a client-side engagement signal:
 
 Server-side SSR/page requests do not count as views.
 
+Implemented frontend behavior:
+
+- only the canonical study detail routes mount the tracker
+- the tracker does not fire on hub, archive, search, visuals, or any non-detail route
+- the tracker sends at most one POST per mounted detail view even if the timer and scroll threshold are both reached
+
 ### Bot and prefetch handling
 
 Decision:
@@ -533,7 +549,7 @@ Decision:
 
 - logged-in viewer identity: `user:{user_id}`
 - anonymous viewer identity: normalized `REMOTE_ADDR + User-Agent`
-- persist only a SHA-256 / HMAC-style hash value, never raw inputs
+- persist only an HMAC-SHA256 hash value, never raw inputs
 
 Reason:
 
@@ -552,9 +568,10 @@ Decision:
 
 - one counted unique view per `study + locale + viewer` per `24` hours
 
-Implementation boundary:
+Implemented boundary:
 
-- enforce through the `view_date` unique key on the event table
+- enforce through a service-level MySQL advisory lock plus `dedupe_expires_at`
+- frontend duplicate prevention is treated only as a best-effort optimization
 
 ### Retention
 
@@ -570,6 +587,15 @@ Decision:
 - aggregate table updated during accepted view writes
 - scheduled recomputation / pruning job runs daily
 - recomputation source of truth for rolling windows is the event table
+
+Implemented maintenance:
+
+- cron hook: `wcm_study_view_maintenance_daily`
+- schedule: daily
+- tasks:
+  - prune event rows older than `180` days
+  - recompute `views_7d` and `views_30d` for existing stats rows
+- view recording still works even if WP-Cron is disabled or delayed
 
 ## REST Contracts
 
@@ -596,38 +622,26 @@ Errors should continue using:
 ### Study engagement summary
 
 ```txt
-GET /wcm/v1/studies/{studyId}/engagement
+GET /wcm/v1/studies/{studyId}/engagement?locale=ko
 ```
 
 Public.
 
-Approved response shape:
+Implemented response shape:
 
 ```json
 {
   "success": true,
   "data": {
-    "stats": {
-      "viewsTotal": 0,
-      "views30d": 0,
-      "commentsApproved": 0
-    },
-    "discussion": {
-      "enabled": true,
-      "canComment": false,
-      "reason": "login_required"
-    }
+    "study_id": 123,
+    "locale": "ko",
+    "views_total": 0,
+    "views_7d": 0,
+    "views_30d": 0,
+    "comments_approved": 0
   }
 }
 ```
-
-`reason` values should be constrained to explicit frontend-safe states such as:
-
-- `ok`
-- `login_required`
-- `email_verification_required`
-- `discussion_closed`
-- `nonce_required`
 
 ### View tracking write
 
@@ -637,36 +651,52 @@ POST /wcm/v1/studies/{studyId}/view
 
 Public write endpoint with strict server filtering.
 
-Approved request shape:
+Implemented request shape:
 
 ```json
 {
-  "locale": "ko",
-  "signal": "dwell_10s"
+  "locale": "ko"
 }
 ```
 
-Allowed `signal` values in Phase 1:
-
-- `dwell_10s`
-- `scroll_25`
-
-Approved response shape:
+Implemented success response shape:
 
 ```json
 {
   "success": true,
   "data": {
     "counted": true,
-    "stats": {
-      "viewsTotal": 0,
-      "views30d": 0
-    }
-  }
+    "reason": "recorded",
+    "views_total": 1,
+    "views_30d": 1
+  },
+  "code": "study_view_recorded",
+  "message": "Study view recorded."
 }
 ```
 
-This endpoint should be idempotent for the current 24-hour dedup window.
+Implemented duplicate response shape:
+
+```json
+{
+  "success": true,
+  "data": {
+    "counted": false,
+    "reason": "duplicate",
+    "views_total": 1,
+    "views_30d": 1
+  },
+  "code": "study_view_duplicate",
+  "message": "Study view was already counted."
+}
+```
+
+Implemented non-counted safety responses also include:
+
+- `reason: "prefetch"`
+- `reason: "bot"`
+
+This endpoint is idempotent for the current 24-hour dedup window.
 
 ### Discussion reads
 

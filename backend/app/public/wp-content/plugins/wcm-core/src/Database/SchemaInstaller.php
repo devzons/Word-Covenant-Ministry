@@ -10,7 +10,7 @@ use WCM\Scripture\Repositories\OriginalTermRepository;
 final class SchemaInstaller
 {
     public const DB_VERSION_OPTION = 'wcm_core_db_version';
-    public const DB_VERSION = '1.7.0';
+    public const DB_VERSION = '1.8.0';
 
     public function install(): void
     {
@@ -43,6 +43,8 @@ final class SchemaInstaller
         $originalWordOccurrencesTable = $prefix . 'wcm_original_word_occurrences';
         $crossReferencesTable = $prefix . 'wcm_cross_references';
         $userVerseNotesTable = $prefix . 'wcm_user_verse_notes';
+        $studyViewEventsTable = $prefix . 'wcm_study_view_events';
+        $studyViewStatsTable = $prefix . 'wcm_study_view_stats';
 
         return [
             "CREATE TABLE {$versionsTable} (
@@ -190,6 +192,30 @@ final class SchemaInstaller
                 UNIQUE KEY user_reference_lookup (user_id, translation, book_slug, chapter_number, verse_number),
                 KEY user_updated_lookup (user_id, updated_at),
                 KEY reference_lookup (translation, book_slug, chapter_number, verse_number)
+            ) {$charsetCollate};",
+            "CREATE TABLE {$studyViewEventsTable} (
+                id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                study_id BIGINT UNSIGNED NOT NULL,
+                locale VARCHAR(8) NOT NULL,
+                viewer_key_hash CHAR(64) NOT NULL,
+                viewed_at DATETIME NOT NULL,
+                dedupe_expires_at DATETIME NOT NULL,
+                created_at DATETIME NOT NULL,
+                PRIMARY KEY  (id),
+                KEY study_locale_viewed_at (study_id, locale, viewed_at),
+                KEY study_locale_viewer_dedupe (study_id, locale, viewer_key_hash, dedupe_expires_at),
+                KEY study_view_dedupe_expires_at (dedupe_expires_at)
+            ) {$charsetCollate};",
+            "CREATE TABLE {$studyViewStatsTable} (
+                study_id BIGINT UNSIGNED NOT NULL,
+                locale VARCHAR(8) NOT NULL,
+                total_views BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                views_7d BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                views_30d BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                updated_at DATETIME NOT NULL,
+                PRIMARY KEY  (study_id, locale),
+                KEY study_view_stats_locale_30d (locale, views_30d),
+                KEY study_view_stats_updated_at (updated_at)
             ) {$charsetCollate};",
         ];
     }
