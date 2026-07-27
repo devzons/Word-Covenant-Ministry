@@ -2,11 +2,21 @@ import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 import { fetchStudyCategories, fetchStudyContents } from "@/lib/api/study";
-import { buildStudyDetailHref, buildStudyLibraryScope } from "@/lib/utils/study-library";
+import {
+  appendStudyQuery,
+  buildStudyDetailHref,
+  buildStudyLibraryScope,
+  filterStudyLibraryScopeByCategory,
+  getStudyCategoryLabel,
+} from "@/lib/utils/study-library";
 
 type SermonsIndexPageProps = {
   params: Promise<{
     locale: string;
+  }>;
+  searchParams: Promise<{
+    category?: string;
+    q?: string;
   }>;
 };
 
@@ -33,16 +43,25 @@ const copy = {
 
 export const dynamic = "force-dynamic";
 
-export default async function StudySermonsIndexPage({ params }: SermonsIndexPageProps) {
+export default async function StudySermonsIndexPage({
+  params,
+  searchParams,
+}: SermonsIndexPageProps) {
   const { locale } = await params;
+  const { category = "", q = "" } = await searchParams;
   const activeLocale = getSupportedLocale(locale);
   const pageCopy = copy[activeLocale];
   const [contents, categories] = await Promise.all([
     fetchStudyContents(activeLocale, { perPage: 100, order: "asc", orderBy: "title" }),
     fetchStudyCategories(activeLocale),
   ]);
-  const scope = buildStudyLibraryScope("sermons", contents, categories);
+  const categorySlug = normalizeCategorySlug(category);
+  const scope = filterStudyLibraryScopeByCategory(
+    buildStudyLibraryScope("sermons", contents, categories),
+    categorySlug,
+  );
   const firstItem = scope.items[0] ?? null;
+  const categoryLabel = getStudyCategoryLabel(categories, categorySlug);
 
   return (
     <section className="flex min-w-0 flex-col gap-6">
@@ -53,6 +72,11 @@ export default async function StudySermonsIndexPage({ params }: SermonsIndexPage
           </p>
           <h2 className="text-3xl font-semibold text-zinc-950 sm:text-4xl">{pageCopy.title}</h2>
           <p className="text-base leading-7 text-zinc-600">{pageCopy.body}</p>
+          {categoryLabel ? (
+            <p className="text-sm font-medium text-zinc-700">
+              {activeLocale === "en" ? `Current category: ${categoryLabel}` : `현재 분류: ${categoryLabel}`}
+            </p>
+          ) : null}
         </div>
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-2 xl:max-w-xl">
@@ -74,7 +98,13 @@ export default async function StudySermonsIndexPage({ params }: SermonsIndexPage
           <div className="mt-6">
             <Link
               className="inline-flex min-h-11 items-center justify-center rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-              href={buildStudyDetailHref(activeLocale, "sermons", firstItem.slug)}
+              href={appendStudyQuery(
+                buildStudyDetailHref(activeLocale, "sermons", firstItem.slug),
+                q,
+                "all",
+                "sermons",
+                categorySlug,
+              )}
               scroll={false}
             >
               {pageCopy.openFirst}
@@ -91,6 +121,12 @@ export default async function StudySermonsIndexPage({ params }: SermonsIndexPage
       ) : null}
     </section>
   );
+}
+
+function normalizeCategorySlug(value: string): string | null {
+  const trimmed = value.trim();
+
+  return trimmed === "" ? null : trimmed;
 }
 
 function getSupportedLocale(locale: string): "en" | "ko" {

@@ -12,6 +12,8 @@ import {
   buildStudyIndexHref,
   buildStudyLibraryScope,
   filterStudyLibraryItems,
+  filterStudyLibraryScopeByCategory,
+  getStudyCategoryLabel,
   resolveOpenGroupSlug,
   type StudyLibraryGroup,
   type StudyLibraryPublicationKind,
@@ -83,14 +85,23 @@ export function StudyLibraryWorkspace({
   const searchQuery = searchParams.get("q") ?? "";
   const normalizedSearchQuery = searchQuery.trim();
   const publicationKind = getPublicationKind(searchParams.get("kind"));
+  const categorySlug = normalizeCategorySlug(searchParams.get("category"));
 
-  const scope = useMemo(
+  const baseScope = useMemo(
     () => buildStudyLibraryScope(variant, contents, categories, publicationKind),
     [categories, contents, publicationKind, variant],
+  );
+  const scope = useMemo(
+    () => filterStudyLibraryScopeByCategory(baseScope, categorySlug),
+    [baseScope, categorySlug],
   );
   const filteredItems = useMemo(
     () => filterStudyLibraryItems(scope, searchQuery),
     [scope, searchQuery],
+  );
+  const categoryLabel = useMemo(
+    () => getStudyCategoryLabel(categories, categorySlug),
+    [categories, categorySlug],
   );
   const hasSearch = normalizedSearchQuery !== "";
   const autoOpenGroupSlug = useMemo(
@@ -130,7 +141,7 @@ export function StudyLibraryWorkspace({
     locale === "en"
       ? `${filteredItems.length} ${pageCopy.results}`
       : `${filteredItems.length}${pageCopy.results}`;
-  const currentScopeLabel = getCurrentScopeLabel(locale, variant, publicationKind);
+  const currentScopeLabel = getCurrentScopeLabel(locale, variant, publicationKind, categoryLabel);
 
   return (
     <div className="py-10 sm:py-12">
@@ -241,6 +252,7 @@ export function StudyLibraryWorkspace({
                             searchQuery,
                             publicationKind,
                             variant,
+                            categorySlug,
                           );
 
                           return (
@@ -292,6 +304,7 @@ export function StudyLibraryWorkspace({
                     <div className="grid gap-3">
                       {scope.groups.map((group) => (
                         <StudyLibraryGroupPanel
+                          categorySlug={categorySlug}
                           group={group}
                           isOpen={openGroupSlug === group.slug}
                           key={group.id}
@@ -350,6 +363,7 @@ function decodePathSegment(value: string): string {
 }
 
 type StudyLibraryGroupPanelProps = {
+  categorySlug: string | null;
   group: StudyLibraryGroup;
   isOpen: boolean;
   locale: "en" | "ko";
@@ -374,6 +388,7 @@ type StudyLibraryGroupPanelProps = {
 };
 
 function StudyLibraryGroupPanel({
+  categorySlug,
   group,
   isOpen,
   locale,
@@ -423,6 +438,7 @@ function StudyLibraryGroupPanel({
                 searchQuery,
                 publicationKind,
                 variant,
+                categorySlug,
               );
 
               return (
@@ -466,7 +482,13 @@ function StudyLibraryGroupPanel({
           ) : (
             <Link
               className="rounded-md border border-dashed border-zinc-200 px-3 py-3 text-sm text-zinc-600"
-              href={appendStudyQuery(buildStudyIndexHref(locale, variant), searchQuery, publicationKind, variant)}
+              href={appendStudyQuery(
+                buildStudyIndexHref(locale, variant),
+                searchQuery,
+                publicationKind,
+                variant,
+                categorySlug,
+              )}
               scroll={false}
             >
               {locale === "en" ? "No items yet in this group." : "이 그룹에는 아직 콘텐츠가 없습니다."}
@@ -507,6 +529,21 @@ function getCurrentScopeLabel(
   locale: "en" | "ko",
   variant: StudyLibraryVariant,
   publicationKind: StudyLibraryPublicationKind,
+  categoryLabel: string | null,
+): string {
+  const baseLabel = getBaseScopeLabel(locale, variant, publicationKind);
+
+  if (!categoryLabel) {
+    return baseLabel;
+  }
+
+  return locale === "en" ? `${baseLabel} · ${categoryLabel}` : `${baseLabel} · ${categoryLabel}`;
+}
+
+function getBaseScopeLabel(
+  locale: "en" | "ko",
+  variant: StudyLibraryVariant,
+  publicationKind: StudyLibraryPublicationKind,
 ): string {
   if (variant === "sermons") {
     return locale === "en" ? "Sermons & Exposition" : "설교와 강해";
@@ -521,6 +558,16 @@ function getCurrentScopeLabel(
   }
 
   return locale === "en" ? "Books & Research Papers" : "책과 연구논문";
+}
+
+function normalizeCategorySlug(value: string | null): string | null {
+  if (!value) {
+    return null;
+  }
+
+  const trimmed = value.trim();
+
+  return trimmed === "" ? null : trimmed;
 }
 
 function formatShortDate(value: string, locale: "en" | "ko"): string {

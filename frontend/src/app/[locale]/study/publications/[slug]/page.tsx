@@ -4,9 +4,11 @@ import { StudyContentArticle } from "@/components/content/study/StudyContentArti
 import { siteConfig } from "@/config/site";
 import { fetchStudyCategories, fetchStudyContentBySlug, fetchStudyContents } from "@/lib/api/study";
 import {
+  appendStudyQuery,
   buildStudyIndexHref,
   buildStudyLibraryScope,
   buildStudySiblingLinks,
+  filterStudyLibraryScopeByCategory,
   getStudyTopLevelLabel,
   type StudyLibraryPublicationKind,
 } from "@/lib/utils/study-library";
@@ -19,6 +21,7 @@ type StudyPublicationDetailPageProps = {
   searchParams: Promise<{
     q?: string;
     kind?: string;
+    category?: string;
   }>;
 };
 
@@ -52,7 +55,7 @@ export default async function StudyPublicationDetailPage({
   searchParams,
 }: StudyPublicationDetailPageProps) {
   const { locale, slug } = await params;
-  const { q = "", kind = "" } = await searchParams;
+  const { q = "", kind = "", category = "" } = await searchParams;
   const activeLocale = getSupportedLocale(locale);
   const pageCopy = copy[activeLocale];
   const publicationKind = getPublicationKind(kind);
@@ -72,14 +75,17 @@ export default async function StudyPublicationDetailPage({
     notFound();
   }
 
+  const categorySlug = normalizeCategorySlug(category);
   const scope = buildStudyLibraryScope("publications", contents, categories, publicationKind);
+  const filteredScope = filterStudyLibraryScopeByCategory(scope, categorySlug);
   const siblings = buildStudySiblingLinks(
     activeLocale,
     "publications",
     detail.slug,
-    scope,
+    filteredScope,
     q,
     publicationKind,
+    categorySlug,
   );
   const subtitle = formatStudyDate(detail.date, activeLocale, detail.authorName);
   const badge = labels.branch?.slug === "research_paper" ? pageCopy.papers : pageCopy.books;
@@ -101,7 +107,13 @@ export default async function StudyPublicationDetailPage({
       nextHref={siblings.next?.href ?? null}
       nextLabel={pageCopy.next}
       nextTitle={siblings.next?.title ?? null}
-      openArchiveHref={buildStudyIndexHref(activeLocale, "publications")}
+      openArchiveHref={appendStudyQuery(
+        buildStudyIndexHref(activeLocale, "publications"),
+        q,
+        publicationKind,
+        "publications",
+        categorySlug,
+      )}
       openArchiveLabel={pageCopy.archive}
       openSourceHref={detail.link}
       openSourceLabel={pageCopy.source}
@@ -112,6 +124,12 @@ export default async function StudyPublicationDetailPage({
       title={detail.title}
     />
   );
+}
+
+function normalizeCategorySlug(value: string): string | null {
+  const trimmed = value.trim();
+
+  return trimmed === "" ? null : trimmed;
 }
 
 function getSupportedLocale(locale: string): "en" | "ko" {

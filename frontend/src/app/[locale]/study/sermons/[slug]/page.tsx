@@ -4,9 +4,11 @@ import { StudyContentArticle } from "@/components/content/study/StudyContentArti
 import { siteConfig } from "@/config/site";
 import { fetchStudyCategories, fetchStudyContentBySlug, fetchStudyContents } from "@/lib/api/study";
 import {
+  appendStudyQuery,
   buildStudyIndexHref,
   buildStudyLibraryScope,
   buildStudySiblingLinks,
+  filterStudyLibraryScopeByCategory,
   getStudyTopLevelLabel,
 } from "@/lib/utils/study-library";
 
@@ -17,6 +19,7 @@ type SermonDetailPageProps = {
   }>;
   searchParams: Promise<{
     q?: string;
+    category?: string;
   }>;
 };
 
@@ -48,7 +51,7 @@ export default async function StudySermonDetailPage({
   searchParams,
 }: SermonDetailPageProps) {
   const { locale, slug } = await params;
-  const { q = "" } = await searchParams;
+  const { q = "", category = "" } = await searchParams;
   const activeLocale = getSupportedLocale(locale);
   const pageCopy = copy[activeLocale];
   const [detail, categories, contents] = await Promise.all([
@@ -67,8 +70,12 @@ export default async function StudySermonDetailPage({
     notFound();
   }
 
-  const scope = buildStudyLibraryScope("sermons", contents, categories);
-  const siblings = buildStudySiblingLinks(activeLocale, "sermons", detail.slug, scope, q);
+  const categorySlug = normalizeCategorySlug(category);
+  const scope = filterStudyLibraryScopeByCategory(
+    buildStudyLibraryScope("sermons", contents, categories),
+    categorySlug,
+  );
+  const siblings = buildStudySiblingLinks(activeLocale, "sermons", detail.slug, scope, q, "all", categorySlug);
   const subtitle = formatStudyDate(detail.date, activeLocale, detail.authorName);
 
   return (
@@ -88,7 +95,13 @@ export default async function StudySermonDetailPage({
       nextHref={siblings.next?.href ?? null}
       nextLabel={pageCopy.next}
       nextTitle={siblings.next?.title ?? null}
-      openArchiveHref={buildStudyIndexHref(activeLocale, "sermons")}
+      openArchiveHref={appendStudyQuery(
+        buildStudyIndexHref(activeLocale, "sermons"),
+        q,
+        "all",
+        "sermons",
+        categorySlug,
+      )}
       openArchiveLabel={pageCopy.archive}
       openSourceHref={detail.link}
       openSourceLabel={pageCopy.source}
@@ -99,6 +112,12 @@ export default async function StudySermonDetailPage({
       title={detail.title}
     />
   );
+}
+
+function normalizeCategorySlug(value: string): string | null {
+  const trimmed = value.trim();
+
+  return trimmed === "" ? null : trimmed;
 }
 
 function getSupportedLocale(locale: string): "en" | "ko" {

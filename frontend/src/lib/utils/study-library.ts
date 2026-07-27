@@ -18,6 +18,7 @@ export type StudyLibraryItem = {
   modified: string;
   link: string;
   studyCategoryIds: number[];
+  categorySlugs: string[];
   topLevelSlug: string | null;
   topLevelName: string | null;
   branchSlug: string | null;
@@ -121,6 +122,27 @@ export function filterStudyLibraryItems(
   });
 }
 
+export function filterStudyLibraryScopeByCategory(
+  scope: StudyLibraryScope,
+  categorySlug: string | null,
+): StudyLibraryScope {
+  if (!categorySlug) {
+    return scope;
+  }
+
+  const items = scope.items.filter((item) => matchesStudyCategory(item, categorySlug));
+
+  return {
+    items,
+    groups: scope.groups
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => matchesStudyCategory(item, categorySlug)),
+      }))
+      .filter((group) => group.items.length > 0),
+  };
+}
+
 export function resolveOpenGroupSlug(
   scope: StudyLibraryScope,
   selectedSlug: string | null,
@@ -203,6 +225,7 @@ export function buildStudySiblingLinks(
   scope: StudyLibraryScope,
   searchQuery: string,
   publicationKind: StudyLibraryPublicationKind = "all",
+  categorySlug: string | null = null,
 ): { previous: { title: string; href: string } | null; next: { title: string; href: string } | null } {
   const visibleItems = filterStudyLibraryItems(scope, searchQuery);
   const currentIndex = visibleItems.findIndex((item) => item.slug === currentSlug);
@@ -220,6 +243,7 @@ export function buildStudySiblingLinks(
             searchQuery,
             publicationKind,
             variant,
+            categorySlug,
           ),
         }
       : null,
@@ -231,6 +255,7 @@ export function buildStudySiblingLinks(
             searchQuery,
             publicationKind,
             variant,
+            categorySlug,
           ),
         }
       : null,
@@ -242,6 +267,7 @@ export function appendStudyQuery(
   searchQuery: string,
   publicationKind: StudyLibraryPublicationKind,
   variant: StudyLibraryVariant,
+  categorySlug?: string | null,
 ): string {
   const params = new URLSearchParams();
 
@@ -251,6 +277,10 @@ export function appendStudyQuery(
 
   if (variant === "publications" && publicationKind !== "all") {
     params.set("kind", publicationKind);
+  }
+
+  if (categorySlug && categorySlug.trim() !== "") {
+    params.set("category", categorySlug.trim());
   }
 
   const query = params.toString();
@@ -270,6 +300,7 @@ function decorateStudyContent(
 
   return {
     ...content,
+    categorySlugs: categoryRefs.map((category) => category.slug),
     topLevelSlug: topLevel?.slug ?? null,
     topLevelName: topLevel?.name ?? null,
     branchSlug: branch?.slug ?? topLevel?.slug ?? null,
@@ -344,4 +375,23 @@ export function buildQueryString(
   const query = params.toString();
 
   return query === "" ? "" : `?${query}`;
+}
+
+export function getStudyCategoryLabel(
+  categories: StudyCategory[],
+  slug: string | null,
+): string | null {
+  if (!slug) {
+    return null;
+  }
+
+  return categories.find((category) => category.slug === slug)?.name ?? null;
+}
+
+function matchesStudyCategory(item: StudyLibraryItem, categorySlug: string): boolean {
+  return (
+    item.branchSlug === categorySlug ||
+    item.topLevelSlug === categorySlug ||
+    item.categorySlugs.includes(categorySlug)
+  );
 }
