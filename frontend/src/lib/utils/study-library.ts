@@ -7,6 +7,7 @@ import type {
 
 export type StudyLibraryVariant = "sermons" | "publications";
 export type StudyLibraryPublicationKind = "all" | "books" | "papers";
+export type StudySection = "hub" | StudyLibraryVariant;
 
 export type StudyLibraryItem = {
   id: number;
@@ -143,15 +144,30 @@ export function buildStudyDetailHref(
   slug: string,
 ): string {
   return variant === "sermons"
-    ? `/${locale}/sermons/${encodeURIComponent(slug)}`
-    : `/${locale}/study/${encodeURIComponent(slug)}`;
+    ? `/${locale}/study/sermons/${encodeURIComponent(slug)}`
+    : `/${locale}/study/publications/${encodeURIComponent(slug)}`;
 }
 
 export function buildStudyIndexHref(
   locale: "en" | "ko",
   variant: StudyLibraryVariant,
 ): string {
-  return variant === "sermons" ? `/${locale}/sermons` : `/${locale}/study`;
+  return variant === "sermons" ? `/${locale}/study/sermons` : `/${locale}/study/publications`;
+}
+
+export function buildStudyHubHref(locale: "en" | "ko"): string {
+  return `/${locale}/study`;
+}
+
+export function buildStudySectionHref(
+  locale: "en" | "ko",
+  section: StudySection,
+): string {
+  if (section === "hub") {
+    return buildStudyHubHref(locale);
+  }
+
+  return buildStudyIndexHref(locale, section);
 }
 
 export function getStudyTopLevelLabel(
@@ -300,4 +316,32 @@ function matchesStudyVariant(
 
 function normalizeQuery(value: string): string {
   return value.trim().toLocaleLowerCase();
+}
+
+export function buildQueryString(
+  searchParams: Record<string, string | string[] | undefined>,
+): string {
+  const params = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (typeof value === "string") {
+      if (value !== "") {
+        params.set(key, value);
+      }
+
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        if (item !== "") {
+          params.append(key, item);
+        }
+      }
+    }
+  }
+
+  const query = params.toString();
+
+  return query === "" ? "" : `?${query}`;
 }

@@ -112,7 +112,7 @@ export function HomePage({ locale }: HomePageProps) {
             </Link>
             <Link
               className="inline-flex min-h-11 items-center justify-center rounded-md border border-zinc-300 px-4 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
-              href={`/${activeLocale}/sermons`}
+              href={`/${activeLocale}/study/sermons`}
             >
               {copy.ctas.sermons}
             </Link>

@@ -223,7 +223,10 @@ export function StudyLibraryWorkspace({
               <div
                 className={cn(
                   "min-h-0 xl:overflow-y-auto",
-                  mobileNavigatorOpen || hasSearch || pathname.endsWith("/sermons") || pathname.endsWith("/study")
+                  mobileNavigatorOpen ||
+                    hasSearch ||
+                    pathname.endsWith("/study/sermons") ||
+                    pathname.endsWith("/study/publications")
                     ? "block"
                     : "hidden xl:block",
                 )}
@@ -329,13 +332,13 @@ function resolveSelectedSlug(pathname: string, variant: StudyLibraryVariant): st
     return decodePathSegment(segments[sermonsIndex + 1]);
   }
 
-  const studyIndex = segments.indexOf("study");
+  const publicationsIndex = segments.indexOf("publications");
 
-  if (studyIndex < 0 || studyIndex === segments.length - 1) {
+  if (publicationsIndex < 0 || publicationsIndex === segments.length - 1) {
     return null;
   }
 
-  return decodePathSegment(segments[studyIndex + 1]);
+  return decodePathSegment(segments[publicationsIndex + 1]);
 }
 
 function decodePathSegment(value: string): string {
