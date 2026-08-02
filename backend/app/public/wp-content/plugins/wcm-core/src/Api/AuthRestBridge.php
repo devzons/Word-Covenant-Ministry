@@ -60,7 +60,10 @@ final class AuthRestBridge
             || $route === '/wcm/v1/auth/logout'
             || $route === '/wcm/v1/my/notes'
             || $route === '/wcm/v1/my/notes/by-reference'
-            || preg_match('#^/wcm/v1/my/notes/\d+$#', $route) === 1;
+            || preg_match('#^/wcm/v1/my/notes/\d+$#', $route) === 1
+            || preg_match('#^/wcm/v1/studies/\d+/discussions(?:/\d+)?$#', $route) === 1
+            || $route === '/wcm/v1/admin/study-discussions'
+            || preg_match('#^/wcm/v1/admin/study-discussions/\d+/moderation$#', $route) === 1;
     }
 
     private function isNonceBypassRoute(): bool

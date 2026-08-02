@@ -10,9 +10,11 @@ final class PostTypeRegistrar
     {
         $this->registerStudyPostType();
         $this->registerStudyCategoryTaxonomy();
+        $this->registerStudyCommentDefaults();
 
         if (is_admin()) {
             $this->registerStudyAdminListHooks();
+            $this->registerStudyDiscussionAdminHooks();
         }
     }
 
@@ -70,11 +72,117 @@ final class PostTypeRegistrar
                 'thumbnail',
                 'author',
                 'revisions',
+                'comments',
             ],
             'menu_position' => 20,
             'menu_icon' => 'dashicons-welcome-write-blog',
             'show_in_menu' => true,
         ]);
+    }
+
+    private function registerStudyCommentDefaults(): void
+    {
+        add_filter('wp_insert_post_data', [$this, 'defaultStudyCommentsClosed'], 10, 2);
+        add_action('init', [$this, 'normalizeExistingStudyCommentStatus'], 20);
+    }
+
+    private function registerStudyDiscussionAdminHooks(): void
+    {
+        add_action('admin_menu', [$this, 'registerStudyDiscussionModerationMenu']);
+        add_action('pre_get_comments', [$this, 'filterStudyDiscussionCommentsAdminQuery']);
+        add_filter('admin_comment_types_dropdown', [$this, 'addStudyDiscussionCommentTypeFilter']);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $postarr
+     * @return array<string, mixed>
+     */
+    public function defaultStudyCommentsClosed(array $data, array $postarr): array
+    {
+        if (($data['post_type'] ?? '') !== 'wcm_study') {
+            return $data;
+        }
+
+        $postId = isset($postarr['ID']) ? (int) $postarr['ID'] : 0;
+
+        if ($postId > 0) {
+            return $data;
+        }
+
+        $data['comment_status'] = 'closed';
+
+        return $data;
+    }
+
+    public function normalizeExistingStudyCommentStatus(): void
+    {
+        if (get_option('wcm_study_comments_normalized_closed') === '1') {
+            return;
+        }
+
+        $posts = get_posts([
+            'post_type' => 'wcm_study',
+            'post_status' => 'any',
+            'fields' => 'ids',
+            'numberposts' => -1,
+        ]);
+
+        foreach ($posts as $postId) {
+            wp_update_post([
+                'ID' => (int) $postId,
+                'comment_status' => 'closed',
+            ]);
+        }
+
+        update_option('wcm_study_comments_normalized_closed', '1', false);
+    }
+
+    public function registerStudyDiscussionModerationMenu(): void
+    {
+        add_submenu_page(
+            'edit.php?post_type=wcm_study',
+            __('Study Discussions', 'wcm-core'),
+            __('Discussion Moderation', 'wcm-core'),
+            'moderate_comments',
+            'wcm-study-discussions',
+            [$this, 'redirectToStudyDiscussionModeration']
+        );
+    }
+
+    public function redirectToStudyDiscussionModeration(): void
+    {
+        wp_safe_redirect(admin_url('edit-comments.php?comment_type=wcm_study_comment'));
+        exit;
+    }
+
+    public function filterStudyDiscussionCommentsAdminQuery(\WP_Comment_Query $query): void
+    {
+        if (! is_admin()) {
+            return;
+        }
+
+        $commentType = isset($_GET['comment_type'])
+            ? sanitize_key((string) wp_unslash($_GET['comment_type']))
+            : '';
+
+        if ($commentType !== 'wcm_study_comment') {
+            return;
+        }
+
+        $query->query_vars['type'] = 'wcm_study_comment';
+        $query->query_vars['post_type'] = 'wcm_study';
+    }
+
+    /**
+     * @param array<string, string> $commentTypes
+     * @return array<string, string>
+     */
+    public function addStudyDiscussionCommentTypeFilter(array $commentTypes): array
+    {
+        $commentTypes['wcm_study_comment'] = __('Study Discussion', 'wcm-core');
+
+        return $commentTypes;
     }
 
     private function registerStudyCategoryTaxonomy(): void
