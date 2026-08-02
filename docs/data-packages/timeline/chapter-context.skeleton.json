@@ -2,7 +2,7 @@
   "$schema": "./schema.md",
   "packageId": "scripture-context-atlas.chapter-context",
   "packageType": "scripture-context-atlas.chapter-context",
-  "packageVersion": "0.25.0-pilot",
+  "packageVersion": "0.26.0-pilot",
   "status": "pilot",
   "scope": "chapter-level-preview-metadata",
   "notes": [
@@ -638,6 +638,75 @@
       "isSkeleton": false
     },
     {
+      "id": "chapter-context-acts-1",
+      "chapterContextId": "chapter-context-acts-1",
+      "bookId": "acts",
+      "chapter": 1,
+      "title": {
+        "ko": "사도행전 1장 승천과 증언의 시작 문맥",
+        "en": "Acts 1 Ascension and Witness Beginning Context"
+      },
+      "summary": {
+        "ko": "사도행전 1장은 부활하신 그리스도 예수께서 하나님 나라와 성령의 약속을 가르치시고 승천하신 뒤, 제자들이 땅끝까지 증인이 될 사명을 기다리는 장 수준 문맥 row입니다.",
+        "en": "Acts 1 is a chapter-level context row where the risen Christ Jesus teaches about the kingdom of God and the promise of the Spirit, ascends, and leaves the disciples waiting to bear witness to the ends of the earth."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 승천과 증언 사명 문맥",
+        "en": "Chapter-level ascension and witness-mission context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 1장",
+            "en": "Acts 1"
+          },
+          "reference": "Acts 1",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 승천과 사도적 증언의 모든 종말론적 결론을 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not finalize every eschatological conclusion about the ascension and apostolic witness."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-ascension-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "승천",
+          "en": "Ascension"
+        },
+        {
+          "ko": "성령의 약속",
+          "en": "Promise of the Spirit"
+        },
+        {
+          "ko": "증언",
+          "en": "Witness"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
       "id": "chapter-context-acts-2",
       "chapterContextId": "chapter-context-acts-2",
       "bookId": "acts",
@@ -979,6 +1048,144 @@
         {
           "ko": "출애굽 전환",
           "en": "Exodus transition"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-4",
+      "chapterContextId": "chapter-context-acts-4",
+      "bookId": "acts",
+      "chapter": 4,
+      "title": {
+        "ko": "사도행전 4장 담대한 증언과 공동체의 하나 됨 문맥",
+        "en": "Acts 4 Bold Witness and United Community Context"
+      },
+      "summary": {
+        "ko": "사도행전 4장은 베드로와 요한의 부활 증언이 박해 속에서도 성령의 담대함으로 선포되고, 공동체가 함께 기도하며 하나 됨과 나눔을 드러내는 장 수준 문맥 row입니다.",
+        "en": "Acts 4 is a chapter-level context row where Peter and John proclaim the resurrection with Spirit-given boldness amid opposition, while the community prays together and displays unity and sharing."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 부활 증언과 공동체 기도 문맥",
+        "en": "Chapter-level resurrection witness and community-prayer context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 4장",
+            "en": "Acts 4"
+          },
+          "reference": "Acts 4",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 공동체의 나눔을 인간적 이상이나 모든 교회론의 완결된 모형으로 확정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not treat the community's sharing as a human ideal or a complete model for every ecclesiological conclusion."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-early-church-jerusalem-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "부활 증언",
+          "en": "Resurrection witness"
+        },
+        {
+          "ko": "성령의 담대함",
+          "en": "Spirit-given boldness"
+        },
+        {
+          "ko": "공동체의 하나 됨",
+          "en": "Community unity"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-7",
+      "chapterContextId": "chapter-context-acts-7",
+      "bookId": "acts",
+      "chapter": 7,
+      "title": {
+        "ko": "사도행전 7장 스데반의 역사 증언과 순교 문맥",
+        "en": "Acts 7 Stephen's Historical Witness and Martyrdom Context"
+      },
+      "summary": {
+        "ko": "사도행전 7장은 스데반이 이스라엘의 역사와 하나님의 임재를 증언하며 보내심을 받은 자에 대한 반복된 거절을 드러내고, 인자의 영광을 보며 순교하는 장 수준 문맥 row입니다.",
+        "en": "Acts 7 is a chapter-level context row where Stephen witnesses to Israel's history and God's presence, exposes the repeated rejection of those whom God sends, and sees the glory of the Son of Man before his martyrdom."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 역사 증언과 순교의 전환 문맥",
+        "en": "Chapter-level historical witness and martyrdom-transition context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 7장",
+            "en": "Acts 7"
+          },
+          "reference": "Acts 7",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 스데반의 순교를 인간 영웅주의나 박해에 대한 단순한 교훈으로 환원하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reduce Stephen's martyrdom to human heroism or a simple lesson about persecution."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-stephen-martyrdom-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "역사 증언",
+          "en": "Historical witness"
+        },
+        {
+          "ko": "인자의 영광",
+          "en": "Glory of the Son of Man"
+        },
+        {
+          "ko": "순교와 복음 확장",
+          "en": "Martyrdom and gospel expansion"
         }
       ],
       "isSkeleton": false
@@ -1881,6 +2088,145 @@
       "isSkeleton": false
     },
     {
+      "id": "chapter-context-acts-11",
+      "chapterContextId": "chapter-context-acts-11",
+      "bookId": "acts",
+      "chapter": 11,
+      "title": {
+        "ko": "사도행전 11장 안디옥 교회 형성 문맥",
+        "en": "Acts 11 Antioch Church Formation Context"
+      },
+      "summary": {
+        "ko": "사도행전 11장은 이방인에게도 동일한 성령이 임하셨다는 베드로의 해명과, 흩어진 증인들을 통해 안디옥에 형성된 교회가 예루살렘과 연결되어 구제를 나누는 흐름을 보여 주는 장 수준 문맥 row입니다.",
+        "en": "Acts 11 is a chapter-level context row where Peter explains that the same Spirit came upon Gentiles, and the church formed in Antioch through scattered witnesses remains connected to Jerusalem through shared relief."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 이방인 성령 임재와 안디옥 교회 문맥",
+        "en": "Chapter-level Gentile Spirit-giving and Antioch-church context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 11장",
+            "en": "Acts 11"
+          },
+          "reference": "Acts 11",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 유대인과 이방인의 관계를 경쟁 구도로 고정하거나 안디옥 교회의 형성을 인간 조직의 성취로 설명하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not frame Jews and Gentiles as competitors or explain the formation of the Antioch church as a human organizational achievement."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-antioch-mission-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "동일한 성령",
+          "en": "The same Spirit"
+        },
+        {
+          "ko": "안디옥 교회",
+          "en": "Antioch church"
+        },
+        {
+          "ko": "유대인과 이방인의 하나 됨",
+          "en": "Jew and Gentile unity"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-13",
+      "chapterContextId": "chapter-context-acts-13",
+      "bookId": "acts",
+      "chapter": 13,
+      "title": {
+        "ko": "사도행전 13장 성령의 파송과 복음 확장 문맥",
+        "en": "Acts 13 Spirit-Sent Mission and Gospel Expansion Context"
+      },
+      "summary": {
+        "ko": "사도행전 13장은 성령께서 바나바와 사울을 구별하여 보내시고, 바울의 회당 설교를 통해 다윗에게 주신 약속과 예수의 부활이 증언되며 복음이 이방인에게로 확장되는 장 수준 문맥 row입니다.",
+        "en": "Acts 13 is a chapter-level context row where the Spirit sets apart and sends Barnabas and Saul, Paul witnesses in the synagogue to the promise given to David and the resurrection of Jesus, and the gospel extends to the Gentiles."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성령의 파송과 이방인 복음 확장 문맥",
+        "en": "Chapter-level Spirit-sent mission and Gentile gospel-expansion context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 13장",
+            "en": "Acts 13"
+          },
+          "reference": "Acts 13",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 선교 여행을 인간 전략의 성공 서사나 사도행전 전체의 모든 지역 확장을 단일 장면으로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not frame the mission journey as a human-strategy success story or compress every regional expansion in Acts into one scene."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-antioch-mission-skeleton",
+        "event-gospel-to-nations-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "성령의 파송",
+          "en": "Spirit-sent mission"
+        },
+        {
+          "ko": "다윗의 약속과 부활",
+          "en": "Davidic promise and resurrection"
+        },
+        {
+          "ko": "이방인에게 확장되는 복음",
+          "en": "Gospel extending to the Gentiles"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
       "id": "chapter-context-acts-15",
       "chapterContextId": "chapter-context-acts-15",
       "bookId": "acts",
@@ -1945,6 +2291,282 @@
         {
           "ko": "초기 교회",
           "en": "Early church"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-16",
+      "chapterContextId": "chapter-context-acts-16",
+      "bookId": "acts",
+      "chapter": 16,
+      "title": {
+        "ko": "사도행전 16장 마게도냐와 복음의 열린 길 문맥",
+        "en": "Acts 16 Macedonia and the Open Way for the Gospel Context"
+      },
+      "summary": {
+        "ko": "사도행전 16장은 성령께서 선교의 방향을 여시고 막으시는 가운데 마게도냐 환상과 루디아의 믿음, 빌립보 감옥의 구원으로 복음이 새로운 지역으로 나아가는 장 수준 문맥 row입니다.",
+        "en": "Acts 16 is a chapter-level context row where the Spirit opens and closes mission directions, leading through the Macedonian vision, Lydia's faith, and salvation in the Philippian prison as the gospel reaches a new region."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 성령의 인도와 마게도냐 복음 확장 문맥",
+        "en": "Chapter-level Spirit-led direction and Macedonian gospel-expansion context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 16장",
+            "en": "Acts 16"
+          },
+          "reference": "Acts 16",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 선교의 지리적 확장을 인간 계획의 성취나 모든 선교 원리의 공식으로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not frame the geographic expansion of mission as a human planning achievement or a formula for every mission principle."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-gospel-to-nations-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "성령의 인도",
+          "en": "Spirit-led direction"
+        },
+        {
+          "ko": "마게도냐 환상",
+          "en": "Macedonian vision"
+        },
+        {
+          "ko": "감옥에서의 구원",
+          "en": "Salvation in prison"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-18",
+      "chapterContextId": "chapter-context-acts-18",
+      "bookId": "acts",
+      "chapter": 18,
+      "title": {
+        "ko": "사도행전 18장 고린도 증언과 말씀 사역 문맥",
+        "en": "Acts 18 Corinthian Witness and Word Ministry Context"
+      },
+      "summary": {
+        "ko": "사도행전 18장은 바울이 고린도에서 말씀을 증언하는 동안 주께서 두려워하지 말라고 붙드시고, 아굴라와 브리스길라 및 아볼로의 사역을 통해 증언의 흐름이 이어지는 장 수준 문맥 row입니다.",
+        "en": "Acts 18 is a chapter-level context row where the Lord sustains Paul as he bears witness in Corinth, and the witness continues through Aquila and Priscilla and the ministry of Apollos."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 고린도 증언과 말씀의 연속성 문맥",
+        "en": "Chapter-level Corinthian witness and continuity of the word context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 18장",
+            "en": "Acts 18"
+          },
+          "reference": "Acts 18",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 바울이나 동역자들의 활동을 개인 성공의 모범이나 사역 방법론의 완결된 공식으로 만들지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not turn Paul or his co-workers into models of personal success or a complete ministry methodology."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-gospel-to-nations-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "고린도 증언",
+          "en": "Witness in Corinth"
+        },
+        {
+          "ko": "주님의 붙드심",
+          "en": "The Lord's sustaining presence"
+        },
+        {
+          "ko": "말씀의 연속성",
+          "en": "Continuity of the word"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-21",
+      "chapterContextId": "chapter-context-acts-21",
+      "bookId": "acts",
+      "chapter": 21,
+      "title": {
+        "ko": "사도행전 21장 예루살렘 결박과 증언의 길 문맥",
+        "en": "Acts 21 Jerusalem Bonds and the Way of Witness Context"
+      },
+      "summary": {
+        "ko": "사도행전 21장은 성령의 증언 속에서 바울이 예루살렘으로 향하고 결박과 체포를 당하며, 유대인과 이방인 사이의 긴장 속에서도 로마를 향한 마지막 증언 여정이 시작되는 장 수준 문맥 row입니다.",
+        "en": "Acts 21 is a chapter-level context row where Paul travels to Jerusalem amid the Spirit's testimony, is bound and arrested, and begins the final witness journey toward Rome amid tensions involving Jews and Gentiles."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 예루살렘 결박과 로마를 향한 증언 전환 문맥",
+        "en": "Chapter-level Jerusalem arrest and transition toward witness in Rome context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 21장",
+            "en": "Acts 21"
+          },
+          "reference": "Acts 21",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 바울의 고난을 개인 영웅주의로 환원하거나 유대인과 이방인을 단순한 경쟁 집단으로 고정하지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not reduce Paul's suffering to personal heroism or frame Jews and Gentiles as simple competing groups."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-paul-arrested-in-jerusalem-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "성령의 증언",
+          "en": "The Spirit's testimony"
+        },
+        {
+          "ko": "결박과 고난",
+          "en": "Bonds and suffering"
+        },
+        {
+          "ko": "로마를 향한 증언",
+          "en": "Witness toward Rome"
+        }
+      ],
+      "isSkeleton": false
+    },
+    {
+      "id": "chapter-context-acts-28",
+      "chapterContextId": "chapter-context-acts-28",
+      "bookId": "acts",
+      "chapter": 28,
+      "title": {
+        "ko": "사도행전 28장 로마에서의 하나님 나라 증언 문맥",
+        "en": "Acts 28 Witness to the Kingdom of God in Rome Context"
+      },
+      "summary": {
+        "ko": "사도행전 28장은 멜리데에서의 보호와 치유를 지나 바울이 로마에 도착하고, 유대 지도자들에게 하나님 나라와 그리스도 예수를 증언하며 담대하고 거침없이 복음을 전하는 장 수준 문맥 row입니다.",
+        "en": "Acts 28 is a chapter-level context row where, after protection and healing on Malta, Paul reaches Rome and witnesses to the Jewish leaders about the kingdom of God and Jesus the Christ, proclaiming the gospel with boldness and without hindrance."
+      },
+      "chapterScopeLabel": {
+        "ko": "장 수준 로마 도착과 하나님 나라 증언 문맥",
+        "en": "Chapter-level arrival in Rome and kingdom-of-God witness context"
+      },
+      "scriptureAnchors": [
+        {
+          "bookId": "acts",
+          "label": {
+            "ko": "사도행전 28장",
+            "en": "Acts 28"
+          },
+          "reference": "Acts 28",
+          "scope": "chapter"
+        }
+      ],
+      "basisLabel": {
+        "ko": "성경 본문 장 범위 기준",
+        "en": "Scripture chapter scope basis"
+      },
+      "confidenceLabel": {
+        "ko": "reviewed pilot row / authoring pass",
+        "en": "Reviewed pilot row / authoring pass"
+      },
+      "cautionNote": {
+        "ko": "이 row는 장 수준 preview metadata이며 사도행전의 결말을 복음 확장의 인간적 완성이나 외부 연대의 확정으로 읽지 않습니다.",
+        "en": "This row is chapter-level preview metadata and does not read the ending of Acts as a human completion of gospel expansion or a fixed external chronology."
+      },
+      "reviewStatus": "reviewed",
+      "sourceBasisLabel": {
+        "ko": "Scripture-first reviewed pilot row",
+        "en": "Scripture-first reviewed pilot row"
+      },
+      "relatedBookIds": [
+        "acts"
+      ],
+      "relatedEventIds": [
+        "event-paul-in-rome-skeleton"
+      ],
+      "relatedKingdomIds": [],
+      "relatedPlaceIds": [],
+      "relatedThemeLabels": [
+        {
+          "ko": "로마 도착",
+          "en": "Arrival in Rome"
+        },
+        {
+          "ko": "하나님 나라",
+          "en": "Kingdom of God"
+        },
+        {
+          "ko": "담대하고 거침없는 증언",
+          "en": "Bold and unhindered witness"
         }
       ],
       "isSkeleton": false
