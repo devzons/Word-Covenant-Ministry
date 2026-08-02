@@ -24,6 +24,7 @@ type StudyContentArticleProps = {
   nextLabel: string;
   nextTitle: string | null;
   engagement?: ReactNode;
+  discussion?: ReactNode;
 };
 
 export function StudyContentArticle({
@@ -49,6 +50,7 @@ export function StudyContentArticle({
   nextLabel,
   nextTitle,
   engagement,
+  discussion,
 }: StudyContentArticleProps) {
   return (
     <article className="flex min-w-0 flex-col gap-6">
@@ -150,7 +152,7 @@ export function StudyContentArticle({
         {contentHtml !== "" ? (
           <div
             id={articleBodyId}
-            className="max-w-4xl text-base leading-8 text-zinc-800 [&_.wp-block-heading]:mt-8 [&_.wp-block-heading]:text-2xl [&_.wp-block-heading]:font-semibold [&_.wp-block-list]:my-5 [&_.wp-block-list]:pl-6 [&_.wp-block-paragraph]:my-5 [&_.wp-block-quote]:my-6 [&_.wp-block-quote]:border-l-4 [&_.wp-block-quote]:border-zinc-300 [&_.wp-block-quote]:pl-4 [&_a]:text-zinc-900 [&_a]:underline [&_a]:underline-offset-4"
+            className="max-w-4xl text-base leading-8 text-zinc-800 [&_.wp-block-heading]:mt-8 [&_.wp-block-heading]:text-2xl [&_.wp-block-heading]:font-semibold [&_.wp-block-list]:my-5 [&_.wp-block-list]:pl-6 [&_.wp-block-paragraph]:my-5 [&_.wp-block-quote]:my-6 [&_.wp-block-quote]:border-l-4 [&_.wp-block-quote]:border-zinc-300 [&_.wp-block-quote]:pl-4 [&_a]:text-zinc-900 [&_a]:underline [&_a]:underline-offset-4 [&_code]:whitespace-pre-wrap [&_code]:[overflow-wrap:anywhere]"
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
         ) : (
@@ -159,6 +161,8 @@ export function StudyContentArticle({
           </p>
         )}
       </div>
+
+      {discussion ? <div>{discussion}</div> : null}
     </article>
   );
 }

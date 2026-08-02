@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { StudyEngagementSummary } from "@/components/content/study/StudyEngagementSummary";
 import { StudyContentArticle } from "@/components/content/study/StudyContentArticle";
+import { StudyDiscussionSection } from "@/components/content/study/StudyDiscussionSection";
 import { siteConfig } from "@/config/site";
 import { fetchStudyCategories, fetchStudyContentBySlug, fetchStudyContents } from "@/lib/api/study";
 import {
@@ -128,6 +129,12 @@ export default async function StudyPublicationDetailPage({
       engagement={(
         <StudyEngagementSummary
           bodyElementId={articleBodyId}
+          locale={activeLocale}
+          studyId={detail.id}
+        />
+      )}
+      discussion={(
+        <StudyDiscussionSection
           locale={activeLocale}
           studyId={detail.id}
         />
