@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { AuthApiError, forgotPassword } from "@/lib/api/auth";
 import { LegalNoticeLinks } from "@/components/content/LegalNoticeLinks";
@@ -42,6 +42,7 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const submitLockRef = useRef(false);
 
   return (
     <Card className="mx-auto max-w-md">
@@ -53,6 +54,12 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
         className="mt-6 space-y-4"
         onSubmit={async (event) => {
           event.preventDefault();
+
+          if (submitLockRef.current) {
+            return;
+          }
+
+          submitLockRef.current = true;
           setErrorMessage("");
           setSuccessMessage("");
           setIsSubmitting(true);
@@ -72,6 +79,7 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
             }
           } finally {
             setIsSubmitting(false);
+            submitLockRef.current = false;
           }
         }}
       >

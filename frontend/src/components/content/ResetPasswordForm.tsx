@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { AuthApiError, resetPassword } from "@/lib/api/auth";
@@ -60,6 +60,7 @@ export function ResetPasswordForm({
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const submitLockRef = useRef(false);
 
   if (!hasValidLink) {
     return (
@@ -108,14 +109,20 @@ export function ResetPasswordForm({
           className="mt-6 space-y-4"
           onSubmit={async (event) => {
             event.preventDefault();
+
+            if (submitLockRef.current) {
+              return;
+            }
+
             setErrorMessage("");
-            setIsSubmitting(true);
 
             if (password !== confirmPassword) {
               setErrorMessage(labels.mismatch);
-              setIsSubmitting(false);
               return;
             }
+
+            submitLockRef.current = true;
+            setIsSubmitting(true);
 
             try {
               const message = await resetPassword({
@@ -142,6 +149,7 @@ export function ResetPasswordForm({
               }
             } finally {
               setIsSubmitting(false);
+              submitLockRef.current = false;
             }
           }}
         >
